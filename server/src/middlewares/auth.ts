@@ -21,17 +21,6 @@ export const authenticate = async (
   }
 };
 
-export const validate = async (
-  //validation middleware
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { valide } = req.body;
-  if (valide) next();
-  else res.status(401).send('Cannot access if not validated');
-};
-
 export const authorize = (roles: Role[] = []) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const { role } = req.body;
