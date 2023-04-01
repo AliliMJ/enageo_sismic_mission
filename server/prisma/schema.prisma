@@ -1,0 +1,268 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Utilisateur {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  hashPassword  String
+  role          Role?
+  valide        Boolean   @default(false) //il ne peut pas accèder à l'application que s'il a été validé par l'admin
+  ProjetsCree   Projet[]
+  employe       Employe   @relation(fields: [employeId], references: [id])
+  employeId     String    @unique
+  Gestion       Gestion[]
+  ChefMissionDe Mission?  @relation("chefMission")
+  ChefTerrainDe Mission?  @relation("chefTerrain")
+}
+
+enum Role {
+  GESTIONNAIRE
+  CHEF_MISSION
+  CHEF_TERRAIN
+  DIRECTEUR
+}
+
+model Employe {
+  id            String        @id @default(uuid())
+  date_adhesion DateTime      @db.Date
+  status        StatusEmploye
+  fonction      Fonction
+  profile       Profile       @relation(fields: [profileId], references: [id])
+  profileId     String        @unique
+  utilisateur   Utilisateur?
+  Memebre       Memebre[]
+}
+
+enum StatusEmploye {
+  EN_MISSION
+  EN_CONGE
+  RETRAITE
+  EN_SERVICE
+  SENCTONNE
+}
+
+model Profile {
+  id            String   @id @default(uuid())
+  nom           String
+  prenom        String
+  dateNaissance DateTime
+  //lieu de naissence
+  //num tel
+  //num securité nationale
+  //diplome
+  //num carte nationnale
+  //permis
+  //observation
+  Employe       Employe?
+}
+
+enum Fonction {
+  MANEUVRE
+  INGENIEUR
+  CHEF_MISSION
+  CHEF_TERRAIN
+  RESPONSABLE
+}
+
+model Projet {
+  id             String           @id @default(uuid())
+  creePar        Utilisateur      @relation(fields: [creeParID], references: [id]) // user.role=CM && mission.chefM = user
+  creeParID      String
+  Mission        Mission          @relation(fields: [missionCode], references: [code])
+  missionCode    String
+  Gestion        Gestion[]
+  Objectif       Objectif?
+  EtatProjet     EtatProjet[]
+  Ravitaillement Ravitaillement[]
+  Materiel       Materiel[]
+  Consomation    Consomation[]
+  createdAt      DateTime         @default(now())
+}
+
+model EtatProjet {
+  id       String         @id @default(uuid())
+  typeEtat TypeEtatProjet
+  Projet   Projet         @relation(fields: [projetId], references: [id])
+  projetId String
+  dateEtat DateTime       @db.Date
+}
+
+enum TypeEtatProjet {
+  CREATION
+  PRODUCTION
+  CLOTURATION
+  ANNULATION
+}
+
+model Objectif {
+  Projet               Projet   @relation(fields: [projetId], references: [id])
+  projetId             String   @unique
+  VP                   Int
+  dateDebutProjetAvant DateTime @db.Date
+  dateFinProjetAvant   DateTime @db.Date
+}
+
+model Localisation {
+  longitude Float
+  latitude  Float
+  Wilaya    Wilaya @relation(fields: [wilayaId], references: [id])
+  wilayaId  String
+
+  @@unique([longitude, latitude])
+}
+
+model Wilaya {
+  id           String         @id @default(uuid())
+  numero       Int
+  nom          String
+  Localisation Localisation[]
+}
+
+model Mission {
+  code          String      @id
+  type          TypeMission
+  projets       Projet[]
+  ChefMission   Utilisateur @relation("chefMission", fields: [chefMissionID], references: [id])
+  chefMissionID String      @unique
+  ChefTerrain   Utilisateur @relation("chefTerrain", fields: [chefTerrainID], references: [id])
+  chefTerrainID String      @unique
+
+  Equipe Equipe[] // 5 equipes Labo, Topo, Pose, Ramasse et Layonnage 
+}
+
+enum TypeMission {
+  MISSION2D
+  MISSION3D
+}
+
+model Gestion {
+  Utilisateur     Utilisateur @relation(fields: [utilisateurId], references: [id])
+  utilisateurId   String
+  projet          Projet      @relation(fields: [projetId], references: [id])
+  projetId        String
+  dateAssignement DateTime
+
+  @@unique([utilisateurId, projetId])
+}
+
+model Equipe {
+  id          String     @id @default(uuid())
+  type        TypeEquipe
+  Mission     Mission    @relation(fields: [missionCode], references: [code])
+  missionCode String     @unique
+  Memebre     Memebre[]
+  Travaux     Travail[]
+  Retard      Retard[]
+}
+
+model Memebre {
+  Employe   Employe @relation(fields: [employeId], references: [id])
+  employeId String  @unique
+  Equipe    Equipe  @relation(fields: [equipeId], references: [id])
+  equipeId  String
+}
+
+enum TypeEquipe {
+  LABO
+  TOPO
+  POSE
+  RAMASSE
+  LAYONNAGE
+}
+
+model Travail {
+  id         String     @id @default(uuid())
+  Equipe     Equipe     @relation(fields: [equipeId], references: [id])
+  equipeId   String
+  jour       DateTime   @unique @db.Date
+  heureDebut DateTime   @db.Time()
+  heureFin   DateTime   @db.Time()
+  Rendement  Rendement?
+}
+
+model Rendement {
+  Travail   Travail       @relation(fields: [travailId], references: [id])
+  travailId String        @unique
+  type      TypeRendement
+  valeur    Int
+}
+
+enum TypeRendement {
+  VP
+  PIQUET
+  CABLE
+  GRAPPE
+}
+
+model Retard {
+  id          String   @id @default(uuid())
+  jour        DateTime @unique @db.Date
+  Equipe      Equipe   @relation(fields: [equipeId], references: [id])
+  equipeId    String
+  description String
+  tempsPerdu  Int
+}
+
+model Ravitaillement {
+  id                 String             @id @default(uuid())
+  nom                String
+  typeRavitaillement TypeRavitaillement
+  unite              Unite
+  Projet             Projet[]
+  Prix               Prix?
+  Consomation        Consomation[]
+}
+
+model Consomation {
+  Ravitaillement Ravitaillement @relation(fields: [ravitaillementId], references: [id])
+  Projet         Projet         @relation(fields: [projetId], references: [id])
+
+  ravitaillementId String
+  projetId         String
+
+  date DateTime @default(now())
+
+  @@unique([ravitaillementId, projetId])
+}
+
+enum TypeRavitaillement {
+  CARBURANT
+  NOURITURE
+}
+
+enum Unite {
+  LITRE
+  METRE
+  METRECUBE
+  KILOGRAMME
+  OBJET
+}
+
+model Prix {
+  Ravitaillement   Ravitaillement @relation(fields: [ravitaillementId], references: [id])
+  ravitaillementId String         @unique
+  prixUnitaire     Float
+}
+
+model Materiel {
+  code              String       @id
+  nom               String
+  utiliseDansProjet Projet?      @relation(fields: [projetId], references: [id])
+  projetId          String?
+  etat              EtatMateriel
+  //matricule
+}
+
+enum EtatMateriel {
+  BON
+  ENPANNE
+}

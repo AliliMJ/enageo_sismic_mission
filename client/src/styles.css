@@ -1,0 +1,16 @@
+.strong {
+  font-weight: var(--font-weight-strong);
+}
+
+.secondary{
+  color:var(--text-color-disabled);
+}
+.mini {
+  font-size: var(--font-size-mini);
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden
+}
