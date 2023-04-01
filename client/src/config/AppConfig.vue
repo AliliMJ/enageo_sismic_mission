@@ -1,13 +1,9 @@
 <template>
-  <n-config-provider :theme="darkTheme">
-    <n-global-style />
-
-    <n-message-provider>
-      <n-dialog-provider>
-        <slot></slot>
-      </n-dialog-provider>
-    </n-message-provider>
-  </n-config-provider>
+  <n-message-provider>
+    <n-dialog-provider>
+      <slot></slot>
+    </n-dialog-provider>
+  </n-message-provider>
 </template>
 
 <script setup>
