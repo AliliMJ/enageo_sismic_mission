@@ -1,43 +1,39 @@
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script>
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-  setup () {
+  setup() {
     return {
-      value: ref(null)
-    }
-  }
-})
+      value: ref(null),
+    };
+  },
+});
 </script>
 
 <template>
-   <body>
-  <div class="container">
-    <form action="post">
-      <h1 class="authLabel">Authentification</h1>
-      <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur">
-      <div class="inputContainer">
-      <input class="input" type="text" placeholder=" " required>
-      <label for="username" class="placeholder">nom d'utilisateur</label>
+  <body>
+    <div class="container">
+      <form action="post">
+        <h1 class="authLabel">Authentification</h1>
+        <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
+        <div class="inputContainer">
+          <input class="input" type="text" placeholder=" " required />
+          <label for="username" class="placeholder">nom d'utilisateur</label>
+        </div>
+        <div class="separator"></div>
+        <div class="inputContainer">
+          <input class="input" type="password" placeholder=" " required />
+          <label for="password" class="placeholder">mot de passe</label>
+        </div>
+
+        <div class="forget">mot de passe oubliee</div>
+
+        <input class="button-4" type="submit" value="connexion" />
+
+        <div class="create">creer un compte</div>
+      </form>
     </div>
-    <div class="separator"></div>
-    <div class="inputContainer">
-      <input class="input" type="password" placeholder=" " required>
-      <label for="password" class="placeholder">mot de passe</label>
-    </div>
-
-      <div class="forget">mot de passe oubliee</div>
-
-      <input class="button-4" type="submit" value="connexion">
-
-      <div class="create">creer un compte</div>
-
-    </form>
-  </div>
-
-</body> 
-
-  
+  </body>
 </template>
 
 <style scoped>
@@ -89,52 +85,50 @@ body {
 /* start input style */
 
 .inputContainer {
-    height: 50px;
-    position: relative;
-    width: 100%;
-    text-align: center;
-  }
-  
-  
-  .input {
-    box-sizing: border-box;
-    color: #787878;
-    font-size: 18px;
-    outline: 0;
-    padding: 4px 20px 0;
-    height: 40px;
-  }
+  height: 50px;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
 
-  .input:focus {
-    border: 1px solid #fbff00;
-  }
-  
-  .placeholder {
-    color: #96969b;
-    background-color: white;
-    font-family: sans-serif;
-    left: 70px;
-    line-height: 14px;
-    pointer-events: none;
-    position: absolute;
-    transform-origin: 0 50%;
-    transition: ease 200ms, color 150ms;
-    top: 12px;
-  }
-  
-  .input:focus~.placeholder,
-  .input:not(:placeholder-shown)~.placeholder {
-    transform: translateY(-18px) translateX(10px);
-    color: #ffed00;
-    font-size: 14px;
-  }
-  
-  .input:not(:placeholder-shown)~.placeholder {
-    color: #ffed00;
-  }
+.input {
+  box-sizing: border-box;
+  color: #787878;
+  font-size: 18px;
+  outline: 0;
+  padding: 4px 20px 0;
+  height: 40px;
+}
+
+.input:focus {
+  border: 1px solid #fbff00;
+}
+
+.placeholder {
+  color: #96969b;
+  background-color: white;
+  font-family: sans-serif;
+  left: 70px;
+  line-height: 14px;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 0 50%;
+  transition: ease 200ms, color 150ms;
+  top: 12px;
+}
+
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
+  transform: translateY(-18px) translateX(10px);
+  color: #ffed00;
+  font-size: 14px;
+}
+
+.input:not(:placeholder-shown) ~ .placeholder {
+  color: #ffed00;
+}
 
 /* end input style */
-
 
 /* Start button style  */
 
@@ -143,12 +137,14 @@ body {
   background-color: #ffed00;
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
-  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
+    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
   box-sizing: border-box;
-  color: #24292E;
+  color: #24292e;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: -apple-system, system-ui, 'Segoe UI', Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
@@ -201,5 +197,4 @@ body {
 }
 
 /* End button style  */
-
 </style>
