@@ -1,4 +1,17 @@
-export const getUserByEmail = async (email) => {
+import bcrypt from 'bcrypt';
+import { Fonction, StatusEmploye, Utilisateur } from '@prisma/client';
+import prisma from '../utils/prisma.ts';
+
+type UserRegistration = {
+  email: string;
+  password: string;
+  nom: string;
+  prenom: string;
+  dateAdhesion: Date;
+  dateNaissance: Date;
+};
+
+export const getUserByEmail = async (email: string): Promise<Utilisateur> => {
   try {
     const user = await prisma.utilisateur.findUnique({
       where: { email },
@@ -10,7 +23,10 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-export const verifyUserCredentials = async (email, password) => {
+export const verifyUserCredentials = async (
+  email: string,
+  password: string
+): Promise<Utilisateur> => {
   try {
     const user = await getUserByEmail(email);
 
@@ -24,19 +40,10 @@ export const verifyUserCredentials = async (email, password) => {
   }
 };
 
-export const verifyUserAccess = async (email, password, role) => {
-  try {
-    const user = await verifyUserCredentials(email, password);
-    if (user.role === role) return true;
-    else return false;
-  } catch {
-    return Promise.reject('Access not allowed');
-  }
-};
-
-export const registerUser = async (data) => {
-  const { email, hashPassword, nom, prenom, dateAdhesion, dateNaissance } =
-    data;
+export const registerUser = async (userRegistration: UserRegistration) => {
+  const { email, password, nom, prenom, dateAdhesion, dateNaissance } =
+    userRegistration;
+  const hashPassword = await bcrypt.hash(password, 10);
 
   return prisma.utilisateur.create({
     data: {
