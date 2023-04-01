@@ -11,7 +11,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <body>
+  <div class="main">
     <div class="container">
       <form action="post">
         <h1 class="authLabel">Authentification</h1>
@@ -33,11 +33,13 @@ export default defineComponent({
         <div class="create">creer un compte</div>
       </form>
     </div>
-  </body>
+  </div>
 </template>
 
 <style scoped>
-body {
+.main {
+  min-height: 100vh;
+  width: 100vw;
   margin: 0;
   padding: 0;
   background-color: #ffed00;
