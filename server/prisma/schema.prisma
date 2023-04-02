@@ -11,17 +11,18 @@ datasource db {
 }
 
 model Utilisateur {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  hashPassword  String
-  role          Role?
-  valide        Boolean   @default(false) //il ne peut pas accèder à l'application que s'il a été validé par l'admin
-  ProjetsCree   Projet[]
-  employe       Employe   @relation(fields: [employeId], references: [id])
-  employeId     String    @unique
-  Gestion       Gestion[]
-  ChefMissionDe Mission?  @relation("chefMission")
-  ChefTerrainDe Mission?  @relation("chefTerrain")
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  hashPassword       String
+  role               Role?
+  valide             Boolean   @default(false) //il ne peut pas accèder à l'application que s'il a été validé par l'admin
+  ProjetsCree        Projet[]
+  employe            Employe   @relation(fields: [employeId], references: [id])
+  employeId          String    @unique
+  Gestion            Gestion[]
+  ChefMissionDe      Mission?  @relation("chefMission")
+  ChefTerrainDe      Mission?  @relation("chefTerrain")
+  dateCreationCompte DateTime  @default(now())
 }
 
 enum Role {
@@ -29,17 +30,18 @@ enum Role {
   CHEF_MISSION
   CHEF_TERRAIN
   DIRECTEUR
+  ADMINISTRATEUR
 }
 
 model Employe {
-  id            String        @id @default(uuid())
-  date_adhesion DateTime      @db.Date
-  status        StatusEmploye
-  fonction      Fonction
-  profile       Profile       @relation(fields: [profileId], references: [id])
-  profileId     String        @unique
-  utilisateur   Utilisateur?
-  Memebre       Memebre[]
+  id           String        @id @default(uuid())
+  dateAdhesion DateTime      @db.Date
+  status       StatusEmploye
+  fonction     Fonction
+  profile      Profile       @relation(fields: [profileId], references: [id])
+  profileId    String        @unique
+  utilisateur  Utilisateur?
+  Memebre      Memebre[]
 }
 
 enum StatusEmploye {
@@ -51,10 +53,10 @@ enum StatusEmploye {
 }
 
 model Profile {
-  id            String   @id @default(uuid())
+  id            String   @id @default(cuid())
   nom           String
   prenom        String
-  dateNaissance DateTime
+  dateNaissance DateTime @db.Date
   //lieu de naissence
   //num tel
   //num securité nationale
@@ -74,7 +76,7 @@ enum Fonction {
 }
 
 model Projet {
-  id             String           @id @default(uuid())
+  id             String           @id @default(cuid())
   creePar        Utilisateur      @relation(fields: [creeParID], references: [id]) // user.role=CM && mission.chefM = user
   creeParID      String
   Mission        Mission          @relation(fields: [missionCode], references: [code])
@@ -89,7 +91,7 @@ model Projet {
 }
 
 model EtatProjet {
-  id       String         @id @default(uuid())
+  id       String         @id @default(cuid())
   typeEtat TypeEtatProjet
   Projet   Projet         @relation(fields: [projetId], references: [id])
   projetId String
@@ -105,7 +107,7 @@ enum TypeEtatProjet {
 
 model Objectif {
   Projet               Projet   @relation(fields: [projetId], references: [id])
-  projetId             String   @unique
+  projetId             String   @id
   VP                   Int
   dateDebutProjetAvant DateTime @db.Date
   dateFinProjetAvant   DateTime @db.Date
@@ -114,15 +116,14 @@ model Objectif {
 model Localisation {
   longitude Float
   latitude  Float
-  Wilaya    Wilaya @relation(fields: [wilayaId], references: [id])
-  wilayaId  String
+  Wilaya    Wilaya @relation(fields: [numWilaya], references: [numero])
+  numWilaya Int
 
-  @@unique([longitude, latitude])
+  @@id([longitude, latitude])
 }
 
 model Wilaya {
-  id           String         @id @default(uuid())
-  numero       Int
+  numero       Int            @id
   nom          String
   Localisation Localisation[]
 }
@@ -151,11 +152,11 @@ model Gestion {
   projetId        String
   dateAssignement DateTime
 
-  @@unique([utilisateurId, projetId])
+  @@id([utilisateurId, projetId])
 }
 
 model Equipe {
-  id          String     @id @default(uuid())
+  id          String     @id @default(cuid())
   type        TypeEquipe
   Mission     Mission    @relation(fields: [missionCode], references: [code])
   missionCode String     @unique
@@ -180,7 +181,7 @@ enum TypeEquipe {
 }
 
 model Travail {
-  id         String     @id @default(uuid())
+  id         String     @id @default(cuid())
   Equipe     Equipe     @relation(fields: [equipeId], references: [id])
   equipeId   String
   jour       DateTime   @unique @db.Date
@@ -191,7 +192,7 @@ model Travail {
 
 model Rendement {
   Travail   Travail       @relation(fields: [travailId], references: [id])
-  travailId String        @unique
+  travailId String        @id
   type      TypeRendement
   valeur    Int
 }
@@ -204,7 +205,7 @@ enum TypeRendement {
 }
 
 model Retard {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   jour        DateTime @unique @db.Date
   Equipe      Equipe   @relation(fields: [equipeId], references: [id])
   equipeId    String
@@ -213,7 +214,7 @@ model Retard {
 }
 
 model Ravitaillement {
-  id                 String             @id @default(uuid())
+  id                 String             @id @default(cuid())
   nom                String
   typeRavitaillement TypeRavitaillement
   unite              Unite
@@ -229,9 +230,10 @@ model Consomation {
   ravitaillementId String
   projetId         String
 
-  date DateTime @default(now())
+  date   DateTime @default(now())
+  valeur Int
 
-  @@unique([ravitaillementId, projetId])
+  @@id([ravitaillementId, projetId])
 }
 
 enum TypeRavitaillement {
@@ -249,7 +251,7 @@ enum Unite {
 
 model Prix {
   Ravitaillement   Ravitaillement @relation(fields: [ravitaillementId], references: [id])
-  ravitaillementId String         @unique
+  ravitaillementId String         @id
   prixUnitaire     Float
 }
 
