@@ -32,26 +32,32 @@ export const verifyUserCredentials = async (
 export const registerUser = async (userRegistration: UserRegistration) => {
   const { email, password, nom, prenom, dateAdhesion, dateNaissance } =
     userRegistration;
-  const hashPassword = await bcrypt.hash(password, 10);
 
-  return prisma.utilisateur.create({
-    data: {
-      email,
-      hashPassword,
-      employe: {
-        create: {
-          date_adhesion: dateAdhesion,
-          fonction: Fonction.INGENIEUR,
-          status: StatusEmploye.EN_SERVICE,
-          profile: {
-            create: {
-              dateNaissance,
-              nom,
-              prenom,
+  try {
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.utilisateur.create({
+      data: {
+        email,
+        hashPassword,
+        employe: {
+          create: {
+            date_adhesion: dateAdhesion,
+            fonction: Fonction.INGENIEUR,
+            status: StatusEmploye.EN_SERVICE,
+            profile: {
+              create: {
+                dateNaissance,
+                nom,
+                prenom,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
+    return user;
+  } catch (e) {
+    return Promise.reject('Failed to register user.');
+  }
 };

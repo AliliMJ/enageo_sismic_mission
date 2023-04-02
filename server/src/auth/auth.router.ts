@@ -11,7 +11,6 @@ authRouter.post('/register', async (req, res) => {
 
     res.status(201).send(user);
   } catch (e) {
-    console.log(e);
     res.status(500).send(e);
   }
 });
@@ -21,12 +20,3 @@ authRouter.post('/login', authenticate, async (req, res) => {
 
   res.status(201).send(user);
 });
-
-authRouter.post(
-  '/direction',
-  authenticate,
-  authorize([Role.DIRECTEUR]),
-  async (req, res) => {
-    res.status(201).send('User authorized');
-  }
-);
