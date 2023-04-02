@@ -27,8 +27,6 @@ const login = async (e) => {
 </script>
 
 <template>
-  <p>{{ auth.email }}</p>
-
   <div class="main">
     <div class="container" v-show="showModal">
       <h1 class="authLabel">creer un nouveau compte</h1>
