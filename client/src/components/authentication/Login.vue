@@ -1,38 +1,79 @@
-<script>
+<script setup>
 import { defineComponent, ref } from 'vue';
 
-export default defineComponent({
-  setup() {
-    return {
-      value: ref(null),
-    };
-  },
-});
+
+
+const showModal = ref(false);
+
+
+
+
 </script>
 
 <template>
   <div class="main">
-    <div class="container">
+
+
+    <div  class="container" v-show="showModal">
+      <h1 class="authLabel">creer un nouveau compte</h1>
       <form action="post">
-        <h1 class="authLabel">Authentification</h1>
-        <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
+
         <div class="inputContainer">
           <input class="input" type="text" placeholder=" " required />
-          <label for="username" class="placeholder">nom d'utilisateur</label>
+          <label for="email" class="placeholder">Adresse email</label>
         </div>
-        <div class="separator"></div>
+
         <div class="inputContainer">
           <input class="input" type="password" placeholder=" " required />
           <label for="password" class="placeholder">mot de passe</label>
         </div>
 
-        <div class="forget">mot de passe oubliee</div>
+        <div class="inputContainer">
+          <input class="input" type="password" placeholder=" " required />
+          <label for="password" class="placeholder">nom</label>
+        </div>
+
+        <div class="inputContainer">
+          <input class="input" type="password" placeholder=" " required />
+          <label for="password" class="placeholder">prenom</label>
+        </div>
+
+        <div class="inputContainer">
+          <input class="input" type="password" placeholder=" " required />
+          <label for="password" class="placeholder">mot de passe</label>
+        </div>
+
+        <input class="button-4" type="submit" value="creer" />
+      </form>
+
+      <hr class="hrSeparator">
+      <div class="create" v-on:click="showModal=!showModal">retour a la page de connexion</div>
+    </div>
+
+    <transition>
+    <div class="container" v-show="!showModal">
+      <h1 class="authLabel">Authentification</h1>
+      <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
+      <form action="post">
+        <div class="inputContainer">
+          <input class="input" type="text" placeholder=" " required />
+          <label for="username" class="placeholder">email</label>
+        </div>
+        <div class="inputContainer">
+          <input class="input" type="password" placeholder=" " required />
+          <label for="password" class="placeholder">mot de passe</label>
+        </div>
+
+        <div class="forgetContainer"><label class="forget">mot de passe oubliée ?</label></div>
 
         <input class="button-4" type="submit" value="connexion" />
-
-        <div class="create">creer un compte</div>
       </form>
+
+      <hr class="hrSeparator">
+      <div class="create" v-on:click="showModal=!showModal">creer un compte</div>
     </div>
+  </transition>
+
   </div>
 </template>
 
@@ -43,8 +84,22 @@ export default defineComponent({
   margin: 0;
   padding: 0;
   background-color: #ffed00;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   overflow: hidden;
+}
+
+.container1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: red;
+  width: 500px;
+  height: 500px;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  text-align: center;
 }
 
 .container {
@@ -53,11 +108,12 @@ export default defineComponent({
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgb(255, 255, 255);
-  width: 400px;
-  height: 450px;
+  width: 500px;
+  height: 500px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  text-align: center;
 }
 
 .authLabel {
@@ -65,33 +121,48 @@ export default defineComponent({
   text-align: center;
 }
 
+.forgetContainer {
+  margin: -15px 0px 30px 0px;
+}
+
 .forget {
-  margin: 0px 0px 10px 0px;
   padding: 0;
-  top: -10px;
-  left: 65px;
   text-decoration: underline;
+  position: relative;
+  left: 50px;
+}
+
+.create {
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.create:active {
+  color: #787878;
 }
 
 .logoImg {
-  width: 100px;
-  height: 100px;
-  left: 138px;
-  margin-bottom: 30px;
+  width: 130px;
+  height: 130px;
+  text-align: center;
+  position: relative;
 }
 
-.separator {
-  height: 15px;
+.hrSeparator {
+  margin: 30px 50px 10px 50px;
 }
 
 /* start input style */
 
 .inputContainer {
-  height: 50px;
   position: relative;
   width: 100%;
   text-align: center;
+  margin: 20px 0px 20px 0px;
+  ;
 }
+
 
 .input {
   box-sizing: border-box;
@@ -100,37 +171,39 @@ export default defineComponent({
   outline: 0;
   padding: 4px 20px 0;
   height: 40px;
+  /* border: 0.3px solid #202020; */
 }
 
 .input:focus {
-  border: 1px solid #fbff00;
+  border: 1px solid #35bc00;
 }
 
 .placeholder {
   color: #96969b;
   background-color: white;
   font-family: sans-serif;
-  left: 70px;
+  left: 125px;
   line-height: 14px;
   pointer-events: none;
   position: absolute;
   transform-origin: 0 50%;
   transition: ease 200ms, color 150ms;
-  top: 12px;
+  top: 13px;
 }
 
-.input:focus ~ .placeholder,
-.input:not(:placeholder-shown) ~ .placeholder {
+.input:focus~.placeholder,
+.input:not(:placeholder-shown)~.placeholder {
   transform: translateY(-18px) translateX(10px);
-  color: #ffed00;
+  color: #35bc00;
   font-size: 14px;
 }
 
-.input:not(:placeholder-shown) ~ .placeholder {
-  color: #ffed00;
+.input:not(:placeholder-shown)~.placeholder {
+  color: #35bc00;
 }
 
 /* end input style */
+
 
 /* Start button style  */
 
@@ -139,14 +212,12 @@ export default defineComponent({
   background-color: #ffed00;
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
-  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
-    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
   box-sizing: border-box;
-  color: #24292e;
+  color: #24292E;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, 'Segoe UI', Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  /* font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; */
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
@@ -160,11 +231,9 @@ export default defineComponent({
   vertical-align: middle;
   white-space: nowrap;
   word-wrap: break-word;
-  width: 250px;
+  width: 280px;
   height: 40px;
-  text-align: center;
   font-weight: bold;
-  left: 65px;
 }
 
 .button-4:hover {
@@ -174,20 +243,20 @@ export default defineComponent({
 }
 
 .button-4:disabled {
-  background-color: #00ed14;
+  background-color: #e6ea02;
   border-color: rgba(27, 31, 35, 0.15);
-  color: #65f300;
+  color: #e6ea02;
   cursor: default;
 }
 
 .button-4:active {
-  background-color: #00ff11;
-  box-shadow: rgb(0, 228, 11) 0 1px 0 inset;
+  background-color: #e6ea02;
+  box-shadow: rgb(209, 228, 0) 0 1px 0 inset;
   transition: none 0s;
 }
 
 .button-4:focus {
-  outline: 1px green;
+  outline: 1px rgb(220, 232, 0);
 }
 
 .button-4:before {
@@ -199,4 +268,25 @@ export default defineComponent({
 }
 
 /* End button style  */
+
+/* overlay animation start */
+.container1-enter-from {
+  opacity: 0
+}
+.container1-enter-to {
+  opacity: 1
+}
+.container1-enter-active {
+  transition: all 3s ease;
+}
+.container1-leave-from {
+  opacity: 1;
+}
+.container1-leave-to {
+  opacity: 0;
+}
+.container1-leave-active {
+  transition: all 3s ease;
+}
+/* overlay animation end */
 </style>
