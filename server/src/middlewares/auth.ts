@@ -8,6 +8,7 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(req.body);
   const { email, password } = req.body;
   try {
     const user = await verifyUserCredentials(email, password);
@@ -15,7 +16,7 @@ export const authenticate = async (
       req.body = user;
       return next();
     }
-    res.status(401).send('User not validated');
+    res.status(403).send('User not validated');
   } catch {
     res.status(401).send('User not authenticated.');
   }
@@ -28,6 +29,6 @@ export const authorize = (roles: Role[] = []) => {
 
     if (role && roles.includes(role)) return next();
 
-    res.status(401).send('User is unauthorised');
+    res.status(401).send('User not authorised');
   };
 };

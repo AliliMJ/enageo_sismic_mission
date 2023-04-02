@@ -1,7 +1,10 @@
 <script setup>
 import { RouterView } from 'vue-router';
+import AppConfig from 'config/AppConfig.vue';
 </script>
 
 <template>
-  <RouterView />
+  <app-config>
+    <RouterView />
+  </app-config>
 </template>

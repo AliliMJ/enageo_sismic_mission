@@ -1,14 +1,21 @@
 <template>
-  <app-config>
-    <n-layout class="app">
-      <h1>Home</h1>
-    </n-layout>
-  </app-config>
+  <n-layout class="app">
+    <h1>Home</h1>
+    Welcome! {{ auth.user?.email }}
+    <button @click="logout">Logout</button>
+  </n-layout>
 </template>
 
 <script setup>
-import AppConfig from 'config/AppConfig.vue';
 import { NLayout } from 'naive-ui';
+import { useAuth } from '../../stores/authStore';
+import { useRouter } from 'vue-router';
+const auth = useAuth();
+const router = useRouter();
+const logout = () => {
+  router.push('/login');
+  auth.logout();
+};
 </script>
 
 <style>

@@ -1,24 +1,58 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+import { useAuth } from 'stores/authStore.js';
+import { useMessage } from 'naive-ui';
+import { useRouter } from 'vue-router';
+const auth = useAuth();
+const email = ref('');
+const password = ref('');
+const router = useRouter();
+
+const message = useMessage();
+
+const login = async (e) => {
+  e.preventDefault();
+  try {
+    await auth.login(email.value, password.value);
+    router.push('/');
+  } catch (m) {
+    console.log('not welcome');
+    message.error(m);
+  }
+};
+</script>
 
 <template>
   <div class="main">
     <div class="container">
-      <form action="post">
+      <form>
         <h1 class="authLabel">Authentification</h1>
         <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
         <div class="inputContainer">
-          <input class="input" type="text" placeholder=" " required />
+          <input
+            v-model="email"
+            class="input"
+            type="text"
+            placeholder=" "
+            required
+          />
           <label for="username" class="placeholder">nom d'utilisateur</label>
         </div>
         <div class="separator"></div>
         <div class="inputContainer">
-          <input class="input" type="password" placeholder=" " required />
+          <input
+            v-model="password"
+            class="input"
+            type="password"
+            placeholder=" "
+            required
+          />
           <label for="password" class="placeholder">mot de passe</label>
         </div>
 
         <div class="forget">mot de passe oubliee</div>
 
-        <input class="button-4" type="submit" value="connexion" />
+        <button class="button-4" @click="login">connexion</button>
 
         <div class="create">creer un compte</div>
       </form>
