@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Fonction, StatusEmploye, Utilisateur } from '@prisma/client';
+import { getUserByEmail } from '../user/user.service.ts';
 import prisma from '../utils/prisma.ts';
 
 type UserRegistration = {
@@ -9,18 +10,6 @@ type UserRegistration = {
   prenom: string;
   dateAdhesion: Date;
   dateNaissance: Date;
-};
-
-export const getUserByEmail = async (email: string): Promise<Utilisateur> => {
-  try {
-    const user = await prisma.utilisateur.findUnique({
-      where: { email },
-    });
-    if (user == null) return Promise.reject('User not found');
-    return user;
-  } catch (e) {
-    return Promise.reject(e);
-  }
 };
 
 export const verifyUserCredentials = async (
