@@ -29,6 +29,7 @@ enum Role {
   CHEF_MISSION
   CHEF_TERRAIN
   DIRECTEUR
+  ADMINISTRATEUR
 }
 
 model Employe {
