@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue';
-import { useAuth } from 'stores/authStore.js';
+
 import { useMessage } from 'naive-ui';
 import { useRouter } from 'vue-router';
+import { useAuth } from 'stores/authStore';
 const auth = useAuth();
+
 const email = ref('');
 const password = ref('');
 const router = useRouter();
@@ -15,7 +17,8 @@ const login = async (e) => {
   e.preventDefault();
   try {
     await auth.login(email.value, password.value);
-    router.push('/');
+
+    return router.push('/');
   } catch (m) {
     console.log('not welcome');
     message.error(m);
@@ -24,6 +27,8 @@ const login = async (e) => {
 </script>
 
 <template>
+  <p>{{ auth.email }}</p>
+
   <div class="main">
     <div class="container" v-show="showModal">
       <h1 class="authLabel">creer un nouveau compte</h1>

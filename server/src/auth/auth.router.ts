@@ -9,7 +9,7 @@ authRouter.post('/register', async (req, res) => {
   try {
     const user = await registerUser(req.body);
 
-    res.status(201).send(user);
+    res.send(user);
   } catch (e) {
     res.status(500).send(e);
   }
@@ -18,5 +18,5 @@ authRouter.post('/register', async (req, res) => {
 authRouter.post('/login', authenticate, async (req, res) => {
   const user = req.body;
 
-  res.status(201).send(user);
+  res.status(200).send(user);
 });

@@ -23,11 +23,6 @@ import Home from 'app/Home.vue';
 const routes = [
   { path: '/login', component: Login },
   { path: '/', component: Home, meta: { requireAuth: true } },
-  {
-    path: '/',
-    component: Home,
-    meta: { requireAuth: true, roles: [Role.Administrateur] },
-  },
 ];
 
 const router = createRouter({
@@ -35,15 +30,15 @@ const router = createRouter({
   history: createWebHistory(),
 });
 
-router.beforeEach((to, from, next) => {
-  const authentication = JSON.parse(
-    window.localStorage.getItem('authentication')
-  );
-  if (to.meta.requireAuth && !authentication?.isAuthenticated) {
-    next('/login');
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   const authentication = JSON.parse(
+//     window.localStorage.getItem('authentication')
+//   );
+//   if (to.meta.requireAuth && !authentication?.isAuthenticated) {
+//     next('/login');
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

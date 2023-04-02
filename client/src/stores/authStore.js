@@ -1,11 +1,14 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { useMessage } from 'naive-ui';
 
 export const useAuth = defineStore('authentication', {
   state: () => ({
     user: null,
+    email: '',
+    password: '',
+    isAuthenticated: false,
   }),
+  persist: true,
   actions: {
     async login(email, password) {
       try {
@@ -13,28 +16,35 @@ export const useAuth = defineStore('authentication', {
           email,
           password,
         });
-
-        window.localStorage.setItem(
-          'authentication',
-          JSON.stringify({
-            email,
-            password,
-            isAuthenticated: true,
-          })
-        );
-        this.user = { ...response.data };
+        const { id, dateCreationCompte, employeId, role } = response.data;
+        this.$patch({
+          user: {
+            id,
+            employeId,
+            dateCreationCompte,
+            role,
+          },
+          email,
+          password,
+          isAuthenticated: true,
+        });
 
         return Promise.resolve('Successful');
-      } catch ({ response }) {
-        if (response.status === 401)
+      } catch (e) {
+        console.log(e);
+        if (e.response?.status === 401)
           return Promise.reject('Votre email ou mot de passe sont incorrects');
-
-        return Promise.reject(`Ce compte n'est pas encore validé`);
+        if (e.response?.status === 4013)
+          return Promise.reject(`Ce compte n'est pas encore validé`);
+        return Promise.reject('Cannot loggin.');
       }
     },
     logout() {
       this.user = null;
-      window.localStorage.removeItem('authentication');
+      this.email = '';
+      this.password = '';
+      this.isAuthenticated = false;
+      //window.localStorage.removeItem('authentication');
     },
     register() {
       console.log('user registered');
