@@ -1,23 +1,38 @@
 <script setup>
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 
+import { useMessage } from 'naive-ui';
+import { useRouter } from 'vue-router';
+import { useAuth } from 'stores/authStore';
+const auth = useAuth();
 
+const email = ref('');
+const password = ref('');
+const router = useRouter();
+
+const message = useMessage();
 
 const showModal = ref(false);
+const login = async (e) => {
+  e.preventDefault();
+  try {
+    await auth.login(email.value, password.value);
 
-
-
-
+    return router.push('/');
+  } catch (m) {
+    console.log('not welcome');
+    message.error(m);
+  }
+};
 </script>
 
 <template>
+  <p>{{ auth.email }}</p>
+
   <div class="main">
-
-
-    <div  class="container" v-show="showModal">
+    <div class="container" v-show="showModal">
       <h1 class="authLabel">creer un nouveau compte</h1>
-      <form action="post">
-
+      <form>
         <div class="inputContainer">
           <input class="input" type="text" placeholder=" " required />
           <label for="email" class="placeholder">Adresse email</label>
@@ -43,37 +58,54 @@ const showModal = ref(false);
           <label for="password" class="placeholder">mot de passe</label>
         </div>
 
-        <input class="button-4" type="submit" value="creer" />
+        <button class="button-4" value="creer" />
       </form>
 
-      <hr class="hrSeparator">
-      <div class="create" v-on:click="showModal=!showModal">retour a la page de connexion</div>
+      <hr class="hrSeparator" />
+      <div class="create" v-on:click="showModal = !showModal">
+        retour a la page de connexion
+      </div>
     </div>
 
     <transition>
-    <div class="container" v-show="!showModal">
-      <h1 class="authLabel">Authentification</h1>
-      <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
-      <form action="post">
-        <div class="inputContainer">
-          <input class="input" type="text" placeholder=" " required />
-          <label for="username" class="placeholder">email</label>
+      <div class="container" v-show="!showModal">
+        <h1 class="authLabel">Authentification</h1>
+        <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
+        <form>
+          <div class="inputContainer">
+            <input
+              class="input"
+              v-model="email"
+              type="text"
+              placeholder=" "
+              required
+            />
+            <label for="username" class="placeholder">email</label>
+          </div>
+          <div class="inputContainer">
+            <input
+              class="input"
+              type="password"
+              v-model="password"
+              placeholder=" "
+              required
+            />
+            <label for="password" class="placeholder">mot de passe</label>
+          </div>
+
+          <div class="forgetContainer">
+            <label class="forget">mot de passe oubliée ?</label>
+          </div>
+
+          <button @click="login" class="button-4">Connexion</button>
+        </form>
+
+        <hr class="hrSeparator" />
+        <div class="create" v-on:click="showModal = !showModal">
+          créer un compte
         </div>
-        <div class="inputContainer">
-          <input class="input" type="password" placeholder=" " required />
-          <label for="password" class="placeholder">mot de passe</label>
-        </div>
-
-        <div class="forgetContainer"><label class="forget">mot de passe oubliée ?</label></div>
-
-        <input class="button-4" type="submit" value="connexion" />
-      </form>
-
-      <hr class="hrSeparator">
-      <div class="create" v-on:click="showModal=!showModal">creer un compte</div>
-    </div>
-  </transition>
-
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -160,9 +192,7 @@ const showModal = ref(false);
   width: 100%;
   text-align: center;
   margin: 20px 0px 20px 0px;
-  ;
 }
-
 
 .input {
   box-sizing: border-box;
@@ -191,19 +221,18 @@ const showModal = ref(false);
   top: 13px;
 }
 
-.input:focus~.placeholder,
-.input:not(:placeholder-shown)~.placeholder {
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
   transform: translateY(-18px) translateX(10px);
   color: #35bc00;
   font-size: 14px;
 }
 
-.input:not(:placeholder-shown)~.placeholder {
+.input:not(:placeholder-shown) ~ .placeholder {
   color: #35bc00;
 }
 
 /* end input style */
-
 
 /* Start button style  */
 
@@ -212,9 +241,10 @@ const showModal = ref(false);
   background-color: #ffed00;
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
-  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
+    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
   box-sizing: border-box;
-  color: #24292E;
+  color: #24292e;
   cursor: pointer;
   display: inline-block;
   /* font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; */
@@ -271,10 +301,10 @@ const showModal = ref(false);
 
 /* overlay animation start */
 .container1-enter-from {
-  opacity: 0
+  opacity: 0;
 }
 .container1-enter-to {
-  opacity: 1
+  opacity: 1;
 }
 .container1-enter-active {
   transition: all 3s ease;

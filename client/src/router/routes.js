@@ -1,4 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
+import { Role } from '../enums';
 
 //import Users from 'components/users/Users.vue';
 //import UserInfo from 'components/users/UserInfo.vue';
@@ -9,8 +10,6 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 //import Dashboard from 'components/dashboard/Dashboard.vue';
 import Login from 'components/authentication/Login.vue';
 import Home from 'app/Home.vue';
-
-import { names } from '@/names';
 
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
@@ -28,16 +27,18 @@ const routes = [
 
 const router = createRouter({
   routes,
-  history: createWebHashHistory(),
+  history: createWebHistory(),
 });
 
-router.beforeEach((to, from, next) => {
-  const user = JSON.parse(window.localStorage.getItem('user'));
-  if (to.meta.requireAuth && !user?.isAuthenticated) {
-    next('/login');
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   const authentication = JSON.parse(
+//     window.localStorage.getItem('authentication')
+//   );
+//   if (to.meta.requireAuth && !authentication?.isAuthenticated) {
+//     next('/login');
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

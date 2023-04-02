@@ -42,7 +42,7 @@ export const registerUser = async (userRegistration: UserRegistration) => {
         hashPassword,
         employe: {
           create: {
-            date_adhesion: dateAdhesion,
+            dateAdhesion,
             fonction: Fonction.INGENIEUR,
             status: StatusEmploye.EN_SERVICE,
             profile: {
