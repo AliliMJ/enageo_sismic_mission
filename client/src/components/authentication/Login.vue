@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 
-import { useMessage } from 'naive-ui';
 import { useRouter } from 'vue-router';
 import { useAuth } from 'stores/authStore';
 const auth = useAuth();
@@ -9,8 +8,6 @@ const auth = useAuth();
 const email = ref('');
 const password = ref('');
 const router = useRouter();
-
-const message = useMessage();
 
 const showModal = ref(false);
 const login = async (e) => {
@@ -21,7 +18,7 @@ const login = async (e) => {
     return router.push('/');
   } catch (m) {
     console.log('not welcome');
-    message.error(m);
+    alert(m);
   }
 };
 </script>
@@ -29,7 +26,7 @@ const login = async (e) => {
 <template>
   <div class="main">
     <div class="container" v-show="showModal">
-      <h1 class="authLabel">creer un nouveau compte</h1>
+      <h1 class="authLabel">créer un nouveau compte</h1>
       <form>
         <div class="inputContainer">
           <input class="input" type="text" placeholder=" " required />
@@ -47,16 +44,16 @@ const login = async (e) => {
         </div>
 
         <div class="inputContainer">
-          <input class="input" type="password" placeholder=" " required />
+          <input class="input" type="text" placeholder=" " required />
           <label for="password" class="placeholder">prenom</label>
         </div>
 
         <div class="inputContainer">
-          <input class="input" type="password" placeholder=" " required />
-          <label for="password" class="placeholder">mot de passe</label>
+          <input class="input" type="text" placeholder=" " required />
+          <label for="password" class="placeholder">code d'employé</label>
         </div>
 
-        <button class="button-4" value="creer" />
+        <button class="button-4">Créer</button>
       </form>
 
       <hr class="hrSeparator" />
@@ -187,7 +184,7 @@ const login = async (e) => {
 
 .inputContainer {
   position: relative;
-  width: 100%;
+
   text-align: center;
   margin: 20px 0px 20px 0px;
 }
@@ -199,6 +196,8 @@ const login = async (e) => {
   outline: 0;
   padding: 4px 20px 0;
   height: 40px;
+  width: 100%;
+
   /* border: 0.3px solid #202020; */
 }
 
@@ -210,7 +209,7 @@ const login = async (e) => {
   color: #96969b;
   background-color: white;
   font-family: sans-serif;
-  left: 125px;
+  left: 12px;
   line-height: 14px;
   pointer-events: none;
   position: absolute;
