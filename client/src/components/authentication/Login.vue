@@ -1,14 +1,4 @@
-<script>
-import { defineComponent, ref } from 'vue';
-
-export default defineComponent({
-  setup() {
-    return {
-      value: ref(null),
-    };
-  },
-});
-</script>
+<script setup></script>
 
 <template>
   <div class="main">
