@@ -92,7 +92,7 @@ const login = async (e) => {
             <label class="forget">mot de passe oubliée ?</label>
           </div>
 
-          <button class="button-4">Connexion</button>
+          <button @click="login" class="button-4">Connexion</button>
         </form>
 
         <hr class="hrSeparator" />
