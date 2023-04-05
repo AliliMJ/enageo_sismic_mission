@@ -76,18 +76,21 @@ enum Fonction {
 }
 
 model Projet {
-  id             String           @id @default(cuid())
-  creePar        Utilisateur      @relation(fields: [creeParID], references: [id]) // user.role=CM && mission.chefM = user
-  creeParID      String
-  Mission        Mission          @relation(fields: [missionCode], references: [code])
-  missionCode    String
-  Gestion        Gestion[]
-  Objectif       Objectif?
-  EtatProjet     EtatProjet[]
-  Ravitaillement Ravitaillement[]
-  Materiel       Materiel[]
-  Consomation    Consomation[]
-  createdAt      DateTime         @default(now())
+  id                    String           @id @default(cuid())
+  creePar               Utilisateur      @relation(fields: [creeParID], references: [id]) // user.role=CM && mission.chefM = user
+  creeParID             String
+  Mission               Mission          @relation(fields: [missionCode], references: [code])
+  missionCode           String
+  Gestion               Gestion[]
+  Objectif              Objectif?
+  EtatProjet            EtatProjet[]
+  Ravitaillement        Ravitaillement[]
+  Materiel              Materiel[]
+  Consomation           Consomation[]
+  createdAt             DateTime         @default(now())
+  Localisation          Localisation     @relation(fields: [localisationLongitude, localisationLatitude], references: [longitude, latitude])
+  localisationLongitude Float
+  localisationLatitude  Float
 }
 
 model EtatProjet {
@@ -116,8 +119,9 @@ model Objectif {
 model Localisation {
   longitude Float
   latitude  Float
-  Wilaya    Wilaya @relation(fields: [numWilaya], references: [numero])
+  Wilaya    Wilaya   @relation(fields: [numWilaya], references: [numero])
   numWilaya Int
+  Projet    Projet[]
 
   @@id([longitude, latitude])
 }

@@ -30,15 +30,15 @@ const router = createRouter({
   history: createWebHistory(),
 });
 
-// router.beforeEach((to, from, next) => {
-//   const authentication = JSON.parse(
-//     window.localStorage.getItem('authentication')
-//   );
-//   if (to.meta.requireAuth && !authentication?.isAuthenticated) {
-//     next('/login');
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const authentication = JSON.parse(
+    window.localStorage.getItem('authentication')
+  );
+  if (to.meta.requireAuth && !authentication?.isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 
 export default router;
