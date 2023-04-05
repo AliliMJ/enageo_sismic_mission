@@ -37,7 +37,8 @@ export const loginUser = async (req: Request, res: Response) => {
 
   try {
     const user = await prisma.utilisateur.findUnique({ where: { email } });
-    if (user === null) res.status(401).json({ err: 'Utilisateur introuvable' });
+    if (user === null)
+      return res.status(401).json({ err: 'Utilisateur introuvable' });
     else if (await bcrypt.compare(password, user.hashPassword)) {
       res.status(200).json(user);
     } else {
