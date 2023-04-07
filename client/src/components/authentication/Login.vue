@@ -119,7 +119,7 @@ const login = async (e) => {
 .website {
   position: absolute;
   bottom: 10px;
-  left: 45%;
+  left: 48.5%;
   text-decoration: none;
 }
 
@@ -130,7 +130,7 @@ a, a:visited, a:hover, a:active {
 .copyright {
   position: absolute;
   bottom: -12px;
-  left: 41%;
+  left: 44.5%;
   text-decoration: none;
   font-weight: normal;
 }
