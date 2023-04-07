@@ -39,18 +39,18 @@ const login = async (e) => {
         </div>
 
         <div class="inputContainer">
-          <input class="input" type="password" placeholder=" " required />
-          <label for="password" class="placeholder">nom</label>
+          <input class="input" type="text" placeholder=" " required />
+          <label for="nom" class="placeholder">nom</label>
         </div>
 
         <div class="inputContainer">
           <input class="input" type="text" placeholder=" " required />
-          <label for="password" class="placeholder">prenom</label>
+          <label for="prenom" class="placeholder">prenom</label>
         </div>
 
         <div class="inputContainer">
           <input class="input" type="text" placeholder=" " required />
-          <label for="password" class="placeholder">code d'employé</label>
+          <label for="empCode" class="placeholder">code d'employé</label>
         </div>
 
         <button class="button-4">Créer</button>
@@ -101,6 +101,8 @@ const login = async (e) => {
         </div>
       </div>
     </transition>
+    <h5 class="copyright">&#169; 2023</h5>
+    <a target="_blank" class="website" href="https://www.enageo.com/">enageo.com</a>
   </div>
 </template>
 
@@ -114,19 +116,23 @@ const login = async (e) => {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   overflow: hidden;
 }
-
-.container1 {
+.website {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: red;
-  width: 500px;
-  height: 500px;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-  text-align: center;
+  bottom: 10px;
+  left: 48.5%;
+  text-decoration: none;
+}
+
+a, a:visited, a:hover, a:active {
+  color: black;
+} 
+
+.copyright {
+  position: absolute;
+  bottom: -12px;
+  left: 44.5%;
+  text-decoration: none;
+  font-weight: normal;
 }
 
 .container {
@@ -156,7 +162,8 @@ const login = async (e) => {
   padding: 0;
   text-decoration: underline;
   position: relative;
-  left: 50px;
+  left: 80px;
+  font-size: 13px;
 }
 
 .create {
@@ -184,7 +191,6 @@ const login = async (e) => {
 
 .inputContainer {
   position: relative;
-
   text-align: center;
   margin: 20px 0px 20px 0px;
 }
@@ -192,11 +198,11 @@ const login = async (e) => {
 .input {
   box-sizing: border-box;
   color: #787878;
-  font-size: 18px;
+  font-size: 15px;
   outline: 0;
-  padding: 4px 20px 0;
+  padding: 0px 20px 0;
   height: 40px;
-  width: 100%;
+  width: 65%;
 
   /* border: 0.3px solid #202020; */
 }
@@ -209,7 +215,7 @@ const login = async (e) => {
   color: #96969b;
   background-color: white;
   font-family: sans-serif;
-  left: 12px;
+  left: 100px;
   line-height: 14px;
   pointer-events: none;
   position: absolute;
@@ -220,7 +226,7 @@ const login = async (e) => {
 
 .input:focus ~ .placeholder,
 .input:not(:placeholder-shown) ~ .placeholder {
-  transform: translateY(-18px) translateX(10px);
+  transform: translateY(-19px) translateX(10px);
   color: #35bc00;
   font-size: 14px;
 }
@@ -258,7 +264,7 @@ const login = async (e) => {
   vertical-align: middle;
   white-space: nowrap;
   word-wrap: break-word;
-  width: 280px;
+  width: 300px;
   height: 40px;
   font-weight: bold;
 }
