@@ -4,8 +4,6 @@ import axios from 'axios';
 export const useAuth = defineStore('authentication', {
   state: () => ({
     user: null,
-    email: '',
-    password: '',
     isAuthenticated: false,
   }),
   persist: true,
@@ -16,16 +14,9 @@ export const useAuth = defineStore('authentication', {
           email,
           password,
         });
-        const { id, dateCreationCompte, employeId, role } = response.data;
+        const user = response.data;
         this.$patch({
-          user: {
-            id,
-            employeId,
-            dateCreationCompte,
-            role,
-          },
-          email,
-          password,
+          user,
           isAuthenticated: true,
         });
 

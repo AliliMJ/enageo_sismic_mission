@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { useRouter } from 'vue-router';
-import { useAuth } from 'stores/authStore';
+import { useAuth } from 'stores/authentication.js';
 const auth = useAuth();
 
 const email = ref('');
@@ -102,7 +102,9 @@ const login = async (e) => {
       </div>
     </transition>
     <h5 class="copyright">&#169; 2023</h5>
-    <a target="_blank" class="website" href="https://www.enageo.com/">enageo.com</a>
+    <a target="_blank" class="website" href="https://www.enageo.com/"
+      >enageo.com</a
+    >
   </div>
 </template>
 
@@ -123,9 +125,12 @@ const login = async (e) => {
   text-decoration: none;
 }
 
-a, a:visited, a:hover, a:active {
+a,
+a:visited,
+a:hover,
+a:active {
   color: black;
-} 
+}
 
 .copyright {
   position: absolute;

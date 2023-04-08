@@ -1,6 +1,6 @@
 <script setup>
 import { NLayout } from 'naive-ui';
-import { useAuth } from 'stores/authStore.js';
+import { useAuth } from 'stores/authentication.js';
 import { useRouter } from 'vue-router';
 const auth = useAuth();
 

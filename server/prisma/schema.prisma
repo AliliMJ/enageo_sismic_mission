@@ -165,7 +165,7 @@ model Equipe {
 
 model Memebre {
   Employe   Employe @relation(fields: [employeId], references: [id])
-  employeId String  @unique
+  employeId String  @id
   Equipe    Equipe  @relation(fields: [equipeId], references: [id])
   equipeId  String
 }

@@ -21,7 +21,6 @@ export const registerUser = async (req: Request, res: Response) => {
     res.status(201).json(registeredUser);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log();
       if (e.code === 'P2002')
         return res.status(500).send({ err: 'Email déja utilisé' });
       if (e.code === 'P2003')
