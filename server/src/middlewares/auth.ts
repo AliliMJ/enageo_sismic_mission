@@ -9,19 +9,17 @@ export const verifyUserAuthentication = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email, password } = req.body;
+  const { email, hashPassword } = req.body;
 
   try {
-    const user = await prisma.utilisateur.findUnique({ where: { email } });
+    const user = await prisma.utilisateur.findFirst({
+      where: { email, hashPassword },
+    });
     if (user === null)
       return res.status(401).json({ err: 'Utilisateur non authentifié.' });
 
-    if (await bcrypt.compare(password, user.hashPassword)) {
-      req.body = user;
-      return next();
-    }
-
-    return res.status(400).json({ err: 'Authentification refusée.' });
+    req.body = user;
+    return next();
   } catch {
     res.status(500).json({ err: `Problème d'authentification.` });
   }

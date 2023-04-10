@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { Role } from '../enums';
+import { Role, Route } from '../enums';
 
 //import Users from 'components/users/Users.vue';
 //import UserInfo from 'components/users/UserInfo.vue';
@@ -9,8 +9,10 @@ import { Role } from '../enums';
 
 //import Dashboard from 'components/dashboard/Dashboard.vue';
 import Login from 'components/authentication/Login.vue';
-import Home from 'app/Home.vue';
-
+import Admin from 'app/Admin.vue';
+import Gestionnaire from 'app/Gestionnaire.vue';
+import Loading from 'app/Loading.vue';
+import AdminDashboard from 'components/dashboard/AdminDashboard.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -22,7 +24,31 @@ import Home from 'app/Home.vue';
 
 const routes = [
   { path: '/login', component: Login },
-  { path: '/', component: Home, meta: { requireAuth: true } },
+  {
+    path: '/admin',
+    name: Route.Admin,
+    component: Admin,
+    meta: { requireAuth: true, role: 'admin' },
+    children: [
+      {
+        path: '',
+        component: AdminDashboard,
+      },
+    ],
+  },
+  {
+    path: '/gestionnaire',
+    component: Gestionnaire,
+    name: Route.Gestionnaire,
+    meta: { requireAuth: true, role: 'gestionnaire' },
+    children: [
+      {
+        path: '',
+        component: AdminDashboard,
+      },
+    ],
+  },
+  { path: '/', component: Loading, meta: { requireAuth: true } },
 ];
 
 const router = createRouter({
@@ -34,11 +60,22 @@ router.beforeEach((to, from, next) => {
   const authentication = JSON.parse(
     window.localStorage.getItem('authentication')
   );
-  if (to.meta.requireAuth && !authentication?.isAuthenticated) {
-    next('/login');
-  } else {
-    next();
+
+  if (!to.meta.requireAuth) return next();
+
+  if (to.meta.requireAuth && !authentication?.isAuthenticated)
+    return next('/login');
+
+  if (to.meta.role && to.meta.role != authentication?.user?.role)
+    return next('/denied');
+
+  if (from.path == '/login') {
+    if (authentication?.user?.role == 'admin') return next('/admin');
+    if (authentication?.user?.role == 'gestionnaire')
+      return next('/gestionnaire');
   }
+
+  return next();
 });
 
 export default router;

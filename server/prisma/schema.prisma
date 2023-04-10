@@ -11,18 +11,19 @@ datasource db {
 }
 
 model Utilisateur {
-  id                 String    @id @default(cuid())
-  email              String    @unique
+  id                 String   @id @default(cuid())
+  email              String   @unique
   hashPassword       String
   role               Role?
-  valide             Boolean   @default(false) //il ne peut pas accèder à l'application que s'il a été validé par l'admin
-  ProjetsCree        Projet[]
-  employe            Employe   @relation(fields: [employeId], references: [id])
-  employeId          String    @unique
-  Gestion            Gestion[]
-  ChefMissionDe      Mission?  @relation("chefMission")
-  ChefTerrainDe      Mission?  @relation("chefTerrain")
-  dateCreationCompte DateTime  @default(now())
+  valide             Boolean  @default(false) //il ne peut pas accèder à l'application que s'il a été validé par l'admin
+  ProjetsCree        Projet[] @relation("projetsCree")
+  employe            Employe  @relation(fields: [employeId], references: [id])
+  employeId          String   @unique
+  ChefMissionDe      Mission? @relation("chefMission")
+  ChefTerrainDe      Mission? @relation("chefTerrain")
+  dateCreationCompte DateTime @default(now())
+  ProjetGere         Projet?  @relation(fields: [projetGereId], references: [id])
+  projetGereId       String?
 }
 
 enum Role {
@@ -41,7 +42,9 @@ model Employe {
   profile      Profile       @relation(fields: [profileId], references: [id])
   profileId    String        @unique
   utilisateur  Utilisateur?
-  Memebre      Memebre[]
+
+  Equipe   Equipe? @relation(fields: [equipeId], references: [id])
+  equipeId String?
 }
 
 enum StatusEmploye {
@@ -76,12 +79,12 @@ enum Fonction {
 }
 
 model Projet {
-  id                    String           @id @default(cuid())
-  creePar               Utilisateur      @relation(fields: [creeParID], references: [id]) // user.role=CM && mission.chefM = user
-  creeParID             String
-  Mission               Mission          @relation(fields: [missionCode], references: [code])
-  missionCode           String
-  Gestion               Gestion[]
+  id          String      @id @default(cuid())
+  creePar     Utilisateur @relation("projetsCree", fields: [creeParID], references: [id]) // user.role=CM && mission.chefM = user 
+  creeParID   String
+  Mission     Mission     @relation(fields: [missionCode], references: [code])
+  missionCode String
+
   Objectif              Objectif?
   EtatProjet            EtatProjet[]
   Ravitaillement        Ravitaillement[]
@@ -91,6 +94,7 @@ model Projet {
   Localisation          Localisation     @relation(fields: [localisationLongitude, localisationLatitude], references: [longitude, latitude])
   localisationLongitude Float
   localisationLatitude  Float
+  gestionnaires         Utilisateur[]
 }
 
 model EtatProjet {
@@ -140,8 +144,7 @@ model Mission {
   chefMissionID String      @unique
   ChefTerrain   Utilisateur @relation("chefTerrain", fields: [chefTerrainID], references: [id])
   chefTerrainID String      @unique
-
-  Equipe Equipe[] // 5 equipes Labo, Topo, Pose, Ramasse et Layonnage 
+  Equipe        Equipe[]
 }
 
 enum TypeMission {
@@ -149,35 +152,21 @@ enum TypeMission {
   MISSION3D
 }
 
-model Gestion {
-  Utilisateur     Utilisateur @relation(fields: [utilisateurId], references: [id])
-  utilisateurId   String
-  projet          Projet      @relation(fields: [projetId], references: [id])
-  projetId        String
-  dateAssignement DateTime
-
-  @@id([utilisateurId, projetId])
-}
-
 model Equipe {
-  id          String     @id @default(cuid())
-  type        TypeEquipe
-  Mission     Mission    @relation(fields: [missionCode], references: [code])
-  missionCode String     @unique
-  Memebre     Memebre[]
-  Travaux     Travail[]
-  Retard      Retard[]
-}
+  id   String     @id @default(cuid())
+  type TypeEquipe
 
-model Memebre {
-  Employe   Employe @relation(fields: [employeId], references: [id])
-  employeId String  @unique
-  Equipe    Equipe  @relation(fields: [equipeId], references: [id])
-  equipeId  String
+  Mission   Mission @relation(fields: [missionId], references: [code])
+  missionId String
+
+  Travaux Travail[]
+  Membres Employe[]
+
+  @@unique([missionId, type])
 }
 
 enum TypeEquipe {
-  LABO
+  ENREGISTREMENT
   TOPO
   POSE
   RAMASSE
@@ -185,36 +174,13 @@ enum TypeEquipe {
 }
 
 model Travail {
-  id         String     @id @default(cuid())
-  Equipe     Equipe     @relation(fields: [equipeId], references: [id])
+  id         String   @id @default(cuid())
+  Equipe     Equipe   @relation(fields: [equipeId], references: [id])
   equipeId   String
-  jour       DateTime   @unique @db.Date
-  heureDebut DateTime   @db.Time()
-  heureFin   DateTime   @db.Time()
-  Rendement  Rendement?
-}
-
-model Rendement {
-  Travail   Travail       @relation(fields: [travailId], references: [id])
-  travailId String        @id
-  type      TypeRendement
-  valeur    Int
-}
-
-enum TypeRendement {
-  VP
-  PIQUET
-  CABLE
-  GRAPPE
-}
-
-model Retard {
-  id          String   @id @default(cuid())
-  jour        DateTime @unique @db.Date
-  Equipe      Equipe   @relation(fields: [equipeId], references: [id])
-  equipeId    String
-  description String
-  tempsPerdu  Int
+  jour       DateTime @unique @db.Date
+  heureDebut DateTime @db.Time()
+  heureFin   DateTime @db.Time()
+  Rendement  Int
 }
 
 model Ravitaillement {
@@ -271,4 +237,10 @@ model Materiel {
 enum EtatMateriel {
   BON
   ENPANNE
+}
+
+enum TypeMateriel {
+  VEHICULE
+  BULLDUZER
+  CAMION
 }

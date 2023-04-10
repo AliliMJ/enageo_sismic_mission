@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {

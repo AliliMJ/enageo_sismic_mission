@@ -4,3 +4,8 @@ export const Role = Object.freeze({
   ChefTerrain: 'CHEF_TERRAIN',
   Gestionnaire: 'GESTIONNAIRE',
 });
+
+export const Route = Object.freeze({
+  Admin: 'admin',
+  Gestionnaire: 'gestionnaire',
+});
