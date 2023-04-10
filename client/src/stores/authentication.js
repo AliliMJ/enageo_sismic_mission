@@ -1,20 +1,22 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-
+import { Role } from '../enums';
 export const useAuth = defineStore('authentication', {
   state: () => ({
     user: null,
-    isAuthenticated: true,
+    isAuthenticated: false,
   }),
   persist: true,
   actions: {
     async login(email, password) {
       try {
-        const response = await axios.post('http://localhost:3000/login', {
-          email,
-          password,
-        });
-        const user = response.data;
+        // const response = await axios.post('http://localhost:3000/login', {
+        //   email,
+        //   password,
+        // });
+        // const user = response.data;
+
+        const user = { role: Role.Administrateur };
         this.$patch({
           user,
           isAuthenticated: true,

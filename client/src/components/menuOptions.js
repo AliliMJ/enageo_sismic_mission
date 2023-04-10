@@ -14,14 +14,14 @@ export const optionsSupervisor = [
   {
     label: `Tables`,
     key: 'tables',
-    children: [{ label: 'Missions', key: Route.Materiel }],
+    children: [{ label: 'Missions', key: Route.Mission }],
   },
 ];
 export const optionsChefMission = [
   {
     label: `Tables`,
     key: 'tables',
-    children: [{ label: 'Projets', key: Route.Materiel }],
+    children: [{ label: 'Projets', key: Route.Projet }],
   },
 ];
 
@@ -29,7 +29,7 @@ export const optionsAdmin = [
   {
     label: `Tables`,
     key: 'tables',
-    children: [{ label: 'Utilisateurs', key: Route.Materiel }],
+    children: [{ label: 'Utilisateurs', key: Route.Utilisateur }],
   },
 ];
 const optionsCompte = [
@@ -38,8 +38,8 @@ const optionsCompte = [
     label: 'Compte',
     key: 'compte',
     children: [
-      { label: 'Profile', key: 'profile' },
-      { label: 'Préférences', key: 'preferences' },
+      { label: 'Profile', key: Route.Profile },
+      { label: 'Préférences', key: Route.Preference },
       { label: 'Déconnecter', key: 'logout' },
     ],
   },

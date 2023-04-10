@@ -1,0 +1,1 @@
+<template>Gestionnaire Dashboard</template>

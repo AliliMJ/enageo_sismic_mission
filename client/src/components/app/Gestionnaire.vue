@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
-
+import { NLayout, NLayoutSider, NLayoutContent } from 'naive-ui';
 import GestMenu from '../menu/GestMenu.vue';
 //const auth = useAuth();
 
@@ -12,5 +12,13 @@ const router = useRouter();
 </script>
 
 <template>
-  <GestMenu />
+  <NLayout has-sider>
+    <NLayoutSider>
+      <GestMenu />
+    </NLayoutSider>
+
+    <NLayoutContent>
+      <RouterView />
+    </NLayoutContent>
+  </NLayout>
 </template>

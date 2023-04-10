@@ -13,6 +13,7 @@ import Admin from 'app/Admin.vue';
 import Gestionnaire from 'app/Gestionnaire.vue';
 import Loading from 'app/Loading.vue';
 import AdminDashboard from 'components/dashboard/AdminDashboard.vue';
+import GestDashboard from 'components/dashboard/GestDashboard.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -28,7 +29,7 @@ const routes = [
     path: '/admin',
     name: Route.Admin,
     component: Admin,
-    meta: { requireAuth: true, role: 'admin' },
+    meta: { requireAuth: true, role: Role.Administrateur },
     children: [
       {
         path: '',
@@ -40,11 +41,11 @@ const routes = [
     path: '/gestionnaire',
     component: Gestionnaire,
     name: Route.Gestionnaire,
-    meta: { requireAuth: true, role: 'gestionnaire' },
+    meta: { requireAuth: true, role: Role.Gestionnaire },
     children: [
       {
         path: '',
-        component: AdminDashboard,
+        component: GestDashboard,
       },
     ],
   },
@@ -70,8 +71,9 @@ router.beforeEach((to, from, next) => {
     return next('/denied');
 
   if (from.path == '/login') {
-    if (authentication?.user?.role == 'admin') return next('/admin');
-    if (authentication?.user?.role == 'gestionnaire')
+    if (authentication?.user?.role == Role.Administrateur)
+      return next('/admin');
+    if (authentication?.user?.role == Role.Gestionnaire)
       return next('/gestionnaire');
   }
 

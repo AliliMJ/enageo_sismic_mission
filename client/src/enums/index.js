@@ -8,4 +8,10 @@ export const Role = Object.freeze({
 export const Route = Object.freeze({
   Admin: 'admin',
   Gestionnaire: 'gestionnaire',
+  Material: 'materiel',
+  Projet: 'projet',
+  Utilisateur: 'utilisateur',
+  Mission: 'mission',
+  Profile: 'profile',
+  Preference: 'preference',
 });

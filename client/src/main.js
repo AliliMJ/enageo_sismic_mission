@@ -4,6 +4,7 @@ import App from './App.vue';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { createPinia } from 'pinia';
 import './styles.css';
+import { Role } from './enums';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -13,3 +14,11 @@ app.use(router);
 app.use(pinia);
 
 app.mount('#app');
+
+window.localStorage.setItem(
+  'authentication',
+  JSON.stringify({
+    user: { role: Role.Gestionnaire },
+    isAuthenticated: true,
+  })
+);
