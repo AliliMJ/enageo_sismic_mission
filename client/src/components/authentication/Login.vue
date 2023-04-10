@@ -88,10 +88,6 @@ const login = async (e) => {
             <label for="password" class="placeholder">mot de passe</label>
           </div>
 
-          <div class="forgetContainer">
-            <label class="forget">mot de passe oubliée ?</label>
-          </div>
-
           <button @click="login" class="button-4">Connexion</button>
         </form>
 
@@ -153,19 +149,6 @@ a, a:visited, a:hover, a:active {
   margin-bottom: 20px;
   text-align: center;
 }
-
-.forgetContainer {
-  margin: -15px 0px 30px 0px;
-}
-
-.forget {
-  padding: 0;
-  text-decoration: underline;
-  position: relative;
-  left: 80px;
-  font-size: 13px;
-}
-
 .create {
   text-align: center;
   text-decoration: underline;
