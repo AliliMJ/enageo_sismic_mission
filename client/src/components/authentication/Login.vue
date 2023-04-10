@@ -25,43 +25,6 @@ const login = async (e) => {
 
 <template>
   <div class="main">
-    <div class="container" v-show="showModal">
-      <h1 class="authLabel">créer un nouveau compte</h1>
-      <form>
-        <div class="inputContainer">
-          <input class="input" type="text" placeholder=" " required />
-          <label for="email" class="placeholder">Adresse email</label>
-        </div>
-
-        <div class="inputContainer">
-          <input class="input" type="password" placeholder=" " required />
-          <label for="password" class="placeholder">mot de passe</label>
-        </div>
-
-        <div class="inputContainer">
-          <input class="input" type="text" placeholder=" " required />
-          <label for="nom" class="placeholder">nom</label>
-        </div>
-
-        <div class="inputContainer">
-          <input class="input" type="text" placeholder=" " required />
-          <label for="prenom" class="placeholder">prenom</label>
-        </div>
-
-        <div class="inputContainer">
-          <input class="input" type="text" placeholder=" " required />
-          <label for="empCode" class="placeholder">code d'employé</label>
-        </div>
-
-        <button class="button-4">Créer</button>
-      </form>
-
-      <hr class="hrSeparator" />
-      <div class="create" v-on:click="showModal = !showModal">
-        retour a la page de connexion
-      </div>
-    </div>
-
     <transition>
       <div class="container" v-show="!showModal">
         <h1 class="authLabel">Authentification</h1>
@@ -87,14 +50,8 @@ const login = async (e) => {
             />
             <label for="password" class="placeholder">mot de passe</label>
           </div>
-
           <button @click="login" class="button-4">Connexion</button>
         </form>
-
-        <hr class="hrSeparator" />
-        <div class="create" v-on:click="showModal = !showModal">
-          créer un compte
-        </div>
       </div>
     </transition>
     <h5 class="copyright">&#169; 2023</h5>
@@ -143,7 +100,7 @@ a:active {
   transform: translate(-50%, -50%);
   background-color: rgb(255, 255, 255);
   width: 500px;
-  height: 500px;
+  height: 450px;
   border-radius: 10px;
   padding: 15px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
@@ -151,28 +108,16 @@ a:active {
 }
 
 .authLabel {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   text-align: center;
-}
-.create {
-  text-align: center;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.create:active {
-  color: #787878;
 }
 
 .logoImg {
   width: 130px;
   height: 130px;
+  margin-bottom: 10px;
   text-align: center;
   position: relative;
-}
-
-.hrSeparator {
-  margin: 30px 50px 10px 50px;
 }
 
 /* start input style */
@@ -180,7 +125,7 @@ a:active {
 .inputContainer {
   position: relative;
   text-align: center;
-  margin: 20px 0px 20px 0px;
+  margin: 20px 0px 10px 0px;
 }
 
 .input {
@@ -252,9 +197,10 @@ a:active {
   vertical-align: middle;
   white-space: nowrap;
   word-wrap: break-word;
-  width: 300px;
+  width: 325px;
   height: 40px;
   font-weight: bold;
+  margin-top: 20px;
 }
 
 .button-4:hover {
