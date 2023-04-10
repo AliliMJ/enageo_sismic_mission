@@ -42,7 +42,9 @@ model Employe {
   profile      Profile       @relation(fields: [profileId], references: [id])
   profileId    String        @unique
   utilisateur  Utilisateur?
-  Memebre      Memebre?
+
+  Equipe   Equipe? @relation(fields: [equipeId], references: [id])
+  equipeId String?
 }
 
 enum StatusEmploye {
@@ -142,8 +144,7 @@ model Mission {
   chefMissionID String      @unique
   ChefTerrain   Utilisateur @relation("chefTerrain", fields: [chefTerrainID], references: [id])
   chefTerrainID String      @unique
-
-  Equipe Equipe[] // 5 equipes Labo, Topo, Pose, Ramasse et Layonnage 
+  Equipe        Equipe[]
 }
 
 enum TypeMission {
@@ -152,22 +153,16 @@ enum TypeMission {
 }
 
 model Equipe {
-  id          String     @id @default(cuid())
-  type        TypeEquipe
-  Mission     Mission    @relation(fields: [missionCode], references: [code])
-  missionCode String
-  Memebre     Memebre[]
-  Travaux     Travail[]
-  Retard      Retard[]
+  id   String     @id @default(cuid())
+  type TypeEquipe
 
-  @@unique([missionCode, type])
-}
+  Mission   Mission @relation(fields: [missionId], references: [code])
+  missionId String
 
-model Memebre {
-  Employe   Employe @relation(fields: [employeId], references: [id])
-  employeId String  @id
-  Equipe    Equipe  @relation(fields: [equipeId], references: [id])
-  equipeId  String
+  Travaux Travail[]
+  Membres Employe[]
+
+  @@unique([missionId, type])
 }
 
 enum TypeEquipe {
@@ -179,36 +174,13 @@ enum TypeEquipe {
 }
 
 model Travail {
-  id         String     @id @default(cuid())
-  Equipe     Equipe     @relation(fields: [equipeId], references: [id])
+  id         String   @id @default(cuid())
+  Equipe     Equipe   @relation(fields: [equipeId], references: [id])
   equipeId   String
-  jour       DateTime   @unique @db.Date
-  heureDebut DateTime   @db.Time()
-  heureFin   DateTime   @db.Time()
-  Rendement  Rendement?
-}
-
-model Rendement {
-  Travail   Travail       @relation(fields: [travailId], references: [id])
-  travailId String        @id
-  type      TypeRendement
-  valeur    Int
-}
-
-enum TypeRendement {
-  VP
-  PIQUET
-  CABLE
-  GRAPPE
-}
-
-model Retard {
-  id          String   @id @default(cuid())
-  jour        DateTime @unique @db.Date
-  Equipe      Equipe   @relation(fields: [equipeId], references: [id])
-  equipeId    String
-  description String
-  tempsPerdu  Int
+  jour       DateTime @unique @db.Date
+  heureDebut DateTime @db.Time()
+  heureFin   DateTime @db.Time()
+  Rendement  Int
 }
 
 model Ravitaillement {

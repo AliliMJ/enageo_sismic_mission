@@ -1,8 +1,5 @@
 
 
--- C1
-Equipe{@@unique([missionCode, type]) }
-
 -- C4
 delimiter $$
 CREATE TRIGGER trg_add_projet

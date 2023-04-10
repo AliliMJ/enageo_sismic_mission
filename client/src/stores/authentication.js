@@ -4,7 +4,7 @@ import axios from 'axios';
 export const useAuth = defineStore('authentication', {
   state: () => ({
     user: null,
-    isAuthenticated: false,
+    isAuthenticated: true,
   }),
   persist: true,
   actions: {
