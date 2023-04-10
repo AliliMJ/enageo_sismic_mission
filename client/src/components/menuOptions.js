@@ -1,4 +1,5 @@
 import { Route } from '../enums';
+import { renderMenuItem } from './menu/render';
 export const optionsGestion = [
   {
     label: `Tables`,
@@ -40,12 +41,12 @@ const optionsCompte = [
     children: [
       { label: 'Profile', key: Route.Profile },
       { label: 'Préférences', key: Route.Preference },
-      { label: 'Déconnecter', key: 'logout' },
+      { label: renderMenuItem('Déconnecter', 'logout'), key: 'logout' },
     ],
   },
 ];
 
-const dashboardOption = [{ label: 'Tableau de bord', key: Route.Dashboard }];
+const dashboardOption = [{ label: 'Tableau de bord', key: 'dashboard' }];
 
 export const createMenuOptions = (options) => [
   ...dashboardOption,

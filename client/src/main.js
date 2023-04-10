@@ -14,11 +14,3 @@ app.use(router);
 app.use(pinia);
 
 app.mount('#app');
-
-window.localStorage.setItem(
-  'authentication',
-  JSON.stringify({
-    user: { role: Role.Gestionnaire },
-    isAuthenticated: true,
-  })
-);

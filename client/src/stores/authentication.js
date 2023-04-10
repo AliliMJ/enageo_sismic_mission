@@ -10,13 +10,14 @@ export const useAuth = defineStore('authentication', {
   actions: {
     async login(email, password) {
       try {
-        // const response = await axios.post('http://localhost:3000/login', {
-        //   email,
-        //   password,
-        // });
-        // const user = response.data;
+        const response = await axios.post('http://localhost:3000/login', {
+          email,
+          password,
+        });
 
-        const user = { role: Role.Administrateur };
+        const user = response.data;
+
+        //const user = { role: Role.Administrateur };
         this.$patch({
           user,
           isAuthenticated: true,

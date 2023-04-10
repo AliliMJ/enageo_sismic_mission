@@ -9,6 +9,7 @@ import { Role, Route } from '../enums';
 
 //import Dashboard from 'components/dashboard/Dashboard.vue';
 import Login from 'components/authentication/Login.vue';
+import Logout from 'components/authentication/Logout.vue';
 import Admin from 'app/Admin.vue';
 import Gestionnaire from 'app/Gestionnaire.vue';
 import Loading from 'app/Loading.vue';
@@ -25,6 +26,7 @@ import GestDashboard from 'components/dashboard/GestDashboard.vue';
 
 const routes = [
   { path: '/login', component: Login },
+  { path: '/logout', component: Logout, name: 'logout' },
   {
     path: '/admin',
     name: Route.Admin,
@@ -34,6 +36,7 @@ const routes = [
       {
         path: '',
         component: AdminDashboard,
+        name: 'adminDB',
       },
     ],
   },
@@ -46,9 +49,11 @@ const routes = [
       {
         path: '',
         component: GestDashboard,
+        name: 'gestDB',
       },
     ],
   },
+
   { path: '/', component: Loading, meta: { requireAuth: true } },
 ];
 
@@ -70,7 +75,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.role && to.meta.role != authentication?.user?.role)
     return next('/denied');
 
-  if (from.path == '/login') {
+  if (to.path == '/') {
     if (authentication?.user?.role == Role.Administrateur)
       return next('/admin');
     if (authentication?.user?.role == Role.Gestionnaire)
