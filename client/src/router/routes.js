@@ -37,7 +37,7 @@ const routes = [
         path: '',
         component: AdminDashboard,
         name: 'adminDB',
-      },
+      }, 
     ],
   },
   {
