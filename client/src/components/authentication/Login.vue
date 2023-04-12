@@ -9,7 +9,6 @@ const email = ref('');
 const password = ref('');
 const router = useRouter();
 
-const showModal = ref(false);
 const login = async (e) => {
   e.preventDefault();
   try {
@@ -31,33 +30,21 @@ const login = async (e) => {
         <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
         <form>
           <div class="inputContainer">
-            <input
-              class="input"
-              v-model="email"
-              type="text"
-              placeholder=" "
-              required
-            />
+            <input class="input" v-model="email" type="text" placeholder=" " required />
             <label for="username" class="placeholder">email</label>
           </div>
           <div class="inputContainer">
-            <input
-              class="input"
-              type="password"
-              v-model="password"
-              placeholder=" "
-              required
-            />
+            <input class="input" type="password" v-model="password" placeholder=" " required />
             <label for="password" class="placeholder">mot de passe</label>
           </div>
           <button @click="login" class="button-4">Connexion</button>
         </form>
       </div>
     </transition>
-    <h5 class="copyright">&#169; 2023</h5>
-    <a target="_blank" class="website" href="https://www.enageo.com/"
-      >enageo.com</a
-    >
+    <div class="footer-container">
+      <h5 class="copyright">&#169; 2023</h5>
+    <a target="_blank" class="website" href="https://www.enageo.com/">enageo.com</a>
+    </div>
   </div>
 </template>
 
@@ -71,28 +58,37 @@ const login = async (e) => {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   overflow: hidden;
 }
-.website {
-  position: absolute;
-  bottom: 10px;
-  left: 48.5%;
-  text-decoration: none;
-}
 
-a,
+ .website {
+  text-decoration: none;
+} 
+
+ a,
 a:visited,
 a:hover,
 a:active {
   color: black;
 }
 
-.copyright {
-  position: absolute;
-  bottom: -12px;
-  left: 44.5%;
+ .copyright {
   text-decoration: none;
   font-weight: normal;
-}
+  font-weight:normal;
+}  
 
+
+.footer-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 160px;
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  height: 25px;
+}
 .container {
   position: absolute;
   top: 50%;
@@ -157,14 +153,14 @@ a:active {
   top: 13px;
 }
 
-.input:focus ~ .placeholder,
-.input:not(:placeholder-shown) ~ .placeholder {
+.input:focus~.placeholder,
+.input:not(:placeholder-shown)~.placeholder {
   transform: translateY(-19px) translateX(10px);
   color: #35bc00;
   font-size: 14px;
 }
 
-.input:not(:placeholder-shown) ~ .placeholder {
+.input:not(:placeholder-shown)~.placeholder {
   color: #35bc00;
 }
 
@@ -240,20 +236,26 @@ a:active {
 .container1-enter-from {
   opacity: 0;
 }
+
 .container1-enter-to {
   opacity: 1;
 }
+
 .container1-enter-active {
   transition: all 3s ease;
 }
+
 .container1-leave-from {
   opacity: 1;
 }
+
 .container1-leave-to {
   opacity: 0;
 }
+
 .container1-leave-active {
   transition: all 3s ease;
 }
+
 /* overlay animation end */
 </style>
