@@ -25,7 +25,7 @@ const login = async (e) => {
 <template>
   <div class="main">
     <transition>
-      <div class="container" v-show="!showModal">
+      <div class="container">
         <h1 class="authLabel">Authentification</h1>
         <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
         <form>
