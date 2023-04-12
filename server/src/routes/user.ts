@@ -7,7 +7,7 @@ import { Role } from '@prisma/client';
 
 export const userRouter = express.Router();
 
-userRouter.get(
+userRouter.post(
   '/users',
   verifyUserAuthentication,
   verifyUserAcces([Role.ADMINISTRATEUR]),

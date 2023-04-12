@@ -1,15 +1,5 @@
 import { Route } from '../enums';
 import { renderMenuItem } from './menu/render';
-export const optionsGestion = [
-  {
-    label: `Tables`,
-    key: 'tables',
-    children: [
-      { label: 'Matériel', key: Route.Materiel },
-      { label: 'Employes', key: Route.Employe },
-    ],
-  },
-];
 
 export const optionsSupervisor = [
   {
@@ -26,14 +16,7 @@ export const optionsChefMission = [
   },
 ];
 
-export const optionsAdmin = [
-  {
-    label: `Tables`,
-    key: 'tables',
-    children: [{ label: 'Utilisateurs', key: Route.Utilisateur }],
-  },
-];
-const optionsCompte = [
+export const optionsCompte = [
   {
     type: 'group',
     label: 'Compte',
@@ -44,12 +27,4 @@ const optionsCompte = [
       { label: renderMenuItem('Déconnecter', 'logout'), key: 'logout' },
     ],
   },
-];
-
-const dashboardOption = [{ label: 'Tableau de bord', key: 'dashboard' }];
-
-export const createMenuOptions = (options) => [
-  ...dashboardOption,
-  ...options,
-  ...optionsCompte,
 ];

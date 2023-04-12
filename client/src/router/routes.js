@@ -15,6 +15,9 @@ import Gestionnaire from 'app/Gestionnaire.vue';
 import Loading from 'app/Loading.vue';
 import AdminDashboard from 'components/dashboard/AdminDashboard.vue';
 import GestDashboard from 'components/dashboard/GestDashboard.vue';
+import MaterialTable from 'components/tables/MaterialTable.vue';
+import EmployesTable from 'components/tables/EmployesTable.vue';
+import UsersTable from 'components/tables/UsersTable.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -36,7 +39,12 @@ const routes = [
       {
         path: '',
         component: AdminDashboard,
-        name: 'adminDB',
+        name: 'adminDashboard',
+      },
+      {
+        path: Route.Utilisateur,
+        component: UsersTable,
+        name: Route.Utilisateur,
       },
     ],
   },
@@ -49,7 +57,17 @@ const routes = [
       {
         path: '',
         component: GestDashboard,
-        name: 'gestDB',
+        name: 'gestDashboard',
+      },
+      {
+        path: Route.Material,
+        component: MaterialTable,
+        name: Route.Material,
+      },
+      {
+        path: Route.Employe,
+        component: EmployesTable,
+        name: Route.Employe,
       },
     ],
   },

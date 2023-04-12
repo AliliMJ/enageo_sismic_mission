@@ -15,7 +15,9 @@ const router = useRouter();
     </NLayoutSider>
 
     <NLayoutContent>
-      <RouterView />
+      <Suspense>
+        <RouterView />
+      </Suspense>
     </NLayoutContent>
   </NLayout>
 </template>

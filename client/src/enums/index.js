@@ -14,4 +14,5 @@ export const Route = Object.freeze({
   Mission: 'mission',
   Profile: 'profile',
   Preference: 'preference',
+  Employe: 'employe',
 });
