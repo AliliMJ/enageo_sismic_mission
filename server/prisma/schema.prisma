@@ -11,19 +11,16 @@ datasource db {
 }
 
 model Utilisateur {
-  id                 String   @id @default(cuid())
+  id                 Int      @id @default(autoincrement())
   email              String   @unique
   hashPassword       String
   role               Role?
-  valide             Boolean  @default(false) //il ne peut pas accèder à l'application que s'il a été validé par l'admin
-  ProjetsCree        Projet[] @relation("projetsCree")
   employe            Employe  @relation(fields: [employeId], references: [id])
-  employeId          String   @unique
-  ChefMissionDe      Mission? @relation("chefMission")
-  ChefTerrainDe      Mission? @relation("chefTerrain")
+  employeId          Int      @unique
   dateCreationCompte DateTime @default(now())
-  ProjetGere         Projet?  @relation(fields: [projetGereId], references: [id])
-  projetGereId       String?
+
+  Mission     Mission? @relation(fields: [missionCode], references: [code])
+  missionCode String?
 }
 
 enum Role {
@@ -35,16 +32,18 @@ enum Role {
 }
 
 model Employe {
-  id           String        @id @default(uuid())
-  dateAdhesion DateTime      @db.Date
-  status       StatusEmploye
-  fonction     Fonction
-  profile      Profile       @relation(fields: [profileId], references: [id])
-  profileId    String        @unique
-  utilisateur  Utilisateur?
-
-  Equipe   Equipe? @relation(fields: [equipeId], references: [id])
-  equipeId String?
+  id            Int           @id @default(autoincrement())
+  email         String        @unique
+  dateAdhesion  DateTime      @db.Date
+  status        StatusEmploye
+  fonction      Fonction      @relation(fields: [fonctionId], references: [id])
+  fonctionId    Int
+  utilisateur   Utilisateur?
+  nom           String
+  prenom        String
+  dateNaissance DateTime      @db.Date
+  Equipe        Equipe?       @relation(fields: [equipeId], references: [id])
+  equipeId      Int?
 }
 
 enum StatusEmploye {
@@ -55,96 +54,71 @@ enum StatusEmploye {
   SENCTONNE
 }
 
-model Profile {
-  id            String   @id @default(cuid())
-  nom           String
-  prenom        String
-  dateNaissance DateTime @db.Date
-  //lieu de naissence
-  //num tel
-  //num securité nationale
-  //diplome
-  //num carte nationnale
-  //permis
-  //observation
-  Employe       Employe?
-}
-
-enum Fonction {
-  MANEUVRE
-  INGENIEUR
-  CHEF_MISSION
-  CHEF_TERRAIN
-  RESPONSABLE
+model Fonction {
+  id      Int       @id @default(autoincrement())
+  nom     String
+  Employe Employe[]
 }
 
 model Projet {
-  id          String      @id @default(cuid())
-  creePar     Utilisateur @relation("projetsCree", fields: [creeParID], references: [id]) // user.role=CM && mission.chefM = user 
-  creeParID   String
-  Mission     Mission     @relation(fields: [missionCode], references: [code])
-  missionCode String
+  id Int @id @default(autoincrement())
 
-  Objectif              Objectif?
-  EtatProjet            EtatProjet[]
-  Ravitaillement        Ravitaillement[]
-  Materiel              Materiel[]
-  Consomation           Consomation[]
-  createdAt             DateTime         @default(now())
-  Localisation          Localisation     @relation(fields: [localisationLongitude, localisationLatitude], references: [longitude, latitude])
-  localisationLongitude Float
-  localisationLatitude  Float
-  gestionnaires         Utilisateur[]
+  Objectif   Objectif     @relation(fields: [objectifId], references: [id])
+  objectifId Int          @unique
+  EtatProjet EtatProjet[]
+
+  Materiel Materiel[]
+
+  createdAt DateTime    @default(now())
+  Coodonnes Coordonne[]
+  Equipes   Execution[]
 }
 
 model EtatProjet {
   id       String         @id @default(cuid())
   typeEtat TypeEtatProjet
   Projet   Projet         @relation(fields: [projetId], references: [id])
-  projetId String
+  projetId Int
   dateEtat DateTime       @db.Date
 }
 
 enum TypeEtatProjet {
-  CREATION
+  PLANIFICATION
   PRODUCTION
   CLOTURATION
   ANNULATION
 }
 
 model Objectif {
-  Projet               Projet   @relation(fields: [projetId], references: [id])
-  projetId             String   @id
-  VP                   Int
-  dateDebutProjetAvant DateTime @db.Date
-  dateFinProjetAvant   DateTime @db.Date
+  id     Int      @id @default(autoincrement())
+  Projet Projet?
+  VP     Int
+  debut  DateTime @db.Date
+  fin    DateTime @db.Date
 }
 
-model Localisation {
+model Coordonne {
+  id        Int      @id @default(autoincrement())
   longitude Float
   latitude  Float
   Wilaya    Wilaya   @relation(fields: [numWilaya], references: [numero])
   numWilaya Int
   Projet    Projet[]
-
-  @@id([longitude, latitude])
 }
 
 model Wilaya {
-  numero       Int            @id
-  nom          String
-  Localisation Localisation[]
+  numero    Int         @id
+  nom       String
+  Coordonne Coordonne[]
 }
 
 model Mission {
-  code          String      @id
-  type          TypeMission
-  projets       Projet[]
-  ChefMission   Utilisateur @relation("chefMission", fields: [chefMissionID], references: [id])
-  chefMissionID String      @unique
-  ChefTerrain   Utilisateur @relation("chefTerrain", fields: [chefTerrainID], references: [id])
-  chefTerrainID String      @unique
-  Equipe        Equipe[]
+  code String      @id
+  type TypeMission
+
+  Chefs Utilisateur[]
+
+  Equipes Equipe[]
 }
 
 enum TypeMission {
@@ -153,94 +127,58 @@ enum TypeMission {
 }
 
 model Equipe {
-  id   String     @id @default(cuid())
-  type TypeEquipe
+  id         Int      @id @default(autoincrement())
+  activite   Activite @relation(fields: [activiteId], references: [id])
+  activiteId Int
 
   Mission   Mission @relation(fields: [missionId], references: [code])
   missionId String
 
-  Travaux Travail[]
   Membres Employe[]
-
-  @@unique([missionId, type])
+  Projets Execution[]
 }
 
-enum TypeEquipe {
-  ENREGISTREMENT
-  TOPO
-  POSE
-  RAMASSE
-  LAYONNAGE
+model Activite {
+  id      Int      @id @default(autoincrement())
+  nom     String
+  Equipes Equipe[]
 }
 
-model Travail {
-  id         String   @id @default(cuid())
-  Equipe     Equipe   @relation(fields: [equipeId], references: [id])
-  equipeId   String
-  jour       DateTime @unique @db.Date
-  heureDebut DateTime @db.Time()
-  heureFin   DateTime @db.Time()
-  Rendement  Int
-}
+model Execution {
+  Projet   Projet @relation(fields: [projetId], references: [id])
+  projetId Int
 
-model Ravitaillement {
-  id                 String             @id @default(cuid())
-  nom                String
-  typeRavitaillement TypeRavitaillement
-  unite              Unite
-  Projet             Projet[]
-  Prix               Prix?
-  Consomation        Consomation[]
-}
+  Equipe   Equipe   @relation(fields: [equipeId], references: [id])
+  equipeId Int
+  debut    DateTime @db.Date
+  fin      DateTime @db.Date
 
-model Consomation {
-  Ravitaillement Ravitaillement @relation(fields: [ravitaillementId], references: [id])
-  Projet         Projet         @relation(fields: [projetId], references: [id])
-
-  ravitaillementId String
-  projetId         String
-
-  date   DateTime @default(now())
-  valeur Int
-
-  @@id([ravitaillementId, projetId])
-}
-
-enum TypeRavitaillement {
-  CARBURANT
-  NOURITURE
-}
-
-enum Unite {
-  LITRE
-  METRE
-  METRECUBE
-  KILOGRAMME
-  OBJET
-}
-
-model Prix {
-  Ravitaillement   Ravitaillement @relation(fields: [ravitaillementId], references: [id])
-  ravitaillementId String         @id
-  prixUnitaire     Float
+  @@id([projetId, equipeId])
 }
 
 model Materiel {
-  code              String       @id
-  nom               String
-  utiliseDansProjet Projet?      @relation(fields: [projetId], references: [id])
-  projetId          String?
-  etat              EtatMateriel
-  //matricule
+  code        String  @id
+  designation String
+  Projet      Projet? @relation(fields: [projetId], references: [id])
+  projetId    Int?
+  enPanne     Boolean
 }
 
-enum EtatMateriel {
-  BON
-  ENPANNE
+model Reparation {
+  id             Int      @id @default(autoincrement())
+  dPanne         DateTime @db.Date
+  dRep           DateTime @db.Date
+  detailProbleme String
+  Pannes         Panne[]
 }
 
-enum TypeMateriel {
-  VEHICULE
-  BULLDUZER
-  CAMION
+model Panne {
+  id          Int          @id @default(autoincrement())
+  nom         String
+  Reparations Reparation[]
+}
+
+model TypeMateriel {
+  id  Int    @id @default(autoincrement())
+  nom String
 }

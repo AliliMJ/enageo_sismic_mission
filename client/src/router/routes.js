@@ -18,6 +18,7 @@ import GestDashboard from 'components/dashboard/GestDashboard.vue';
 import MaterialTable from 'components/tables/MaterialTable.vue';
 import EmployesTable from 'components/tables/EmployesTable.vue';
 import UsersTable from 'components/tables/UsersTable.vue';
+import Profile from 'app/Profile.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -71,6 +72,7 @@ const routes = [
       },
     ],
   },
+  { path: '/profile', component: Profile, name: 'profile' },
 
   { path: '/', component: Loading, meta: { requireAuth: true } },
 ];
