@@ -65,7 +65,7 @@ model Projet {
 
   Objectif   Objectif     @relation(fields: [objectifId], references: [id])
   objectifId Int          @unique
-  EtatProjet EtatProjet[]
+  Etats      Transition[]
 
   Materiel Materiel[]
 
@@ -75,18 +75,18 @@ model Projet {
 }
 
 model EtatProjet {
-  id       String         @id @default(cuid())
-  typeEtat TypeEtatProjet
-  Projet   Projet         @relation(fields: [projetId], references: [id])
-  projetId Int
-  dateEtat DateTime       @db.Date
+  id      String       @id @default(cuid())
+  nom     String
+  Projets Transition[]
 }
 
-enum TypeEtatProjet {
-  PLANIFICATION
-  PRODUCTION
-  CLOTURATION
-  ANNULATION
+model Transition {
+  Projet       Projet     @relation(fields: [projetId], references: [id])
+  projetId     Int
+  EtatProjet   EtatProjet @relation(fields: [etatProjetId], references: [id])
+  etatProjetId String
+
+  @@id([projetId, etatProjetId])
 }
 
 model Objectif {
@@ -157,19 +157,22 @@ model Execution {
 }
 
 model Materiel {
-  code        String  @id
+  code        String       @id
   designation String
-  Projet      Projet? @relation(fields: [projetId], references: [id])
+  Projet      Projet?      @relation(fields: [projetId], references: [id])
   projetId    Int?
   enPanne     Boolean
+  Reparations Reparation[]
 }
 
 model Reparation {
-  id             Int      @id @default(autoincrement())
-  dPanne         DateTime @db.Date
-  dRep           DateTime @db.Date
-  detailProbleme String
+  id             Int       @id @default(autoincrement())
+  dPanne         DateTime  @default(now())
+  dRep           DateTime?
+  detailProbleme String?
   Pannes         Panne[]
+  Materiel       Materiel  @relation(fields: [materielCode], references: [code])
+  materielCode   String
 }
 
 model Panne {

@@ -1,9 +1,20 @@
 import express from 'express';
 import paginate from '../middlewares/pagination';
-import { getMaterial, getMaterialTypes } from '../controllers/material';
+import {
+  getMaterial,
+  getMaterialTypes,
+  getMaterialByCode,
+  mettreEnPanne,
+  reparer,
+} from '../controllers/material';
 
 export const materialRouter = express.Router();
 
-materialRouter.get('/material', paginate, getMaterial);
+materialRouter.get('/', paginate, getMaterial);
 
-materialRouter.get('/material/types', getMaterialTypes);
+materialRouter.get('/types', getMaterialTypes);
+
+materialRouter.get('/:code', getMaterialByCode);
+
+materialRouter.post('/:code/mettreEnPanne', mettreEnPanne);
+materialRouter.post('/:code/reparer', reparer);
