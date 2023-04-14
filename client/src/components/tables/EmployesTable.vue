@@ -2,7 +2,10 @@
 import axios from 'axios';
 
 import STable from 'common/STable.vue';
-import { NH1 } from 'naive-ui';
+import { NH1, NTag, NButton, NIcon, NSpace } from 'naive-ui';
+import { h } from 'vue';
+import OptionButton from '../common/OptionButton.vue';
+import { Add } from '@vicons/ionicons5';
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
@@ -18,7 +21,14 @@ const cols = [
     title: 'fonction',
     key: 'fonctionId',
     render(row) {
-      return fonctions.filter((f) => f.id === row.fonctionId)[0].nom;
+      return h(
+        NTag,
+        { round: true, bordered: false, type: 'info' },
+        {
+          default: () =>
+            fonctions.filter((f) => f.id === row.fonctionId)[0].nom,
+        }
+      );
     },
   },
   {
@@ -35,10 +45,27 @@ const cols = [
       return new Date(row.dateAdhesion).toLocaleDateString();
     },
   },
+  {
+    title: 'Options',
+    key: 'options',
+    render(row) {
+      return h(OptionButton);
+    },
+  },
 ];
 </script>
 
 <template>
-  <NH1>Employés</NH1>
-  <STable :data="employes" :columns="cols" />
+  <NSpace vertical>
+    <NH1>Employés</NH1>
+    <NButton type="success" icon-placement="right">
+      Ajouter
+      <template #icon>
+        <NIcon>
+          <Add />
+        </NIcon>
+      </template>
+    </NButton>
+    <STable :data="employes" :columns="cols" />
+  </NSpace>
 </template>

@@ -2,8 +2,9 @@
 import { RouterView } from 'vue-router';
 import AppConfig from 'config/AppConfig.vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ref, watch } from 'vue';
+import { watch } from 'vue';
 import { useAuth } from './stores/authentication';
+import { NLayout, NLayoutHeader, NLayoutContent } from 'naive-ui';
 
 const auth = useAuth();
 const router = useRouter();

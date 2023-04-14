@@ -6,8 +6,8 @@
 import { NMenu } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { optionsCompte } from '../menuOptions.js';
-import { renderMenuItem } from './render';
+import { optionsCompte } from './menuOptions.js';
+import { renderMenuItem } from '../../utils/render.js';
 import { Route } from '../../enums';
 
 const route = useRoute();

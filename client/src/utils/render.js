@@ -1,5 +1,5 @@
 import { h } from 'vue';
-import { NIcon, dividerDark } from 'naive-ui';
+import { NIcon } from 'naive-ui';
 import { RouterLink } from 'vue-router';
 
 export function renderIcon(icon) {

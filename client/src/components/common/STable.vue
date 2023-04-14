@@ -5,7 +5,7 @@
     bordered
     :pagination="{ pageSize: 10 }"
     :row-key="rowKey"
-    :max-height="350"
+    :max-height="290"
   >
   </n-data-table>
 </template>

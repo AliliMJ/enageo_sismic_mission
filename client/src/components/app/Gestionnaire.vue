@@ -1,6 +1,12 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { NLayout, NLayoutSider, NLayoutContent } from 'naive-ui';
+import {
+  NLayout,
+  NLayoutSider,
+  NLayoutContent,
+  NCard,
+  NLayoutHeader,
+} from 'naive-ui';
 import GestMenu from '../menu/GestMenu.vue';
 //const auth = useAuth();
 
@@ -12,15 +18,31 @@ const router = useRouter();
 </script>
 
 <template>
-  <NLayout has-sider>
-    <NLayoutSider>
-      <GestMenu />
-    </NLayoutSider>
+  <NLayout>
+    <NLayoutHeader bordered></NLayoutHeader>
 
-    <NLayoutContent>
-      <Suspense>
-        <RouterView />
-      </Suspense>
-    </NLayoutContent>
+    <NLayout has-sider>
+      <NLayoutSider bordered>
+        <GestMenu />
+      </NLayoutSider>
+
+      <NLayoutContent>
+        <NCard :bordered="false">
+          <Suspense>
+            <RouterView />
+          </Suspense>
+        </NCard>
+      </NLayoutContent>
+    </NLayout>
   </NLayout>
 </template>
+
+<style scoped>
+.n-layout-sider {
+  height: 100vh;
+}
+
+.n-layout-header {
+  padding: 24px;
+}
+</style>
