@@ -1,11 +1,23 @@
 <script setup>
 import axios from 'axios';
+import { useAuth } from '../../stores/authentication';
+import STable from 'common/STable.vue';
+import { NH1 } from 'naive-ui';
 
 import STable from 'common/STable.vue';
 import { NH1, NTag, NButton, NIcon, NSpace } from 'naive-ui';
 import { h } from 'vue';
 import OptionButton from '../common/OptionButton.vue';
 import { Add } from '@vicons/ionicons5';
+const auth = useAuth();
+
+console.log(auth.user.hashPassword);
+const req = {
+  email: auth.user.email,
+  hashPassword: auth.user.hashPassword,
+};
+
+console.log(req);
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
