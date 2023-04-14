@@ -18,9 +18,11 @@ const router = useRouter();
       </NLayoutSider>
 
       <NLayoutContent>
-        <Suspense>
-          <RouterView />
-        </Suspense>
+        <NCard :bordered="false">
+          <Suspense>
+            <RouterView />
+          </Suspense>
+        </NCard>
       </NLayoutContent>
     </NLayout>
   </NLayout>
