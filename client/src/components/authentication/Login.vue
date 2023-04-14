@@ -1,40 +1,72 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
+import { useMessage } from 'naive-ui'
+import { useRouter } from "vue-router";
+import { useAuth } from "stores/authentication.js";
 
-import { useRouter } from 'vue-router';
-import { useAuth } from 'stores/authentication.js';
 const auth = useAuth();
-
-const email = ref('');
-const password = ref('');
+const message = useMessage()
+const email = ref("");
+const password = ref("");
 const router = useRouter();
+
 
 const login = async (e) => {
   e.preventDefault();
   try {
     await auth.login(email.value, password.value);
-
-    return router.push('/');
+    return router.push("/");
   } catch (m) {
-    console.log('not welcome');
-    alert(m);
+    console.log("not welcome");
+    message.error(m)
   }
 };
+
+</script>
+
+<script>
+export default {
+  methods: {
+    beforeEnter(el){
+      el.style.opacity=0;
+    },
+    enter(el) {
+      el.style.transition = 'opacity 200ms ease-in-out';
+      getComputedStyle(el);
+
+      setTimeout(() => {
+        el.style.opacity=1;
+      });
+    }
+  },
+}
 </script>
 
 <template>
   <div class="main">
-    <transition>
+    <transition appear :css="false" @before-enter="beforeEnter" @enter="enter">
       <div class="container">
         <h1 class="authLabel">Authentification</h1>
         <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
         <form>
           <div class="inputContainer">
-            <input class="input" v-model="email" type="text" placeholder=" " required />
+            <input
+              class="input"
+              v-model="email"
+              type="text"
+              placeholder=" "
+              required
+            />
             <label for="username" class="placeholder">email</label>
           </div>
           <div class="inputContainer">
-            <input class="input" type="password" v-model="password" placeholder=" " required />
+            <input
+              class="input"
+              type="password"
+              v-model="password"
+              placeholder=" "
+              required
+            />
             <label for="password" class="placeholder">mot de passe</label>
           </div>
           <button @click="login" class="button-4">Connexion</button>
@@ -43,7 +75,9 @@ const login = async (e) => {
     </transition>
     <div class="footer-container">
       <h5 class="copyright">&#169; 2023</h5>
-    <a target="_blank" class="website" href="https://www.enageo.com/">enageo.com</a>
+      <a target="_blank" class="website" href="https://www.enageo.com/"
+        >enageo.com</a
+      >
     </div>
   </div>
 </template>
@@ -59,23 +93,22 @@ const login = async (e) => {
   overflow: hidden;
 }
 
- .website {
+.website {
   text-decoration: none;
-} 
+}
 
- a,
+a,
 a:visited,
 a:hover,
 a:active {
   color: black;
 }
 
- .copyright {
+.copyright {
   text-decoration: none;
   font-weight: normal;
-  font-weight:normal;
-}  
-
+  font-weight: normal;
+}
 
 .footer-container {
   display: flex;
@@ -153,14 +186,14 @@ a:active {
   top: 13px;
 }
 
-.input:focus~.placeholder,
-.input:not(:placeholder-shown)~.placeholder {
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
   transform: translateY(-19px) translateX(10px);
   color: #35bc00;
   font-size: 14px;
 }
 
-.input:not(:placeholder-shown)~.placeholder {
+.input:not(:placeholder-shown) ~ .placeholder {
   color: #35bc00;
 }
 
