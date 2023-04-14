@@ -1,7 +1,10 @@
 <script setup>
 import axios from 'axios';
 import { useAuth } from '../../stores/authentication';
+
 import STable from 'common/STable.vue';
+import { NH1 } from 'naive-ui';
+
 const auth = useAuth();
 
 console.log(auth.user.hashPassword);
@@ -22,5 +25,6 @@ const cols = [
 </script>
 
 <template>
+  <NH1>Utilisateurs</NH1>
   <STable :data="users" :columns="cols" />
 </template>

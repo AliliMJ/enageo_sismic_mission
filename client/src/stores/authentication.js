@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { Role } from '../enums';
+
 export const useAuth = defineStore('authentication', {
   state: () => ({
     user: null,

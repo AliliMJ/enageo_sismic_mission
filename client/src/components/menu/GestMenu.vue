@@ -23,6 +23,10 @@ const menuOptions = [
     key: 'gestDashboard',
   },
   {
+    label: 'Atelier',
+    key: 'atelier',
+  },
+  {
     label: `Tables`,
     key: 'tables',
     children: [

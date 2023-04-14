@@ -19,7 +19,7 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     console.log(id);
     const user = await prisma.utilisateur.findUnique({
-      where: { id },
+      where: { id: Number(id) },
     });
     if (user == null)
       return res.status(400).json({ err: 'Utilisateur introuvable' });
