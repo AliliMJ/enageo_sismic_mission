@@ -18,12 +18,8 @@ import GestDashboard from 'components/dashboard/GestDashboard.vue';
 import MaterialTable from 'components/tables/MaterialTable.vue';
 import EmployesTable from 'components/tables/EmployesTable.vue';
 import UsersTable from 'components/tables/UsersTable.vue';
-<<<<<<< HEAD
-import Profile from 'components/common/Profile.vue';
-import Preferences from 'components/common/Preferences.vue';
-=======
+import AdminPreferences from 'components/common/Preferences.vue';
 import Profile from 'app/Profile.vue';
->>>>>>> a026253fcc141808aa21ddf398dea0db5fd32bea
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -59,7 +55,7 @@ const routes = [
       },
       {
         path: Route.Preference,
-        component: Preferences,
+        component: AdminPreferences,
         name: Route.Preference,
       },
     ],

@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-GET http://localhost:3000/users
-GET http://localhost:3000/employees
-=======
 GET http://localhost:3000/employes/fonctions
->>>>>>> a026253fcc141808aa21ddf398dea0db5fd32bea
 
 
