@@ -7,8 +7,12 @@ import { NMenu } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { optionsCompte } from './menuOptions.js';
-import { renderMenuItem } from '../../utils/render.js';
+import { renderIcon, renderMenuItem } from '../../utils/render.js';
 import { Route } from '../../enums';
+import {
+  CubeOutline as Cube,
+  BarChartOutline as Dashboard,
+} from '@vicons/ionicons5';
 
 const route = useRoute();
 const selectedKey = ref(route.name);
@@ -20,10 +24,12 @@ const menuOptions = [
   {
     label: renderMenuItem('Tableau de bord', 'adminDashboard'),
     key: 'adminDashboard',
+    icon: renderIcon(Dashboard),
   },
   {
-    label: `Tables`,
-    key: 'tables',
+    label: `Espace`,
+    key: 'espace',
+    icon: renderIcon(Cube),
     children: [
       {
         label: renderMenuItem('Utilisateurs', Route.Utilisateur),
