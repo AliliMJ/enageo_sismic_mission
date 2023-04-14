@@ -34,7 +34,7 @@ export const optionsCompte = [
         icon: renderIcon(Person),
       },
       {
-        label: 'Préférences',
+        label: renderMenuItem('Préférences', Route.Preference),
         key: Route.Preference,
         icon: renderIcon(Settings),
       },
