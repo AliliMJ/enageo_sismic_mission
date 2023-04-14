@@ -32,26 +32,25 @@ enum Role {
 }
 
 model Employe {
-  id            Int           @id @default(autoincrement())
-  email         String        @unique
-  dateAdhesion  DateTime      @db.Date
-  status        StatusEmploye
-  fonction      Fonction      @relation(fields: [fonctionId], references: [id])
+  id            Int          @id @default(autoincrement())
+  email         String       @unique
+  dateAdhesion  DateTime     @db.Date
+  etat          EtatEmploye  @relation(fields: [etatEmployeId], references: [id])
+  etatEmployeId Int
+  fonction      Fonction     @relation(fields: [fonctionId], references: [id])
   fonctionId    Int
   utilisateur   Utilisateur?
   nom           String
   prenom        String
-  dateNaissance DateTime      @db.Date
-  Equipe        Equipe?       @relation(fields: [equipeId], references: [id])
+  dateNaissance DateTime     @db.Date
+  Equipe        Equipe?      @relation(fields: [equipeId], references: [id])
   equipeId      Int?
 }
 
-enum StatusEmploye {
-  EN_MISSION
-  EN_CONGE
-  RETRAITE
-  EN_SERVICE
-  SENCTONNE
+model EtatEmploye {
+  id      Int       @id @default(autoincrement())
+  nom     String
+  Employe Employe[]
 }
 
 model Fonction {

@@ -22,7 +22,7 @@ export const optionsCompte = [
     label: 'Compte',
     key: 'compte',
     children: [
-      { label: renderMenuItem('Profil', 'profile'), key: Route.Profile },
+      { label: renderMenuItem('Profile', 'profile'), key: Route.Profile },
       { label: 'Préférences', key: Route.Preference },
       { label: renderMenuItem('Déconnecter', 'logout'), key: 'logout' },
     ],

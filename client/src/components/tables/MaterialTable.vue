@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import STable from 'common/STable.vue';
 import StatusTag from 'common/StatusTag.vue';
+import { NH1 } from 'naive-ui';
 import { h } from 'vue';
 
 const materials = (await axios.get('http://localhost:3000/material')).data;
@@ -28,5 +29,6 @@ const cols = [
 </script>
 
 <template>
+  <NH1>Matériel</NH1>
   <STable :data="materials" :columns="cols" />
 </template>
