@@ -1,20 +1,24 @@
 <script setup>
 import axios from 'axios';
-import { useAuth } from '../../stores/authentication';
+
 import STable from 'common/STable.vue';
-import { NH1, NTag, NButton, NIcon, NSpace } from 'naive-ui';
+import { NH1, NTag, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { h } from 'vue';
 import OptionButton from '../common/OptionButton.vue';
 import { Add } from '@vicons/ionicons5';
-const auth = useAuth();
 
-console.log(auth.user.hashPassword);
-const req = {
-  email: auth.user.email,
-  hashPassword: auth.user.hashPassword,
-};
+const dialog = useDialog();
 
-console.log(req);
+function deleteEmploye(id) {
+  dialog.warning({
+    title: 'Confimer la supprission',
+    content: 'Êtes-vous sur de supprimer cet employé?',
+    positiveText: 'Confirmer',
+    negativeText: 'Annuler',
+    onPositiveClick: () => console.log('Employé supprimer', id),
+    onNegativeClick: () => console.log('Suppression annulée'),
+  });
+}
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
@@ -58,7 +62,7 @@ const cols = [
     title: 'Options',
     key: 'options',
     render(row) {
-      return h(OptionButton);
+      return h(OptionButton, { onDelete: () => deleteEmploye(row.id) });
     },
   },
 ];
@@ -67,14 +71,22 @@ const cols = [
 <template>
   <NSpace vertical>
     <NH1>Employés</NH1>
-    <NButton type="success" icon-placement="right">
-      Ajouter
-      <template #icon>
-        <NIcon>
-          <Add />
-        </NIcon>
-      </template>
-    </NButton>
+    <NSpace justify="end">
+      <NButton type="success" icon-placement="right">
+        Nouvel employé
+        <template #icon>
+          <NIcon>
+            <Add />
+          </NIcon>
+        </template>
+      </NButton>
+    </NSpace>
     <STable :data="employes" :columns="cols" />
   </NSpace>
 </template>
+
+<style scoped>
+#new-employe {
+  align-self: self-start;
+}
+</style>
