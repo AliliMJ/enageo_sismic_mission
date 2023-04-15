@@ -6,6 +6,7 @@
     positive-text="Confirmer"
     @positive-click="handlePositiveClick('logout')"
     @negative-click="handleNegativeClick"
+    
   />
 </template>
 
@@ -15,10 +16,14 @@ import { h } from 'vue';
 import { RouterLink } from 'vue-router';
 
 function handleNegativeClick() {
-    window.alert("clicked")
+    window.alert("clicked annuler")
 }
 
-function handlePositiveClick(name) {
+function handlePositiveClick() {
+  window.alert("clicked confirmer")
+}
+
+function render(name){
   return () =>
     h(
       RouterLink,

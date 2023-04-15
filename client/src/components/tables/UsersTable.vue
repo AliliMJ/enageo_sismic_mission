@@ -53,7 +53,6 @@ const cols = [
       </template>
     </NButton>
   <STable :data="users" :columns="cols" />
-  <ConfirmDial/>
 </NSpace>
 
 </template>
