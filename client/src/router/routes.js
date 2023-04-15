@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { Role, Route } from '../enums';
+import { createRouter, createWebHistory } from "vue-router";
+import { Role, Route } from "../enums";
 
 //import Users from 'components/users/Users.vue';
 //import UserInfo from 'components/users/UserInfo.vue';
@@ -8,18 +8,18 @@ import { Role, Route } from '../enums';
 //import ItemInfo from 'components/items/ItemInfo.vue';
 
 //import Dashboard from 'components/dashboard/Dashboard.vue';
-import Login from 'components/authentication/Login.vue';
-import Logout from 'components/authentication/Logout.vue';
-import Admin from 'app/Admin.vue';
-import Gestionnaire from 'app/Gestionnaire.vue';
-import Loading from 'app/Loading.vue';
-import AdminDashboard from 'components/dashboard/AdminDashboard.vue';
-import GestDashboard from 'components/dashboard/GestDashboard.vue';
-import MaterialTable from 'components/tables/MaterialTable.vue';
-import EmployesTable from 'components/tables/EmployesTable.vue';
-import UsersTable from 'components/tables/UsersTable.vue';
-import AdminPreferences from 'components/common/Preferences.vue';
-import Profile from 'app/Profile.vue';
+import Login from "components/authentication/Login.vue";
+import Logout from "components/authentication/Logout.vue";
+import Admin from "app/Admin.vue";
+import Gestionnaire from "app/Gestionnaire.vue";
+import Loading from "app/Loading.vue";
+import AdminDashboard from "components/dashboard/AdminDashboard.vue";
+import GestDashboard from "components/dashboard/GestDashboard.vue";
+import MaterialTable from "components/tables/MaterialTable.vue";
+import EmployesTable from "components/tables/EmployesTable.vue";
+import UsersTable from "components/tables/UsersTable.vue";
+import AdminPreferences from "components/common/Preferences.vue";
+import Profile from "components/common/Profile.vue";
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -30,18 +30,18 @@ import Profile from 'app/Profile.vue';
 // ];
 
 const routes = [
-  { path: '/login', component: Login },
-  { path: '/logout', component: Logout, name: 'logout' },
+  { path: "/login", component: Login },
+  { path: "/logout", component: Logout, name: "logout" },
   {
-    path: '/admin',
+    path: "/admin",
     name: Route.Admin,
     component: Admin,
     meta: { requireAuth: true, role: Role.Administrateur },
     children: [
       {
-        path: '',
+        path: "",
         component: AdminDashboard,
-        name: 'adminDashboard',
+        name: "adminDashboard",
       },
       {
         path: Route.Utilisateur,
@@ -58,18 +58,22 @@ const routes = [
         component: AdminPreferences,
         name: Route.Preference,
       },
+      { path: "Profile", 
+        component: Profile,
+        name: Route.profile ,
+      },
     ],
   },
   {
-    path: '/gestionnaire',
+    path: "/gestionnaire",
     component: Gestionnaire,
     name: Route.Gestionnaire,
     meta: { requireAuth: true, role: Role.Gestionnaire },
     children: [
       {
-        path: '',
+        path: "",
         component: GestDashboard,
-        name: 'gestDashboard',
+        name: "gestDashboard",
       },
       {
         path: Route.Material,
@@ -81,11 +85,14 @@ const routes = [
         component: EmployesTable,
         name: Route.Employe,
       },
+      { path: "Profile", 
+        component: Profile,
+        name: Route.profile,
+      },
     ],
   },
-  { path: '/profile', component: Profile, name: 'profile' },
 
-  { path: '/', component: Loading, meta: { requireAuth: true } },
+  { path: "/", component: Loading, meta: { requireAuth: true } },
 ];
 
 const router = createRouter({
@@ -95,22 +102,22 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authentication = JSON.parse(
-    window.localStorage.getItem('authentication')
+    window.localStorage.getItem("authentication")
   );
 
   if (!to.meta.requireAuth) return next();
 
   if (to.meta.requireAuth && !authentication?.isAuthenticated)
-    return next('/login');
+    return next("/login");
 
   if (to.meta.role && to.meta.role != authentication?.user?.role)
-    return next('/denied');
+    return next("/denied");
 
-  if (to.path == '/') {
+  if (to.path == "/") {
     if (authentication?.user?.role == Role.Administrateur)
-      return next('/admin');
+      return next("/admin");
     if (authentication?.user?.role == Role.Gestionnaire)
-      return next('/gestionnaire');
+      return next("/gestionnaire");
   }
 
   return next();
