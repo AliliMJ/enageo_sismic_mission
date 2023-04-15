@@ -17,7 +17,6 @@ export const getEmps = async (req: Request, res: Response) => {
 export const getEmpById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    console.log(id);
     const emp = await prisma.employe.findUnique({
       where: { id },
     });
@@ -26,8 +25,6 @@ export const getEmpById = async (req: Request, res: Response) => {
 
     res.status(200).json(emp);
   } catch {
-    res
-      .status(500)
-      .json({ err: `Problème lors de la recherche de l'employe` });
+    res.status(500).json({ err: `Problème lors de la recherche de l'employe` });
   }
 };

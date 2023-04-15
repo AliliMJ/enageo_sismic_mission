@@ -13,8 +13,6 @@ const req = {
   hashPassword: auth.user.hashPassword,
 };
 
-console.log(req);
-
 const users = (await axios.post('http://localhost:3000/users', req)).data;
 
 const cols = [

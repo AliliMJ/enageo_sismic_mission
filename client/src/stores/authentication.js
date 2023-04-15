@@ -25,7 +25,6 @@ export const useAuth = defineStore('authentication', {
 
         return Promise.resolve('Successful');
       } catch (e) {
-        console.log(e);
         if (e.response?.status === 401)
           return Promise.reject('Votre email ou mot de passe sont incorrects');
         if (e.response?.status === 4013)
