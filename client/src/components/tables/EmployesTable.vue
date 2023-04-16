@@ -20,6 +20,10 @@ function deleteEmploye(id) {
   });
 }
 
+function updateEmploye(id) {
+  window.alert(id);
+}
+
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
 const fonctions = (await axios.get('http://localhost:3000/employes/fonctions'))
@@ -62,7 +66,7 @@ const cols = [
     title: 'Options',
     key: 'options',
     render(row) {
-      return h(OptionButton, { onDelete: () => deleteEmploye(row.id) });
+      return h(OptionButton, { onDelete: () => deleteEmploye(row.id) } , { onUpdate: () => updateEmploye(row.id) });
     },
   },
 ];

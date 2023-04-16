@@ -1,6 +1,6 @@
 <template>
         <NSpace justify="end" class="space">
-            <NIcon size="30" class="icon" trigger="click">
+            <NIcon size="30" class="icon">
             <Persone/>
           </NIcon>
         </NSpace>

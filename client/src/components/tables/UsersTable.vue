@@ -22,6 +22,10 @@ function deleteUser(id) {
   });
 }
 
+function updateUser(id) {
+  window.alert(id);
+}
+
 
 console.log(auth.user.hashPassword);
 const req = {
@@ -45,7 +49,7 @@ const cols = [
     title: 'Options',
     key: 'options',
     render(row) {
-      return h(OptionButton,{ onDelete: () => deleteUser(row.id) });
+      return h(OptionButton,{ onDelete: () => deleteUser(row.id) } , { onUpdate: () => updateUser(row.id) });
     },
   },
 ];
