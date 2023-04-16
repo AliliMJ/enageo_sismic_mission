@@ -37,7 +37,7 @@ export const useAuth = defineStore('authentication', {
       this.email = '';
       this.password = '';
       this.isAuthenticated = false;
-      //window.localStorage.removeItem('authentication');
+      window.localStorage.removeItem('authentication');
     },
     register() {
       console.log('user registered');

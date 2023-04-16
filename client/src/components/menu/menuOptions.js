@@ -3,7 +3,6 @@ import { renderIcon, renderMenuItem } from '../../utils/render';
 
 import {
   SettingsOutline as Settings,
-  LogOutOutline as LogOut,
   PersonOutline as Person,
 } from '@vicons/ionicons5';
 
@@ -24,6 +23,10 @@ export const optionsChefMission = [
 
 export const optionsCompte = [
   {
+    type: 'divider',
+    key: 'divider',
+  },
+  {
     type: 'group',
     label: 'Compte',
     key: 'compte',
@@ -37,11 +40,6 @@ export const optionsCompte = [
         label: renderMenuItem('Préférences', Route.Preference),
         key: Route.Preference,
         icon: renderIcon(Settings),
-      },
-      {
-        label: renderMenuItem('Déconnecter', 'logout'),
-        key: 'logout',
-        icon: renderIcon(LogOut),
       },
     ],
   },

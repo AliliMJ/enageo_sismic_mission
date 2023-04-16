@@ -24,8 +24,8 @@ watch(route, (route) => {
 console.log(route.name);
 const menuOptions = [
   {
-    label: renderMenuItem('Tableau de bord', 'gestDashboard'),
-    key: 'gestDashboard',
+    label: renderMenuItem('Tableau de bord', 'dashboard'),
+    key: 'dashboard',
     icon: renderIcon(Dashboard),
   },
   {
@@ -39,10 +39,10 @@ const menuOptions = [
     icon: renderIcon(Cube),
     children: [
       {
-        label: renderMenuItem('Matériel', Route.Material),
+        label: renderMenuItem('Matériel', 'materiel'),
         key: Route.Material,
       },
-      { label: renderMenuItem('Employés', Route.Employe), key: Route.Employe },
+      { label: renderMenuItem('Employés', 'employe'), key: Route.Employe },
     ],
   },
   ...optionsCompte,

@@ -18,22 +18,18 @@ const router = useRouter();
 </script>
 
 <template>
-  <NLayout>
-    <NLayoutHeader bordered></NLayoutHeader>
+  <NLayout has-sider>
+    <NLayoutSider bordered>
+      <GestMenu />
+    </NLayoutSider>
 
-    <NLayout has-sider>
-      <NLayoutSider bordered>
-        <GestMenu />
-      </NLayoutSider>
-
-      <NLayoutContent>
-        <NCard :bordered="false">
-          <Suspense>
-            <RouterView />
-          </Suspense>
-        </NCard>
-      </NLayoutContent>
-    </NLayout>
+    <NLayoutContent>
+      <NCard :bordered="false">
+        <Suspense>
+          <RouterView />
+        </Suspense>
+      </NCard>
+    </NLayoutContent>
   </NLayout>
 </template>
 
