@@ -11,6 +11,7 @@ import {
 import { LogInOutline as Logout } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
 import Gestionnaire from './Gestionnaire.vue';
+import Navbar from './Navbar.vue';
 
 const auth = useAuth();
 const router = useRouter();
@@ -31,7 +32,7 @@ const logout = () => {
   </NButton>
 
   <NLayout>
-    <NLayoutHeader></NLayoutHeader>
+    <NLayoutHeader> <Navbar /></NLayoutHeader>
     <NLayoutContent>
       <Admin v-if="auth.user.role === 'ADMINISTRATEUR'" />
       <Gestionnaire v-else-if="auth.user.role === 'GESTIONNAIRE'" />

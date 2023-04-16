@@ -1,14 +1,9 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import {
-  NLayout,
-  NLayoutSider,
-  NLayoutContent,
-  NLayoutHeader,
-  NCard,
-} from 'naive-ui';
+import { NLayout, NLayoutSider, NLayoutContent, NCard } from 'naive-ui';
 
 import AdminMenu from '../menu/AdminMenu.vue';
+
 //const auth = useAuth();
 
 const router = useRouter();

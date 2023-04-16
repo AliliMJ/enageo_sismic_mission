@@ -70,7 +70,7 @@ const cols = [
 
 <template>
   <NSpace vertical>
-    <NH1>Employés</NH1>
+    <NH1>La liste des employés</NH1>
     <NSpace justify="end">
       <NButton type="success" icon-placement="right">
         Nouvel employé

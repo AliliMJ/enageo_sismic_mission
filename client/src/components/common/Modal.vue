@@ -6,10 +6,7 @@
       :bordered="false"
       size="huge"
       role="dialog"
-      aria-modal="true"
-
-
-      
+      aria-modal="true"  
     >
     <n-scrollbar style="max-height:400px">
 
