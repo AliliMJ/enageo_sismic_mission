@@ -3,13 +3,25 @@ import axios from 'axios';
 import { useAuth } from '../../stores/authentication';
 import { h } from 'vue';
 import STable from 'common/STable.vue';
-import { NH1 , NButton , NIcon , NSpace} from 'naive-ui';
+import { NH1 , NButton , NIcon , NSpace , useDialog } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import OptionButton from '../common/OptionButton.vue';
-//import * as ConfirmDialog from 'vuejs-confirm-dialog'
-import ConfirmDial from '../common/ConfirmDial.vue';
 
 const auth = useAuth();
+
+const dialog = useDialog();
+
+function deleteUser(id) {
+  dialog.warning({
+    title: 'Confimer la supprission',
+    content: 'Êtes-vous sur de supprimer cet utilisateur?',
+    positiveText: 'Confirmer',
+    negativeText: 'Annuler',
+    onPositiveClick: () => console.log('l\'utilisateur a été supprimé', id),
+    onNegativeClick: () => console.log('Suppression annulée'),
+  });
+}
+
 
 console.log(auth.user.hashPassword);
 const req = {
@@ -33,7 +45,7 @@ const cols = [
     title: 'Options',
     key: 'options',
     render(row) {
-      return h(OptionButton);
+      return h(OptionButton,{ onDelete: () => deleteUser(row.id) });
     },
   },
 ];
@@ -42,6 +54,7 @@ const cols = [
 <template>
    <NSpace vertical>
   <NH1>Utilisateurs</NH1>
+  <NSpace justify="end">
   <NButton class="button" type="success" icon-placement="right">
       Ajouter
       <template #icon>
@@ -50,6 +63,7 @@ const cols = [
         </NIcon>
       </template>
     </NButton>
+  </NSpace>
   <STable :data="users" :columns="cols" />
 </NSpace>
 

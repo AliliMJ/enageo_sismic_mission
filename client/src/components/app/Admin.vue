@@ -9,6 +9,7 @@ import {
 } from 'naive-ui';
 
 import AdminMenu from '../menu/AdminMenu.vue';
+import AdminHeader from '../common/header.vue';
 //const auth = useAuth();
 
 const router = useRouter();
@@ -16,7 +17,7 @@ const router = useRouter();
 
 <template>
   <NLayout>
-    <NLayoutHeader bordered> </NLayoutHeader>
+    <NLayoutHeader  bordered class="header"> <AdminHeader/> </NLayoutHeader>
 
     <NLayout has-sider>
       <NLayoutSider bordered>
@@ -41,5 +42,9 @@ const router = useRouter();
 
 .n-layout-header {
   padding: 24px;
+}
+
+.header {
+  padding : 10px 0px;
 }
 </style>
