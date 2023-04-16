@@ -6,7 +6,7 @@
 import { NMenu } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { optionsCompte } from './menuOptions.js';
+import { optionsCompte, optionDashboard } from './menuOptions.js';
 import { renderIcon, renderMenuItem } from '../../utils/render.js';
 import { Route } from '../../enums';
 import {
@@ -23,11 +23,7 @@ watch(route, (route) => {
 });
 console.log(route.name);
 const menuOptions = [
-  {
-    label: renderMenuItem('Tableau de bord', 'dashboard'),
-    key: 'dashboard',
-    icon: renderIcon(Dashboard),
-  },
+  ...optionDashboard,
   {
     label: 'Atelier',
     key: 'atelier',
@@ -39,10 +35,10 @@ const menuOptions = [
     icon: renderIcon(Cube),
     children: [
       {
-        label: renderMenuItem('Matériel', 'materiel'),
+        label: renderMenuItem('Matériel', Route.Material),
         key: Route.Material,
       },
-      { label: renderMenuItem('Employés', 'employe'), key: Route.Employe },
+      { label: renderMenuItem('Employés', Route.Employe), key: Route.Employe },
     ],
   },
   ...optionsCompte,

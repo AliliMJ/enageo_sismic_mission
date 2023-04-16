@@ -1,3 +1,12 @@
+<script setup>
+import AdminDashboard from './AdminDashboard.vue';
+import GestDashboard from './GestDashboard.vue';
+import { useAuth } from '../../stores/authentication';
+import { Role } from '../../enums';
+const auth = useAuth();
+</script>
+
 <template>
-  <h1>Bienvenue</h1>
+  <AdminDashboard v-if="auth.user.role === Role.Administrateur" />
+  <GestDashboard v-else-if="auth.user.role === Role.Gestionnaire" />
 </template>

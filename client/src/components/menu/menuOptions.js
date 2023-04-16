@@ -4,6 +4,7 @@ import { renderIcon, renderMenuItem } from '../../utils/render';
 import {
   SettingsOutline as Settings,
   PersonOutline as Person,
+  BarChartOutline as Dashboard,
 } from '@vicons/ionicons5';
 
 export const optionsSupervisor = [
@@ -42,5 +43,13 @@ export const optionsCompte = [
         icon: renderIcon(Settings),
       },
     ],
+  },
+];
+
+export const optionDashboard = [
+  {
+    label: renderMenuItem('Tableau de bord', Route.Dashboard),
+    key: Route.Dashboard,
+    icon: renderIcon(Dashboard),
   },
 ];

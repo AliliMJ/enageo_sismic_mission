@@ -6,7 +6,7 @@ const { fonctionId } = defineProps({
 </script>
 
 <template>
-  <n-tag v-if="fonctionId === 1" type="info" round :bordered="false"
+  <n-tag v-if="fonctionId === 1" type="success" text round :bordered="false"
     >Chef mission</n-tag
   >
   <n-tag v-if="fonctionId === 2" type="info" round :bordered="false">

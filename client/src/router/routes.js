@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { Role } from '../enums';
+import { Role, Route } from '../enums';
 
 //import Users from 'components/users/Users.vue';
 //import UserInfo from 'components/users/UserInfo.vue';
@@ -33,33 +33,33 @@ const routes = [
     component: Home,
     meta: { requireAuth: true },
     children: [
-      { path: '', name: 'dashboard', component: Dashboard },
+      { path: '', name: Route.Dashboard, component: Dashboard },
       {
         path: '/utilisateur',
-        name: 'utilisateur',
+        name: Route.Utilisateur,
         component: UsersTable,
         meta: { role: Role.Administrateur },
       },
       {
         path: '/employe',
-        name: 'employe',
+        name: Route.Employe,
         component: EmployesTable,
         meta: { role: Role.Gestionnaire },
       },
       {
         path: '/materiel',
-        name: 'materiel',
+        name: Route.Material,
         component: MaterialTable,
         meta: { role: Role.Gestionnaire },
       },
       {
         path: '/profile',
-        name: 'profile',
+        name: Route.Profile,
         component: () => import('app/Profile.vue'),
       },
       {
         path: '/preference',
-        name: 'preference',
+        name: Route.Preference,
         component: () => import('app/Preference.vue'),
       },
     ],

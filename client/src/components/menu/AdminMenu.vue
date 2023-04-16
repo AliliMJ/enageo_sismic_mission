@@ -6,7 +6,7 @@
 import { NMenu, NDivider } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { optionsCompte } from './menuOptions.js';
+import { optionsCompte, optionDashboard } from './menuOptions.js';
 import { renderIcon, renderMenuItem } from '../../utils/render.js';
 import { Route } from '../../enums';
 import {
@@ -21,11 +21,7 @@ watch(route, (route) => {
 });
 
 const menuOptions = [
-  {
-    label: renderMenuItem('Tableau de bord', 'dashboard'),
-    key: 'dashboard',
-    icon: renderIcon(Dashboard),
-  },
+  ...optionDashboard,
   {
     label: renderMenuItem('Utilisateurs', Route.Utilisateur),
     key: Route.Utilisateur,

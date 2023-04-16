@@ -32,7 +32,7 @@ const logout = () => {
   </NButton>
 
   <NLayout>
-    <NLayoutHeader> <Navbar /></NLayoutHeader>
+    <NLayoutHeader bordered> <Navbar /></NLayoutHeader>
     <NLayoutContent>
       <Admin v-if="auth.user.role === 'ADMINISTRATEUR'" />
       <Gestionnaire v-else-if="auth.user.role === 'GESTIONNAIRE'" />
@@ -48,6 +48,6 @@ const logout = () => {
   z-index: 10;
 }
 .n-layout-header {
-  padding: 24px;
+  padding: 10px;
 }
 </style>
