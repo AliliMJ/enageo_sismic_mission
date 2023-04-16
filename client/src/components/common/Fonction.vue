@@ -1,15 +1,15 @@
 <script setup>
-import { NTag } from 'naive-ui';
+import { NText } from 'naive-ui';
 const { fonctionId } = defineProps({
   fonctionId: Number,
 });
 </script>
 
 <template>
-  <n-tag v-if="fonctionId === 1" type="info" round :bordered="false"
-    >Chef mission</n-tag
+  <n-text italic strong v-if="fonctionId === 1" type="info" round
+    >Chef mission</n-text
   >
-  <n-tag v-if="fonctionId === 2" type="info" round :bordered="false">
+  <n-text italic strong v-if="fonctionId === 2" type="info" round>
     Chef terrain
-  </n-tag>
+  </n-text>
 </template>

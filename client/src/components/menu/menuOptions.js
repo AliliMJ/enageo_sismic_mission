@@ -3,8 +3,8 @@ import { renderIcon, renderMenuItem } from '../../utils/render';
 
 import {
   SettingsOutline as Settings,
-  LogOutOutline as LogOut,
   PersonOutline as Person,
+  BarChartOutline as Dashboard,
 } from '@vicons/ionicons5';
 
 export const optionsSupervisor = [
@@ -24,6 +24,10 @@ export const optionsChefMission = [
 
 export const optionsCompte = [
   {
+    type: 'divider',
+    key: 'divider',
+  },
+  {
     type: 'group',
     label: 'Compte',
     key: 'compte',
@@ -38,11 +42,14 @@ export const optionsCompte = [
         key: Route.Preference,
         icon: renderIcon(Settings),
       },
-      {
-        label: renderMenuItem('Déconnecter', 'logout'),
-        key: 'logout',
-        icon: renderIcon(LogOut),
-      },
     ],
+  },
+];
+
+export const optionDashboard = [
+  {
+    label: renderMenuItem('Tableau de bord', Route.Dashboard),
+    key: Route.Dashboard,
+    icon: renderIcon(Dashboard),
   },
 ];

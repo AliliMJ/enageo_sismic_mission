@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../../stores/authentication';
 import { h } from 'vue';
 import STable from 'common/STable.vue';
-import { NH1 , NButton , NIcon , NSpace , useDialog } from 'naive-ui';
+import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import OptionButton from '../common/OptionButton.vue';
 
@@ -17,15 +17,10 @@ function deleteUser(id) {
     content: 'Êtes-vous sur de supprimer cet utilisateur?',
     positiveText: 'Confirmer',
     negativeText: 'Annuler',
-    onPositiveClick: () => console.log('l\'utilisateur a été supprimé', id),
+    onPositiveClick: () => console.log("l'utilisateur a été supprimé", id),
     onNegativeClick: () => console.log('Suppression annulée'),
   });
 }
-
-function updateUser(id) {
-  window.alert(id);
-}
-
 
 console.log(auth.user.hashPassword);
 const req = {
@@ -39,36 +34,29 @@ const cols = [
   { title: 'id', key: 'id' },
   { title: 'email', key: 'email' },
   { title: 'role', key: 'role' },
-  { title: 'date de création',
-    key: 'dateCreationCompte' ,
+  {
+    title: 'date de création',
+    key: 'dateCreationCompte',
     render(row) {
       return new Date(row.dateCreationCompte).toLocaleDateString();
-    },
- },
-  {
-    title: 'Options',
-    key: 'options',
-    render(row) {
-      return h(OptionButton,{ onDelete: () => deleteUser(row.id) } , { onUpdate: () => updateUser(row.id) });
     },
   },
 ];
 </script>
 
 <template>
-   <NSpace vertical>
-  <NH1>Utilisateurs</NH1>
-  <NSpace justify="end">
-  <NButton class="button" type="success" icon-placement="right">
-      Ajouter
-      <template #icon>
-        <NIcon>
-          <Add />
-        </NIcon>
-      </template>
-    </NButton>
+  <NSpace vertical>
+    <NH1>Utilisateurs</NH1>
+    <NSpace justify="end">
+      <NButton class="button" type="success" icon-placement="right">
+        Ajouter
+        <template #icon>
+          <NIcon>
+            <Add />
+          </NIcon>
+        </template>
+      </NButton>
+    </NSpace>
+    <STable :data="users" :columns="cols" />
   </NSpace>
-  <STable :data="users" :columns="cols" />
-</NSpace>
-
 </template>

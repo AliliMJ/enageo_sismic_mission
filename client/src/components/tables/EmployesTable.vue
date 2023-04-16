@@ -6,6 +6,9 @@ import { NH1, NTag, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { h } from 'vue';
 import OptionButton from '../common/OptionButton.vue';
 import { Add } from '@vicons/ionicons5';
+import Fonction from '../common/Fonction.vue';
+import Position from '../common/Position.vue';
+import { useRouter } from 'vue-router';
 
 const dialog = useDialog();
 
@@ -26,33 +29,24 @@ function updateEmploye(id) {
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
-const fonctions = (await axios.get('http://localhost:3000/employes/fonctions'))
-  .data;
-
+const router = useRouter();
 const cols = [
   { title: 'id', key: 'id' },
-  { title: 'email', key: 'email' },
+
   { title: 'nom', key: 'nom' },
   { title: 'prénom', key: 'prenom' },
   {
     title: 'fonction',
     key: 'fonctionId',
     render(row) {
-      return h(
-        NTag,
-        { round: true, bordered: false, type: 'info' },
-        {
-          default: () =>
-            fonctions.filter((f) => f.id === row.fonctionId)[0].nom,
-        }
-      );
+      return h(Fonction, { fonctionId: row.fonctionId });
     },
   },
   {
-    title: 'Date naissance',
-    key: 'dateNaissance',
+    title: 'Position',
+    key: 'etatEmployeId',
     render(row) {
-      return new Date(row.dateNaissance).toLocaleDateString();
+      return h(Position, { etatEmployeId: row.etatEmployeId });
     },
   },
   {
@@ -62,14 +56,11 @@ const cols = [
       return new Date(row.dateAdhesion).toLocaleDateString();
     },
   },
-  {
-    title: 'Options',
-    key: 'options',
-    render(row) {
-      return h(OptionButton, { onDelete: () => deleteEmploye(row.id) } , { onUpdate: () => updateEmploye(row.id) });
-    },
-  },
 ];
+
+const handleClick = (employe) => {
+  router.push(`/employe/${employe.id}`);
+};
 </script>
 
 <template>
@@ -85,7 +76,7 @@ const cols = [
         </template>
       </NButton>
     </NSpace>
-    <STable :data="employes" :columns="cols" />
+    <STable @onRowClicked="handleClick" :data="employes" :columns="cols" />
   </NSpace>
 </template>
 
