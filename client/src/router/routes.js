@@ -14,6 +14,7 @@ import MaterialTable from 'components/tables/MaterialTable.vue';
 import EmployesTable from 'components/tables/EmployesTable.vue';
 import UsersTable from 'components/tables/UsersTable.vue';
 import Home from 'app/Home.vue';
+import Employe from 'components/pages/Employe.vue';
 import Dashboard from 'components/dashboard/Dashboard.vue';
 
 // const routes = [
@@ -44,6 +45,11 @@ const routes = [
         path: '/employe',
         name: Route.Employe,
         component: EmployesTable,
+        meta: { role: Role.Gestionnaire },
+      },
+      {
+        path: '/employe/:id',
+        component: Employe,
         meta: { role: Role.Gestionnaire },
       },
       {

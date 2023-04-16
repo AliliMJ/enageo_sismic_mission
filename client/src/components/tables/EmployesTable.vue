@@ -7,6 +7,8 @@ import { h } from 'vue';
 import OptionButton from '../common/OptionButton.vue';
 import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
+import Position from '../common/Position.vue';
+import { useRouter } from 'vue-router';
 
 const dialog = useDialog();
 
@@ -23,9 +25,7 @@ function deleteEmploye(id) {
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
-const fonctions = (await axios.get('http://localhost:3000/employes/fonctions'))
-  .data;
-
+const router = useRouter();
 const cols = [
   { title: 'id', key: 'id' },
 
@@ -42,7 +42,7 @@ const cols = [
     title: 'Position',
     key: 'etatEmployeId',
     render(row) {
-      return row.etatEmployeId;
+      return h(Position, { etatEmployeId: row.etatEmployeId });
     },
   },
   {
@@ -52,14 +52,11 @@ const cols = [
       return new Date(row.dateAdhesion).toLocaleDateString();
     },
   },
-  {
-    title: 'Options',
-    key: 'options',
-    render(row) {
-      return h(OptionButton, { onDelete: () => deleteEmploye(row.id) });
-    },
-  },
 ];
+
+const handleClick = (employe) => {
+  router.push(`/employe/${employe.id}`);
+};
 </script>
 
 <template>
@@ -75,7 +72,7 @@ const cols = [
         </template>
       </NButton>
     </NSpace>
-    <STable :data="employes" :columns="cols" />
+    <STable @onRowClicked="handleClick" :data="employes" :columns="cols" />
   </NSpace>
 </template>
 
