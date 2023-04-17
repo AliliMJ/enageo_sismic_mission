@@ -9,12 +9,12 @@ import { Role, Route } from '../enums';
 
 //import Dashboard from 'components/dashboard/Dashboard.vue';
 import Login from 'components/authentication/Login.vue';
-
 import MaterialTable from 'components/tables/MaterialTable.vue';
 import EmployesTable from 'components/tables/EmployesTable.vue';
 import UsersTable from 'components/tables/UsersTable.vue';
 import Home from 'app/Home.vue';
 import Employe from 'components/pages/Employe.vue';
+import User from 'components/pages/User.vue';
 import Dashboard from 'components/dashboard/Dashboard.vue';
 
 // const routes = [
@@ -39,6 +39,11 @@ const routes = [
         path: '/utilisateur',
         name: Route.Utilisateur,
         component: UsersTable,
+        meta: { role: Role.Administrateur },
+      },
+      {
+        path: '/utilisateur/:id',
+        component: User,
         meta: { role: Role.Administrateur },
       },
       {
