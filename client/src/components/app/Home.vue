@@ -1,19 +1,19 @@
 <script setup>
-import Admin from "./Admin.vue";
-import { useAuth } from "../../stores/authentication";
+import Admin from './Admin.vue';
+import { useAuth } from '../../stores/authentication';
 import {
   NButton,
   NIcon,
   NLayout,
   NLayoutContent,
   NLayoutHeader,
-} from "naive-ui";
-import { LogOutOutline as Logout } from "@vicons/ionicons5";
-import { useRouter } from "vue-router";
-import Gestionnaire from "./Gestionnaire.vue";
-import Navbar from "./Navbar.vue";
+} from 'naive-ui';
+import { LogOutOutline as Logout } from '@vicons/ionicons5';
+import { useRouter } from 'vue-router';
+import Gestionnaire from './Gestionnaire.vue';
+import Navbar from './Navbar.vue';
 
-import { useMessage, useDialog } from "naive-ui";
+import { useMessage, useDialog } from 'naive-ui';
 
 const auth = useAuth();
 const router = useRouter();
@@ -22,25 +22,25 @@ const message = useMessage();
 const dialog = useDialog();
 
 function handleConfirm() {
-        dialog.warning({
-          title: "Confirmation",
-          content: "êtes-vous sûr de déconnecter?",
-          positiveText: "Déconnecter",
-          negativeText: "Annuler",
-          onPositiveClick: () => {
-            message.success("Déconnexion effectué avec success");
-            auth.logout();
-            router.push("/login");
-          },
-          onNegativeClick: () => {
-            message.error("Déconnexion annulée");
-          }
-        });
-      }
+  dialog.warning({
+    title: 'Confirmation',
+    content: 'êtes-vous sûr de déconnecter?',
+    positiveText: 'Déconnecter',
+    negativeText: 'Annuler',
+    onPositiveClick: () => {
+      message.success('Déconnexion effectué avec success');
+      auth.logout();
+      router.push('/login');
+    },
+    onNegativeClick: () => {
+      message.error('Déconnexion annulée');
+    },
+  });
+}
 
 const logout = () => {
   auth.logout();
-  router.push("/login");
+  router.push('/login');
 };
 </script>
 
@@ -55,8 +55,8 @@ const logout = () => {
   <NLayout>
     <NLayoutHeader bordered> <Navbar /></NLayoutHeader>
     <NLayoutContent>
-      <Admin v-if="auth.user.role === 'ADMINISTRATEUR'" />
-      <Gestionnaire v-else-if="auth.user.role === 'GESTIONNAIRE'" />
+      <Admin v-if="auth.user?.role === 'ADMINISTRATEUR'" />
+      <Gestionnaire v-else-if="auth.user?.role === 'GESTIONNAIRE'" />
     </NLayoutContent>
   </NLayout>
 </template>

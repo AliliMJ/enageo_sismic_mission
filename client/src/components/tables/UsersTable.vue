@@ -4,6 +4,7 @@ import { useAuth } from '../../stores/authentication';
 import STable from 'common/STable.vue';
 import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
+import { useRouter } from 'vue-router';
 
 const auth = useAuth();
 const router = useRouter();
