@@ -14,7 +14,8 @@ import AppConfig from 'config/AppConfig.vue';
         <RouterView />
       </NLayoutContent>
     </NLayout> -->
-    <RouterView />
+    Krimo l 3alami
+    <!-- <RouterView /> -->
   </app-config>
 </template>
 
