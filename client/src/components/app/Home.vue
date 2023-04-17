@@ -13,8 +13,30 @@ import { useRouter } from "vue-router";
 import Gestionnaire from "./Gestionnaire.vue";
 import Navbar from "./Navbar.vue";
 
+import { useMessage, useDialog } from "naive-ui";
+
 const auth = useAuth();
 const router = useRouter();
+
+const message = useMessage();
+const dialog = useDialog();
+
+function handleConfirm() {
+        dialog.warning({
+          title: "Confirmation",
+          content: "êtes-vous sûr de déconnecter?",
+          positiveText: "Déconnecter",
+          negativeText: "Annuler",
+          onPositiveClick: () => {
+            message.success("Sure");
+            auth.logout();
+            router.push("/login");
+          },
+          onNegativeClick: () => {
+            message.error("Not Sure");
+          }
+        });
+      }
 
 const logout = () => {
   auth.logout();
@@ -23,7 +45,7 @@ const logout = () => {
 </script>
 
 <template>
-  <NButton id="logout-btn" type="error" @click="logout"
+  <NButton id="logout-btn" type="error" @click="handleConfirm()"
     >Déconnecter
     <template #icon>
       <NIcon><Logout /></NIcon>
