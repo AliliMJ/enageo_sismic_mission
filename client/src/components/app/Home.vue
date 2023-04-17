@@ -8,7 +8,7 @@ import {
   NLayoutContent,
   NLayoutHeader,
 } from "naive-ui";
-import { LogInOutline as Logout } from "@vicons/ionicons5";
+import { LogOutOutline as Logout } from "@vicons/ionicons5";
 import { useRouter } from "vue-router";
 import Gestionnaire from "./Gestionnaire.vue";
 import Navbar from "./Navbar.vue";
