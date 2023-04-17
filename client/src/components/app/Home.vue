@@ -28,12 +28,12 @@ function handleConfirm() {
           positiveText: "Déconnecter",
           negativeText: "Annuler",
           onPositiveClick: () => {
-            message.success("Sure");
+            message.success("Déconnexion effectué avec success");
             auth.logout();
             router.push("/login");
           },
           onNegativeClick: () => {
-            message.error("Not Sure");
+            message.error("Déconnexion annulée");
           }
         });
       }
