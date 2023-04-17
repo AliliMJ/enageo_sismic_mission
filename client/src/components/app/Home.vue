@@ -54,6 +54,7 @@ const logout = () => {
 
   <NLayout>
     <NLayoutHeader bordered> <Navbar /></NLayoutHeader>
+
     <NLayoutContent>
       <Admin v-if="auth.user?.role === 'ADMINISTRATEUR'" />
       <Gestionnaire v-else-if="auth.user?.role === 'GESTIONNAIRE'" />

@@ -3,8 +3,9 @@ import axios from 'axios';
 
 import STable from 'common/STable.vue';
 import { NH1, NTag, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
-import { h } from 'vue';
-import OptionButton from '../common/OptionButton.vue';
+import { h, ref } from 'vue';
+import Modal from '../common/Modal.vue';
+
 import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
 import Position from '../common/Position.vue';
@@ -61,13 +62,27 @@ const cols = [
 const handleClick = (employe) => {
   router.push(`/employe/${employe.id}`);
 };
+const showModal = ref(false);
+const showInsertEmployeModal = () => {
+  showModal.value = true;
+};
 </script>
 
 <template>
   <NSpace vertical>
+    <Modal
+      title="Ajouter un employé"
+      :showModal="showModal"
+      @cancel="showModal = false"
+      @confirm="showModal = false"
+    />
     <NH1>La liste des employés</NH1>
     <NSpace justify="end">
-      <NButton type="success" icon-placement="right">
+      <NButton
+        @click="showInsertEmployeModal"
+        type="success"
+        icon-placement="right"
+      >
         Nouvel employé
         <template #icon>
           <NIcon>

@@ -1,6 +1,12 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { NLayout, NLayoutSider, NLayoutContent, NCard } from 'naive-ui';
+import {
+  NLayout,
+  NLayoutSider,
+  NLayoutContent,
+  NCard,
+  NScrollbar,
+} from 'naive-ui';
 
 import AdminMenu from '../menu/AdminMenu.vue';
 
@@ -16,11 +22,13 @@ const router = useRouter();
     </NLayoutSider>
 
     <NLayoutContent>
-      <NCard :bordered="false">
-        <Suspense>
-          <RouterView />
-        </Suspense>
-      </NCard>
+      <NScrollbar style="height: 100vh">
+        <NCard :bordered="false">
+          <Suspense>
+            <RouterView />
+          </Suspense>
+        </NCard>
+      </NScrollbar>
     </NLayoutContent>
   </NLayout>
 </template>

@@ -1,5 +1,11 @@
 <script setup>
-import { NLayout, NLayoutSider, NLayoutContent, NCard } from 'naive-ui';
+import {
+  NLayout,
+  NLayoutSider,
+  NLayoutContent,
+  NCard,
+  NScrollbar,
+} from 'naive-ui';
 import GestMenu from '../menu/GestMenu.vue';
 </script>
 
@@ -10,11 +16,13 @@ import GestMenu from '../menu/GestMenu.vue';
     </NLayoutSider>
 
     <NLayoutContent>
-      <NCard :bordered="false">
-        <Suspense>
-          <RouterView />
-        </Suspense>
-      </NCard>
+      <NScrollbar style="height: 100vh">
+        <NCard :bordered="false">
+          <Suspense>
+            <RouterView />
+          </Suspense>
+        </NCard>
+      </NScrollbar>
     </NLayoutContent>
   </NLayout>
 </template>
