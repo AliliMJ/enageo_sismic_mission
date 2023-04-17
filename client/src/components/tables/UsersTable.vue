@@ -1,14 +1,13 @@
 <script setup>
 import axios from 'axios';
 import { useAuth } from '../../stores/authentication';
-import { h } from 'vue';
 import STable from 'common/STable.vue';
 import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
-import OptionButton from '../common/OptionButton.vue';
+import { useRouter } from 'vue-router';
 
 const auth = useAuth();
-
+const router = useRouter();
 const dialog = useDialog();
 
 function deleteUser(id) {
@@ -22,7 +21,8 @@ function deleteUser(id) {
   });
 }
 
-console.log(auth.user.hashPassword);
+//console.log(auth.user.hashPassword);
+
 const req = {
   email: auth.user.email,
   hashPassword: auth.user.hashPassword,
@@ -42,6 +42,10 @@ const cols = [
     },
   },
 ];
+//const idUser=ref(10);
+const handleClick = (user) => {
+  router.push(`/utilisateur/${user.id}`);
+};
 </script>
 
 <template>
@@ -57,6 +61,6 @@ const cols = [
         </template>
       </NButton>
     </NSpace>
-    <STable :data="users" :columns="cols" />
+    <STable  @onRowClicked="handleClick" :data="users" :columns="cols" />
   </NSpace>
 </template>

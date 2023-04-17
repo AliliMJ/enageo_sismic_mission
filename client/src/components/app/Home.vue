@@ -1,31 +1,30 @@
 <script setup>
-import Admin from './Admin.vue';
-import { useAuth } from '../../stores/authentication';
+import Admin from "./Admin.vue";
+import { useAuth } from "../../stores/authentication";
 import {
   NButton,
   NIcon,
   NLayout,
   NLayoutContent,
   NLayoutHeader,
-} from 'naive-ui';
-import { LogInOutline as Logout } from '@vicons/ionicons5';
-import { useRouter } from 'vue-router';
-import Gestionnaire from './Gestionnaire.vue';
-import Navbar from './Navbar.vue';
+} from "naive-ui";
+import { LogInOutline as Logout } from "@vicons/ionicons5";
+import { useRouter } from "vue-router";
+import Gestionnaire from "./Gestionnaire.vue";
+import Navbar from "./Navbar.vue";
 
 const auth = useAuth();
 const router = useRouter();
 
 const logout = () => {
   auth.logout();
-  router.push('/login');
+  router.push("/login");
 };
 </script>
 
 <template>
   <NButton id="logout-btn" type="error" @click="logout"
     >Déconnecter
-
     <template #icon>
       <NIcon><Logout /></NIcon>
     </template>
@@ -44,8 +43,9 @@ const logout = () => {
 #logout-btn {
   position: absolute;
   bottom: 20px;
-  left: 24px;
+  left: 10px;
   z-index: 10;
+  width: 250px;
 }
 .n-layout-header {
   padding: 10px;
