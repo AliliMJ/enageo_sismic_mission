@@ -5,7 +5,6 @@ import { h } from 'vue';
 import STable from 'common/STable.vue';
 import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
-import OptionButton from '../common/OptionButton.vue';
 
 const auth = useAuth();
 

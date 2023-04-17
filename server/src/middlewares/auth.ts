@@ -10,7 +10,6 @@ export const verifyUserAuthentication = async (
   next: NextFunction
 ) => {
   const { email, hashPassword } = req.body;
-  console.log(req.headers.user);
 
   try {
     const user = await prisma.utilisateur.findFirst({
