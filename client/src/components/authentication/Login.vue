@@ -49,7 +49,7 @@ export default {
     <transition appear :css="false" @before-enter="beforeEnter" @enter="enter">
       <div class="container">
         <h1 class="authLabel">Authentification</h1>
-        <img class="logoImg" src="@/assets/ENAGEO.png" alt="erreur" />
+        <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" />
         <form>
           <div class="inputContainer">
             <input
@@ -131,7 +131,7 @@ a:active {
   transform: translate(-50%, -50%);
   background-color: rgb(255, 255, 255);
   width: 500px;
-  height: 450px;
+  height: 400px;
   border-radius: 10px;
   padding: 15px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
@@ -144,8 +144,8 @@ a:active {
 }
 
 .logoImg {
-  width: 130px;
-  height: 130px;
+  width: 370px;
+  height: 70px;
   margin-bottom: 10px;
   text-align: center;
   position: relative;
@@ -190,7 +190,7 @@ a:active {
 
 .input:focus ~ .placeholder,
 .input:not(:placeholder-shown) ~ .placeholder {
-  transform: translateY(-19px) translateX(10px);
+  transform: translateY(-20px) translateX(10px);
   color: #35bc00;
   font-size: 14px;
 }
@@ -231,7 +231,7 @@ a:active {
   width: 325px;
   height: 40px;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .button-4:hover {

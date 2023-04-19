@@ -1,6 +1,6 @@
 <script setup>
-import axios from 'axios';
-import { useRoute } from 'vue-router';
+import axios from "axios";
+import { useRoute } from "vue-router";
 import {
   NCard,
   NTabs,
@@ -14,9 +14,9 @@ import {
   NInput,
   NSelect,
   NDatePicker,
-} from 'naive-ui';
-import { Edit32Filled as Pen } from '@vicons/fluent';
-import { ref } from 'vue';
+} from "naive-ui";
+import { Edit32Filled as Pen } from "@vicons/fluent";
+import { ref } from "vue";
 const route = useRoute();
 const id = route.params.id;
 

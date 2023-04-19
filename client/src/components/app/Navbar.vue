@@ -11,7 +11,7 @@
       </n-button>
 
 
-      <n-dropdown trigger="hover" :options="options" @select="handleSelect">
+      <n-dropdown trigger="hover" :options="options" @select="handleSelect" style="width:300px">
         <n-button text style="font-size: 30px">
         <n-icon>
           <Persone />
@@ -127,7 +127,7 @@ function handleConfirm() {
 }
 
 .logoImg {
-  width: 200px;
+  width: 180px;
 }
 
 .button {
