@@ -5,6 +5,8 @@ import STable from 'common/STable.vue';
 import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
+import { h, ref } from 'vue';
+import Modal from '../common/AddUserModal.vue';
 
 const auth = useAuth();
 const router = useRouter();
@@ -46,13 +48,29 @@ const cols = [
 const handleClick = (user) => {
   router.push(`/utilisateur/${user.id}`);
 };
+
+
+/* script to add user */
+
+const showModal = ref(false);
+
+const showInsertEmployeModal = () => {
+  showModal.value = true;
+};
 </script>
 
 <template>
   <NSpace vertical>
+    <Modal
+      title="Ajouter un nouveau utilisateur"
+      :showModal="showModal"
+      @cancel="showModal = false"
+      @confirm="showModal = false"
+    />
+
     <NH1>Utilisateurs</NH1>
     <NSpace justify="end">
-      <NButton class="button" type="success" icon-placement="right">
+      <NButton  @click="showInsertEmployeModal" class="button" type="success" icon-placement="right">
         Ajouter
         <template #icon>
           <NIcon>

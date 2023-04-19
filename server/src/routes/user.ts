@@ -15,4 +15,13 @@ userRouter.post(
   getUsers
 );
 
-userRouter.get('/users/:id', getUserById);
+// userRouter.get(
+//   '/',
+//   verifyUserAuthentication,
+//   verifyUserAcces([Role.ADMINISTRATEUR]),
+//   paginate,
+//   getUsers
+// );
+
+
+userRouter.get('/:id', getUserById);
