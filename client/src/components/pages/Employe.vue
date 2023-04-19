@@ -15,17 +15,11 @@ import {
   NSelect,
   NDatePicker,
 } from 'naive-ui';
-import { Edit32Filled as Pen } from '@vicons/fluent';
-import { ref } from 'vue';
+
 const route = useRoute();
 const id = route.params.id;
 
-const isEditPersonel = ref(false);
-const isEditEmploi = ref(false);
-
 const employe = (await axios.get(`http://localhost:3000/employes/${id}`)).data;
-
-console.log(employe);
 </script>
 
 <template>
@@ -60,7 +54,7 @@ console.log(employe);
                     <NInput value="Mohamed Lamine" />
                   </NFormItemGi>
                   <NFormItemGi :span="12" label="Date de naissance">
-                    <NDatePicker :value="new Date()" type="date" />
+                    <NDatePicker :value="2000" type="date" />
                   </NFormItemGi>
                   <NFormItemGi :span="12" label="Sexe">
                     <NSelect value="Male" />

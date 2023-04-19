@@ -62,38 +62,58 @@ model Fonction {
 model Projet {
   id Int @id @default(autoincrement())
 
-  Objectif   Objectif     @relation(fields: [objectifId], references: [id])
+  Plans      Plan[]
   objectifId Int          @unique
   Etats      Transition[]
 
   Materiel Materiel[]
 
-  createdAt DateTime    @default(now())
-  Coodonnes Coordonne[]
-  Equipes   Execution[]
+  createdAt  DateTime    @default(now())
+  Coodonnes  Coordonne[]
+  Executions Execution[]
+  Client     Client      @relation(fields: [clientId], references: [id])
+  clientId   Int
+}
+
+model Client {
+  id     Int      @id
+  nom    String
+  Projet Projet[]
 }
 
 model EtatProjet {
-  id      String       @id @default(cuid())
-  nom     String
-  Projets Transition[]
+  id          Int          @id @default(autoincrement())
+  nom         String
+  Transitions Transition[]
 }
 
 model Transition {
   Projet       Projet     @relation(fields: [projetId], references: [id])
   projetId     Int
   EtatProjet   EtatProjet @relation(fields: [etatProjetId], references: [id])
-  etatProjetId String
+  etatProjetId Int
 
   @@id([projetId, etatProjetId])
 }
 
 model Objectif {
-  id     Int      @id @default(autoincrement())
-  Projet Projet?
-  VP     Int
-  debut  DateTime @db.Date
-  fin    DateTime @db.Date
+  id    Int       @id @default(autoincrement())
+  nom   String
+  avant DateTime? @db.Date
+
+  Plans Plan[]
+}
+
+model Plan {
+  Projet     Projet   @relation(fields: [projetId], references: [id])
+  Objectif   Objectif @relation(fields: [objectifId], references: [id])
+  projetId   Int
+  objectifId Int
+
+  valeur String
+  avant  DateTime? @db.Date
+
+  @@id([projetId, objectifId])
 }
 
 model Coordonne {
@@ -117,7 +137,7 @@ model Mission {
 
   Chefs Utilisateur[]
 
-  Equipes Equipe[]
+  Executions Equipe[]
 }
 
 enum TypeMission {
@@ -133,8 +153,8 @@ model Equipe {
   Mission   Mission @relation(fields: [missionId], references: [code])
   missionId String
 
-  Membres Employe[]
-  Projets Execution[]
+  Membres    Employe[]
+  Executions Execution[]
 }
 
 model Activite {

@@ -11,9 +11,11 @@ import {
 import { LogOutOutline as Logout } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
 import Gestionnaire from './Gestionnaire.vue';
+import ChefMission from './ChefMission.vue';
 import Navbar from './Navbar.vue';
 
 import { useMessage, useDialog } from 'naive-ui';
+import { Role } from '../../enums';
 
 const auth = useAuth();
 const router = useRouter();
@@ -56,8 +58,9 @@ const logout = () => {
     <NLayoutHeader bordered> <Navbar /></NLayoutHeader>
 
     <NLayoutContent>
-      <Admin v-if="auth.user?.role === 'ADMINISTRATEUR'" />
-      <Gestionnaire v-else-if="auth.user?.role === 'GESTIONNAIRE'" />
+      <Admin v-if="auth.user?.role === Role.Administrateur" />
+      <Gestionnaire v-else-if="auth.user?.role === Role.Gestionnaire" />
+      <ChefMission v-else-if="auth.user?.role === Role.ChefMision" />
     </NLayoutContent>
   </NLayout>
 </template>

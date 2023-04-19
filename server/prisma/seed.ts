@@ -1,5 +1,6 @@
-import { TypeMission } from '@prisma/client';
+import { Role, TypeMission } from '@prisma/client';
 import prisma from '../src/utils/prisma';
+import bcrypt from 'bcrypt';
 
 async function main() {
   await prisma.fonction.createMany({
@@ -8,6 +9,15 @@ async function main() {
 
   await prisma.etatEmploye.createMany({
     data: [{ nom: 'En mission' }, { nom: 'Congé' }],
+  });
+
+  await prisma.etatProjet.createMany({
+    data: [
+      { nom: 'Planifié' },
+      { nom: 'En production' },
+      { nom: 'Clôturé' },
+      { nom: 'Annulé' },
+    ],
   });
 
   await prisma.wilaya.createMany({ data: [{ numero: 1, nom: 'Adrar' }] });
@@ -42,43 +52,43 @@ async function main() {
   await prisma.employe.createMany({
     data: [
       {
-        email: 'gest',
-        nom: 'ALILI',
-        prenom: 'Mohamed',
-        fonctionId: 1,
-        etatEmployeId: 1,
-        dateAdhesion: new Date(),
-        dateNaissance: new Date(),
-      },
-      {
         email: 'admin',
-        nom: 'ALILI',
-        prenom: 'Amine',
-        fonctionId: 2,
-        etatEmployeId: 1,
-        dateAdhesion: new Date(),
-        dateNaissance: new Date(),
-      },
-      {
-        email: 'chefM',
-        nom: 'ALILI',
-        prenom: 'Mohamed',
+        nom: 'Zoya',
+        prenom: 'Walker',
         fonctionId: 1,
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
       },
       {
-        email: 'chefT',
-        nom: 'ALILI',
-        prenom: 'Mohamed',
+        email: 'gest',
+        nom: 'Faye',
+        prenom: 'Morgan',
         fonctionId: 2,
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
       },
       {
-        email: 'superviseur',
+        email: 'chefm',
+        nom: 'Harris',
+        prenom: 'Ballard',
+        fonctionId: 1,
+        etatEmployeId: 1,
+        dateAdhesion: new Date(),
+        dateNaissance: new Date(),
+      },
+      {
+        email: 'cheft',
+        nom: 'Hasan',
+        prenom: 'Craig',
+        fonctionId: 2,
+        etatEmployeId: 1,
+        dateAdhesion: new Date(),
+        dateNaissance: new Date(),
+      },
+      {
+        email: 'dir',
         nom: 'ALILI',
         prenom: 'Mohamed',
         fonctionId: 1,
@@ -88,8 +98,8 @@ async function main() {
       },
       {
         email: 'e1',
-        nom: 'ALILI',
-        prenom: 'Mohamed',
+        nom: 'Kyran',
+        prenom: 'Noble',
         fonctionId: 1,
         etatEmployeId: 1,
         dateAdhesion: new Date(),
@@ -97,8 +107,8 @@ async function main() {
       },
       {
         email: 'e2',
-        nom: 'ALILI',
-        prenom: 'Mohamed',
+        nom: 'Dewey',
+        prenom: 'Conley',
         fonctionId: 1,
         etatEmployeId: 1,
         dateAdhesion: new Date(),
@@ -119,6 +129,82 @@ async function main() {
       { code: 'M8', designation: 'D1', enPanne: false },
     ],
   });
+
+  await prisma.utilisateur.create({
+    data: {
+      email: 'admin',
+      hashPassword: await bcrypt.hash('123', 10),
+      employeId: 1,
+      role: Role.ADMINISTRATEUR,
+    },
+  });
+
+  await prisma.utilisateur.create({
+    data: {
+      email: 'gest',
+      hashPassword: await bcrypt.hash('123', 10),
+      employeId: 2,
+      role: Role.GESTIONNAIRE,
+    },
+  });
+
+  await prisma.utilisateur.create({
+    data: {
+      email: 'chefm',
+      hashPassword: await bcrypt.hash('123', 10),
+      employeId: 3,
+      role: Role.CHEF_MISSION,
+    },
+  });
+
+  await prisma.utilisateur.create({
+    data: {
+      email: 'cheft',
+      hashPassword: await bcrypt.hash('123', 10),
+      employeId: 4,
+      role: Role.CHEF_TERRAIN,
+    },
+  });
+
+  await prisma.utilisateur.create({
+    data: {
+      email: 'dir',
+      hashPassword: await bcrypt.hash('123', 10),
+      employeId: 5,
+      role: Role.DIRECTEUR,
+    },
+  });
+
+  await prisma.equipe.createMany({
+    data: [
+      { activiteId: 1, missionId: 'EGS100' },
+      { activiteId: 2, missionId: 'EGS100' },
+      { activiteId: 3, missionId: 'EGS100' },
+      { activiteId: 3, missionId: 'EGS100' },
+      { activiteId: 4, missionId: 'EGS100' },
+      { activiteId: 5, missionId: 'EGS100' },
+      { activiteId: 1, missionId: 'EGS120' },
+      { activiteId: 2, missionId: 'EGS120' },
+      { activiteId: 3, missionId: 'EGS120' },
+      { activiteId: 3, missionId: 'EGS120' },
+      { activiteId: 4, missionId: 'EGS120' },
+      { activiteId: 5, missionId: 'EGS120' },
+      { activiteId: 1, missionId: 'EGS200' },
+      { activiteId: 2, missionId: 'EGS200' },
+      { activiteId: 3, missionId: 'EGS200' },
+      { activiteId: 3, missionId: 'EGS200' },
+      { activiteId: 4, missionId: 'EGS200' },
+      { activiteId: 5, missionId: 'EGS200' },
+      { activiteId: 1, missionId: 'EGS220' },
+      { activiteId: 2, missionId: 'EGS220' },
+      { activiteId: 3, missionId: 'EGS220' },
+      { activiteId: 3, missionId: 'EGS220' },
+      { activiteId: 4, missionId: 'EGS220' },
+      { activiteId: 5, missionId: 'EGS220' },
+    ],
+  });
+
+  await prisma.objectif.createMany({ data: [{ nom: 'VP' }] });
 }
 
 main()

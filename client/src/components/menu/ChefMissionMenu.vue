@@ -13,6 +13,8 @@ import {
   CubeOutline as Cube,
   ConstructOutline as Atelier,
   BarChartOutline as Dashboard,
+  AnalyticsOutline as Analytics,
+  HammerOutline as Project,
 } from '@vicons/ionicons5';
 
 const route = useRoute();
@@ -24,21 +26,14 @@ watch(route, (route) => {
 const menuOptions = [
   ...optionDashboard,
   {
-    label: 'Atelier',
-    key: 'atelier',
-    icon: renderIcon(Atelier),
+    title: 'Projets',
+    key: 'projets',
+    icon: renderIcon(Project),
   },
   {
-    label: `Espace`,
-    key: 'space',
-    icon: renderIcon(Cube),
-    children: [
-      {
-        label: renderMenuItem('Matériel', Route.Material),
-        key: Route.Material,
-      },
-      { label: renderMenuItem('Employés', Route.Employe), key: Route.Employe },
-    ],
+    title: 'Analyse',
+    key: 'analyse',
+    icon: renderIcon(Analytics),
   },
   ...optionsCompte,
 ];

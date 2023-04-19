@@ -64,6 +64,12 @@ const routes = [
         meta: { role: Role.Gestionnaire },
       },
       {
+        path: '/projet',
+        name: Route.Projet,
+        component: () => import('components/tables/ProjectTable.vue'),
+        mata: { role: Role.ChefMision },
+      },
+      {
         path: '/profile',
         name: Route.Profile,
         component: () => import('app/Profile.vue'),
