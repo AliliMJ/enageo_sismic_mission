@@ -79,6 +79,11 @@ const routes = [
         name: Route.Preference,
         component: () => import('app/Preference.vue'),
       },
+      {
+        path: '/projet/creation',
+        name: 'creationProjet',
+        component: () => import('components/pages/CreateProject.vue'),
+      },
     ],
   },
   // { path: '/logout', component: Logout, name: 'logout' },

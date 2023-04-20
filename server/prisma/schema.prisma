@@ -62,9 +62,9 @@ model Fonction {
 model Projet {
   id Int @id @default(autoincrement())
 
-  Plans      Plan[]
-  objectifId Int          @unique
-  Etats      Transition[]
+  Plan Tache[]
+
+  Etats Transition[]
 
   Materiel Materiel[]
 
@@ -76,7 +76,7 @@ model Projet {
 }
 
 model Client {
-  id     Int      @id
+  id     Int      @id @default(autoincrement())
   nom    String
   Projet Projet[]
 }
@@ -92,6 +92,7 @@ model Transition {
   projetId     Int
   EtatProjet   EtatProjet @relation(fields: [etatProjetId], references: [id])
   etatProjetId Int
+  date         DateTime   @default(now())
 
   @@id([projetId, etatProjetId])
 }
@@ -101,17 +102,18 @@ model Objectif {
   nom   String
   avant DateTime? @db.Date
 
-  Plans Plan[]
+  Taches Tache[]
 }
 
-model Plan {
+model Tache {
   Projet     Projet   @relation(fields: [projetId], references: [id])
   Objectif   Objectif @relation(fields: [objectifId], references: [id])
   projetId   Int
   objectifId Int
 
   valeur String
-  avant  DateTime? @db.Date
+  debut  DateTime @db.Date
+  duree  Int
 
   @@id([projetId, objectifId])
 }

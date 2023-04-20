@@ -6,10 +6,11 @@ import {
   getFonctions,
   insertEmploye,
 } from '../controllers/employe';
+import employeNameFilter from '../middlewares/filter';
 
 export const employeRouter = express.Router();
 
-employeRouter.get('/', paginate, getEmployes);
+employeRouter.get('/', employeNameFilter, paginate, getEmployes);
 employeRouter.post('/', insertEmploye);
 employeRouter.get('/fonctions', getFonctions);
 

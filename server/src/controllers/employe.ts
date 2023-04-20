@@ -1,9 +1,12 @@
 import { Response, Request } from 'express';
 
 export const getEmployes = async (req: Request, res: Response) => {
+  const value = req.query.like;
+  console.log(value);
   try {
     const employes = await prisma.employe.findMany({
       ...req.body.pagination?.options,
+      where: { ...req.body.filter },
     });
 
     res.status(200).json(employes);

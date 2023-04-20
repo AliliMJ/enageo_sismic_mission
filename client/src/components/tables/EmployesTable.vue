@@ -10,6 +10,7 @@ import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
 import Position from '../common/Position.vue';
 import { useRouter } from 'vue-router';
+import SearchEmploye from '../common/SearchEmploye.vue';
 
 const dialog = useDialog();
 
@@ -70,6 +71,7 @@ const showInsertEmployeModal = () => {
 
 <template>
   <NSpace vertical>
+    <SearchEmploye />
     <Modal
       title="Ajouter un employé"
       :showModal="showModal"

@@ -1,0 +1,31 @@
+<script setup>
+import axios from 'axios';
+
+import { NAutoComplete } from 'naive-ui';
+import { ref, computed, watch } from 'vue';
+
+const employes = ref([]);
+const options = computed(() => {
+  return employes.value.map((e) => ({
+    label: `${e.nom} ${e.prenom}`,
+    value: e.id,
+  }));
+});
+
+const value = ref('');
+watch(value, async () => {
+  if (value.value.length > 0) {
+    employes.value = (
+      await axios.get(`http://localhost:3000/employes?like=${value.value}`)
+    ).data;
+  }
+});
+</script>
+
+<template>
+  <n-auto-complete
+    placeholder="Sélectionnez un employe"
+    :options="options"
+    v-model:value="value"
+  />
+</template>

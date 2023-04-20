@@ -205,6 +205,7 @@ async function main() {
   });
 
   await prisma.objectif.createMany({ data: [{ nom: 'VP' }] });
+  await prisma.client.createMany({ data: [{ nom: 'Sonatrach' }] });
 }
 
 main()
