@@ -67,3 +67,31 @@ export const getFonctions = async (req: Request, res: Response) => {
       .json({ err: 'Problème lors de la collection des fonctions' });
   }
 };
+
+export const updateEmploye = async (req: Request, res: Response) => {
+  const data = req.body;
+
+  try {
+    const id = Number(req.params.id);
+
+    const employe = await prisma.employe.update({ data, where: { id } });
+
+    res.status(200).json(employe);
+  } catch {
+    res.status(500).json({
+      err: `Èchec lors de la mise à jour de données de l'employe ${req.params.id}`,
+    });
+  }
+};
+
+export const deleteEmploye = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    const employe = await prisma.employe.delete({ where: { id } });
+    res.status(200).json(employe);
+  } catch {
+    res.status(500).json({
+      err: `Èchec lors de la suppression de l'employe ${req.params.id}`,
+    });
+  }
+};

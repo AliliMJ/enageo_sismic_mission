@@ -1,5 +1,5 @@
+import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -15,45 +15,18 @@ export const getUsers = async (req: Request, res: Response) => {
       .json({ err: 'Problème lors de la collection des utilisateurs' });
   }
 };
-
-export const insertUser = async (req: Request, res: Response) => {
-
-  const password = '123'; // randomly generated with a random function ex. cuid() or uuid()
-  const hashPassword = await bcrypt.hash(password, 10);
-
-  const {
-    role,
-    employeId,
-  } = req.body;
+export const deleteUser = async (req: Request, res: Response) => {
+  const { id } = req.body;
 
   try {
-    const employe = await prisma.employe.findFirst({
-      where: { id: employeId },
+    const id = Number(req.params.id);
+    const user = await prisma.utilisateur.delete({ where: { id } });
+    res.status(200).json(user);
+  } catch {
+    res.status(500).json({
+      err: `Èchec lors de la suppression de l'utilisateur ${id}`,
     });
-
-    if (employe == null)
-      return res.status(401).json({ err: 'Employé est introuvble' });
-
-    const user = await prisma.utilisateur.findFirst({ where: { employeId } }); // checks if that employe already has an account.
-    if (user)
-      return res.status(400).json({ err: 'Employé possède déja un compte' });
-
-    const user1 = await prisma.utilisateur.create({
-      data : {
-          email : employe.email,
-          hashPassword,
-          role,
-          employeId,
-      },
-    });
-
-    // send password the person with that email.
-
-    res.status(201).json(user1);
-  } catch (e) {
-    return res.status(500).send({ err: 'Inscription échouée' });
   }
-
 };
 
 export const getEmployeById = async (req: Request, res: Response) => {
@@ -82,5 +55,30 @@ export const getUserById = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ err: `Problème lors de la recherche de l'utilisateur` });
+  }
+};
+
+export const updateUserRole = async (req: Request, res: Response) => {
+  const { role } = req.body;
+
+  try {
+    const id = Number(req.params.id);
+    const user = await prisma.utilisateur.update({
+      data: { role },
+      where: { id },
+    });
+    res.status(200).json(user);
+  } catch (e) {
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === 'P2025'
+    ) {
+      return res.status(400).json({
+        err: `Utilisateur ${req.params.id} introuvable`,
+      });
+    }
+    res.status(500).json({
+      err: `Problème lors de la mise à jour du role de l'utilisateur ${req.params.id} à ${role}`,
+    });
   }
 };
