@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
 export const getUsers = async (req: Request, res: Response) => {
-  const value = req.query.like;
-  console.log(value);
   try {
     const users = await prisma.utilisateur.findMany({
       ...req.body.pagination?.options,

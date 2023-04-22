@@ -85,8 +85,11 @@ const insert = async () => {
     //dateCreationCompte:new Date(),
     //missionCode:missionCode.value,
   };
-  console.log("=> "+employeId.value)
-  // (await axios.post('http://localhost:3000/users/insert', req));
+  console.log("=> "+employeId.value);
+    axios
+    .post('http://localhost:3000/users/insert',req)
+    .then((response) => console.log(response))
+  
 }
 
 const email = ref("");

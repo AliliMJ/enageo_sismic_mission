@@ -9,8 +9,13 @@
 
     <NH1>Utilisateurs</NH1>
     <NSpace justify="end">
-      <searchUser @sendId="getId"/>
-      <NButton  @click="showInsertEmployeModal" class="button" type="success" icon-placement="right">
+      <searchUser @sendId="getId" />
+      <NButton
+        @click="showInsertEmployeModal"
+        class="button"
+        type="success"
+        icon-placement="right"
+      >
         Ajouter
         <template #icon>
           <NIcon>
@@ -27,10 +32,17 @@
 import axios from 'axios';
 import { useAuth } from '../../stores/authentication';
 import STable from 'common/STable.vue';
-import { NH1, NButton, NIcon, NSpace, useDialog , NAutoComplete} from 'naive-ui';
+import {
+  NH1,
+  NButton,
+  NIcon,
+  NSpace,
+  useDialog,
+  NAutoComplete,
+} from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-import { h, ref , computed, watch} from 'vue';
+import { h, ref, computed, watch } from 'vue';
 import Modal from '../common/AddUserModal.vue';
 import searchUser from '../common/searchUser.vue';
 
@@ -49,12 +61,7 @@ function deleteUser(id) {
   });
 }
 
-const req = {
-  email: auth.user.email,
-  hashPassword: auth.user.hashPassword,
-};
-
-const users = (await axios.post('http://localhost:3000/users', req)).data;
+const users = (await axios.get('http://localhost:3000/users')).data;
 
 const cols = [
   { title: 'id', key: 'id' },
@@ -73,10 +80,9 @@ const handleClick = (user) => {
   router.push(`/utilisateur/${user.id}`);
 };
 
-function getId(value){
-  console.log("la valeur est : "+value)
+function getId(value) {
+  console.log('la valeur est : ' + value);
 }
-
 
 /* script to add user */
 
@@ -85,6 +91,4 @@ const showModal = ref(false);
 const showInsertEmployeModal = () => {
   showModal.value = true;
 };
-
 </script>
-

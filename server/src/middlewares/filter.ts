@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
-const employeNameFilter = (req: Request, res: Response, next: NextFunction) => {
+export const employeNameFilter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const nom = req.query.like;
 
   req.body.filter = {
@@ -10,7 +14,11 @@ const employeNameFilter = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const userEmailFilter = (req: Request, res: Response, next: NextFunction) => {
+export const userEmailFilter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const email = req.query.like;
 
   req.body.filter = {
@@ -19,5 +27,3 @@ const userEmailFilter = (req: Request, res: Response, next: NextFunction) => {
 
   next();
 };
-
-export default employeNameFilter;userEmailFilter;
