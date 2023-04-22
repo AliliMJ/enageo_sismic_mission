@@ -13,7 +13,7 @@ const options = computed(() => {
   }));
 });
 
-const value = ref(null);
+const value = ref("");
 watch(value, async () => {
   if (value.value.length > 0) {
     employes.value = (
@@ -26,8 +26,7 @@ watch(value, async () => {
 const emit = defineEmits(['sendId']);
 
 const sendId = function() {
- // console.log("employe updated : "+options[0].value+" "+employes[0].value)
-  emit("sendId",value.value)
+  emit("sendId",value.value.split(' ')[0])
 }
 </script>
 

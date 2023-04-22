@@ -8,13 +8,10 @@
       role="dialog"
       aria-modal="true"
     >
-      <n-scrollbar style="max-height: 200px">
+      <n-scrollbar style="max-height: 400px">
         <slot>
           <NGrid :span="24" :x-gap="5">
             <NFormItemGi :span="12" label="email">
-              <NInput />
-            </NFormItemGi>
-            <NFormItemGi :span="12" label="Prénom">
               <NInput />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Employe">
@@ -39,8 +36,8 @@
         </slot>
       </n-scrollbar>
       <template #footer>
-        <n-space>
-          <NButton @click="onConfirm" type="warning">Confirmer</NButton>
+        <n-space justify="end">
+          <NButton @click="onConfirm" type="success">Confirmer</NButton>
           <NButton @click="onCancel">Annuler</NButton>
         </n-space>
       </template>

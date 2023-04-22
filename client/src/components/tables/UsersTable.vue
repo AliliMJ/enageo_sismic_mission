@@ -2,10 +2,10 @@
 import axios from 'axios';
 import { useAuth } from '../../stores/authentication';
 import STable from 'common/STable.vue';
-import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
+import { NH1, NButton, NIcon, NSpace, useDialog , NAutoComplete} from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-import { h, ref } from 'vue';
+import { h, ref , computed, watch} from 'vue';
 import Modal from '../common/AddUserModal.vue';
 
 const auth = useAuth();
@@ -25,12 +25,34 @@ function deleteUser(id) {
 
 //console.log(auth.user.hashPassword);
 
+// search
+// const searchedValue=ref(null);
+// const users1 = ref([]);
+// const options1 = computed(() => {
+//   return users1.value.map((e) => ({
+//     label: `${e.id} ${e.email}`,
+//     value: e.id,
+//   }));
+// });
+
+
+// watch(searchedValue, async () => {
+//   if (searchedValue.value.length > 0) {
+//     users1.value = (
+//       await axios.get(`http://localhost:3000/users?like=${searchedValue.value}`)
+//     ).data;
+//   }
+// });
+
+
+//end
+
 const req = {
   email: auth.user.email,
   hashPassword: auth.user.hashPassword,
 };
 
-const users = (await axios.post('http://localhost:3000/users', req)).data;
+const users = (await axios.get('http://localhost:3000/users')).data;
 
 const cols = [
   { title: 'id', key: 'id' },
@@ -40,7 +62,7 @@ const cols = [
     title: 'date de création',
     key: 'dateCreationCompte',
     render(row) {
-      return new Date(row.dateCreationCompte).toLocaleDateString();
+      return new Date(row.dateCreationCompte).toLocaleDateString('fr');
     },
   },
 ];
@@ -57,6 +79,7 @@ const showModal = ref(false);
 const showInsertEmployeModal = () => {
   showModal.value = true;
 };
+
 </script>
 
 <template>
@@ -70,6 +93,11 @@ const showInsertEmployeModal = () => {
 
     <NH1>Utilisateurs</NH1>
     <NSpace justify="end">
+      <!-- <n-auto-complete
+    v-model:value="searchedValue"
+    :options="options1"
+    placeholder="Email"
+  /> -->
       <NButton  @click="showInsertEmployeModal" class="button" type="success" icon-placement="right">
         Ajouter
         <template #icon>
