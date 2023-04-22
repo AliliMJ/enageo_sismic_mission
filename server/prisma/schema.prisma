@@ -66,13 +66,14 @@ model Projet {
 
   Etats Transition[]
 
-  Materiel Materiel[]
-
-  createdAt  DateTime    @default(now())
-  Coodonnes  Coordonne[]
-  Executions Execution[]
-  Client     Client      @relation(fields: [clientId], references: [id])
-  clientId   Int
+  Materiel    Materiel[]
+  Mission     Mission     @relation(fields: [missionCode], references: [code])
+  missionCode String
+  createdAt   DateTime    @default(now())
+  Coodonnes   Coordonne[]
+  Executions  Execution[]
+  Client      Client      @relation(fields: [clientId], references: [id])
+  clientId    Int
 }
 
 model Client {
@@ -140,6 +141,7 @@ model Mission {
   Chefs Utilisateur[]
 
   Executions Equipe[]
+  Projet     Projet[]
 }
 
 enum TypeMission {

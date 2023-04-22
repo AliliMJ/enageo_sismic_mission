@@ -2,19 +2,23 @@
 import axios from 'axios';
 
 import STable from 'common/STable.vue';
-import CreateProject from '../pages/CreateProject.vue';
+
 import { NH1, NSpace, NButton, NIcon } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 
-import { useRouter } from 'vue-router';
+import { useAuth } from 'stores/authentication.js';
 
-//const projects = (await axios.post('http://localhost:3000/projets', {user:id})).data;
-const projects = [];
+const auth = useAuth();
 
-const router = useRouter();
+const projectsData = (
+  await axios.post('http://localhost:3000/projets', { userid: auth.user?.id })
+).data;
+
+console.log(projects);
+
 const cols = [
   { title: 'Id', key: 'id' },
-  { title: 'État', key: 'état' },
+  { title: 'État', key: 'etat' },
   { title: 'Date création', key: 'createdAt' },
 ];
 </script>
