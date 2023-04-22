@@ -6,7 +6,7 @@ import {
   getFonctions,
   insertEmploye,
 } from '../controllers/employe';
-import employeNameFilter from '../middlewares/filter';
+import { employeNameFilter } from '../middlewares/filter';
 
 export const employeRouter = express.Router();
 
