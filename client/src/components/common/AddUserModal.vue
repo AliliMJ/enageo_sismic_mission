@@ -66,7 +66,6 @@ import SearchEmploye from '../common/SearchEmploye.vue';
 const emit = defineEmits(['confirm', 'cancel']);
 
 const onConfirm = () => {
-  console.log(selectedValue1.value);
   emit('confirm');
 };
 const onCancel = () => {
