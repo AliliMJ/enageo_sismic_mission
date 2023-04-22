@@ -32,6 +32,9 @@
                 v-model:value="selectedValue2"
               />
             </NFormItemGi>
+            <NFormItemGi :span="12" label="Employe">
+              <SearchEmploye @sendId="getId"/>
+            </NFormItemGi>
           </NGrid>
         </slot>
       </n-scrollbar>
@@ -62,6 +65,7 @@ import {
   NSelect,
   NDatePicker,
 } from 'naive-ui';
+import SearchEmploye from '../common/SearchEmploye.vue';
 const emit = defineEmits(['confirm', 'cancel']);
 
 const onConfirm = () => {
@@ -107,6 +111,10 @@ employes.forEach((element) => {
 function printMessage() {
   console.log('hello');
   console.log(selectedValue1.value);
+}
+
+function getId(value){
+  console.log("la valeur est : "+value)
 }
 
 console.log(options);
