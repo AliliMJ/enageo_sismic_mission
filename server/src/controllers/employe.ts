@@ -23,14 +23,12 @@ export const insertEmploye = async (req: Request, res: Response) => {
     prenom,
     fonctionId,
     etatEmployeId,
-    email,
     dateAdhesion,
     dateNaissance,
   } = req.body;
   try {
     const employe = await prisma.employe.create({
       data: {
-        email,
         nom,
         prenom,
         fonctionId,

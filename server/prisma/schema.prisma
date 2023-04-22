@@ -33,7 +33,6 @@ enum Role {
 
 model Employe {
   id            Int          @id @default(autoincrement())
-  email         String       @unique
   dateAdhesion  DateTime     @db.Date
   etat          EtatEmploye  @relation(fields: [etatEmployeId], references: [id])
   etatEmployeId Int
