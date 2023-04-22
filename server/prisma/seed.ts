@@ -52,7 +52,6 @@ async function main() {
   await prisma.employe.createMany({
     data: [
       {
-        email: 'admin',
         nom: 'Zoya',
         prenom: 'Walker',
         fonctionId: 1,
@@ -61,7 +60,6 @@ async function main() {
         dateNaissance: new Date(),
       },
       {
-        email: 'gest',
         nom: 'Faye',
         prenom: 'Morgan',
         fonctionId: 2,
@@ -70,7 +68,6 @@ async function main() {
         dateNaissance: new Date(),
       },
       {
-        email: 'chefm',
         nom: 'Harris',
         prenom: 'Ballard',
         fonctionId: 1,
@@ -79,7 +76,6 @@ async function main() {
         dateNaissance: new Date(),
       },
       {
-        email: 'cheft',
         nom: 'Hasan',
         prenom: 'Craig',
         fonctionId: 2,
@@ -88,7 +84,6 @@ async function main() {
         dateNaissance: new Date(),
       },
       {
-        email: 'dir',
         nom: 'ALILI',
         prenom: 'Mohamed',
         fonctionId: 1,
@@ -97,7 +92,6 @@ async function main() {
         dateNaissance: new Date(),
       },
       {
-        email: 'e1',
         nom: 'Kyran',
         prenom: 'Noble',
         fonctionId: 1,
@@ -106,7 +100,6 @@ async function main() {
         dateNaissance: new Date(),
       },
       {
-        email: 'e2',
         nom: 'Dewey',
         prenom: 'Conley',
         fonctionId: 1,

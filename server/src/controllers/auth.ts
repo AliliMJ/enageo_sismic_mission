@@ -4,7 +4,7 @@ import prisma from '../utils/prisma.ts';
 import { Request, Response } from 'express';
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { employeId, role } = req.body;
+  const { employeId, email, role } = req.body;
 
   try {
     const employe = await prisma.employe.findFirst({
@@ -23,7 +23,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
     const registeredUser = await prisma.utilisateur.create({
       data: {
-        email: employe.email,
+        email,
         hashPassword,
         employeId,
         role,
