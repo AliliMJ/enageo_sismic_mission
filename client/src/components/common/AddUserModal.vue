@@ -8,13 +8,10 @@
       role="dialog"
       aria-modal="true"
     >
-      <n-scrollbar style="max-height: 200px">
+      <n-scrollbar style="max-height: 400px">
         <slot>
           <NGrid :span="24" :x-gap="5">
             <NFormItemGi :span="12" label="email">
-              <NInput />
-            </NFormItemGi>
-            <NFormItemGi :span="12" label="Prénom">
               <NInput />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Employe">
@@ -32,12 +29,15 @@
                 v-model:value="selectedValue2"
               />
             </NFormItemGi>
+            <NFormItemGi :span="12" label="Employe">
+              <SearchEmploye @sendId="getId"/>
+            </NFormItemGi>
           </NGrid>
         </slot>
       </n-scrollbar>
       <template #footer>
-        <n-space>
-          <NButton @click="onConfirm" type="warning">Confirmer</NButton>
+        <n-space justify="end">
+          <NButton @click="onConfirm" type="success">Confirmer</NButton>
           <NButton @click="onCancel">Annuler</NButton>
         </n-space>
       </template>
@@ -62,10 +62,10 @@ import {
   NSelect,
   NDatePicker,
 } from 'naive-ui';
+import SearchEmploye from '../common/SearchEmploye.vue';
 const emit = defineEmits(['confirm', 'cancel']);
 
 const onConfirm = () => {
-  console.log(selectedValue1.value);
   emit('confirm');
 };
 const onCancel = () => {
@@ -107,6 +107,10 @@ employes.forEach((element) => {
 function printMessage() {
   console.log('hello');
   console.log(selectedValue1.value);
+}
+
+function getId(value){
+  console.log("la valeur est : "+value)
 }
 
 console.log(options);

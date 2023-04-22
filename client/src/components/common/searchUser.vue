@@ -4,20 +4,28 @@ import axios from 'axios';
 import { NAutoComplete } from 'naive-ui';
 import { ref, computed, watch } from 'vue';
 import { defineEmits } from 'vue'
+import { useAuth } from '../../stores/authentication';
 
-const employes = ref([]);
+const auth = useAuth();
+
+const users = ref([]);
 const options = computed(() => {
-  return employes.value.map((e) => ({
-    label: `${e.id} ${e.nom} ${e.prenom}`,
+  return users.value.map((e) => ({
+    label: `${e.id} ${e.email}`,
     value: e.id,
   }));
 });
 
+const req = {
+  email: auth.user.email,
+  hashPassword: auth.user.hashPassword,
+};
+
 const value = ref("");
 watch(value, async () => {
   if (value.value.length > 0) {
-    employes.value = (
-      await axios.get(`http://localhost:3000/employes?like=${value.value}`)
+    users.value = (
+      await axios.get(`http://localhost:3000/users/u?like=${value.value}`)
     ).data;
   }
 });
@@ -31,10 +39,11 @@ const sendId = function() {
 </script>
 
 <template>
-  <n-auto-complete
-    placeholder="Sélectionnez un employe"
-    :options="options"
+    <n-auto-complete
     v-model:value="value"
+    :options="options"
+    placeholder="Email"
     @update:value="sendId"
   />
 </template>
+

@@ -10,4 +10,14 @@ const employeNameFilter = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export default employeNameFilter;
+const userEmailFilter = (req: Request, res: Response, next: NextFunction) => {
+  const email = req.query.like;
+
+  req.body.filter = {
+    email: { startsWith: email },
+  };
+
+  next();
+};
+
+export default employeNameFilter;userEmailFilter;
