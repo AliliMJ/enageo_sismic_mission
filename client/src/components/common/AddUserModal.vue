@@ -12,16 +12,16 @@
         <slot>
           <NGrid :span="24" :x-gap="5">
             <NFormItemGi :span="12" label="email">
-              <NInput />
+              <NInput v-model:value="email"/>
             </NFormItemGi>
-            <NFormItemGi :span="12" label="Employe">
+            <!-- <NFormItemGi :span="12" label="Employe">
               <NSelect
                 placeholder="selectionner un employe"
                 :options="options"
                 v-model:value="selectedValue1"
                 @update:value="printMessage"
               />
-            </NFormItemGi>
+            </NFormItemGi> -->
             <NFormItemGi :span="12" label="Employe">
               <NSelect
                 placeholder="selectionner un role"
@@ -66,6 +66,7 @@ import SearchEmploye from '../common/SearchEmploye.vue';
 const emit = defineEmits(['confirm', 'cancel']);
 
 const onConfirm = () => {
+  insert();
   emit('confirm');
 };
 const onCancel = () => {
@@ -75,6 +76,23 @@ const props = defineProps({
   title: String,
   showModal: Boolean,
 });
+
+const insert = async () => {
+  const req = {
+    //email:email.value,
+    employeId:employeId.value,
+    role:selectedValue2.value,
+    //dateCreationCompte:new Date(),
+    //missionCode:missionCode.value,
+  };
+  console.log("=> "+employeId.value)
+  // (await axios.post('http://localhost:3000/users/insert', req));
+}
+
+const email = ref("");
+const employeId = ref();
+const dateCreationCompte = ref(new Date());
+const missionCode = ref("EGS100");
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
@@ -92,6 +110,10 @@ const RoleOptions = [
     label: 'Gestionnaire',
     value: 'GESTIONNAIRE',
   },
+  {
+    label: 'administrateur',
+    value: 'ADMINISTRATEUR',
+  },
 ];
 
 const selectedValue1 = ref(null);
@@ -104,13 +126,15 @@ employes.forEach((element) => {
   });
 });
 
+
+
 function printMessage() {
   console.log('hello');
   console.log(selectedValue1.value);
 }
 
 function getId(value){
-  console.log("la valeur est : "+value)
+  employeId.value=value;
 }
 
 console.log(options);
