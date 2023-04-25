@@ -34,8 +34,22 @@ export const getMaterialByCode = async (req: Request, res: Response) => {
     res.status(500).json({ err: 'Problème lors de la collection ce matériel' });
   }
 };
-
 export const mettreEnPanne = async (req: Request, res: Response) => {
+  try {
+    const { code } = req.params;
+    const material = await prisma.materiel.findFirst({ where: { code } });
+    if (material == null)
+      return res.status(401).json({ err: 'Matériel introuvable' });
+    if (material.enPanne)
+      return res.status(400).json({ err: `Matériel est déja en panne` });
+
+    await prisma.materiel.update({
+      where: { code },
+      data: { enPanne: true },
+    });
+  } catch {}
+};
+export const demandeReparation = async (req: Request, res: Response) => {
   try {
     const { pannes, detail } = req.body;
     const { code } = req.params;
@@ -44,7 +58,7 @@ export const mettreEnPanne = async (req: Request, res: Response) => {
       data: {
         materielCode: code,
         detailProbleme: detail,
-        Pannes: { connect: pannes.map((p: number) => ({ id: p })) },
+        Pannes: { create: pannes.map((p: number) => ({ id: p })) },
       },
     });
 

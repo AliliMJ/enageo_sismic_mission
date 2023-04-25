@@ -30,23 +30,15 @@
 
 <script setup>
 import axios from 'axios';
-import { useAuth } from '../../stores/authentication';
+
 import STable from 'common/STable.vue';
-import {
-  NH1,
-  NButton,
-  NIcon,
-  NSpace,
-  useDialog,
-  NAutoComplete,
-} from 'naive-ui';
+import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-import { h, ref, computed, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import Modal from '../common/AddUserModal.vue';
 import searchUser from '../common/searchUser.vue';
 
-const auth = useAuth();
 const router = useRouter();
 const dialog = useDialog();
 
@@ -61,7 +53,10 @@ function deleteUser(id) {
   });
 }
 
-const users = (await axios.get('http://localhost:3000/users')).data;
+const users = ref([]);
+onMounted(async () => {
+  users.value = (await axios.get('http://localhost:3000/users')).data;
+});
 
 const cols = [
   { title: 'id', key: 'id' },
@@ -84,9 +79,13 @@ function getId(value) {
   
 }
 
-function confirmAdd(value) {
-  if(value==true){
-    showModal.value = false;
+async function confirmAdd(event) {
+  // if(value==true){
+  //   showModal = false;
+  // }
+  console.log(event);
+  if (event.isValid) {
+    //const empl = await axios.post('http://localhost:3000/users', event.data).data; // adds the user sent from the user modal (event.data)
   }
 }
 
