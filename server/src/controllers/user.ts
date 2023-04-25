@@ -44,6 +44,7 @@ export const getEmployeById = async (req: Request, res: Response) => {
 
 export const insertUser = async (req: Request, res: Response) => {
   const { email, role, employeId } = req.body;
+
   const hashPassword = await bcrypt.hash('123', 10);
   try {
     const user = await prisma.utilisateur.create({
