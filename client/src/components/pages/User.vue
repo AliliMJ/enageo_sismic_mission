@@ -1,7 +1,7 @@
 <script setup>
 import { NImage } from "naive-ui";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter , useRoute } from "vue-router";
 import {
   NCard,
   NTabs,
@@ -21,6 +21,7 @@ import {
 import { Edit32Filled as Pen } from "@vicons/fluent";
 import { ref } from "vue";
 const router = useRouter();
+const route = useRoute();
 const dialog = useDialog();
 const message = useMessage();
 
