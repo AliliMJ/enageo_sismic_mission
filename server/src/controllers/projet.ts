@@ -1,3 +1,4 @@
+import { TypeEtatProjet } from '@prisma/client';
 import { Response, Request } from 'express';
 
 export const getProjets = async (req: Request, res: Response) => {
@@ -22,13 +23,8 @@ export const getProjetById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const projet: any = await prisma.projet.findUnique({
       where: { id: Number(id) },
+      include: { Etats: true },
     });
-    const etat = await prisma.transition.findFirst({
-      where: { projetId: projet?.id },
-      orderBy: { date: 'desc' },
-    });
-
-    projet.etat = etat;
 
     return res.status(200).json(projet);
   } catch {
@@ -39,7 +35,7 @@ export const getProjetById = async (req: Request, res: Response) => {
 };
 
 export const insertProjet = async (req: Request, res: Response) => {
-  const { plan, clientId, userid } = req.body;
+  const { plan, contratId, userid } = req.body;
 
   //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
   try {
@@ -54,9 +50,9 @@ export const insertProjet = async (req: Request, res: Response) => {
         .json({ err: `Cet utilisateur n'a pas accès à cette mission` });
     const projet = await prisma.projet.create({
       data: {
-        clientId: clientId,
+        contratNum: contratId,
         Plan: { create: plan },
-        Etats: { create: { etatProjetId: 1 } },
+        Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
         missionCode: mission.code,
       },
     });

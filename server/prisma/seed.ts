@@ -1,4 +1,4 @@
-import { Role, TypeMission } from '@prisma/client';
+import { Role, Sexe, TypeMission } from '@prisma/client';
 import prisma from '../src/utils/prisma';
 import bcrypt from 'bcrypt';
 
@@ -11,15 +11,6 @@ async function main() {
     data: [{ nom: 'En mission' }, { nom: 'Congé' }],
   });
 
-  await prisma.etatProjet.createMany({
-    data: [
-      { nom: 'Planifié' },
-      { nom: 'En production' },
-      { nom: 'Clôturé' },
-      { nom: 'Annulé' },
-    ],
-  });
-
   await prisma.wilaya.createMany({ data: [{ numero: 1, nom: 'Adrar' }] });
 
   await prisma.activite.createMany({
@@ -30,10 +21,6 @@ async function main() {
       { nom: 'Pose' },
       { nom: 'Ramasse' },
     ],
-  });
-
-  await prisma.panne.createMany({
-    data: [{ nom: 'A' }, { nom: 'B' }, { nom: 'C' }],
   });
 
   await prisma.typeMateriel.createMany({
@@ -58,6 +45,8 @@ async function main() {
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
+        sexe: Sexe.Homme,
+        numIdentite: '0000',
       },
       {
         nom: 'Faye',
@@ -66,6 +55,8 @@ async function main() {
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
+        sexe: Sexe.Homme,
+        numIdentite: '0000',
       },
       {
         nom: 'Harris',
@@ -74,6 +65,8 @@ async function main() {
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
+        sexe: Sexe.Homme,
+        numIdentite: '0000',
       },
       {
         nom: 'Hasan',
@@ -82,6 +75,8 @@ async function main() {
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
+        sexe: Sexe.Homme,
+        numIdentite: '0000',
       },
       {
         nom: 'ALILI',
@@ -90,6 +85,8 @@ async function main() {
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
+        sexe: Sexe.Homme,
+        numIdentite: '0000',
       },
       {
         nom: 'Kyran',
@@ -98,6 +95,8 @@ async function main() {
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
+        sexe: Sexe.Homme,
+        numIdentite: '0000',
       },
       {
         nom: 'Dewey',
@@ -106,6 +105,8 @@ async function main() {
         etatEmployeId: 1,
         dateAdhesion: new Date(),
         dateNaissance: new Date(),
+        sexe: Sexe.Homme,
+        numIdentite: '0000',
       },
     ],
   });

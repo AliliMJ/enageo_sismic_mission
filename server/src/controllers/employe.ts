@@ -25,6 +25,9 @@ export const insertEmploye = async (req: Request, res: Response) => {
     etatEmployeId,
     dateAdhesion,
     dateNaissance,
+    sexe,
+    groupeSanguin,
+    numIdentite,
   } = req.body;
   try {
     const employe = await prisma.employe.create({
@@ -35,6 +38,9 @@ export const insertEmploye = async (req: Request, res: Response) => {
         etatEmployeId,
         dateAdhesion,
         dateNaissance,
+        sexe,
+        numIdentite,
+        groupeSanguin,
       },
     });
 

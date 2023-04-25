@@ -18,9 +18,6 @@ model Utilisateur {
   employe            Employe  @relation(fields: [employeId], references: [id])
   employeId          Int      @unique
   dateCreationCompte DateTime @default(now())
-
-  Mission     Mission? @relation(fields: [missionCode], references: [code])
-  missionCode String?
 }
 
 enum Role {
@@ -29,6 +26,11 @@ enum Role {
   CHEF_TERRAIN
   DIRECTEUR
   ADMINISTRATEUR
+}
+
+enum Sexe {
+  Homme
+  Femme
 }
 
 model Employe {
@@ -44,6 +46,11 @@ model Employe {
   dateNaissance DateTime     @db.Date
   Equipe        Equipe?      @relation(fields: [equipeId], references: [id])
   equipeId      Int?
+  sexe          Sexe
+  numIdentite   String
+  groupeSanguin String?
+  Mission       Mission?     @relation(fields: [missionCode], references: [code])
+  missionCode   String?
 }
 
 model EtatEmploye {
@@ -63,7 +70,7 @@ model Projet {
 
   Plan Tache[]
 
-  Etats Transition[]
+  Etats EtatProjet[]
 
   Materiel    Materiel[]
   Mission     Mission     @relation(fields: [missionCode], references: [code])
@@ -71,36 +78,44 @@ model Projet {
   createdAt   DateTime    @default(now())
   Coodonnes   Coordonne[]
   Executions  Execution[]
-  Client      Client      @relation(fields: [clientId], references: [id])
-  clientId    Int
+  Contrat     Contrat     @relation(fields: [contratNum], references: [num])
+  contratNum  Int         @unique
 }
 
 model Client {
-  id     Int      @id @default(autoincrement())
-  nom    String
-  Projet Projet[]
+  id  Int    @id @default(autoincrement())
+  nom String
+
+  Contrat Contrat[]
+}
+
+model Contrat {
+  num      Int      @id @default(autoincrement())
+  debut    DateTime
+  fin      DateTime
+  Client   Client   @relation(fields: [clientId], references: [id])
+  clientId Int
+  Projet   Projet?
 }
 
 model EtatProjet {
-  id          Int          @id @default(autoincrement())
-  nom         String
-  Transitions Transition[]
+  id           Int            @id @default(autoincrement())
+  dPassageEtat DateTime       @default(now())
+  etat         TypeEtatProjet
+  Projet       Projet         @relation(fields: [projetId], references: [id])
+  projetId     Int
 }
 
-model Transition {
-  Projet       Projet     @relation(fields: [projetId], references: [id])
-  projetId     Int
-  EtatProjet   EtatProjet @relation(fields: [etatProjetId], references: [id])
-  etatProjetId Int
-  date         DateTime   @default(now())
-
-  @@id([projetId, etatProjetId])
+enum TypeEtatProjet {
+  PLANIFICATION
+  EN_PRODUCTION
+  CLOTURE
+  ANNULE
 }
 
 model Objectif {
-  id    Int       @id @default(autoincrement())
-  nom   String
-  avant DateTime? @db.Date
+  id  Int    @id @default(autoincrement())
+  nom String
 
   Taches Tache[]
 }
@@ -137,10 +152,9 @@ model Mission {
   code String      @id
   type TypeMission
 
-  Chefs Utilisateur[]
-
   Executions Equipe[]
   Projet     Projet[]
+  Chefs      Employe[]
 }
 
 enum TypeMission {
@@ -170,10 +184,12 @@ model Execution {
   Projet   Projet @relation(fields: [projetId], references: [id])
   projetId Int
 
-  Equipe   Equipe   @relation(fields: [equipeId], references: [id])
-  equipeId Int
-  debut    DateTime @db.Date
-  fin      DateTime @db.Date
+  Equipe    Equipe   @relation(fields: [equipeId], references: [id])
+  equipeId  Int
+  hDebut    Int
+  hFin      Int
+  date      DateTime @unique @db.Date
+  rendement Int
 
   @@id([projetId, equipeId])
 }
@@ -198,12 +214,33 @@ model Reparation {
 }
 
 model Panne {
-  id          Int          @id @default(autoincrement())
-  nom         String
-  Reparations Reparation[]
+  id           Int        @id @default(autoincrement())
+  titre        String
+  cout         Float
+  description  String
+  Reparations  Reparation @relation(fields: [reparationId], references: [id])
+  reparationId Int
 }
 
 model TypeMateriel {
   id  Int    @id @default(autoincrement())
   nom String
+}
+
+model Requisition {
+  id         Int       @id @default(autoincrement())
+  dateEnvoi  DateTime  @default(now())
+  reponse    DateTime?
+  desciption String
+}
+
+enum TypeEvenement {
+  VOL
+  ACCIDENT
+}
+
+model Evenement {
+  id          Int           @id @default(autoincrement())
+  type        TypeEvenement
+  description String
 }

@@ -5,6 +5,7 @@ import {
   getMaterialTypes,
   getMaterialByCode,
   mettreEnPanne,
+  demandeReparation,
   reparer,
 } from '../controllers/material';
 
@@ -18,3 +19,4 @@ materialRouter.get('/:code', getMaterialByCode);
 
 materialRouter.post('/:code/mettreEnPanne', mettreEnPanne);
 materialRouter.post('/:code/reparer', reparer);
+materialRouter.post('/:code/demanderReparation', demandeReparation);
