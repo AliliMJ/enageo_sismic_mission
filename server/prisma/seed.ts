@@ -63,6 +63,7 @@ async function main() {
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
         numIdentite: '0000',
+        missionCode: 'EGS210',
       },
       {
         nom: 'Harris',
@@ -73,6 +74,7 @@ async function main() {
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
         numIdentite: '0000',
+        missionCode: 'EGS210',
       },
       {
         nom: 'Hasan',
@@ -83,6 +85,7 @@ async function main() {
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
         numIdentite: '0000',
+        missionCode: 'EGS210',
       },
       {
         nom: 'ALILI',
