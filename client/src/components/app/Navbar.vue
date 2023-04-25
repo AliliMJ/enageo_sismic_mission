@@ -48,6 +48,7 @@ const options = [
         {
           key: "header-divider",
           type: "divider"
+          // icon: renderIcon(Persone),
         },
         {
           label: "lpsum1",
@@ -58,13 +59,13 @@ const options = [
           key: "stmt2"
         },
         {
-          label: "deconnecter",
-          key: "stmt3"
+          label: "se deconnecter",
+          key: "logout"
         }
       ]
 
 function handleSelect(key) {
-        if(String(key)=='stmt3') {
+        if(String(key)=='logout') {
           handleConfirm();
         }
       }

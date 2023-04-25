@@ -81,14 +81,13 @@ const handleClick = (user) => {
 };
 
 function getId(value) {
-  console.log('la valeur est : ' + value);
+  
 }
 
 function confirmAdd(value) {
-  // if(value==true){
-  //   showModal = false;
-  // }
-  console.log(value);
+  if(value==true){
+    showModal.value = false;
+  }
 }
 
 /* script to add user */

@@ -19,6 +19,5 @@ userRouter.get('/', paginate, getUsers);
 userRouter.post('/', insertUser);
 
 userRouter.get('/:id', getUserById);
-
 userRouter.delete('/:id', deleteUser);
 userRouter.put('/:id/role', updateUserRole);

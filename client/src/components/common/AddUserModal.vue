@@ -71,10 +71,9 @@ const insert = async () => {
   const req = {
     email:email.value,
     role:selectedRole.value,
-    employeId:employeId.value,
+    employeId:Number(employeId.value),
   };
-   const empl = await axios.post('http://localhost:3000/users',req).data
-   console.log(empl);
+   const empl = await axios.post('http://localhost:3000/users',req).data;
 }
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
