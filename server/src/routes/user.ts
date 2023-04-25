@@ -7,6 +7,7 @@ import {
   getUserById,
   deleteUser,
   updateUserRole,
+  insertUser
 } from '../controllers/user';
 
 export const userRouter = express.Router();
@@ -14,6 +15,8 @@ export const userRouter = express.Router();
 userRouter.get('/email', userEmailFilter, paginate, getUsers);
 
 userRouter.get('/', paginate, getUsers);
+
+userRouter.post('/', insertUser);
 
 userRouter.get('/:id', getUserById);
 

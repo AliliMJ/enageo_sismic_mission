@@ -42,10 +42,16 @@ async function main() {
 
   await prisma.mission.createMany({
     data: [
-      { code: 'EGS100', type: TypeMission.MISSION2D },
-      { code: 'EGS120', type: TypeMission.MISSION2D },
-      { code: 'EGS200', type: TypeMission.MISSION3D },
+      { code: 'EGS60', type: TypeMission.MISSION3D },
+      { code: 'EGS120', type: TypeMission.MISSION3D },
+      { code: 'EGS150', type: TypeMission.MISSION3D },
+      { code: 'EGS170', type: TypeMission.MISSION2D },
+      { code: 'EGS180', type: TypeMission.MISSION3D },
+      { code: 'EGS190', type: TypeMission.MISSION3D },
+      { code: 'EGS210', type: TypeMission.MISSION3D },
       { code: 'EGS220', type: TypeMission.MISSION3D },
+      { code: 'EGS250', type: TypeMission.MISSION2D },
+      { code: 'EGS270', type: TypeMission.MISSION3D },
     ],
   });
 

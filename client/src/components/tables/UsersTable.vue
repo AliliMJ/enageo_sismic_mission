@@ -4,7 +4,7 @@
       title="Ajouter un nouveau utilisateur"
       :showModal="showModal"
       @cancel="showModal = false"
-      @confirm="showModal = false"
+      @confirm="confirmAdd"
     />
 
     <NH1>Utilisateurs</NH1>
@@ -82,6 +82,13 @@ const handleClick = (user) => {
 
 function getId(value) {
   console.log('la valeur est : ' + value);
+}
+
+function confirmAdd(value) {
+  // if(value==true){
+  //   showModal = false;
+  // }
+  console.log(value);
 }
 
 /* script to add user */

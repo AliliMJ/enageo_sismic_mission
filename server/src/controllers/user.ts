@@ -1,5 +1,6 @@
-import { Prisma } from '@prisma/client';
-import { Request, Response } from 'express';
+import { Prisma } from "@prisma/client";
+import { Request, Response } from "express";
+import bcrypt from 'bcrypt';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -12,7 +13,7 @@ export const getUsers = async (req: Request, res: Response) => {
   } catch {
     res
       .status(500)
-      .json({ err: 'Problème lors de la collection des utilisateurs' });
+      .json({ err: "Problème lors de la collection des utilisateurs" });
   }
 };
 export const deleteUser = async (req: Request, res: Response) => {
@@ -41,6 +42,28 @@ export const getEmployeById = async (req: Request, res: Response) => {
   }
 };
 
+export const insertUser = async (req: Request, res: Response) => {
+  const { email, 
+          role, 
+          employeId
+          } = req.body;
+          const hashPassword = await bcrypt.hash('123', 10)
+  try {
+    const user = await prisma.utilisateur.create({
+      data: {
+        email,
+        hashPassword,
+        role,
+        employeId,
+      },
+    });
+
+    res.status(201).json(user);
+  } catch {
+    res.status(500).json({ err: `Èchec lors de la creation de utilisateur` });
+  }
+};
+
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -48,7 +71,7 @@ export const getUserById = async (req: Request, res: Response) => {
       where: { id: Number(id) },
     });
     if (user == null)
-      return res.status(400).json({ err: 'Utilisateur introuvable' });
+      return res.status(400).json({ err: "Utilisateur introuvable" });
 
     res.status(200).json(user);
   } catch {
@@ -71,7 +94,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
   } catch (e) {
     if (
       e instanceof Prisma.PrismaClientKnownRequestError &&
-      e.code === 'P2025'
+      e.code === "P2025"
     ) {
       return res.status(400).json({
         err: `Utilisateur ${req.params.id} introuvable`,
