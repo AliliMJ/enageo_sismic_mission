@@ -14,19 +14,11 @@
             <NFormItemGi :span="12" label="email">
               <NInput v-model:value="email"/>
             </NFormItemGi>
-            <!-- <NFormItemGi :span="12" label="Employe">
-              <NSelect
-                placeholder="selectionner un employe"
-                :options="options"
-                v-model:value="selectedValue1"
-                @update:value="printMessage"
-              />
-            </NFormItemGi> -->
-            <NFormItemGi :span="12" label="Employe">
+            <NFormItemGi :span="12" label="Role">
               <NSelect
                 placeholder="selectionner un role"
                 :options="RoleOptions"
-                v-model:value="selectedValue2"
+                v-model:value="selectedRole"
               />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Employe">
@@ -37,7 +29,7 @@
       </n-scrollbar>
       <template #footer>
         <n-space justify="end">
-          <NButton @click="onConfirm" type="success">Confirmer</NButton>
+          <NButton @click="onConfirm" value="success" type="success">Confirmer</NButton>
           <NButton @click="onCancel">Annuler</NButton>
         </n-space>
       </template>
@@ -54,24 +46,22 @@ import {
   NCard,
   NSpace,
   NButton,
-  NIcon,
   NGrid,
-  NForm,
   NFormItemGi,
   NInput,
   NSelect,
-  NDatePicker,
+  useMessage
 } from 'naive-ui';
 import SearchEmploye from '../common/SearchEmploye.vue';
-const emit = defineEmits(['confirm', 'cancel']);
 
-const onConfirm = () => {
-  insert();
-  emit('confirm');
-};
-const onCancel = () => {
-  emit('cancel');
-};
+const emit = defineEmits(['confirm', 'cancel']);
+const email = ref("");
+const employeId = ref();
+const selectedRole = ref();
+let isValid = false;
+
+const message = useMessage();
+
 const props = defineProps({
   title: String,
   showModal: Boolean,
@@ -79,27 +69,17 @@ const props = defineProps({
 
 const insert = async () => {
   const req = {
-    //email:email.value,
+    email:email.value,
+    role:selectedRole.value,
     employeId:employeId.value,
-    role:selectedValue2.value,
-    //dateCreationCompte:new Date(),
-    //missionCode:missionCode.value,
   };
-  console.log("=> "+employeId.value);
-    axios
-    .post('http://localhost:3000/users/insert',req)
-    .then((response) => console.log(response))
-  
+   const empl = await axios.post('http://localhost:3000/users',req).data
+   console.log(empl);
 }
-
-const email = ref("");
-const employeId = ref();
-const dateCreationCompte = ref(new Date());
-const missionCode = ref("EGS100");
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
-const options = [];
+const EmployeOptions = [];
 const RoleOptions = [
   {
     label: 'Chef mision',
@@ -119,28 +99,48 @@ const RoleOptions = [
   },
 ];
 
-const selectedValue1 = ref(null);
-const selectedValue2 = ref(null);
+const MissionsOptions = [
+      { label: 'EGS60',  value: 'EGS60'  },
+      { label: 'EGS120', value: 'EGS120' },
+      { label: 'EGS150', value: 'EGS150'  },
+      { label: 'EGS170', value: 'EGS170' },
+      { label: 'EGS180', value: 'EGS180' },
+      { label: 'EGS190', value: 'EGS190' },
+      { label: 'EGS210', value: 'EGS210' },
+      { label: 'EGS220', value: 'EGS220' },
+      { label: 'EGS250', value: 'EGS250' },
+      { label: 'EGS270', value: 'EGS270' },
+]
+
+
+const onConfirm = () => {
+  
+  if((email.value==="")||(selectedRole.value===undefined)||(employeId.value===undefined)){
+    message.warning("toutes les champs doit etre remplit");
+  }else {
+    console.log("les champs est remplit");
+    isValid=true;
+    insert();
+  }
+  emit('confirm',isValid);
+};
+const onCancel = () => {
+  emit('cancel');
+};
+
+
 
 employes.forEach((element) => {
-  options.push({
+  EmployeOptions.push({
     label: element.id + '- ' + element.nom + ' ' + element.prenom,
     value: element.id,
   });
 });
 
-
-
-function printMessage() {
-  console.log('hello');
-  console.log(selectedValue1.value);
-}
-
 function getId(value){
   employeId.value=value;
 }
 
-console.log(options);
 </script>
 
 <style scoped>
