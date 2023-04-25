@@ -75,9 +75,7 @@ const handleClick = (user) => {
   router.push(`/utilisateur/${user.id}`);
 };
 
-function getId(value) {
-  
-}
+function getId(value) {}
 
 async function confirmAdd(event) {
   // if(value==true){
@@ -85,7 +83,13 @@ async function confirmAdd(event) {
   // }
   console.log(event);
   if (event.isValid) {
-    //const empl = await axios.post('http://localhost:3000/users', event.data).data; // adds the user sent from the user modal (event.data)
+    try {
+      const user = (await axios.post('http://localhost:3000/users', event.data))
+        .data; // adds the user sent from the user modal (event.data)
+      users.value.push(user);
+    } catch {
+      console.log('Erreur');
+    }
   }
 }
 
