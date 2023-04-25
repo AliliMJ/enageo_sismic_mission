@@ -1,7 +1,7 @@
 <script setup>
 import { NImage } from "naive-ui";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import {
   NCard,
   NTabs,
@@ -20,7 +20,7 @@ import {
 } from "naive-ui";
 import { Edit32Filled as Pen } from "@vicons/fluent";
 import { ref } from "vue";
-const route = useRoute();
+const router = useRouter();
 const dialog = useDialog();
 const message = useMessage();
 
@@ -59,7 +59,7 @@ function handleConfirmDelete() {
     onPositiveClick: () => {
       message.success('utilisateur supprimer');
       deleteUser();
-      route.push('/utilisateur');
+      router.push('/utilisateur');
     },
     onNegativeClick: () => {
       message.error('Suppression annulée');
