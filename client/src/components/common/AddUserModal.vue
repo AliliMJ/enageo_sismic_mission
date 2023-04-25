@@ -12,7 +12,7 @@
         <slot>
           <NGrid :span="24" :x-gap="5">
             <NFormItemGi :span="12" label="email">
-              <NInput v-model:value="email"/>
+              <NInput v-model:value="email" />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Role">
               <NSelect
@@ -22,14 +22,16 @@
               />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Employe">
-              <SearchEmploye @sendId="getId"/>
+              <SearchEmploye @sendId="getId" />
             </NFormItemGi>
           </NGrid>
         </slot>
       </n-scrollbar>
       <template #footer>
         <n-space justify="end">
-          <NButton @click="onConfirm" value="success" type="success">Confirmer</NButton>
+          <NButton @click="onConfirm" value="success" type="success"
+            >Confirmer</NButton
+          >
           <NButton @click="onCancel">Annuler</NButton>
         </n-space>
       </template>
@@ -50,12 +52,12 @@ import {
   NFormItemGi,
   NInput,
   NSelect,
-  useMessage
+  useMessage,
 } from 'naive-ui';
 import SearchEmploye from '../common/SearchEmploye.vue';
 
 const emit = defineEmits(['confirm', 'cancel']);
-const email = ref("");
+const email = ref('');
 const employeId = ref();
 const selectedRole = ref();
 let isValid = false;
@@ -67,15 +69,16 @@ const props = defineProps({
   showModal: Boolean,
 });
 
-const insert = async () => {
-  const req = {
-    email:email.value,
-    role:selectedRole.value,
-    employeId:employeId.value,
-  };
-   const empl = await axios.post('http://localhost:3000/users',req).data
-   console.log(empl);
-}
+// **** Function not in the right place ****
+// const insert = async () => {
+//   const req = {
+//     email: email.value,
+//     role: selectedRole.value,
+//     employeId: Number(employeId.value),
+//   };
+//   const empl = await axios.post('http://localhost:3000/users', req).data;
+//   console.log(empl);
+// };
 
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
@@ -100,35 +103,43 @@ const RoleOptions = [
 ];
 
 const MissionsOptions = [
-      { label: 'EGS60',  value: 'EGS60'  },
-      { label: 'EGS120', value: 'EGS120' },
-      { label: 'EGS150', value: 'EGS150'  },
-      { label: 'EGS170', value: 'EGS170' },
-      { label: 'EGS180', value: 'EGS180' },
-      { label: 'EGS190', value: 'EGS190' },
-      { label: 'EGS210', value: 'EGS210' },
-      { label: 'EGS220', value: 'EGS220' },
-      { label: 'EGS250', value: 'EGS250' },
-      { label: 'EGS270', value: 'EGS270' },
-]
-
+  { label: 'EGS60', value: 'EGS60' },
+  { label: 'EGS120', value: 'EGS120' },
+  { label: 'EGS150', value: 'EGS150' },
+  { label: 'EGS170', value: 'EGS170' },
+  { label: 'EGS180', value: 'EGS180' },
+  { label: 'EGS190', value: 'EGS190' },
+  { label: 'EGS210', value: 'EGS210' },
+  { label: 'EGS220', value: 'EGS220' },
+  { label: 'EGS250', value: 'EGS250' },
+  { label: 'EGS270', value: 'EGS270' },
+];
 
 const onConfirm = () => {
-  
-  if((email.value==="")||(selectedRole.value===undefined)||(employeId.value===undefined)){
-    message.warning("toutes les champs doit etre remplit");
-  }else {
-    console.log("les champs est remplit");
-    isValid=true;
-    insert();
+  // sends an object to the parent indicating {isValid, data}
+  let event = {};
+  if (
+    email.value === '' ||
+    selectedRole.value === undefined ||
+    employeId.value === undefined
+  ) {
+    message.warning('toutes les champs doit etre remplit');
+    event.isValid = false;
+  } else {
+    console.log('les champs est remplit');
+    event.isValid = true;
+    event.data = {
+      email: email.value,
+      employeId: Number(employeId.value),
+      role: selectedRole.value,
+    };
+    //insert();
   }
-  emit('confirm',isValid);
+  emit('confirm', event);
 };
 const onCancel = () => {
   emit('cancel');
 };
-
-
 
 employes.forEach((element) => {
   EmployeOptions.push({
@@ -137,10 +148,9 @@ employes.forEach((element) => {
   });
 });
 
-function getId(value){
-  employeId.value=value;
+function getId(value) {
+  employeId.value = value;
 }
-
 </script>
 
 <style scoped>
