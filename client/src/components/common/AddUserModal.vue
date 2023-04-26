@@ -133,6 +133,10 @@ const onConfirm = () => {
       employeId: Number(employeId.value),
       role: selectedRole.value,
     };
+    email.value='';
+    selectedRole.value=undefined;
+    employeId.value=undefined;
+
     //insert();
   }
   emit('confirm', event);

@@ -7,6 +7,7 @@ import {
   NLayout,
   NLayoutContent,
   NLayoutHeader,
+  NPageHeader
 } from 'naive-ui';
 import { LogOutOutline as Logout } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';

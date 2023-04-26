@@ -7,7 +7,8 @@ import {
   getUserById,
   deleteUser,
   updateUserRole,
-  insertUser
+  insertUser,
+  updateUser
 } from '../controllers/user';
 
 export const userRouter = express.Router();
@@ -20,4 +21,5 @@ userRouter.post('/', insertUser);
 
 userRouter.get('/:id', getUserById);
 userRouter.delete('/:id', deleteUser);
+userRouter.put('/:id', updateUser);
 userRouter.put('/:id/role', updateUserRole);
