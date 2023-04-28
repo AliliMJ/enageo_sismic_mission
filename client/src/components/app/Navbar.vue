@@ -1,6 +1,6 @@
 <template>
   <NSpace justify="space-between" class="space">
-    <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" />
+    <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" /> 
     <NSpace justify="space-between" class="space1">
       
 
@@ -11,7 +11,7 @@
       </n-button>
 
 
-      <n-dropdown trigger="hover" :options="options" @select="handleSelect" style="width:300px">
+      <n-dropdown trigger="hover" :options="options" @select="handleSelect" style="width:180px">
         <n-button text style="font-size: 30px">
         <n-icon>
           <Persone />
@@ -29,10 +29,15 @@ import { NSpace, NIcon, NImage, NButton , NDropdown ,  useMessage, NAvatar, NTex
 import {
   PersonCircleOutline as Persone,
   NotificationsOutline as notification,
+  PersonCircleOutline as UserIcon,
+  LogOutOutline as LogoutIcon,
+  SettingsOutline as Settings,
+  PersonOutline as Person,
 } from "@vicons/ionicons5";
 import { h } from "vue";
 import { useRouter } from 'vue-router';
 import { useAuth } from '../../stores/authentication';
+import {renderIcon , renderMenuItem , renderMenuItem1} from '../../utils/render';
 
 const router = useRouter();
 const auth = useAuth();
@@ -51,16 +56,19 @@ const options = [
           // icon: renderIcon(Persone),
         },
         {
-          label: "lpsum1",
-          key: "stmt1"
+          label:  renderMenuItem('Profile', 'profile'),
+          key:"profile",
+          icon:renderIcon(Person)
         },
         {
-          label: "lpsum2",
-          key: "stmt2"
+          label: renderMenuItem('Préférences','preference'),
+          key: "settings",
+          icon:renderIcon(Settings)
         },
         {
           label: "se deconnecter",
-          key: "logout"
+          key: "logout",
+          icon:renderIcon(LogoutIcon)
         }
       ]
 
@@ -84,10 +92,10 @@ function renderCustomHeader() {
       }),
       h("div", null, [
         h("div", null, [
-          h(NText, { depth: 2 }, { default: () => "Admin" })
+          h(NText, { depth: 2 }, { default: () => auth.user.email })
         ]),
         h("div", { style: "font-size: 12px;" }, [
-          h(NText, { depth: 3 }, { default: () => "<???>" })
+          h(NText, { depth: 3 }, { default: () => auth.user.role })
         ])
       ])
     ]
@@ -129,6 +137,10 @@ function handleConfirm() {
 
 .logoImg {
   width: 180px;
+}
+
+.logoImg:hover {
+  cursor:pointer;
 }
 
 .button {

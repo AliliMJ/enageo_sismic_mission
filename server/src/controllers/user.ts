@@ -80,6 +80,22 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
+export const updateUser = async (req: Request, res: Response) => {
+  const data = req.body;
+
+  try {
+    const id = Number(req.params.id);
+
+    const user = await prisma.utilisateur.update({ data, where: { id } });
+
+    res.status(200).json(user);
+  } catch {
+    res.status(500).json({
+      err: `Èchec lors de la mise à jour de données de l'utilisateur ${req.params.id}`,
+    });
+  }
+};
+
 export const updateUserRole = async (req: Request, res: Response) => {
   const { role } = req.body;
 

@@ -78,9 +78,9 @@ const handleClick = (user) => {
 function getId(value) {}
 
 async function confirmAdd(event) {
-  // if(value==true){
-  //   showModal = false;
-  // }
+  if(event.isValid==true){
+    showModal.value = false;
+  }
   console.log(event);
   if (event.isValid) {
     try {

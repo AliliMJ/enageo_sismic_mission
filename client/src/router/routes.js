@@ -27,12 +27,21 @@ import Dashboard from 'components/dashboard/Dashboard.vue';
 // ];
 
 const routes = [
-  { path: '/login', component: Login },
+  { path: '/login', 
+    component: Login ,
+    meta : 
+    { title : 's\'authentifier',
+      icon : "src/assets/lock.png"
+  }},
   { path: '/denied' },
   {
     path: '/',
     component: Home,
-    meta: { requireAuth: true },
+    meta: 
+    { requireAuth: true ,
+    title : 'acceuil',
+    icon :"src/assets/ENA_GEO.png"
+    },
     children: [
       { path: '', name: Route.Dashboard, component: Dashboard },
       {
@@ -150,6 +159,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title}`;
+  const link = document.querySelector("[rel='icon']");
+  link.setAttribute('href',to.meta.icon);
   const authentication = JSON.parse(
     window.localStorage.getItem('authentication')
   );

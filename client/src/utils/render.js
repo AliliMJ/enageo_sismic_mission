@@ -16,3 +16,13 @@ export function renderMenuItem(title, name) {
       { default: () => title }
     );
 }
+
+export function renderMenuItem1(name) {
+  return () =>
+    h(
+      RouterLink,
+      {
+        to: { name },
+      }
+    );
+}

@@ -1,7 +1,7 @@
 <script setup>
 import { NImage } from "naive-ui";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter , useRoute } from "vue-router";
 import {
   NCard,
   NTabs,
@@ -21,6 +21,7 @@ import {
 import { Edit32Filled as Pen } from "@vicons/fluent";
 import { ref } from "vue";
 const router = useRouter();
+const route = useRoute();
 const dialog = useDialog();
 const message = useMessage();
 
@@ -40,6 +41,7 @@ const prenom = ref(employe.prenom);
 const dateNaiss = ref(new Date(employe.dateNaissance));
 const dateAdd = ref(new Date(employe.dateAdhesion));
 const email = ref(user.email);
+const role = ref(user.role);
 const dateCreate = ref(new Date(user.dateCreationCompte));
 //const dateNaiss = ref(employe.dateNaissance.toLocaleDateString("fr"));
 
@@ -65,6 +67,15 @@ function handleConfirmDelete() {
       message.error('Suppression annulée');
     },
   });
+}
+
+const updateUser = async () => {
+  const req = {
+    email:email.value,
+    role:role.value
+  };
+  await axios.put(`http://localhost:3000/users/${user.id}`,req);
+  message.success('utilisateur modifiee');
 }
 
 </script>
@@ -135,24 +146,25 @@ function handleConfirmDelete() {
           <NForm :disabled="isEditUser">
             <NGrid :span="24" :x-gap="24">
               <NFormItemGi :span="12" label="id">
-                <NInput v-model:value="email" />
+                <NInput v-model:value="user.id" disabled/>
               </NFormItemGi>
               <NFormItemGi :span="12" label="Email">
-                <NInput value="email" />
+                <NInput v-model:value="email" />
               </NFormItemGi>
               <NFormItemGi :span="12" label="Role">
-                <NSelect value="role" />
+                <NSelect v-model:value="role" />
               </NFormItemGi>
               <NFormItemGi :span="12" label="date creation de compte">
                 <NDatePicker
                       format="dd/MM/yyyy"
                       v-model:value="dateCreate"
                       type="date"
+                      disabled
                     />
               </NFormItemGi>
             </NGrid>
             <NSpace justify="end">
-              <n-button type="success" :disabled="isEditUser"> Confirmer </n-button>
+              <n-button type="success" :disabled="isEditUser" @click="updateUser"> Confirmer </n-button>
             </NSpace>
           </NForm>
         </NCard>
