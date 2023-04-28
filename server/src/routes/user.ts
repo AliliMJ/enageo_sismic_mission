@@ -8,7 +8,8 @@ import {
   deleteUser,
   updateUserRole,
   insertUser,
-  updateUser
+  updateUser,
+  getUserByEmail
 } from '../controllers/user';
 
 export const userRouter = express.Router();
@@ -20,6 +21,9 @@ userRouter.get('/', paginate, getUsers);
 userRouter.post('/', insertUser);
 
 userRouter.get('/:id', getUserById);
+userRouter.get('/email/:email', getUserByEmail);
+
 userRouter.delete('/:id', deleteUser);
 userRouter.put('/:id', updateUser);
+
 userRouter.put('/:id/role', updateUserRole);

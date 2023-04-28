@@ -9,7 +9,12 @@
 
     <NH1>Utilisateurs</NH1>
     <NSpace justify="end">
-      <searchUser @sendId="getId" />
+      <!-- <searchUser v-model="searchEmail" :on-update="searchFilter" /> -->
+      <n-input v-model:value="searchEmail" @update:value="searchFilter" placeholder="rechercher par email">
+      <template #suffix>
+        <n-icon :component="search" />
+      </template>
+      </n-input>
       <NButton
         @click="showInsertEmployeModal"
         class="button"
@@ -32,13 +37,12 @@
 import axios from 'axios';
 
 import STable from 'common/STable.vue';
-import { NH1, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
+import { NH1, NButton, NIcon, NSpace, useDialog ,NInput } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted ,  computed, watch } from 'vue';
 import Modal from '../common/AddUserModal.vue';
-import searchUser from '../common/searchUser.vue';
-
+import { SearchOutline as search } from '@vicons/ionicons5';
 const router = useRouter();
 const dialog = useDialog();
 
@@ -54,9 +58,44 @@ function deleteUser(id) {
 }
 
 const users = ref([]);
+const searchEmail = ref("");
+
 onMounted(async () => {
   users.value = (await axios.get('http://localhost:3000/users')).data;
 });
+
+const searchFilter = () => {
+  watch(searchEmail, async () => {
+  if (searchEmail.value.length > 0) {
+    users.value = (
+      await axios.get(`http://localhost:3000/users/email/?like=${searchEmail.value}`)
+    ).data;
+  }else{
+    users.value = (
+      await axios.get(`http://localhost:3000/users`)
+    ).data;
+  }
+});
+}
+
+// const options = computed(() => {
+//   function filteredItems () {
+//       return this.items.filter(item => {
+//          return users.email.toLowerCase().indexOf(this.searchEmail.toLowerCase()) > -1
+//       })
+//     }
+// });
+
+//   const searchFilter = () => {
+//     computed: {
+//     function filteredItems () {
+//       return this.items.filter(item => {
+//          return users.email.toLowerCase().indexOf(this.searchEmail.toLowerCase()) > -1
+//       })
+//     }
+//   }
+// console.log("search : "+users1.value);
+// }
 
 const cols = [
   { title: 'id', key: 'id' },
@@ -75,13 +114,10 @@ const handleClick = (user) => {
   router.push(`/utilisateur/${user.id}`);
 };
 
-function getId(value) {}
-
 async function confirmAdd(event) {
   if(event.isValid==true){
     showModal.value = false;
   }
-  console.log(event);
   if (event.isValid) {
     try {
       const user = (await axios.post('http://localhost:3000/users', event.data))

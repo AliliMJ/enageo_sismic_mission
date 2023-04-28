@@ -30,14 +30,14 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getEmployeById = async (req: Request, res: Response) => {
+export const getUserByEmail = async (req: Request, res: Response) => {
   try {
-    const id = Number(req.params.id);
-    const employe = await prisma.employe.findUnique({ where: { id } });
-    res.status(200).json(employe);
+    const email = req.params.email;
+    const user = await prisma.utilisateur.findUnique({ where: { email } });
+    res.status(200).json(user);
   } catch {
     res.status(500).json({
-      err: `Èchec lors de la collection de l'employe ${req.params.id}`,
+      err: `Èchec lors de la collection de l'utilisateur ${req.params.email}`,
     });
   }
 };
