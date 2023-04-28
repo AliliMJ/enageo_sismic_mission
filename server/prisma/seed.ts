@@ -29,7 +29,7 @@ async function main() {
 
   await prisma.mission.createMany({
     data: [
-      { code: 'EGS60', type:  TypeMission.MISSION3D },
+      { code: 'EGS60', type: TypeMission.MISSION3D },
       { code: 'EGS120', type: TypeMission.MISSION3D },
       { code: 'EGS150', type: TypeMission.MISSION3D },
       { code: 'EGS170', type: TypeMission.MISSION2D },
@@ -209,6 +209,9 @@ async function main() {
 
   await prisma.objectif.createMany({ data: [{ nom: 'VP' }] });
   await prisma.client.createMany({ data: [{ nom: 'Sonatrach' }] });
+  await prisma.contrat.create({
+    data: { clientId: 1, debut: new Date(), fin: new Date() },
+  });
 }
 
 main()

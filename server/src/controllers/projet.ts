@@ -5,9 +5,16 @@ export const getProjets = async (req: Request, res: Response) => {
   try {
     const { userid } = req.body;
 
+    const user = await prisma.utilisateur.findFirst({
+      where: { id: userid },
+      select: { employe: { select: { missionCode: true } } },
+    });
+
+    if (!user?.employe?.missionCode)
+      return res.status(401).json({ err: 'Mission not found' });
     const projets = await prisma.projet.findMany({
       where: {
-        Mission: { Chefs: { some: { id: userid } } },
+        missionCode: user.employe.missionCode,
       },
       include: { Etats: true },
     });
@@ -35,7 +42,7 @@ export const getProjetById = async (req: Request, res: Response) => {
 };
 
 export const insertProjet = async (req: Request, res: Response) => {
-  const { plan, contratId, userid } = req.body;
+  const { plan, contratNum, userid } = req.body;
 
   //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
   try {
@@ -50,7 +57,7 @@ export const insertProjet = async (req: Request, res: Response) => {
         .json({ err: `Cet utilisateur n'a pas accès à cette mission` });
     const projet = await prisma.projet.create({
       data: {
-        contratNum: contratId,
+        contratNum: 1,
         Plan: { create: plan },
         Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
         missionCode: mission.code,

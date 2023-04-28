@@ -37,10 +37,9 @@ const clientOptions = [
   },
 ];
 async function createProject() {
-  console.log(new Date('2023-05-09T23:00:00.000Z'));
   try {
     await axios.post('http://localhost:3000/projets/create', {
-      clientId: model.value.client,
+      clientId: Number(model.value.client),
       plan: model.value.dynamic.map((p) => ({
         valeur: p.value,
         duree: p.duration,
@@ -48,6 +47,7 @@ async function createProject() {
         debut: new Date(p.start),
       })),
     });
+    alert('Project created!');
   } catch (e) {
     console.log(e);
   }
