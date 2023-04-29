@@ -1,6 +1,6 @@
 <script setup>
-import axios from "axios";
-import { useRouter, useRoute } from "vue-router";
+import axios from 'axios';
+import { useRouter, useRoute } from 'vue-router';
 import {
   NCard,
   NTabs,
@@ -16,17 +16,18 @@ import {
   NDatePicker,
   useDialog,
   useMessage,
-} from "naive-ui";
+} from 'naive-ui';
 import {
   Edit32Filled as Pen,
   ContactCard20Regular as contact,
-} from "@vicons/fluent";
+  Info20Regular as detail,
+} from '@vicons/fluent';
 import {
   TrashOutline as trash,
   FolderOpenOutline as folder,
-} from "@vicons/ionicons5";
+} from '@vicons/ionicons5';
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted } from 'vue';
 const router = useRouter();
 const route = useRoute();
 const dialog = useDialog();
@@ -39,7 +40,7 @@ const isEditEmploye = ref(true);
 
 const user = (await axios.get(`http://localhost:3000/users/${id}`)).data;
 const employe = (
-  await axios.get("http://localhost:3000/employes/" + user.employeId)
+  await axios.get('http://localhost:3000/employes/' + user.employeId)
 ).data;
 
 // const nom = ref(employe.nom);
@@ -82,19 +83,19 @@ const deleteUser = async () => {
 };
 
 function handleConfirmDeleteUser() {
-  console.log("object : " + userRef.value.email + " " + userRef.value.role);
+  console.log('object : ' + userRef.value.email + ' ' + userRef.value.role);
   dialog.warning({
-    title: "Confirmation",
-    content: "êtes-vous sûr de supprimer cette utilisateur?",
-    positiveText: "Supprimer",
-    negativeText: "Annuler",
+    title: 'Confirmation',
+    content: 'êtes-vous sûr de supprimer cette utilisateur?',
+    positiveText: 'Supprimer',
+    negativeText: 'Annuler',
     onPositiveClick: () => {
-      message.success("utilisateur supprimer");
+      message.success('utilisateur supprimer');
       deleteUser();
-      router.push("/utilisateur");
+      router.push('/utilisateur');
     },
     onNegativeClick: () => {
-      message.error("Suppression annulée");
+      message.error('Suppression annulée');
     },
   });
 }
@@ -105,7 +106,7 @@ const updateUser = async () => {
     role: userRef.value.role,
   };
   await axios.put(`http://localhost:3000/users/${user.id}`, req);
-  message.success("utilisateur modifiee");
+  message.success('utilisateur modifiee');
 };
 
 /* end user operations */
@@ -128,17 +129,17 @@ const deleteEmploye = async () => {
 
 function handleConfirmDeleteEmploye() {
   dialog.warning({
-    title: "Confirmation",
-    content: "êtes-vous sûr de supprimer cette employe?",
-    positiveText: "Supprimer",
-    negativeText: "Annuler",
+    title: 'Confirmation',
+    content: 'êtes-vous sûr de supprimer cette employe?',
+    positiveText: 'Supprimer',
+    negativeText: 'Annuler',
     onPositiveClick: () => {
-      message.success("employe supprimer");
+      message.success('employe supprimer');
       deleteEmploye();
-      router.push("/utilisateur");
+      router.push('/utilisateur');
     },
     onNegativeClick: () => {
-      message.error("Suppression annulée");
+      message.error('Suppression annulée');
     },
   });
 }
@@ -156,44 +157,43 @@ const updateEmploye = async () => {
     groupeSanguin: employeRef.value.groupeSanguin,
     missionCode: employeRef.value.missionCode,
   };
-  console.log("la date : " + req.dateNaissance);
+  console.log('la date : ' + req.dateNaissance);
   await axios.put(`http://localhost:3000/employes/${user.employeId}`, req);
-  message.success("employe modifiee");
+  message.success('employe modifiee');
 };
 
 /* end employe operations */
 
 const roleOptions = [
   {
-    label: "Chef mision",
-    value: "CHEF_MISSION",
+    label: 'Chef mision',
+    value: 'CHEF_MISSION',
   },
   {
-    label: "Chef terrain",
-    value: "CHEF_TERRAIN",
+    label: 'Chef terrain',
+    value: 'CHEF_TERRAIN',
   },
   {
-    label: "Gestionnaire",
-    value: "GESTIONNAIRE",
+    label: 'Gestionnaire',
+    value: 'GESTIONNAIRE',
   },
   {
-    label: "administrateur",
-    value: "ADMINISTRATEUR",
+    label: 'administrateur',
+    value: 'ADMINISTRATEUR',
   },
 ];
 </script>
 
 <template>
   <NSpace justtify="space-between">
-    <n-card
-      header-style="display:flex;flex-direction:row-reverse;"
-      title="Détails"
-      style="margin-bottom: 16px; width: 650px"
-    >
-      <template #header-extra>
-        <n-icon class="folderIcon">
-          <folder />
-        </n-icon>
+    <n-card style="margin-bottom: 16px; width: 650px">
+      <template #header>
+        <NSpace justify="start">
+          <n-icon :size="30">
+            <detail />
+          </n-icon>
+          <NText> Détails </NText>
+        </NSpace>
       </template>
       <n-tabs type="line" animated>
         <n-tab-pane name="data" tab="Données">
