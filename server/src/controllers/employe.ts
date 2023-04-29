@@ -77,6 +77,8 @@ export const getFonctions = async (req: Request, res: Response) => {
 export const updateEmploye = async (req: Request, res: Response) => {
   const data = req.body;
 
+  console.log("date naissance from app is : "+req.body.dateNaissance)
+
   try {
     const id = Number(req.params.id);
 

@@ -19,6 +19,6 @@ employeRouter.get('/:id', getEmployeById);
 employeRouter.put('/:id', updateEmploye);
 employeRouter.delete('/:id', deleteEmploye);
 
-// employeRouter.delete('/:id', deleteEmploye);
+employeRouter.delete('/:id', deleteEmploye);
 
 // employeRouter.put('/:id', updateEmploye);

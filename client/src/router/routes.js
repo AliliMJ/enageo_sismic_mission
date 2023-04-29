@@ -39,7 +39,7 @@ const routes = [
     component: Home,
     meta: 
     { requireAuth: true ,
-    title : 'acceuil',
+    title : 'Tableau de board',
     icon :"src/assets/ENA_GEO.png"
     },
     children: [
@@ -48,7 +48,9 @@ const routes = [
         path: '/utilisateur',
         name: Route.Utilisateur,
         component: UsersTable,
-        meta: { role: Role.Administrateur },
+        meta: { role: Role.Administrateur,
+                title : "les utilisateurs" 
+         },
       },
       {
         path: '/utilisateur/:id',
@@ -59,7 +61,10 @@ const routes = [
         path: '/employe',
         name: Route.Employe,
         component: EmployesTable,
-        meta: { role: Role.Gestionnaire },
+        meta: { 
+                role: Role.Gestionnaire,
+                title : "les employés"
+              },
       },
       {
         path: '/employe/:id',
@@ -70,7 +75,9 @@ const routes = [
         path: '/materiel',
         name: Route.Material,
         component: MaterialTable,
-        meta: { role: Role.Gestionnaire },
+        meta: { role: Role.Gestionnaire,
+                title : "les matériels"
+        },
       },
       {
         path: '/projet',
@@ -82,11 +89,17 @@ const routes = [
         path: '/profile',
         name: Route.Profile,
         component: () => import('app/Profile.vue'),
+        meta : {
+          title : "Mon profile"
+        }
       },
       {
         path: '/preference',
         name: Route.Preference,
         component: () => import('app/Preference.vue'),
+        meta : {
+          title : "Préférences"
+        }
       },
       {
         path: '/projet/creation',
