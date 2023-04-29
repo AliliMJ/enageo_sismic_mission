@@ -10,11 +10,12 @@ import {
   NInput,
   NSelect,
   NDatePicker,
-} from "naive-ui";
+  NScrollbar,
+} from 'naive-ui';
 </script>
 
 <template>
-<n-card title="Détails" style="margin-bottom: 16px">
+  <n-card title="Détails" style="margin-bottom: 16px">
     <n-tabs type="line" animated>
       <n-tab-pane name="data" tab="Données">
         <NSpace vertical>

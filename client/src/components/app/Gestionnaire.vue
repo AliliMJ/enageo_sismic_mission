@@ -16,13 +16,13 @@ import GestMenu from '../menu/GestMenu.vue';
     </NLayoutSider>
 
     <NLayoutContent>
-      <NScrollbar style="height: 100vh">
-        <NCard :bordered="false">
-          <Suspense>
+      <NCard :bordered="false">
+        <Suspense>
+          <NScrollbar style="height: 85vh">
             <RouterView />
-          </Suspense>
-        </NCard>
-      </NScrollbar>
+          </NScrollbar>
+        </Suspense>
+      </NCard>
     </NLayoutContent>
   </NLayout>
 </template>
