@@ -5,6 +5,6 @@ export const projetRouter = express.Router();
 
 projetRouter.post('/', getProjets);
 
-projetRouter.get('/:id', getProjetById);
+projetRouter.get('/:idProjet', getProjetById);
 
 projetRouter.post('/create', insertProjet);

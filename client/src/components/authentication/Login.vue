@@ -1,47 +1,43 @@
 <script setup>
-import { ref } from "vue";
-import { useMessage } from 'naive-ui'
-import { useRouter } from "vue-router";
-import { useAuth } from "stores/authentication.js";
+import { ref } from 'vue';
+import { useMessage } from 'naive-ui';
+import { useRouter } from 'vue-router';
+import { useAuth } from 'stores/authentication.js';
 
 const auth = useAuth();
-const message = useMessage()
-const email = ref("");
-const password = ref("");
+const message = useMessage();
+const username = ref('');
+const password = ref('');
 const router = useRouter();
-
 
 const login = async (e) => {
   e.preventDefault();
   try {
-    await auth.login(email.value, password.value);
-    return router.push("/");
+    await auth.login(username.value, password.value);
+    return router.push('/');
   } catch (m) {
-    console.log("not welcome");
-    message.error(m)
+    console.log('not welcome');
+    message.error(m);
   }
 };
-
 </script>
 
 <script>
 export default {
   methods: {
-    beforeEnter(el){
-      el.style.opacity=0;
+    beforeEnter(el) {
+      el.style.opacity = 0;
     },
     enter(el) {
       el.style.transition = 'opacity 200ms ease-in-out';
       getComputedStyle(el);
 
       setTimeout(() => {
-        el.style.opacity=1;
+        el.style.opacity = 1;
       });
-    }
+    },
   },
-}
-
-
+};
 </script>
 
 <template>
@@ -54,12 +50,12 @@ export default {
           <div class="inputContainer">
             <input
               class="input"
-              v-model="email"
+              v-model="username"
               type="text"
               placeholder=" "
               required
             />
-            <label for="username" class="placeholder">email</label>
+            <label for="username" class="placeholder">nom d'utilisateur</label>
           </div>
           <div class="inputContainer">
             <input

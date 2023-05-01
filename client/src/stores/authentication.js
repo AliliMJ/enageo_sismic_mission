@@ -8,10 +8,10 @@ export const useAuth = defineStore('authentication', {
   }),
   persist: true,
   actions: {
-    async login(email, password) {
+    async login(username, password) {
       try {
         const response = await axios.post('http://localhost:3000/login', {
-          email,
+          username,
           password,
         });
 
@@ -34,7 +34,7 @@ export const useAuth = defineStore('authentication', {
     },
     logout() {
       this.user = null;
-      this.email = '';
+      this.username = '';
       this.password = '';
       this.isAuthenticated = false;
       window.localStorage.removeItem('authentication');

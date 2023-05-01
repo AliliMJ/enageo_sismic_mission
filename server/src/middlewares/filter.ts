@@ -14,15 +14,15 @@ export const employeNameFilter = (
   next();
 };
 
-export const userEmailFilter = (
+export const usernameFilter = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const email = req.query.like;
+  const username = req.query.like;
 
   req.body.filter = {
-    email: { startsWith: email },
+    username: { startsWith: username },
   };
 
   next();

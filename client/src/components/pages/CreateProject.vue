@@ -18,6 +18,9 @@ import {
   NText,
 } from 'naive-ui';
 import { ref } from 'vue';
+import { useAuth } from '../../stores/authentication';
+
+const auth = useAuth();
 
 const selectOptions = [
   {
@@ -39,7 +42,10 @@ const clientOptions = [
 async function createProject() {
   try {
     await axios.post('http://localhost:3000/projets/create', {
-      clientId: Number(model.value.client),
+      userid: auth.user.id,
+      nom: model.value.name,
+      description,
+      budget,
       plan: model.value.dynamic.map((p) => ({
         valeur: p.value,
         duree: p.duration,
@@ -54,6 +60,8 @@ async function createProject() {
 }
 const model = ref({
   name: null,
+  budget: 0,
+  description: null,
   client: null,
   dynamic: [],
 });
@@ -73,15 +81,15 @@ const onCreate = () => ({
         <NSpace>
           <NFormItem label="Nom du projet" path="client">
             <n-input
-              placeholder="Saisissez un nom"
+              placeholder="Saisissez le nom du projet"
               v-model:value="model.name"
             />
           </NFormItem>
-          <NFormItem label="Client" path="client">
-            <n-select
-              placeholder="Sélectionnez un client"
-              v-model:value="model.client"
-              :options="clientOptions"
+
+          <NFormItem label="Nom du projet" path="client">
+            <n-input-number
+              placeholder="Saisissez le budget du projet"
+              v-model:value="model.budget"
             />
           </NFormItem>
         </NSpace>

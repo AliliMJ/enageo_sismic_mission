@@ -4,7 +4,7 @@ import prisma from '../utils/prisma.ts';
 import { Request, Response } from 'express';
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { employeId, email, role } = req.body;
+  const { employeId, username, role } = req.body;
 
   try {
     const employe = await prisma.employe.findFirst({
@@ -14,16 +14,16 @@ export const registerUser = async (req: Request, res: Response) => {
     if (employe == null)
       return res.status(401).json({ err: 'Employé est introuvble' });
 
-    const user = await prisma.utilisateur.findFirst({ where: { employeId } }); // checks if that employe already has an account.
+    const user = await prisma.compte.findFirst({ where: { employeId } }); // checks if that employe already has an account.
     if (user)
       return res.status(400).json({ err: 'Employé possède déja un compte' });
 
     const password = '123'; // randomly generated with a random function ex. cuid() or uuid()
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const registeredUser = await prisma.utilisateur.create({
+    const registeredUser = await prisma.compte.create({
       data: {
-        email,
+        username,
         hashPassword,
         employeId,
         role,
@@ -39,10 +39,10 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const user = await prisma.utilisateur.findUnique({ where: { email } });
+    const user = await prisma.compte.findUnique({ where: { username } });
     if (user === null)
       return res.status(401).json({ err: 'Utilisateur introuvable' });
     else if (await bcrypt.compare(password, user.hashPassword)) {

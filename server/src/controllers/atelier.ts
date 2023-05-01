@@ -29,17 +29,15 @@ export const getReparationsByMaterialCode = async (
   res: Response
 ) => {
   try {
-    const { code } = req.params;
+    const { codeMat } = req.params;
     const reparations = await prisma.reparation.findMany({
-      where: { materielCode: code },
+      where: { codeMat },
     });
 
     return res.status(200).json(reparations);
   } catch {
-    res
-      .status(500)
-      .json({
-        err: 'Problème lors de la collection des reparations pour ce matériel',
-      });
+    res.status(500).json({
+      err: 'Problème lors de la collection des reparations pour ce matériel',
+    });
   }
 };

@@ -1,27 +1,26 @@
 import express from 'express';
 import paginate from '../middlewares/pagination';
 
-import { userEmailFilter } from '../middlewares/filter';
+import { usernameFilter } from '../middlewares/filter';
 import {
   getUsers,
   getUserById,
   deleteUser,
   updateUserRole,
-  insertUser,
   updateUser,
-  getUserByEmail
-} from '../controllers/user';
+  getUserByUsername,
+} from '../controllers/compte';
 
 export const userRouter = express.Router();
 
-userRouter.get('/email', userEmailFilter, paginate, getUsers);
+userRouter.get('/username', usernameFilter, paginate, getUsers);
 
 userRouter.get('/', paginate, getUsers);
 
-userRouter.post('/', insertUser);
+//userRouter.post('/', insertUser);
 
 userRouter.get('/:id', getUserById);
-userRouter.get('/email/:email', getUserByEmail);
+userRouter.get('/username/:email', getUserByUsername);
 
 userRouter.delete('/:id', deleteUser);
 userRouter.put('/:id', updateUser);

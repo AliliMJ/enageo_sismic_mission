@@ -21,26 +21,36 @@ export const insertEmploye = async (req: Request, res: Response) => {
   const {
     nom,
     prenom,
+    email,
     fonctionId,
     etatEmployeId,
-    dateAdhesion,
+    dateRejoint,
     dateNaissance,
+    lieuNaissance,
+    numTel,
     sexe,
     groupeSanguin,
     numIdentite,
+    codeMission,
+    adresse,
   } = req.body;
   try {
     const employe = await prisma.employe.create({
       data: {
         nom,
         prenom,
+        email,
         fonctionId,
         etatEmployeId,
-        dateAdhesion,
+        dateRejoint,
         dateNaissance,
         sexe,
         numIdentite,
         groupeSanguin,
+        numTel,
+        lieuNaissance,
+        codeMission,
+        adresse,
       },
     });
 
@@ -76,8 +86,6 @@ export const getFonctions = async (req: Request, res: Response) => {
 
 export const updateEmploye = async (req: Request, res: Response) => {
   const data = req.body;
-
-  console.log("date naissance from app is : "+req.body.dateNaissance)
 
   try {
     const id = Number(req.params.id);

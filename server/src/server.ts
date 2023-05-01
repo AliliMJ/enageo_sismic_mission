@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import { authRouter } from './routes/auth.ts';
-import { userRouter } from './routes/user.ts';
+import { userRouter } from './routes/compte.ts';
 import { materialRouter } from './routes/material.ts';
 import { missionRouter } from './routes/mission.ts';
 import { atelierRouter } from './routes/aterlier.ts';

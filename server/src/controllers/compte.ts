@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await prisma.utilisateur.findMany({
+    const users = await prisma.compte.findMany({
       ...req.body.pagination?.options,
       where: { ...req.body.filter },
     });
@@ -21,7 +21,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
   try {
     const id = Number(req.params.id);
-    const user = await prisma.utilisateur.delete({ where: { id } });
+    const user = await prisma.compte.delete({ where: { id } });
     res.status(200).json(user);
   } catch {
     res.status(500).json({
@@ -30,43 +30,43 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserByEmail = async (req: Request, res: Response) => {
+export const getUserByUsername = async (req: Request, res: Response) => {
   try {
-    const email = req.params.email;
-    const user = await prisma.utilisateur.findUnique({ where: { email } });
+    const username = req.params.username;
+    const user = await prisma.compte.findUnique({ where: { username } });
     res.status(200).json(user);
   } catch {
     res.status(500).json({
-      err: `Èchec lors de la collection de l'utilisateur ${req.params.email}`,
+      err: `Èchec lors de la collection de l'utilisateur ${req.params.username}`,
     });
   }
 };
 
-export const insertUser = async (req: Request, res: Response) => {
-  const { email, role, employeId } = req.body;
+// export const insertUser = async (req: Request, res: Response) => {
+//   const { email, role, employeId } = req.body;
 
-  const hashPassword = await bcrypt.hash('123', 10);
-  try {
-    const user = await prisma.utilisateur.create({
-      data: {
-        email,
-        hashPassword,
-        role,
-        employeId,
-      },
-    });
+//   const hashPassword = await bcrypt.hash('123', 10);
+//   try {
+//     const user = await prisma.compte.create({
+//       data: {
+//         email,
+//         hashPassword,
+//         role,
+//         employeId,
+//       },
+//     });
 
-    res.status(201).json(user);
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ err: `Èchec lors de la creation de utilisateur` });
-  }
-};
+//     res.status(201).json(user);
+//   } catch (e) {
+//     console.log(e);
+//     res.status(500).json({ err: `Èchec lors de la creation de utilisateur` });
+//   }
+// };
 
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const user = await prisma.utilisateur.findUnique({
+    const user = await prisma.compte.findUnique({
       where: { id: Number(id) },
     });
     if (user == null)
@@ -86,7 +86,7 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
 
-    const user = await prisma.utilisateur.update({ data, where: { id } });
+    const user = await prisma.compte.update({ data, where: { id } });
 
     res.status(200).json(user);
   } catch {
@@ -101,7 +101,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
 
   try {
     const id = Number(req.params.id);
-    const user = await prisma.utilisateur.update({
+    const user = await prisma.compte.update({
       data: { role },
       where: { id },
     });

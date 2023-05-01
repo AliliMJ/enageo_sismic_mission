@@ -20,7 +20,9 @@ const value = ref('');
 watch(value, async () => {
   if (value.value.length > 0) {
     users.value = (
-      await axios.get(`http://localhost:3000/users/email?like=${value.value}`)
+      await axios.get(
+        `http://localhost:3000/users/username?like=${value.value}`
+      )
     ).data;
   }
 });
@@ -36,7 +38,7 @@ const sendId = function () {
   <n-auto-complete
     v-model:value="value"
     :options="options"
-    placeholder="Email"
+    placeholder="Nom d'utilisateur"
     @update:value="sendId"
   />
 </template>

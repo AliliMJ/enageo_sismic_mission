@@ -6,4 +6,4 @@ export const missionRouter = express.Router();
 
 missionRouter.get('/', getMissions);
 
-missionRouter.get('/:id', getMissionByCode);
+missionRouter.get('/:codeMission', getMissionByCode);

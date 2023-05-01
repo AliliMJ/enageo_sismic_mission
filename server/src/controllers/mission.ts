@@ -14,8 +14,8 @@ export const getMissions = async (req: Request, res: Response) => {
 
 export const getMissionByCode = async (req: Request, res: Response) => {
   try {
-    const { code } = req.params;
-    const mission = await prisma.mission.findFirst({ where: { code } });
+    const { codeMission } = req.params;
+    const mission = await prisma.mission.findFirst({ where: { codeMission } });
 
     return res.status(200).json(mission);
   } catch {

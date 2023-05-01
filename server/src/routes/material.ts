@@ -15,8 +15,8 @@ materialRouter.get('/', paginate, getMaterial);
 
 materialRouter.get('/types', getMaterialTypes);
 
-materialRouter.get('/:code', getMaterialByCode);
+materialRouter.get('/:codeMat', getMaterialByCode);
 
-materialRouter.post('/:code/mettreEnPanne', mettreEnPanne);
-materialRouter.post('/:code/reparer', reparer);
-materialRouter.post('/:code/demanderReparation', demandeReparation);
+materialRouter.post('/:codeMat/mettreEnPanne', mettreEnPanne);
+materialRouter.post('/:codeMat/reparer', reparer);
+materialRouter.post('/:codeMat/demanderReparation', demandeReparation);

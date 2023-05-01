@@ -5,16 +5,16 @@ export const getProjets = async (req: Request, res: Response) => {
   try {
     const { userid } = req.body;
 
-    const user = await prisma.utilisateur.findFirst({
+    const user = await prisma.compte.findFirst({
       where: { id: userid },
-      select: { employe: { select: { missionCode: true } } },
+      select: { employe: { select: { codeMission: true } } },
     });
 
-    if (!user?.employe?.missionCode)
+    if (!user?.employe?.codeMission)
       return res.status(401).json({ err: 'Mission not found' });
     const projets = await prisma.projet.findMany({
       where: {
-        missionCode: user.employe.missionCode,
+        codeMission: user.employe.codeMission,
       },
       include: { Etats: true },
     });
@@ -27,9 +27,9 @@ export const getProjets = async (req: Request, res: Response) => {
 
 export const getProjetById = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { idProjet } = req.params;
     const projet: any = await prisma.projet.findUnique({
-      where: { id: Number(id) },
+      where: { idProjet: Number(idProjet) },
       include: { Etats: true },
     });
 
@@ -42,9 +42,15 @@ export const getProjetById = async (req: Request, res: Response) => {
 };
 
 export const insertProjet = async (req: Request, res: Response) => {
-  const { plan, contratNum, userid } = req.body;
+  const {
+    plan, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
+    numContrat,
+    userid,
+    nom = '',
+    description = '',
+    budget = 100,
+  } = req.body;
 
-  //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
   try {
     const mission = await prisma.mission.findFirst({
       where: {
@@ -57,10 +63,13 @@ export const insertProjet = async (req: Request, res: Response) => {
         .json({ err: `Cet utilisateur n'a pas accès à cette mission` });
     const projet = await prisma.projet.create({
       data: {
-        contratNum: 1,
+        numContrat: 1,
         Plan: { create: plan },
         Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
-        missionCode: mission.code,
+        codeMission: mission.codeMission,
+        nom,
+        description,
+        budget,
       },
     });
     res.status(201).json(projet);
