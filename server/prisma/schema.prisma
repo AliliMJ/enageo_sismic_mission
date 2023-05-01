@@ -10,11 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Utilisateur {
+model Compte {
   id                 Int      @id @default(autoincrement())
-  email              String   @unique
+  username           String   @unique
   hashPassword       String
-  role               Role?
+  role               Role
   employe            Employe  @relation(fields: [employeId], references: [id])
   employeId          Int      @unique
   dateCreationCompte DateTime @default(now())
@@ -34,76 +34,95 @@ enum Sexe {
 }
 
 model Employe {
-  id            Int          @id @default(autoincrement())
-  dateAdhesion  DateTime     @db.Date
-  etat          EtatEmploye  @relation(fields: [etatEmployeId], references: [id])
+  id                  Int      @id @default(autoincrement())
+  nom                 String
+  prenom              String
+  dateRejoint         DateTime @db.Date
+  dateNaissance       DateTime @db.Date
+  WilayalieuNaissance Wilaya   @relation(fields: [lieuNaissance], references: [numWilaya])
+  lieuNaissance       Int
+  email               String   @unique
+  numTel              String   @unique
+  adresse             String
+  sexe                Sexe
+  numIdentite         String   @unique
+  groupeSanguin       String?
+  regimTravail        String?
+
+  Mission     Mission? @relation(fields: [codeMission], references: [codeMission])
+  codeMission String?
+
+  etat          EtatEmploye @relation(fields: [etatEmployeId], references: [idEtat])
   etatEmployeId Int
-  fonction      Fonction     @relation(fields: [fonctionId], references: [id])
-  fonctionId    Int
-  utilisateur   Utilisateur?
-  nom           String
-  prenom        String
-  dateNaissance DateTime     @db.Date
-  Equipe        Equipe?      @relation(fields: [equipeId], references: [id])
-  equipeId      Int?
-  sexe          Sexe
-  numIdentite   String
-  groupeSanguin String?
-  Mission       Mission?     @relation(fields: [missionCode], references: [code])
-  missionCode   String?
+
+  fonction   Fonction @relation(fields: [fonctionId], references: [idFonction])
+  fonctionId Int
+
+  compte Compte?
+
+  Equipe   Equipe? @relation(fields: [idEquipe], references: [idEquipe])
+  idEquipe Int?
 }
 
 model EtatEmploye {
-  id      Int       @id @default(autoincrement())
-  nom     String
+  idEtat  Int       @id @default(autoincrement())
+  libEtat String
   Employe Employe[]
 }
 
 model Fonction {
-  id      Int       @id @default(autoincrement())
-  nom     String
-  Employe Employe[]
+  idFonction  Int       @id @default(autoincrement())
+  nom         String
+  description String
+  Employe     Employe[]
 }
 
 model Projet {
-  id Int @id @default(autoincrement())
+  idProjet    Int     @id @default(autoincrement())
+  nom         String
+  description String?
+  budget      Float
+  Contrat     Contrat @relation(fields: [numContrat], references: [numContrat])
+  numContrat  Int     @unique
+  Mission     Mission @relation(fields: [codeMission], references: [codeMission])
+  codeMission String
 
   Plan Tache[]
 
   Etats EtatProjet[]
 
-  Materiel    Materiel[]
-  Mission     Mission     @relation(fields: [missionCode], references: [code])
-  missionCode String
-  createdAt   DateTime    @default(now())
-  Coodonnes   Coordonne[]
-  Executions  Execution[]
-  Contrat     Contrat     @relation(fields: [contratNum], references: [num])
-  contratNum  Int         @unique
+  Materiel Materiel[]
+
+  Coodonnes  Coordonne[]
+  Rapprots   Rapport[]
+  Evenements Evenement[]
 }
 
 model Client {
-  id  Int    @id @default(autoincrement())
-  nom String
+  idCl    Int    @id @default(autoincrement())
+  nom     String
+  email   String
+  numFax  String
+  adresse String
 
   Contrat Contrat[]
 }
 
 model Contrat {
-  num      Int      @id @default(autoincrement())
-  debut    DateTime
-  fin      DateTime
-  Client   Client   @relation(fields: [clientId], references: [id])
-  clientId Int
-  Projet   Projet?
+  numContrat Int      @id @default(autoincrement())
+  debut      DateTime
+  fin        DateTime
+  Client     Client   @relation(fields: [idCl], references: [idCl])
+  idCl       Int
+  Projet     Projet?
 }
 
 model EtatProjet {
   id           Int            @id @default(autoincrement())
   dPassageEtat DateTime       @default(now())
   etat         TypeEtatProjet
-  Projet       Projet         @relation(fields: [projetId], references: [id])
-  projetId     Int
+  Projet       Projet         @relation(fields: [idProjet], references: [idProjet])
+  idProjet     Int
 }
 
 enum TypeEtatProjet {
@@ -114,47 +133,60 @@ enum TypeEtatProjet {
 }
 
 model Objectif {
-  id  Int    @id @default(autoincrement())
-  nom String
+  idObj       Int    @id @default(autoincrement())
+  nomObj      String
+  description String
 
   Taches Tache[]
 }
 
 model Tache {
-  Projet     Projet   @relation(fields: [projetId], references: [id])
-  Objectif   Objectif @relation(fields: [objectifId], references: [id])
-  projetId   Int
-  objectifId Int
+  numT     Int      @id
+  Projet   Projet   @relation(fields: [idProjet], references: [idProjet])
+  Objectif Objectif @relation(fields: [idObj], references: [idObj])
+  idProjet Int
+  idObj    Int
 
   valeur String
   debut  DateTime @db.Date
   duree  Int
-
-  @@id([projetId, objectifId])
+  done   Boolean  @default(false)
 }
 
 model Coordonne {
-  id        Int      @id @default(autoincrement())
+  idCord    Int   @id @default(autoincrement())
   longitude Float
   latitude  Float
-  Wilaya    Wilaya   @relation(fields: [numWilaya], references: [numero])
-  numWilaya Int
-  Projet    Projet[]
+
+  Terrain          Terrain? @relation(fields: [terrainIdTerrain], references: [idTerrain])
+  Projet           Projet?  @relation(fields: [projetIdProjet], references: [idProjet])
+  projetIdProjet   Int?
+  terrainIdTerrain Int?
+}
+
+model Terrain {
+  idTerrain     Int         @id @default(autoincrement())
+  Wilaya        Wilaya      @relation(fields: [numWilaya], references: [numWilaya])
+  numWilaya     Int
+  distanceSiege Float
+  Coordonnes    Coordonne[]
 }
 
 model Wilaya {
-  numero    Int         @id
+  numWilaya Int       @id
   nom       String
-  Coordonne Coordonne[]
+  Terrains  Terrain[]
+  Employe   Employe[]
 }
 
 model Mission {
-  code String      @id
-  type TypeMission
+  codeMission  String      @id
+  methodologie TypeMission
+  description  String
 
-  Executions Equipe[]
-  Projet     Projet[]
-  Chefs      Employe[]
+  Equipes Equipe[]
+  Projets Projet[]
+  Chefs   Employe[]
 }
 
 enum TypeMission {
@@ -163,68 +195,85 @@ enum TypeMission {
 }
 
 model Equipe {
-  id         Int      @id @default(autoincrement())
-  activite   Activite @relation(fields: [activiteId], references: [id])
-  activiteId Int
+  idEquipe     Int      @id @default(autoincrement())
+  activite     Activite @relation(fields: [codeActivite], references: [codeActivite])
+  codeActivite String
+  nom          String
+  performance  Int      @default(0)
 
-  Mission   Mission @relation(fields: [missionId], references: [code])
-  missionId String
+  Mission     Mission @relation(fields: [codeMission], references: [codeMission])
+  codeMission String
 
   Membres    Employe[]
-  Executions Execution[]
+  Rendements Rendement[]
 }
 
 model Activite {
-  id      Int      @id @default(autoincrement())
-  nom     String
-  Equipes Equipe[]
+  codeActivite String   @id
+  nomAct       String
+  description  String?
+  Equipes      Equipe[]
 }
 
-model Execution {
-  Projet   Projet @relation(fields: [projetId], references: [id])
-  projetId Int
+model Rapport {
+  idRapport Int      @id @default(autoincrement())
+  date      DateTime
+  titre     String
+  resume    String
+  Projet    Projet   @relation(fields: [idProjet], references: [idProjet])
+  idProjet  Int
 
-  Equipe    Equipe   @relation(fields: [equipeId], references: [id])
-  equipeId  Int
+  Rendements Rendement[]
+}
+
+model Rendement {
+  idRendement Int    @id @default(autoincrement())
+  Equipe      Equipe @relation(fields: [idEquipe], references: [idEquipe])
+  idEquipe    Int
+
+  Rapport   Rapport @relation(fields: [idRapport], references: [idRapport])
+  idRapport Int
   hDebut    Int
   hFin      Int
-  date      DateTime @unique @db.Date
-  rendement Int
 
-  @@id([projetId, equipeId])
+  valeur Int
 }
 
 model Materiel {
-  code        String       @id
-  designation String
-  Projet      Projet?      @relation(fields: [projetId], references: [id])
-  projetId    Int?
-  enPanne     Boolean
-  Reparations Reparation[]
+  codeMat      String       @id
+  designation  String
+  matricule    String
+  Projet       Projet?      @relation(fields: [idProjet], references: [idProjet])
+  idProjet     Int?
+  enPanne      Boolean
+  Reparations  Reparation[]
+  TypeMateriel TypeMateriel @relation(fields: [idTypeMat], references: [idTypeMat])
+  idTypeMat    Int
 }
 
 model Reparation {
-  id             Int       @id @default(autoincrement())
+  idRep          Int       @id @default(autoincrement())
   dPanne         DateTime  @default(now())
   dRep           DateTime?
   detailProbleme String?
   Pannes         Panne[]
-  Materiel       Materiel  @relation(fields: [materielCode], references: [code])
-  materielCode   String
+  Materiel       Materiel  @relation(fields: [codeMat], references: [codeMat])
+  codeMat        String
 }
 
 model Panne {
-  id           Int        @id @default(autoincrement())
-  titre        String
-  cout         Float
-  description  String
-  Reparations  Reparation @relation(fields: [reparationId], references: [id])
-  reparationId Int
+  id          Int        @id @default(autoincrement())
+  titre       String
+  cout        Float
+  description String
+  Reparations Reparation @relation(fields: [idRep], references: [idRep])
+  idRep       Int
 }
 
 model TypeMateriel {
-  id  Int    @id @default(autoincrement())
-  nom String
+  idTypeMat Int        @id @default(autoincrement())
+  libelle   String
+  Materiel  Materiel[]
 }
 
 model Requisition {
@@ -240,7 +289,9 @@ enum TypeEvenement {
 }
 
 model Evenement {
-  id          Int           @id @default(autoincrement())
-  type        TypeEvenement
-  description String
+  id             Int           @id @default(autoincrement())
+  type           TypeEvenement
+  description    String
+  Projet         Projet        @relation(fields: [projetIdProjet], references: [idProjet])
+  projetIdProjet Int
 }
