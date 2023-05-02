@@ -17,7 +17,7 @@ model Compte {
   role               Role
   employe            Employe  @relation(fields: [employeId], references: [id])
   employeId          Int      @unique
-  dateCreationCompte DateTime @default(now())
+  dateCreationCompte DateTime @db.Date
 }
 
 enum Role {
