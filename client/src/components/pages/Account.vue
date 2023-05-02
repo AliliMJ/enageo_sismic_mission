@@ -79,7 +79,7 @@ const deleteUser = async () => {
   const req = {
     id: Number(user.id),
   };
-  await axios.delete(`http://localhost:3000/users/${user.id}`);
+  await axios.delete(`http://localhost:3000/comptes/${user.id}`);
 };
 
 function handleConfirmDeleteUser() {
@@ -105,7 +105,7 @@ const updateUser = async () => {
     email: userRef.value.email,
     role: userRef.value.role,
   };
-  await axios.put(`http://localhost:3000/users/${user.id}`, req);
+  await axios.put(`http://localhost:3000/comptes/${user.id}`, req);
   message.success('utilisateur modifiee');
 };
 
@@ -120,7 +120,7 @@ const deleteEmploye = async () => {
     id: Number(employeRef.value.id),
   };
   try {
-    await axios.delete(`http://localhost:3000/users/${user.id}`);
+    await axios.delete(`http://localhost:3000/comptes/${user.id}`);
     await axios.delete(`http://localhost:3000/employes/${employeRef.value.id}`);
   } catch (error) {
     console.error(error);
