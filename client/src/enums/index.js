@@ -11,7 +11,7 @@ export const Route = Object.freeze({
   Gestionnaire: 'gestionnaire',
   Material: 'materiel',
   Projet: 'projet',
-  Utilisateur: 'utilisateur',
+  Compte: 'compte',
   Mission: 'mission',
   Profile: 'profile',
   Preference: 'preference',

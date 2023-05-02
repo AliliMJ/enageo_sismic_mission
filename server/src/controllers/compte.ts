@@ -70,13 +70,11 @@ export const getUserById = async (req: Request, res: Response) => {
       where: { id: Number(id) },
     });
     if (user == null)
-      return res.status(400).json({ err: 'Utilisateur introuvable' });
+      return res.status(400).json({ err: 'Compte introuvable' });
 
     res.status(200).json(user);
   } catch {
-    res
-      .status(500)
-      .json({ err: `Problème lors de la recherche de l'utilisateur` });
+    res.status(500).json({ err: `Problème lors de la recherche du compte` });
   }
 };
 

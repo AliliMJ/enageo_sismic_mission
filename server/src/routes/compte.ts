@@ -20,7 +20,7 @@ userRouter.get('/', paginate, getUsers);
 //userRouter.post('/', insertUser);
 
 userRouter.get('/:id', getUserById);
-userRouter.get('/username/:email', getUserByUsername);
+userRouter.get('/username/:username', getUserByUsername);
 
 userRouter.delete('/:id', deleteUser);
 userRouter.put('/:id', updateUser);

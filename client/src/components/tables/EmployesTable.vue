@@ -52,10 +52,10 @@ const cols = [
     },
   },
   {
-    title: 'Date Adhésion',
-    key: 'dateAdhesion',
+    title: 'Date rejoint',
+    key: 'dateRejoint',
     render(row) {
-      return new Date(row.dateAdhesion).toLocaleDateString();
+      return new Date(row.dateRejoint).toLocaleDateString();
     },
   },
 ];

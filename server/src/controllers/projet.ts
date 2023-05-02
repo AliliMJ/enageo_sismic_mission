@@ -44,7 +44,6 @@ export const getProjetById = async (req: Request, res: Response) => {
 export const insertProjet = async (req: Request, res: Response) => {
   const {
     plan, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
-    numContrat,
     userid,
     nom = '',
     description = '',
@@ -63,7 +62,6 @@ export const insertProjet = async (req: Request, res: Response) => {
         .json({ err: `Cet utilisateur n'a pas accès à cette mission` });
     const projet = await prisma.projet.create({
       data: {
-        numContrat: 1,
         Plan: { create: plan },
         Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
         codeMission: mission.codeMission,

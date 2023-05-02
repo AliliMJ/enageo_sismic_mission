@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/', authRouter);
-app.use('/users', userRouter);
+app.use('/comptes', userRouter);
 app.use('/material', materialRouter);
 app.use('/missions', missionRouter);
 app.use('/atelier', atelierRouter);

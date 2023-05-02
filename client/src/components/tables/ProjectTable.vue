@@ -5,6 +5,8 @@ import STable from 'common/STable.vue';
 
 import { NH1, NSpace, NButton, NIcon } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
+import { h } from 'vue';
+import EtatProjet from '../common/EtatProjet.vue';
 
 import { useAuth } from 'stores/authentication.js';
 import { useRouter } from 'vue-router';
@@ -16,10 +18,18 @@ const projects = (
   await axios.post('http://localhost:3000/projets', { userid: auth.user?.id })
 ).data;
 
+console.log(projects);
+
 const cols = [
-  { title: 'Id', key: 'id' },
-  { title: 'État', key: 'etat' },
-  { title: 'Date création', key: 'createdAt' },
+  { title: 'Id', key: 'idProjet' },
+  { title: 'Nom', key: 'nom' },
+  {
+    title: 'état',
+    key: 'Etats',
+    render(row) {
+      return h(EtatProjet, { projectStates: row.Etats });
+    },
+  },
 ];
 
 function addProject() {

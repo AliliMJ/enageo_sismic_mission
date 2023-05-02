@@ -11,10 +11,10 @@ import { Role, Route } from '../enums';
 import Login from 'components/authentication/Login.vue';
 import MaterialTable from 'components/tables/MaterialTable.vue';
 import EmployesTable from 'components/tables/EmployesTable.vue';
-import UsersTable from 'components/tables/UsersTable.vue';
+import AccountTable from 'components/tables/AccountTable.vue';
 import Home from 'app/Home.vue';
 import Employe from 'components/pages/Employe.vue';
-import User from 'components/pages/User.vue';
+import Account from 'components/pages/Account.vue';
 import Dashboard from 'components/dashboard/Dashboard.vue';
 
 // const routes = [
@@ -27,44 +27,44 @@ import Dashboard from 'components/dashboard/Dashboard.vue';
 // ];
 
 const routes = [
-  { path: '/login', 
-    component: Login ,
-    meta : 
-    { title : 's\'authentifier',
-      icon : "src/assets/lock.png"
-  }},
+  {
+    path: '/login',
+    component: Login,
+    meta: { title: "s'authentifier", icon: 'src/assets/lock.png' },
+  },
   { path: '/denied' },
   {
     path: '/',
     component: Home,
-    meta: 
-    { requireAuth: true ,
-    title : 'Tableau de board',
-    icon :"src/assets/ENA_GEO.png"
+    meta: {
+      requireAuth: true,
+      title: 'Tableau de board',
+      icon: 'src/assets/ENA_GEO.png',
     },
     children: [
       { path: '', name: Route.Dashboard, component: Dashboard },
       {
-        path: '/utilisateur',
-        name: Route.Utilisateur,
-        component: UsersTable,
-        meta: { role: Role.Administrateur,
-                title : "les utilisateurs" 
-         },
+        path: '/compte',
+        name: Route.Compte,
+        component: AccountTable,
+        meta: {
+          role: Role.Administrateur,
+          title: 'les comptes des utilisateurs',
+        },
       },
       {
-        path: '/utilisateur/:id',
-        component: User,
+        path: '/compte/:id',
+        component: Account,
         meta: { role: Role.Administrateur },
       },
       {
         path: '/employe',
         name: Route.Employe,
         component: EmployesTable,
-        meta: { 
-                role: Role.Gestionnaire,
-                title : "les employés"
-              },
+        meta: {
+          role: Role.Gestionnaire,
+          title: 'les employés',
+        },
       },
       {
         path: '/employe/:id',
@@ -75,9 +75,7 @@ const routes = [
         path: '/materiel',
         name: Route.Material,
         component: MaterialTable,
-        meta: { role: Role.Gestionnaire,
-                title : "les matériels"
-        },
+        meta: { role: Role.Gestionnaire, title: 'les matériels' },
       },
       {
         path: '/projet',
@@ -89,17 +87,17 @@ const routes = [
         path: '/profile',
         name: Route.Profile,
         component: () => import('app/Profile.vue'),
-        meta : {
-          title : "Mon profile"
-        }
+        meta: {
+          title: 'Mon profile',
+        },
       },
       {
         path: '/preference',
         name: Route.Preference,
         component: () => import('app/Preference.vue'),
-        meta : {
-          title : "Préférences"
-        }
+        meta: {
+          title: 'Préférences',
+        },
       },
       {
         path: '/projet/creation',
@@ -174,7 +172,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title}`;
   const link = document.querySelector("[rel='icon']");
-  link.setAttribute('href',to.meta.icon);
+  link.setAttribute('href', to.meta.icon);
   const authentication = JSON.parse(
     window.localStorage.getItem('authentication')
   );

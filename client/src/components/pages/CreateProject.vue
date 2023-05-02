@@ -16,6 +16,8 @@ import {
   NInputNumber,
   NDivider,
   NText,
+  NGrid,
+  NFormItemGi,
 } from 'naive-ui';
 import { ref } from 'vue';
 import { useAuth } from '../../stores/authentication';
@@ -44,8 +46,8 @@ async function createProject() {
     await axios.post('http://localhost:3000/projets/create', {
       userid: auth.user.id,
       nom: model.value.name,
-      description,
-      budget,
+      description: model.value.description,
+      budget: model.value.budget,
       plan: model.value.dynamic.map((p) => ({
         valeur: p.value,
         duree: p.duration,
@@ -60,9 +62,8 @@ async function createProject() {
 }
 const model = ref({
   name: null,
-  budget: 0,
+  budget: null,
   description: null,
-  client: null,
   dynamic: [],
 });
 const onCreate = () => ({
@@ -78,21 +79,29 @@ const onCreate = () => ({
   <NForm :model="model">
     <NSpace vertical>
       <NCard title="Propriétés">
-        <NSpace>
-          <NFormItem label="Nom du projet" path="client">
+        <NGrid :span="24" :x-gap="24">
+          <n-form-item-gi :span="12" label="Nom" path="name">
             <n-input
               placeholder="Saisissez le nom du projet"
               v-model:value="model.name"
             />
-          </NFormItem>
+          </n-form-item-gi>
 
-          <NFormItem label="Nom du projet" path="client">
+          <n-form-item-gi :span="12" label="Budget" path="budget">
             <n-input-number
               placeholder="Saisissez le budget du projet"
               v-model:value="model.budget"
+              :show-button="false"
             />
-          </NFormItem>
-        </NSpace>
+          </n-form-item-gi>
+          <n-form-item-gi :span="12" label="Description" path="description">
+            <n-input
+              placeholder="Saisissez une description pour le projet"
+              v-model:value="model.description"
+              type="textarea"
+            />
+          </n-form-item-gi>
+        </NGrid>
         <NButton type="success" @click="createProject">Créer le projet</NButton>
       </NCard>
       <NCard title="Plan">

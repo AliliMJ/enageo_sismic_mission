@@ -382,13 +382,6 @@ async function main() {
       },
     ],
   });
-  await prisma.contrat.create({
-    data: {
-      idCl: 1,
-      debut: new Date(),
-      fin: new Date(),
-    },
-  });
 }
 
 main()

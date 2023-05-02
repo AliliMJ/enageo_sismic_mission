@@ -23,8 +23,8 @@ watch(route, (route) => {
 const menuOptions = [
   ...optionDashboard,
   {
-    label: renderMenuItem('Utilisateurs', Route.Utilisateur),
-    key: Route.Utilisateur,
+    label: renderMenuItem('Comptes', Route.Compte),
+    key: Route.Compte,
     icon: renderIcon(Users),
   },
 

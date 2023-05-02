@@ -1,7 +1,7 @@
 <template>
   <NSpace vertical>
     <Modal
-      title="Ajouter un nouveau utilisateur"
+      title="Créer un nouveau compte"
       :showModal="showModal"
       @cancel="showModal = false"
       @confirm="confirmAdd"
@@ -10,10 +10,14 @@
     <NH1>Utilisateurs</NH1>
     <NSpace justify="end">
       <!-- <searchUser v-model="searchEmail" :on-update="searchFilter" /> -->
-      <n-input v-model:value="searchEmail" @update:value="searchFilter" placeholder="rechercher par email">
-      <template #suffix>
-        <n-icon :component="search" />
-      </template>
+      <n-input
+        v-model:value="searchEmail"
+        @update:value="searchFilter"
+        placeholder="rechercher nom d'utilisateur"
+      >
+        <template #suffix>
+          <n-icon :component="search" />
+        </template>
       </n-input>
       <NButton
         @click="showInsertEmployeModal"
@@ -21,7 +25,7 @@
         type="success"
         icon-placement="right"
       >
-        Ajouter
+        Créer compte
         <template #icon>
           <NIcon>
             <Add />
@@ -37,10 +41,10 @@
 import axios from 'axios';
 
 import STable from 'common/STable.vue';
-import { NH1, NButton, NIcon, NSpace, useDialog ,NInput } from 'naive-ui';
+import { NH1, NButton, NIcon, NSpace, useDialog, NInput } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-import { ref, onMounted ,  computed, watch } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import Modal from '../common/AddUserModal.vue';
 import { SearchOutline as search } from '@vicons/ionicons5';
 const router = useRouter();
@@ -58,25 +62,25 @@ function deleteUser(id) {
 }
 
 const users = ref([]);
-const searchEmail = ref("");
+const searchEmail = ref('');
 
 onMounted(async () => {
-  users.value = (await axios.get('http://localhost:3000/users')).data;
+  users.value = (await axios.get('http://localhost:3000/comptes')).data;
 });
 
 const searchFilter = () => {
   watch(searchEmail, async () => {
-  if (searchEmail.value.length > 0) {
-    users.value = (
-      await axios.get(`http://localhost:3000/users/email/?like=${searchEmail.value}`)
-    ).data;
-  }else{
-    users.value = (
-      await axios.get(`http://localhost:3000/users`)
-    ).data;
-  }
-});
-}
+    if (searchEmail.value.length > 0) {
+      users.value = (
+        await axios.get(
+          `http://localhost:3000/users/email/?like=${searchEmail.value}`
+        )
+      ).data;
+    } else {
+      users.value = (await axios.get(`http://localhost:3000/users`)).data;
+    }
+  });
+};
 
 // const options = computed(() => {
 //   function filteredItems () {
@@ -99,7 +103,7 @@ const searchFilter = () => {
 
 const cols = [
   { title: 'id', key: 'id' },
-  { title: 'email', key: 'email' },
+  { title: "Nom d'utilisateur", key: 'username' },
   { title: 'role', key: 'role' },
   {
     title: 'date de création',
@@ -111,11 +115,11 @@ const cols = [
 ];
 
 const handleClick = (user) => {
-  router.push(`/utilisateur/${user.id}`);
+  router.push(`/compte/${user.id}`);
 };
 
 async function confirmAdd(event) {
-  if(event.isValid==true){
+  if (event.isValid == true) {
     showModal.value = false;
   }
   if (event.isValid) {

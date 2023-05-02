@@ -9,7 +9,7 @@ import { h } from 'vue';
 const materials = (await axios.get('http://localhost:3000/material')).data;
 
 const cols = [
-  { title: 'Code', key: 'code' },
+  { title: 'Code', key: 'codeMat' },
   { title: 'Désignation', key: 'designation' },
   {
     title: 'Status',
