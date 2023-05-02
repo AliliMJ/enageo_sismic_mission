@@ -38,7 +38,7 @@ const id = route.params.id;
 const isEditUser = ref(true);
 const isEditEmploye = ref(true);
 
-const user = (await axios.get(`http://localhost:3000/users/${id}`)).data;
+const user = (await axios.get(`http://localhost:3000/comptes/${id}`)).data;
 const employe = (
   await axios.get('http://localhost:3000/employes/' + user.employeId)
 ).data;

@@ -7,7 +7,7 @@
       @confirm="confirmAdd"
     />
 
-    <NH1>Utilisateurs</NH1>
+    <NH1>les comptes</NH1>
     <NSpace justify="end">
       <!-- <searchUser v-model="searchEmail" :on-update="searchFilter" /> -->
       <n-input
