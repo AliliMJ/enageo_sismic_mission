@@ -272,6 +272,7 @@ async function main() {
       hashPassword: await bcrypt.hash('123', 10),
       employeId: 1,
       role: Role.ADMINISTRATEUR,
+      dateCreationCompte: new Date(),
     },
   });
 
@@ -281,6 +282,7 @@ async function main() {
       hashPassword: await bcrypt.hash('123', 10),
       employeId: 2,
       role: Role.GESTIONNAIRE,
+      dateCreationCompte: new Date(),
     },
   });
 
@@ -290,6 +292,7 @@ async function main() {
       hashPassword: await bcrypt.hash('123', 10),
       employeId: 3,
       role: Role.CHEF_MISSION,
+      dateCreationCompte: new Date(),
     },
   });
 
@@ -299,6 +302,7 @@ async function main() {
       hashPassword: await bcrypt.hash('123', 10),
       employeId: 4,
       role: Role.CHEF_TERRAIN,
+      dateCreationCompte: new Date(),
     },
   });
 
@@ -308,6 +312,7 @@ async function main() {
       hashPassword: await bcrypt.hash('123', 10),
       employeId: 5,
       role: Role.DIRECTEUR,
+      dateCreationCompte: new Date(),
     },
   });
 

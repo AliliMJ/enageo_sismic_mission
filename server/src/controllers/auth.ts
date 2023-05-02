@@ -27,6 +27,7 @@ export const registerUser = async (req: Request, res: Response) => {
         hashPassword,
         employeId,
         role,
+        dateCreationCompte: new Date(),
       },
     });
 
