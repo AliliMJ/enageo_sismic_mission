@@ -52,6 +52,13 @@ const etatEmploye = (
 const fonction = (
   await axios.get("http://localhost:3000/fonction/" + employe.fonctionId)
 ).data;
+
+if(employe.equipeId!=null){
+  const equipe = (
+  await axios.get("http://localhost:3000/equipe/" + employe.idEquipe)
+).data;
+}
+
 const wilaya = (
   await axios.get("http://localhost:3000/wilaya")
 ).data;
