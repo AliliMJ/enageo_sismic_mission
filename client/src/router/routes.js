@@ -44,7 +44,7 @@ const routes = [
     children: [
       { path: '', name: Route.Dashboard, component: Dashboard },
       {
-        path: '/compte',
+        path: '/comptes',
         name: Route.Compte,
         component: AccountTable,
         meta: {
@@ -55,7 +55,10 @@ const routes = [
       {
         path: '/compte/:id',
         component: Account,
-        meta: { role: Role.Administrateur },
+        meta: { role: Role.Administrateur,
+                title : 'compte :id',
+           
+        },
       },
       {
         path: '/employe',

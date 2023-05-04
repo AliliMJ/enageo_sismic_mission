@@ -11,8 +11,8 @@
       <n-scrollbar style="max-height: 400px">
         <slot>
           <NGrid :span="24" :x-gap="5">
-            <NFormItemGi :span="12" label="email">
-              <NInput v-model:value="email" />
+            <NFormItemGi :span="12" label="username">
+              <NInput v-model:value="username" />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Role">
               <NSelect
@@ -57,10 +57,9 @@ import {
 import SearchEmploye from '../common/SearchEmploye.vue';
 
 const emit = defineEmits(['confirm', 'cancel']);
-const email = ref('');
+const username = ref('');
 const employeId = ref();
 const selectedRole = ref();
-let isValid = false;
 
 const message = useMessage();
 
@@ -72,7 +71,7 @@ const props = defineProps({
 // **** Function not in the right place ****
 // const insert = async () => {
 //   const req = {
-//     email: email.value,
+//     username: username.value,
 //     role: selectedRole.value,
 //     employeId: Number(employeId.value),
 //   };
@@ -119,7 +118,7 @@ const onConfirm = () => {
   // sends an object to the parent indicating {isValid, data}
   let event = {};
   if (
-    email.value === '' ||
+    username.value === '' ||
     selectedRole.value === undefined ||
     employeId.value === undefined
   ) {
@@ -129,11 +128,11 @@ const onConfirm = () => {
     console.log('les champs est remplit');
     event.isValid = true;
     event.data = {
-      email: email.value,
+      username: username.value,
       employeId: Number(employeId.value),
       role: selectedRole.value,
     };
-    email.value='';
+    username.value='';
     selectedRole.value=undefined;
     employeId.value=undefined;
 

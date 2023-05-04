@@ -17,7 +17,7 @@ async function main() {
   });
 
   await prisma.etatEmploye.createMany({
-    data: [{ libEtat: 'En mission' }, { libEtat: 'En congé' }],
+    data: [{ libEtat: 'En mission' }, { libEtat: 'En congé' } , { libEtat: 'en maladie' } , { libEtat: 'en sanctionné' }],
   });
 
   await prisma.wilaya.createMany({ data: [{ numWilaya: 1, nom: 'Adrar' }] });
@@ -33,6 +33,8 @@ async function main() {
       { codeActivite: 'LAY', nomAct: 'Layonnage' },
       { codeActivite: 'POSE', nomAct: 'Pose' },
       { codeActivite: 'RAM', nomAct: 'Ramasse' },
+      { codeActivite: 'VIB', nomAct: 'Vibration' },
+    
     ],
   });
 
@@ -41,6 +43,7 @@ async function main() {
       { libelle: 'Camion' },
       { libelle: 'Véhicule' },
       { libelle: 'Bulldozer' },
+      { libelle: 'Vibrreur' },
     ],
   });
 

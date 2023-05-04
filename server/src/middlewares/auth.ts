@@ -9,11 +9,11 @@ export const verifyUserAuthentication = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email, hashPassword } = req.body;
+  const { username, hashPassword } = req.body;
 
   try {
-    const user = await prisma.utilisateur.findFirst({
-      where: { email, hashPassword },
+    const user = await prisma.compte.findFirst({
+      where: { username, hashPassword },
     });
     if (user === null)
       return res.status(401).json({ err: 'Utilisateur non authentifié.' });

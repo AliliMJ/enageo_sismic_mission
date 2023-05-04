@@ -9,9 +9,9 @@
 
     <NH1>les comptes</NH1>
     <NSpace justify="end">
-      <!-- <searchUser v-model="searchEmail" :on-update="searchFilter" /> -->
+      <!-- <searchUser v-model="searchUsername" :on-update="searchFilter" /> -->
       <n-input
-        v-model:value="searchEmail"
+        v-model:value="searchUsername"
         @update:value="searchFilter"
         placeholder="rechercher nom d'utilisateur"
       >
@@ -62,22 +62,22 @@ function deleteUser(id) {
 }
 
 const users = ref([]);
-const searchEmail = ref('');
+const searchUsername = ref('');
 
 onMounted(async () => {
   users.value = (await axios.get('http://localhost:3000/comptes')).data;
 });
 
 const searchFilter = () => {
-  watch(searchEmail, async () => {
-    if (searchEmail.value.length > 0) {
+  watch(searchUsername, async () => {
+    if (searchUsername.value.length > 0) {
       users.value = (
         await axios.get(
-          `http://localhost:3000/users/email/?like=${searchEmail.value}`
+          `http://localhost:3000/comptes/username/?like=${searchUsername.value}`
         )
       ).data;
     } else {
-      users.value = (await axios.get(`http://localhost:3000/users`)).data;
+      users.value = (await axios.get(`http://localhost:3000/comptes`)).data;
     }
   });
 };
@@ -85,7 +85,7 @@ const searchFilter = () => {
 // const options = computed(() => {
 //   function filteredItems () {
 //       return this.items.filter(item => {
-//          return users.email.toLowerCase().indexOf(this.searchEmail.toLowerCase()) > -1
+//          return users.email.toLowerCase().indexOf(this.searchUsername.toLowerCase()) > -1
 //       })
 //     }
 // });
@@ -94,7 +94,7 @@ const searchFilter = () => {
 //     computed: {
 //     function filteredItems () {
 //       return this.items.filter(item => {
-//          return users.email.toLowerCase().indexOf(this.searchEmail.toLowerCase()) > -1
+//          return users.email.toLowerCase().indexOf(this.searchUsername.toLowerCase()) > -1
 //       })
 //     }
 //   }
@@ -124,7 +124,7 @@ async function confirmAdd(event) {
   }
   if (event.isValid) {
     try {
-      const user = (await axios.post('http://localhost:3000/users', event.data))
+      const user = (await axios.post('http://localhost:3000/comptes', event.data))
         .data; // adds the user sent from the user modal (event.data)
       users.value.push(user);
     } catch {
