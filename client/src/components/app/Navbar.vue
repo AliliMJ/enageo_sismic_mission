@@ -92,7 +92,7 @@ function renderCustomHeader() {
       }),
       h("div", null, [
         h("div", null, [
-          h(NText, { depth: 2 }, { default: () => auth.user.email })
+          h(NText, { depth: 2 }, { default: () => auth.user.username })
         ]),
         h("div", { style: "font-size: 12px;" }, [
           h(NText, { depth: 3 }, { default: () => auth.user.role })

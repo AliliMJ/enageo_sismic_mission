@@ -52,9 +52,15 @@ const etatEmploye = (
 const fonction = (
   await axios.get('http://localhost:3000/fonction/' + employe.fonctionId)
 ).data;
-const equipe = (
-  await axios.get('http://localhost:3000/equipe/' + employe.idEquipe)
-).data;
+
+let equipe;
+
+if (employe.equipeId != null) {
+  equipe = (await axios.get('http://localhost:3000/equipe/' + employe.idEquipe))
+    .data;
+}
+
+const wilaya = (await axios.get('http://localhost:3000/wilaya')).data;
 
 // const nom = ref(employe.nom);
 // const prenom = ref(employe.prenom);
@@ -89,6 +95,31 @@ const employeRef = ref({
   equipeId: String(employe.equipeId),
   groupeS: employe.groupeSanguin,
   missionCode: employe.missionCode,
+  regimT: employe.regimTravail,
+});
+
+// const equipeRef = ref({
+//   idEquipe : equipe.idEquipe,
+//   codeAct : equipe.codeActivite,
+//   nom : equipe.nom,
+//   performance : equipe.performance,
+//   codeMission : equipe.codeMission
+// });
+
+const fonctionRef = ref({
+  idFonction: fonction.idFonction,
+  nomFonction: fonction.nom,
+  description: fonction.description,
+});
+
+const etatRef = ref({
+  id: etatEmploye.id,
+  libEtat: etatEmploye.libEtat,
+});
+
+const wilayaRef = ref({
+  numWilaya: wilaya.numWilaya,
+  nom: wilaya.nom,
 });
 
 /* user operations */
@@ -166,6 +197,7 @@ const updateEmploye = async () => {
     id: Number(employeRef.value.id),
     nom: employeRef.value.nom,
     prenom: employeRef.value.prenom,
+    dateRejoint: new Date(employeRef.value.dateRejoint + 4000000),
     dateNaissance: new Date(employeRef.value.dateNaiss + 4000000),
     etatEmployeId: Number(employeRef.value.etat),
     fonctionId: Number(employeRef.value.fonction),
@@ -173,6 +205,24 @@ const updateEmploye = async () => {
     numIdentite: employeRef.value.numIdentite,
     groupeSanguin: employeRef.value.groupeSanguin,
     missionCode: employeRef.value.missionCode,
+
+    // id: String(user.employeId),
+    // nom: employe.nom,
+    // prenom: employe.prenom,
+    // dateRejoint: new Date(employe.dateRejoint).valueOf(),
+    // dateNaiss: new Date(employe.dateNaissance).valueOf(),
+    // lieuNaiss: employe.lieuNaissance,
+    // email: employe.email,
+    // numTel: employe.numTel,
+    // adresse: employe.adresse,
+    // sexe: employe.sexe,
+    // numId: String(employe.numIdentite),
+    // etat: String(employe.etatEmployeId),
+    // fonction: String(employe.fonctionId),
+    // equipeId: String(employe.equipeId),
+    // groupeS: employe.groupeSanguin,
+    // missionCode: employe.missionCode,
+    // regimT: employe.regimTravail,
   };
   console.log('la date : ' + req.dateNaissance);
   await axios.put(`http://localhost:3000/employes/${user.employeId}`, req);
@@ -198,6 +248,33 @@ const roleOptions = [
     label: 'administrateur',
     value: 'ADMINISTRATEUR',
   },
+];
+
+const groupeSanguinOptions = [
+  { label: 'A+', value: 'A+' },
+  { label: 'A-', value: 'A-' },
+  { label: 'B+', value: 'B+' },
+  { label: 'B-', value: 'B-' },
+  { label: 'AB+', value: 'AB+' },
+  { label: 'AB-', value: 'AB-' },
+  { label: 'O+', value: 'O+' },
+  { label: 'O-', value: 'O-' },
+];
+
+const lieuOptions = [];
+
+wilaya.forEach((element) => {
+  lieuOptions.push({
+    label: element.numWilaya + ' ' + element.nom,
+    value: element.numWilaya,
+  });
+});
+
+const etatEmployeOptions = [
+  { label: 'En mission', value: 'En mission' },
+  { label: 'En congé', value: 'En mission' },
+  { label: 'en maladie', value: 'En mission' },
+  { label: 'en sanctionné', value: 'En mission' },
 ];
 </script>
 
@@ -253,20 +330,6 @@ const roleOptions = [
                     <NFormItemGi :span="12" label="id">
                       <NInput v-model:value="employeRef.id" disabled />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="Date de rejoint">
-                      <NDatePicker
-                        format="dd/MM/yyyy"
-                        v-model:value="employeRef.dateRejoint"
-                        type="date"
-                        disabled
-                      />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="etat de l'employe">
-                      <NInput v-model:value="employeRef.etat" />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="fonction">
-                      <NInput v-model:value="employeRef.fonction" />
-                    </NFormItemGi>
                     <NFormItemGi :span="12" label="Nom">
                       <NInput v-model:value="employeRef.nom" />
                     </NFormItemGi>
@@ -280,8 +343,24 @@ const roleOptions = [
                         type="date"
                       />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="equipe">
-                      <NInput v-model:value="employeRef.equipeId" />
+                    <NFormItemGi :span="12" label="lieu de naissance">
+                      <NSelect
+                        placeholder="wilaya"
+                        :options="lieuOptions"
+                        v-model:value="employeRef.lieuNaiss"
+                      />
+                    </NFormItemGi>
+
+                    <NFormItemGi :span="12" label="Date de rejoint">
+                      <NDatePicker
+                        format="dd/MM/yyyy"
+                        v-model:value="employeRef.dateRejoint"
+                        type="date"
+                        disabled
+                      />
+                    </NFormItemGi>
+                    <NFormItemGi :span="12" label="l'adresse">
+                      <NInput v-model:value="employeRef.adresse" />
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="Sexe">
                       <NSelect v-model:value="employeRef.sexe" />
@@ -289,8 +368,27 @@ const roleOptions = [
                     <NFormItemGi :span="12" label="numero identite">
                       <NInput v-model:value="employeRef.numId" />
                     </NFormItemGi>
+                    <NFormItemGi :span="12" label="Groupe Sanguin">
+                      <NSelect
+                        placeholder="GroupeSanguin"
+                        :options="groupeSanguinOptions"
+                        v-model:value="employeRef.groupeS"
+                      />
+                    </NFormItemGi>
+                    <NFormItemGi :span="12" label="Regime de travail">
+                      <NInput v-model:value="employeRef.regimT" />
+                    </NFormItemGi>
+                    <NFormItemGi :span="12" label="mission">
+                      <NInput
+                        v-model:value="employeRef.missionCode"
+                        placeholder="non mission"
+                      />
+                    </NFormItemGi>
                     <NFormItemGi :span="12" label="etat de l'employe">
-                      <NSelect v-model:value="employeRef.etat" />
+                      <NInput v-model:value="etatRef.libEtat" />
+                    </NFormItemGi>
+                    <NFormItemGi :span="12" label="fonction">
+                      <NInput v-model:value="fonctionRef.nomFonction" />
                     </NFormItemGi>
                   </NGrid>
                   <NSpace justify="end">

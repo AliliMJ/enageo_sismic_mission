@@ -11,6 +11,7 @@ import { projetRouter } from './routes/projet.ts';
 import { etatEmployeRouter } from './routes/etatEmploye.ts';
 import { fonctionRouter } from './routes/fonction.ts';
 import { equipeRouter } from './routes/equipe.ts';
+import { wilayaRouter } from './routes/wilaya.ts';
 
 const app = express();
 app.use(express.json());
@@ -26,5 +27,6 @@ app.use('/projets', projetRouter);
 app.use('/etatEmploye', etatEmployeRouter);
 app.use('/fonction', fonctionRouter);
 app.use('/equipe', equipeRouter);
+app.use('/wilaya', wilayaRouter);
 
 app.listen(3000, () => console.log('listening at port 3000...'));

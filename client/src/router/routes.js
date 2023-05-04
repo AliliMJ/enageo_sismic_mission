@@ -56,7 +56,7 @@ const routes = [
         path: '/compte/:id',
         component: Account,
         meta: { role: Role.Administrateur,
-                title : 'compte :id',
+                title : 'details sur compte',
            
         },
       },
