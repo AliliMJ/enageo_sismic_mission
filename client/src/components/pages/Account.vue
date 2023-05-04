@@ -1,6 +1,6 @@
 <script setup>
-import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router';
+import axios from "axios";
+import { useRouter, useRoute } from "vue-router";
 import {
   NCard,
   NTabs,
@@ -17,21 +17,21 @@ import {
   useDialog,
   useMessage,
   NText,
-} from 'naive-ui';
+} from "naive-ui";
 import {
   Edit32Filled as Pen,
   ContactCard20Regular as contact,
   Info20Regular as detail,
   PeopleTeam16Regular as team,
   BookContacts20Regular as personelInfo,
-} from '@vicons/fluent';
+} from "@vicons/fluent";
 import {
   TrashOutline as trash,
   FolderOpenOutline as folder,
   BriefcaseOutline as bag,
-} from '@vicons/ionicons5';
+} from "@vicons/ionicons5";
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 const router = useRouter();
 const route = useRoute();
 const dialog = useDialog();
@@ -44,24 +44,10 @@ const isEditEmploye = ref(true);
 
 const user = (await axios.get(`http://localhost:3000/comptes/${id}`)).data;
 const employe = (
-  await axios.get('http://localhost:3000/employes/' + user.employeId)
+  await axios.get("http://localhost:3000/employes/" + user.employeId)
 ).data;
-const etatEmploye = (
-  await axios.get('http://localhost:3000/etatEmploye/' + employe.etatEmployeId)
-).data;
-const fonction = (
-  await axios.get('http://localhost:3000/fonction/' + employe.fonctionId)
-).data;
-
-const wilaya = (await axios.get('http://localhost:3000/wilaya')).data;
-
-// const nom = ref(employe.nom);
-// const prenom = ref(employe.prenom);
-// const dateNaiss = ref(new Date(employe.dateNaissance).valueOf());
-// const dateAdd = ref(new Date(employe.dateAdhesion).valueOf());
-// const email = ref(user.email);
-// const role = ref(user.role);
-// const dateCreate = ref(new Date(user.dateCreationCompte).valueOf());
+const wilaya = (await axios.get("http://localhost:3000/wilaya")).data;
+const fonction = (await axios.get("http://localhost:3000/fonction")).data;
 
 const userRef = ref({
   id: user.id,
@@ -69,7 +55,6 @@ const userRef = ref({
   role: user.role,
   dateCreate: new Date(user.dateCreationCompte).valueOf(),
 });
-console.log(new Date(user.dateCreationCompte).valueOf());
 console.log(employe);
 
 const employeRef = ref({
@@ -83,33 +68,40 @@ const employeRef = ref({
   numTel: employe.numTel,
   adresse: employe.adresse,
   sexe: employe.sexe,
-  numId: String(employe.numIdentite),
-  etat: String(employe.etatEmployeId),
-  fonction: String(employe.fonctionId),
+  numIdentite: String(employe.numIdentite),
+  etat: String(employe.etat),
+  fonction: employe.fonction,
   equipe: employe.Equipe,
-  groupeS: employe.groupeSanguin,
-  missionCode: employe.missionCode,
-  regimT: employe.regimTravail,
+  groupeSanguin: employe.groupeSanguin,
+  mission: employe.Mission,
+  regimTravail: employe.regimTravail,
 });
 
-// const equipeRef = ref({
-//   idEquipe : equipe.idEquipe,
-//   codeAct : equipe.codeActivite,
-//   nom : equipe.nom,
-//   performance : equipe.performance,
-//   codeMission : equipe.codeMission
-// });
+// let equipeRef;
+// if(employe.Equipe!=null){
+//   equipeRef = ref({
+//     idEquipe : String(employe.Equipe.idEquipe),
+//     codeActivite : employe.Equipe.codeActivite,
+//     nom : employe.Equipe.nom,
+//     performance : String(employe.Equipe.performance),
+//     codeMission : employe.Equipe.codeMission
+//   })
+// }else{
+//   equipeRef=ref();
+// }
 
-const fonctionRef = ref({
-  idFonction: fonction.idFonction,
-  nomFonction: fonction.nom,
-  description: fonction.description,
-});
+const fonctionRef = ref(employe.fonction.idFonction);
 
-const etatRef = ref({
-  id: etatEmploye.id,
-  libEtat: etatEmploye.libEtat,
-});
+
+let missionRef
+if(employe.Mission!=null){
+  missionRef = ref({
+    code : employe.Mission.codeMission,
+    methodologie : employe.Mission.methodologie,
+  })
+}else{
+  missionRef=ref();
+}
 
 const wilayaRef = ref({
   numWilaya: wilaya.numWilaya,
@@ -127,17 +119,17 @@ const deleteUser = async () => {
 
 function handleConfirmDeleteUser() {
   dialog.warning({
-    title: 'Confirmation',
-    content: 'êtes-vous sûr de supprimer cette utilisateur?',
-    positiveText: 'Supprimer',
-    negativeText: 'Annuler',
+    title: "Confirmation",
+    content: "êtes-vous sûr de supprimer cette utilisateur?",
+    positiveText: "Supprimer",
+    negativeText: "Annuler",
     onPositiveClick: () => {
-      message.success('utilisateur supprimer');
+      message.success("utilisateur supprimer");
       deleteUser();
-      router.push('/comptes');
+      router.push("/comptes");
     },
     onNegativeClick: () => {
-      message.error('Suppression annulée');
+      message.error("Suppression annulée");
     },
   });
 }
@@ -148,7 +140,7 @@ const updateUser = async () => {
     role: userRef.value.role,
   };
   await axios.put(`http://localhost:3000/comptes/${user.id}`, req);
-  message.success('utilisateur modifiee');
+  message.success("utilisateur modifiee");
 };
 
 /* end user operations */
@@ -171,105 +163,101 @@ const deleteEmploye = async () => {
 
 function handleConfirmDeleteEmploye() {
   dialog.warning({
-    title: 'Confirmation',
-    content: 'êtes-vous sûr de supprimer cette employe?',
-    positiveText: 'Supprimer',
-    negativeText: 'Annuler',
+    title: "Confirmation",
+    content: "êtes-vous sûr de supprimer cette employe?",
+    positiveText: "Supprimer",
+    negativeText: "Annuler",
     onPositiveClick: () => {
-      message.success('employe supprimer');
+      message.success("employe supprimer");
       deleteEmploye();
-      router.push('/utilisateur');
+      router.push("/comptes");
     },
     onNegativeClick: () => {
-      message.error('Suppression annulée');
+      message.error("Suppression annulée");
     },
   });
 }
 
 const updateEmploye = async () => {
-  const req = {
-    id: Number(employeRef.value.id),
-    nom: employeRef.value.nom,
-    prenom: employeRef.value.prenom,
-    dateRejoint: new Date(employeRef.value.dateRejoint + 4000000),
-    dateNaissance: new Date(employeRef.value.dateNaiss + 4000000),
-    etatEmployeId: Number(employeRef.value.etat),
-    fonctionId: Number(employeRef.value.fonction),
-    equipeId: Number(employeRef.value.equipeId),
-    numIdentite: employeRef.value.numIdentite,
-    groupeSanguin: employeRef.value.groupeSanguin,
-    missionCode: employeRef.value.missionCode,
+    const req = {
+        id : Number(employeRef.value.id),
+        nom : employeRef.value.nom,
+        prenom : employeRef.value.prenom,
+         dateRejoint : new Date(employeRef.value.dateRejoint + 4000000),
+         dateNaissance : new Date(employeRef.value.dateNaiss + 4000000),
+         lieuNaissance : Number(employeRef.value.lieuNaiss),
+         email : employeRef.value.email,
+         numTel : employeRef.value.numTel,
+        adresse : employeRef.value.adresse,
+        sexe : employeRef.value.sexe,
+         numIdentite : employeRef.value.numId,
+         groupeSanguin : employeRef.value.groupeSanguin,
+         regimTravail : employeRef.value.regimTravail,
+        codeMission : employeRef.value.missionCode,
+        etat : employeRef.value.etat,
+        fonctionId : Number(fonctionRef.value),
+    }
 
-    // id: String(user.employeId),
-    // nom: employe.nom,
-    // prenom: employe.prenom,
-    // dateRejoint: new Date(employe.dateRejoint).valueOf(),
-    // dateNaiss: new Date(employe.dateNaissance).valueOf(),
-    // lieuNaiss: employe.lieuNaissance,
-    // email: employe.email,
-    // numTel: employe.numTel,
-    // adresse: employe.adresse,
-    // sexe: employe.sexe,
-    // numId: String(employe.numIdentite),
-    // etat: String(employe.etatEmployeId),
-    // fonction: String(employe.fonctionId),
-    // equipeId: String(employe.equipeId),
-    // groupeS: employe.groupeSanguin,
-    // missionCode: employe.missionCode,
-    // regimT: employe.regimTravail,
-  };
-  console.log('la date : ' + req.dateNaissance);
+  console.log("request : "+req.fonctionId);
   await axios.put(`http://localhost:3000/employes/${user.employeId}`, req);
-  message.success('employe modifiee');
+  message.success("employe modifiee");
 };
 
 /* end employe operations */
 
 const roleOptions = [
   {
-    label: 'Chef mision',
-    value: 'CHEF_MISSION',
+    label: "Chef mision",
+    value: "CHEF_MISSION",
   },
   {
-    label: 'Chef terrain',
-    value: 'CHEF_TERRAIN',
+    label: "Chef terrain",
+    value: "CHEF_TERRAIN",
   },
   {
-    label: 'Gestionnaire',
-    value: 'GESTIONNAIRE',
+    label: "Gestionnaire",
+    value: "GESTIONNAIRE",
   },
   {
-    label: 'administrateur',
-    value: 'ADMINISTRATEUR',
+    label: "administrateur",
+    value: "ADMINISTRATEUR",
   },
 ];
 
 const groupeSanguinOptions = [
-  { label: 'A+', value: 'A+' },
-  { label: 'A-', value: 'A-' },
-  { label: 'B+', value: 'B+' },
-  { label: 'B-', value: 'B-' },
-  { label: 'AB+', value: 'AB+' },
-  { label: 'AB-', value: 'AB-' },
-  { label: 'O+', value: 'O+' },
-  { label: 'O-', value: 'O-' },
+  { label: "A+", value: "A+" },
+  { label: "A-", value: "A-" },
+  { label: "B+", value: "B+" },
+  { label: "B-", value: "B-" },
+  { label: "AB+", value: "AB+" },
+  { label: "AB-", value: "AB-" },
+  { label: "O+", value: "O+" },
+  { label: "O-", value: "O-" },
 ];
 
 const lieuOptions = [];
-
 wilaya.forEach((element) => {
   lieuOptions.push({
-    label: element.numWilaya + ' ' + element.nom,
+    label: element.numWilaya + " " + element.nom,
     value: element.numWilaya,
   });
 });
 
 const etatEmployeOptions = [
-  { label: 'En mission', value: 'En mission' },
-  { label: 'En congé', value: 'En mission' },
-  { label: 'en maladie', value: 'En mission' },
-  { label: 'en sanctionné', value: 'En mission' },
+  { label: "En mission", value: "mission" },
+  { label: "En congé", value: "conge" },
+  { label: "en maladie", value: "maladie" },
+  { label: "en sanctionné", value: "sanctionne" },
 ];
+
+const fonctionOptions = [];
+fonction.forEach((element) => {
+  fonctionOptions.push({
+    label: element.idFonction + " " + element.nom,
+    value: element.idFonction,
+  });
+});
+
 </script>
 
 <template>
@@ -360,37 +348,44 @@ const etatEmployeOptions = [
                       <NSelect v-model:value="employeRef.sexe" />
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="numero identite">
-                      <NInput v-model:value="employeRef.numId" />
+                      <NInput v-model:value="employeRef.numIdentite" />
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="Groupe Sanguin">
                       <NSelect
                         placeholder="GroupeSanguin"
                         :options="groupeSanguinOptions"
-                        v-model:value="employeRef.groupeS"
+                        v-model:value="employeRef.groupeSanguin"
                       />
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="Regime de travail">
-                      <NInput v-model:value="employeRef.regimT" />
+                      <NInput v-model:value="employeRef.regimTravail" />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="mission">
+                    <NFormItemGi :span="12" label="mission" v-if="employeRef.mission">
                       <NInput
-                        v-model:value="employeRef.missionCode"
+                        v-model:value="missionRef.code"
                         placeholder="non mission"
                       />
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="etat de l'employe">
-                      <NInput v-model:value="etatRef.libEtat" />
+                      <NSelect
+                        placeholder="etat"
+                        :options="etatEmployeOptions"
+                        v-model:value="employeRef.etat"
+                      />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="fonction">
-                      <NInput v-model:value="fonctionRef.nomFonction" />
+                    <NFormItemGi :span="12" label="fonction de l'employe">
+                      <NSelect
+                        :options="fonctionOptions"
+                        v-model:value="fonctionRef"
+                      />
                     </NFormItemGi>
-                    <NFormItemGi
+                    <!-- <NFormItemGi
                       v-if="employeRef.equipe"
                       :span="12"
-                      label="Equipe"
+                      label="Equipe Id"
                     >
-                      <NInput v-model:value="employeRef.equipe.idEquipe" />
-                    </NFormItemGi>
+                      <NInput v-model:value="equipeRef.idEquipe" />
+                    </NFormItemGi> -->
                   </NGrid>
                   <NSpace justify="end">
                     <n-button
@@ -497,29 +492,40 @@ const etatEmployeOptions = [
           </NGrid>
         </NForm>
       </NCard>
-
-      <!-- <NCard
-      header-style="display:flex;flex-direction:row-reverse;"
-      title="Emploi"
-      style="margin-bottom: 16px; width: 400px"
-    >
-      <template #header-extra>
-        <n-icon class="contactIcon">
-          <bag />
-        </n-icon>
-      </template>
-      <NForm disabled>
-        <NGrid :span="12" :x-gap="12">
-          <NFormItemGi :span="18" label="Email">
-            <NInput v-model:value="userRef.email" />
-          </NFormItemGi>
-          <NFormItemGi :span="18" label="Numéro de téléphone">
-            <NInput value="0541383260" />
-          </NFormItemGi>
-        </NGrid>
-      </NForm>
-    </NCard> -->
     </NSpace>
+
+    <!-- <NCard
+          header-style="display:flex;flex-direction:row-reverse;"
+          title="Equipe"
+          style="margin-bottom: 16px; width: 700px"
+          v-if="equipeRef"
+         >
+          <template #header-extra>
+            <n-icon class="contactIcon">
+              <team />
+            </n-icon>
+          </template>
+          <NForm disabled >
+            <NGrid :span="24" :x-gap="24">
+              <NFormItemGi :span="12" label="id de l'equipe">
+                <NInput v-model:value="equipeRef.idEquipe" />
+              </NFormItemGi>
+              <NFormItemGi :span="12" label="code d'activite">
+                <NInput v-model:value="equipeRef.codeActivite" />
+              </NFormItemGi>
+              <NFormItemGi :span="12" label="nom">
+                <NInput v-model:value="equipeRef.nom" />
+              </NFormItemGi>
+              <NFormItemGi :span="12" label="performance">
+                <NInput v-model:value="equipeRef.performance" />
+              </NFormItemGi>
+              <NFormItemGi :span="12" label="code de la mission">
+                <NInput v-model:value="equipeRef.codeMission" />
+              </NFormItemGi>
+            </NGrid>
+          </NForm>
+ </NCard> -->
+
   </NSpace>
 </template>
 

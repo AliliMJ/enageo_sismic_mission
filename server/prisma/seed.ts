@@ -13,12 +13,24 @@ async function main() {
         nom: 'Chef terrain',
         description: "Responsable de l'execution de la mission sur terrain",
       },
+      {
+        nom: 'directeur',
+        description: "Responsable de suivi des mission sismiques",
+      },
+      {
+        nom: 'administrateur',
+        description: "Responsable de system",
+      },
+      {
+        nom: 'gestionnaire',
+        description: "Responsable de l'execution de la mission sur terrain",
+      },
     ],
   });
 
-  await prisma.etatEmploye.createMany({
-    data: [{ libEtat: 'En mission' }, { libEtat: 'En congé' } , { libEtat: 'en maladie' } , { libEtat: 'en sanctionné' }],
-  });
+  // await prisma.etatEmploye.createMany({
+  //   data: [{ libEtat: 'En mission' }, { libEtat: 'En congé' } , { libEtat: 'en maladie' } , { libEtat: 'en sanctionné' }],
+  // });
 
   await prisma.wilaya.createMany({ data: [
     { numWilaya: 1, nom: 'Adrar' },
@@ -167,7 +179,7 @@ async function main() {
         nom: 'Zoya',
         prenom: 'Walker',
         fonctionId: 1,
-        etatEmployeId: 1,
+        etat: 'mission',
         dateRejoint: new Date(),
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
@@ -181,7 +193,7 @@ async function main() {
         nom: 'Faye',
         prenom: 'Morgan',
         fonctionId: 2,
-        etatEmployeId: 1,
+        etat: 'mission',
         dateRejoint: new Date(),
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
@@ -196,7 +208,7 @@ async function main() {
         nom: 'Harris',
         prenom: 'Ballard',
         fonctionId: 1,
-        etatEmployeId: 1,
+        etat: 'mission',
         dateRejoint: new Date(),
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
@@ -211,7 +223,7 @@ async function main() {
         nom: 'Hasan',
         prenom: 'Craig',
         fonctionId: 2,
-        etatEmployeId: 1,
+        etat: 'mission',
         dateRejoint: new Date(),
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
@@ -226,7 +238,7 @@ async function main() {
         nom: 'ALILI',
         prenom: 'Mohamed',
         fonctionId: 1,
-        etatEmployeId: 1,
+        etat: 'mission',
         dateRejoint: new Date(),
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
@@ -240,7 +252,7 @@ async function main() {
         nom: 'Kyran',
         prenom: 'Noble',
         fonctionId: 1,
-        etatEmployeId: 1,
+        etat: 'mission',
         dateRejoint: new Date(),
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
@@ -254,7 +266,7 @@ async function main() {
         nom: 'Dewey',
         prenom: 'Conley',
         fonctionId: 1,
-        etatEmployeId: 1,
+        etat: 'mission',
         dateRejoint: new Date(),
         dateNaissance: new Date(),
         sexe: Sexe.Homme,
