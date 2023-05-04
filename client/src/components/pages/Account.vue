@@ -16,6 +16,7 @@ import {
   NDatePicker,
   useDialog,
   useMessage,
+  NText,
 } from 'naive-ui';
 import {
   Edit32Filled as Pen,
@@ -57,13 +58,14 @@ const userRef = ref({
   role: user.role,
   dateCreate: new Date(user.dateCreationCompte).valueOf(),
 });
+console.log(new Date(user.dateCreationCompte).valueOf());
 
 const employeRef = ref({
   id: String(user.employeId),
   nom: employe.nom,
   prenom: employe.prenom,
   dateNaiss: new Date(employe.dateNaissance).valueOf(),
-  dateAdd: new Date(employe.dateAdhesion).valueOf(),
+  dateAdd: new Date(employe.dateRejoint).valueOf(),
   etat: String(employe.etatEmployeId),
   fonction: String(employe.fonctionId),
   sexe: employe.sexe,
