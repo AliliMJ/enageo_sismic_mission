@@ -53,13 +53,6 @@ const fonction = (
   await axios.get('http://localhost:3000/fonction/' + employe.fonctionId)
 ).data;
 
-let equipe;
-
-if (employe.equipeId != null) {
-  equipe = (await axios.get('http://localhost:3000/equipe/' + employe.idEquipe))
-    .data;
-}
-
 const wilaya = (await axios.get('http://localhost:3000/wilaya')).data;
 
 // const nom = ref(employe.nom);
@@ -77,6 +70,7 @@ const userRef = ref({
   dateCreate: new Date(user.dateCreationCompte).valueOf(),
 });
 console.log(new Date(user.dateCreationCompte).valueOf());
+console.log(employe);
 
 const employeRef = ref({
   id: String(user.employeId),
@@ -92,7 +86,7 @@ const employeRef = ref({
   numId: String(employe.numIdentite),
   etat: String(employe.etatEmployeId),
   fonction: String(employe.fonctionId),
-  equipeId: String(employe.equipeId),
+  equipe: employe.Equipe,
   groupeS: employe.groupeSanguin,
   missionCode: employe.missionCode,
   regimT: employe.regimTravail,
@@ -389,6 +383,13 @@ const etatEmployeOptions = [
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="fonction">
                       <NInput v-model:value="fonctionRef.nomFonction" />
+                    </NFormItemGi>
+                    <NFormItemGi
+                      v-if="employeRef.equipe"
+                      :span="12"
+                      label="Equipe"
+                    >
+                      <NInput v-model:value="employeRef.equipe.idEquipe" />
                     </NFormItemGi>
                   </NGrid>
                   <NSpace justify="end">
