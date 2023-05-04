@@ -42,26 +42,28 @@ export const getUserByUsername = async (req: Request, res: Response) => {
   }
 };
 
-// export const insertUser = async (req: Request, res: Response) => {
-//   const { email, role, employeId } = req.body;
+export const insertUser = async (req: Request, res: Response) => {
+  const { username, role, employeId } = req.body;
+  const dateCreationCompte = new Date();
 
-//   const hashPassword = await bcrypt.hash('123', 10);
-//   try {
-//     const user = await prisma.compte.create({
-//       data: {
-//         email,
-//         hashPassword,
-//         role,
-//         employeId,
-//       },
-//     });
+  const hashPassword = await bcrypt.hash('123', 10);
+  try {
+    const user = await prisma.compte.create({
+      data: {
+        username,
+        hashPassword,
+        role,
+        employeId,
+        dateCreationCompte
+      },
+    });
 
-//     res.status(201).json(user);
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).json({ err: `Èchec lors de la creation de utilisateur` });
-//   }
-// };
+    res.status(201).json(user);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ err: `Èchec lors de la creation de utilisateur` });
+  }
+};
 
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;

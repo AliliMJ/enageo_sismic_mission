@@ -22,10 +22,13 @@ import {
   Edit32Filled as Pen,
   ContactCard20Regular as contact,
   Info20Regular as detail,
+  PeopleTeam16Regular as team,
+  BookContacts20Regular as personelInfo,
 } from '@vicons/fluent';
 import {
   TrashOutline as trash,
   FolderOpenOutline as folder,
+  BriefcaseOutline as bag,
 } from '@vicons/ionicons5';
 
 import { ref, onMounted } from 'vue';
@@ -43,6 +46,15 @@ const user = (await axios.get(`http://localhost:3000/comptes/${id}`)).data;
 const employe = (
   await axios.get('http://localhost:3000/employes/' + user.employeId)
 ).data;
+const etatEmploye = (
+  await axios.get('http://localhost:3000/etatEmploye/' + employe.etatEmployeId)
+).data;
+const fonction = (
+  await axios.get('http://localhost:3000/fonction/' + employe.fonctionId)
+).data;
+const equipe = (
+  await axios.get('http://localhost:3000/equipe/' + employe.idEquipe)
+).data;
 
 // const nom = ref(employe.nom);
 // const prenom = ref(employe.prenom);
@@ -54,7 +66,7 @@ const employe = (
 
 const userRef = ref({
   id: user.id,
-  email: user.email,
+  username: user.username,
   role: user.role,
   dateCreate: new Date(user.dateCreationCompte).valueOf(),
 });
@@ -64,13 +76,17 @@ const employeRef = ref({
   id: String(user.employeId),
   nom: employe.nom,
   prenom: employe.prenom,
+  dateRejoint: new Date(employe.dateRejoint).valueOf(),
   dateNaiss: new Date(employe.dateNaissance).valueOf(),
-  dateAdd: new Date(employe.dateRejoint).valueOf(),
+  lieuNaiss: employe.lieuNaissance,
+  email: employe.email,
+  numTel: employe.numTel,
+  adresse: employe.adresse,
+  sexe: employe.sexe,
+  numId: String(employe.numIdentite),
   etat: String(employe.etatEmployeId),
   fonction: String(employe.fonctionId),
-  sexe: employe.sexe,
   equipeId: String(employe.equipeId),
-  numId: String(employe.numIdentite),
   groupeS: employe.groupeSanguin,
   missionCode: employe.missionCode,
 });
@@ -81,11 +97,10 @@ const deleteUser = async () => {
   const req = {
     id: Number(user.id),
   };
-  await axios.delete(`http://localhost:3000/users/${user.id}`);
+  await axios.delete(`http://localhost:3000/comptes/${user.id}`);
 };
 
 function handleConfirmDeleteUser() {
-  console.log('object : ' + userRef.value.email + ' ' + userRef.value.role);
   dialog.warning({
     title: 'Confirmation',
     content: 'êtes-vous sûr de supprimer cette utilisateur?',
@@ -94,7 +109,7 @@ function handleConfirmDeleteUser() {
     onPositiveClick: () => {
       message.success('utilisateur supprimer');
       deleteUser();
-      router.push('/utilisateur');
+      router.push('/comptes');
     },
     onNegativeClick: () => {
       message.error('Suppression annulée');
@@ -104,10 +119,10 @@ function handleConfirmDeleteUser() {
 
 const updateUser = async () => {
   const req = {
-    email: userRef.value.email,
+    username: userRef.value.username,
     role: userRef.value.role,
   };
-  await axios.put(`http://localhost:3000/users/${user.id}`, req);
+  await axios.put(`http://localhost:3000/comptes/${user.id}`, req);
   message.success('utilisateur modifiee');
 };
 
@@ -122,7 +137,7 @@ const deleteEmploye = async () => {
     id: Number(employeRef.value.id),
   };
   try {
-    await axios.delete(`http://localhost:3000/users/${user.id}`);
+    await axios.delete(`http://localhost:3000/comptes/${user.id}`);
     await axios.delete(`http://localhost:3000/employes/${employeRef.value.id}`);
   } catch (error) {
     console.error(error);
@@ -188,7 +203,7 @@ const roleOptions = [
 
 <template>
   <NSpace justtify="space-between">
-    <n-card style="margin-bottom: 16px; width: 650px">
+    <n-card style="margin: 10px; width: 750px">
       <template #header>
         <NSpace justify="start">
           <n-icon :size="30">
@@ -223,17 +238,25 @@ const roleOptions = [
           </NSpace>
           <NSpace vertical>
             <NSpace>
-              <NCard title="informations personnel">
+              <NCard style="width: 700px">
+                <template #header>
+                  <NSpace justify="start">
+                    <n-icon :size="30">
+                      <personelInfo />
+                    </n-icon>
+                    <NText> informations personnel </NText>
+                  </NSpace>
+                </template>
                 <!--nom, prénom, date de naissance, sexe-->
                 <NForm :disabled="isEditEmploye">
                   <NGrid :span="24" :x-gap="24">
                     <NFormItemGi :span="12" label="id">
                       <NInput v-model:value="employeRef.id" disabled />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="Date d'adhesion">
+                    <NFormItemGi :span="12" label="Date de rejoint">
                       <NDatePicker
                         format="dd/MM/yyyy"
-                        v-model:value="employeRef.dateAdd"
+                        v-model:value="employeRef.dateRejoint"
                         type="date"
                         disabled
                       />
@@ -284,7 +307,6 @@ const roleOptions = [
             </NSpace>
           </NSpace>
         </n-tab-pane>
-
         <n-tab-pane name="compte" tab="Compte">
           <NSpace justify="end" style="margin-bottom: 10px">
             <n-button
@@ -316,8 +338,8 @@ const roleOptions = [
                 <NFormItemGi :span="12" label="id">
                   <NInput v-model:value="id" disabled />
                 </NFormItemGi>
-                <NFormItemGi :span="12" label="Email">
-                  <NInput v-model:value="userRef.email" />
+                <NFormItemGi :span="12" label="nom d'utilisateur">
+                  <NInput v-model:value="userRef.username" />
                 </NFormItemGi>
                 <NFormItemGi :span="12" label="Role">
                   <NSelect
@@ -348,14 +370,43 @@ const roleOptions = [
         </n-tab-pane>
       </n-tabs>
     </n-card>
-    <NCard
+
+    <NSpace vertical>
+      <NCard
+        header-style="display:flex;flex-direction:row-reverse;"
+        title="Contact"
+        style="
+          margin: 10px;
+          width: 400px;
+          box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+            rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+        "
+      >
+        <template #header-extra>
+          <n-icon class="contactIcon">
+            <contact />
+          </n-icon>
+        </template>
+        <NForm disabled>
+          <NGrid :span="12" :x-gap="12">
+            <NFormItemGi :span="18" label="Email">
+              <NInput v-model:value="employeRef.email" />
+            </NFormItemGi>
+            <NFormItemGi :span="18" label="Numéro de téléphone">
+              <NInput v-model:value="employeRef.numTel" />
+            </NFormItemGi>
+          </NGrid>
+        </NForm>
+      </NCard>
+
+      <!-- <NCard
       header-style="display:flex;flex-direction:row-reverse;"
-      title="Contact"
+      title="Emploi"
       style="margin-bottom: 16px; width: 400px"
     >
       <template #header-extra>
         <n-icon class="contactIcon">
-          <contact />
+          <bag />
         </n-icon>
       </template>
       <NForm disabled>
@@ -368,7 +419,8 @@ const roleOptions = [
           </NFormItemGi>
         </NGrid>
       </NForm>
-    </NCard>
+    </NCard> -->
+    </NSpace>
   </NSpace>
 </template>
 
@@ -397,5 +449,9 @@ const roleOptions = [
 .contactIcon {
   margin-right: 10px;
   font-size: 25px;
+}
+
+.cardShadow {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 </style>
