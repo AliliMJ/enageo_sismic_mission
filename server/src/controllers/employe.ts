@@ -135,3 +135,21 @@ export const deleteEmploye = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getEmployesNumberByYear = async (req: Request, res: Response) => {
+  try {
+    const rawNumberByYears: Array<any> =
+      await prisma.$queryRaw`SELECT YEAR(dateRejoint) as year , count(*) as nbr
+                             FROM employe group by YEAR(dateRejoint)`;
+
+    const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
+      return { year, nbr: Number(nbr) };
+    });
+    return res.status(200).json(numberByYears);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ err: 'Problème lors de la collection des statistiques' });
+  }
+};

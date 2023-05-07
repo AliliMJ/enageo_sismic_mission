@@ -136,8 +136,9 @@ export const getUsersNumber = async (req: Request, res: Response) => {
       datesCreation: {
         annees: [],
       },
+      nbUsersEmail : 0,
       nbEmployes: 0,
-      nbEmployesEmail: 0,
+      nbEmployesEmail:0,
     };
 
     stat.nbUsers = await prisma.compte.count();
@@ -157,6 +158,15 @@ export const getUsersNumber = async (req: Request, res: Response) => {
       where: { role: 'DIRECTEUR' },
     });
     stat.nbEmployes = await prisma.employe.count();
+    const nbEmployesEmail = await prisma.employe.count({
+      select : {
+          email : true
+        } 
+    });
+
+    stat.nbEmployesEmail = nbEmployesEmail.email;
+
+    console.log(stat.nbEmployesEmail);
 
     return res.status(200).json(stat);
   } catch (e) {
