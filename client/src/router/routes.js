@@ -17,7 +17,7 @@ import Employe from 'components/pages/Employe.vue';
 import Account from 'components/pages/Account.vue';
 import Dashboard from 'components/dashboard/Dashboard.vue';
 import Map from 'app/Map.vue';
-
+import CreateRapport from 'components/pages/CreateRapport.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -85,6 +85,11 @@ const routes = [
         mata: { role: Role.ChefMision },
       },
       {
+        path: '/equipe',
+        name: Route.Equipe,
+        component: () => import('components/tables/EquipesTable.vue'),
+      },
+      {
         path: '/profile',
         name: Route.Profile,
         component: () => import('app/Profile.vue'),
@@ -106,6 +111,13 @@ const routes = [
         component: () => import('components/pages/CreateProject.vue'),
       },
       { path: '/carte', name: 'carte', component: Map },
+      { path: '/terrain', name: Route.Terrain },
+      { path: '/rapport', name: Route.Rapport },
+      {
+        path: 'rapport/create',
+        name: 'createRapport',
+        component: CreateRapport,
+      },
     ],
   },
   // { path: '/logout', component: Logout, name: 'logout' },

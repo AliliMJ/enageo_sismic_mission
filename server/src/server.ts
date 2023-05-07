@@ -24,7 +24,7 @@ app.use('/atelier', atelierRouter);
 app.use('/employes', employeRouter);
 app.use('/projets', projetRouter);
 app.use('/fonction', fonctionRouter);
-app.use('/equipe', equipeRouter);
+app.use('/equipes', equipeRouter);
 app.use('/wilaya', wilayaRouter);
 
 app.listen(3000, () => console.log('listening at port 3000...'));

@@ -7,12 +7,13 @@ import {
   NLayout,
   NLayoutContent,
   NLayoutHeader,
-  NPageHeader
+  NPageHeader,
 } from 'naive-ui';
 import { LogOutOutline as Logout } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
 import Gestionnaire from './Gestionnaire.vue';
 import ChefMission from './ChefMission.vue';
+import ChefTerrain from './ChefTerrain.vue';
 import Navbar from './Navbar.vue';
 
 import { useMessage, useDialog } from 'naive-ui';
@@ -55,13 +56,14 @@ const logout = () => {
     </template>
   </NButton>
 
-  <NLayout >
+  <NLayout>
     <NLayoutHeader bordered> <Navbar /></NLayoutHeader>
 
     <NLayoutContent>
-      <Admin v-if="auth.user?.role === Role.Administrateur"/>
+      <Admin v-if="auth.user?.role === Role.Administrateur" />
       <Gestionnaire v-else-if="auth.user?.role === Role.Gestionnaire" />
       <ChefMission v-else-if="auth.user?.role === Role.ChefMision" />
+      <ChefTerrain v-else-if="auth.user?.role === Role.ChefTerrain" />
     </NLayoutContent>
   </NLayout>
 </template>
