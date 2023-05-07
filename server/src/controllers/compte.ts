@@ -136,9 +136,9 @@ export const getUsersNumber = async (req: Request, res: Response) => {
       datesCreation: {
         annees: [],
       },
-      nbUsersEmail : 0,
+      nbUsersEmail: 0,
       nbEmployes: 0,
-      nbEmployesEmail:0,
+      nbEmployesEmail: 0,
     };
 
     stat.nbUsers = await prisma.compte.count();
@@ -159,9 +159,9 @@ export const getUsersNumber = async (req: Request, res: Response) => {
     });
     stat.nbEmployes = await prisma.employe.count();
     const nbEmployesEmail = await prisma.employe.count({
-      select : {
-          email : true
-        } 
+      select: {
+        email: true,
+      },
     });
 
     stat.nbEmployesEmail = nbEmployesEmail.email;
@@ -205,9 +205,9 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
     //   );
     // });
 
-    // const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
-    //   return { year, nbr: Number(nbr) };
-    // });
+    const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
+      return { year, nbr: Number(nbr) };
+    });
 
     // console.log(anneesArray);
 
@@ -218,7 +218,7 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
     //   }
     // });
 
-    return res.status(200).json(rawNumberByYears);
+    return res.status(200).json(numberByYears);
   } catch (e) {
     console.log(e);
     res
