@@ -171,8 +171,8 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
   try {
 
    // let distinctAnnees: any[] = [];
-    const distinctAnnees =  await prisma.$queryRaw`SELECT distinct YEAR(dateCreationCompte) as annee
-                             FROM compte`;
+    const distinctAnnees =  await prisma.$queryRaw`SELECT YEAR(dateCreationCompte) as annee , count(*) as nombre
+                             FROM compte group by YEAR(dateCreationCompte)`;
 
     //  const annees =
     //   await prisma.compte.findMany({
