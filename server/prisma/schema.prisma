@@ -52,8 +52,7 @@ model Employe {
   Mission     Mission? @relation(fields: [codeMission], references: [codeMission])
   codeMission String?
 
-  etat          EtatEmploye @relation(fields: [etatEmployeId], references: [idEtat])
-  etatEmployeId Int
+  etat          EtatEmploye
 
   fonction   Fonction @relation(fields: [fonctionId], references: [idFonction])
   fonctionId Int
@@ -62,12 +61,6 @@ model Employe {
 
   Equipe   Equipe? @relation(fields: [idEquipe], references: [idEquipe])
   idEquipe Int?
-}
-
-model EtatEmploye {
-  idEtat  Int       @id @default(autoincrement())
-  libEtat String
-  Employe Employe[]
 }
 
 model Fonction {
@@ -290,6 +283,14 @@ model Requisition {
 enum TypeEvenement {
   VOL
   ACCIDENT
+}
+
+enum EtatEmploye {
+ mission
+ conge
+ maladie
+ sanctionne
+ travail
 }
 
 model Evenement {

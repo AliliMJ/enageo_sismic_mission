@@ -1,8 +1,10 @@
 import express from 'express';
 import {
-   getFonction
+   getFonctionById,
+   getFonctions
   } from '../controllers/fonction';
 
 export const fonctionRouter = express.Router();
 
-fonctionRouter.get('/:idFonction',getFonction);
+fonctionRouter.get('/:idFonction',getFonctionById);
+fonctionRouter.get('/',getFonctions);

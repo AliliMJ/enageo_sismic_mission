@@ -55,11 +55,11 @@ const logout = () => {
     </template>
   </NButton>
 
-  <NLayout>
+  <NLayout >
     <NLayoutHeader bordered> <Navbar /></NLayoutHeader>
 
     <NLayoutContent>
-      <Admin v-if="auth.user?.role === Role.Administrateur" />
+      <Admin v-if="auth.user?.role === Role.Administrateur"/>
       <Gestionnaire v-else-if="auth.user?.role === Role.Gestionnaire" />
       <ChefMission v-else-if="auth.user?.role === Role.ChefMision" />
     </NLayoutContent>

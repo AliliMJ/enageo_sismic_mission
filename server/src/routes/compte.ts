@@ -10,6 +10,8 @@ import {
   updateUser,
   getUserByUsername,
   insertUser,
+  getUsersNumber,
+  getUsersNumberOfYear
 } from '../controllers/compte';
 
 export const userRouter = express.Router();
@@ -17,6 +19,9 @@ export const userRouter = express.Router();
 userRouter.get('/username', usernameFilter, paginate, getUsers);
 
 userRouter.get('/', paginate, getUsers);
+
+userRouter.get('/stats',getUsersNumber);
+userRouter.get('/dates',getUsersNumberOfYear);
 
 userRouter.post('/', insertUser);
 

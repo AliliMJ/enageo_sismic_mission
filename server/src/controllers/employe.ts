@@ -1,4 +1,4 @@
-import { Response, Request } from 'express';
+import { Response, Request } from "express";
 
 export const getEmployes = async (req: Request, res: Response) => {
   // const value = req.query.like;
@@ -13,7 +13,24 @@ export const getEmployes = async (req: Request, res: Response) => {
   } catch {
     res
       .status(500)
-      .json({ err: 'Problème lors de la collection des employés' });
+      .json({ err: "Problème lors de la collection des employés" });
+  }
+};
+
+export const getAccountedEmployes = async (req: Request, res: Response) => {
+  // const value = req.query.like;
+  // console.log(value);
+  try {
+    const employes = await prisma.employe.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter },
+    });
+
+    res.status(200).json(employes);
+  } catch {
+    res
+      .status(500)
+      .json({ err: "Problème lors de la collection des employés" });
   }
 };
 
@@ -21,36 +38,40 @@ export const insertEmploye = async (req: Request, res: Response) => {
   const {
     nom,
     prenom,
-    email,
-    fonctionId,
-    etatEmployeId,
     dateRejoint,
     dateNaissance,
     lieuNaissance,
+    email,
     numTel,
-    sexe,
-    groupeSanguin,
-    numIdentite,
-    codeMission,
     adresse,
+    sexe,
+    numIdentite,
+    groupeSanguin,
+    regimTravail,
+    codeMission,
+    etat,
+    fonctionId,
+    idEquipe,
   } = req.body;
   try {
     const employe = await prisma.employe.create({
       data: {
         nom,
         prenom,
-        email,
-        fonctionId,
-        etatEmployeId,
         dateRejoint,
         dateNaissance,
+        lieuNaissance,
+        email,
+        numTel,
+        adresse,
         sexe,
         numIdentite,
         groupeSanguin,
-        numTel,
-        lieuNaissance,
+        regimTravail,
         codeMission,
-        adresse,
+        etat,
+        fonctionId,
+        idEquipe,
       },
     });
 
@@ -65,7 +86,7 @@ export const getEmployeById = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const employe = await prisma.employe.findUnique({
       where: { id },
-      include: { Equipe: true },
+      include: { Equipe: true, Mission: true, fonction: true },
     });
     res.status(200).json(employe);
   } catch {
@@ -83,7 +104,7 @@ export const getFonctions = async (req: Request, res: Response) => {
   } catch {
     res
       .status(500)
-      .json({ err: 'Problème lors de la collection des fonctions' });
+      .json({ err: "Problème lors de la collection des fonctions" });
   }
 };
 
