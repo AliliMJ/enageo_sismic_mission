@@ -477,7 +477,7 @@ fonction.forEach((element) => {
         "
       >
         <template #header-extra>
-          <n-icon class="contactIcon">
+          <n-icon class="cardIcon">
             <contact />
           </n-icon>
         </template>
