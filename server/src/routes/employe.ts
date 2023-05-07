@@ -7,18 +7,19 @@ import {
   getFonctions,
   insertEmploye,
   updateEmploye,
+  getEmployesNumberOfYear,
 } from '../controllers/employe';
 import { employeNameFilter } from '../middlewares/filter';
 
 export const employeRouter = express.Router();
 
 employeRouter.get('/', employeNameFilter, paginate, getEmployes);
-employeRouter.post('/', insertEmploye);
 employeRouter.get('/fonctions', getFonctions);
+employeRouter.get('/stats', getEmployesNumberOfYear);
 employeRouter.get('/:id', getEmployeById);
+
+employeRouter.post('/', insertEmploye);
+
 employeRouter.put('/:id', updateEmploye);
 employeRouter.delete('/:id', deleteEmploye);
-
-employeRouter.delete('/:id', deleteEmploye);
-
 // employeRouter.put('/:id', updateEmploye);

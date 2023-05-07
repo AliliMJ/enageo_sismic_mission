@@ -14,7 +14,7 @@ import axios from 'axios';
 import {
   NSpace,
   NGrid,
-  NFormItemGi,
+  NGridItem,
   NForm,
   NCard,
   NIcon,
@@ -114,8 +114,8 @@ const data1 = {
 
 <template>
   <NSpace class="space">
-    <NGrid x-gap="25" :cols="4">
-      <NFormItemGi :span="1">
+    <NGrid x-gap="25" y-gap="25" :cols="4">
+      <n-grid-item :span="1">
         <!-- <NCard
         header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:23px"
         title="les comptes"
@@ -139,8 +139,8 @@ const data1 = {
           </NSpace>
           {{ stat.nbUsers }}
         </NSpace>
-      </NFormItemGi>
-      <NFormItemGi :span="1">
+      </n-grid-item>
+      <n-grid-item :span="1">
         <!-- <NCard
         header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:15px"
         title="les employes"
@@ -164,9 +164,9 @@ const data1 = {
           </NSpace>
           {{ stat.nbEmployes }}
         </NSpace>
-      </NFormItemGi>
+      </n-grid-item>
 
-      <NFormItemGi :span="1">
+      <n-grid-item :span="1">
         <!-- <NCard
         header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:15px"
         title="les comptes (2023)"
@@ -190,9 +190,9 @@ const data1 = {
           </NSpace>
           {{ datesdata[datesdata.length - 1] }}
         </NSpace>
-      </NFormItemGi>
+      </n-grid-item>
 
-      <NFormItemGi :span="1">
+      <n-grid-item :span="1">
         <NSpace class="testCard" justify="space-between">
           <NSpace class="header">
             <n-icon class="headerIcon">
@@ -202,16 +202,16 @@ const data1 = {
           </NSpace>
           {{ datesdata[datesdata.length - 2] }}
         </NSpace>
-      </NFormItemGi>
-      <NFormItemGi :span="2" class="pie">
+      </n-grid-item>
+      <n-grid-item :span="2" class="pie">
         <Pie :data="data" :options="options" />
-      </NFormItemGi>
-      <NFormItemGi :span="2">
+      </n-grid-item>
+      <n-grid-item :span="2">
         <NSpace vertical justify="space-around">
           <Bar :data="data1" :options="options1" class="bar1" />
           <Bar :data="data1" :options="options1" class="bar2" />
         </NSpace>
-      </NFormItemGi>
+      </n-grid-item>
     </NGrid>
   </NSpace>
 </template>
@@ -221,14 +221,14 @@ const data1 = {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
-  height: 400px;
+  /* height: 400px; */
 }
 
 .bar1 {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
-  height: 200px;
+  /* height: 200px; */
   padding: 0px 15px;
   /* width:600px; */
 }
@@ -237,17 +237,9 @@ const data1 = {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
-  height: 200px;
+  /* height: 200px; */
   padding: 0px 15px;
   /* width:600px; */
-}
-
-.card {
-  width: 280px;
-  height: 80px;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-  border-radius: 8px;
 }
 
 .cardIcon1 {
@@ -281,7 +273,7 @@ const data1 = {
 }
 
 .testCard {
-  width: 280px;
+  /* width: 280px; */
   height: 60px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
