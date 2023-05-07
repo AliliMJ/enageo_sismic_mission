@@ -177,16 +177,48 @@ export const getUsersNumber = async (req: Request, res: Response) => {
   }
 };
 
+type AccountGroup = {
+  year: number;
+  nbr: number;
+};
+
 export const getUsersNumberOfYear = async (req: Request, res: Response) => {
   try {
-    const rawNumberByYears: Array<any> =
+    const rawNumberByYears: Array<AccountGroup> =
       await prisma.$queryRaw`SELECT YEAR(dateCreationCompte) as year , count(*) as nbr
                              FROM compte group by YEAR(dateCreationCompte)`;
 
-    const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
-      return { year, nbr: Number(nbr) };
-    });
-    return res.status(200).json(numberByYears);
+    // const accountCount: any =
+    //   await prisma.$queryRaw`Select count(*) as nbr from Compte`;
+
+    //  const annees =
+    //   await prisma.compte.findMany({
+    //     select : {
+    //       dateCreationCompte : true
+    //     }
+    //   })
+
+    // const anneesArray: any[] = [];
+
+    // annees.forEach((element) => {
+    //   anneesArray.push(element.dateCreationCompte.getFullYear()
+    //   );
+    // });
+
+    // const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
+    //   return { year, nbr: Number(nbr) };
+    // });
+
+    // console.log(anneesArray);
+
+    // const nombre = await prisma.compte.count({
+    //   where : {
+    //     dateCreationCompte : {gte : `01/01/`+annee , lte : `31/12/`+annee},
+
+    //   }
+    // });
+
+    return res.status(200).json(rawNumberByYears);
   } catch (e) {
     console.log(e);
     res
