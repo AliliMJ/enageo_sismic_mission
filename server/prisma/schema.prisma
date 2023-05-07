@@ -41,7 +41,7 @@ model Employe {
   dateNaissance       DateTime @db.Date
   WilayalieuNaissance Wilaya   @relation(fields: [lieuNaissance], references: [numWilaya])
   lieuNaissance       Int
-  email               String   @unique
+  email               String?  @unique
   numTel              String   @unique
   adresse             String
   sexe                Sexe
