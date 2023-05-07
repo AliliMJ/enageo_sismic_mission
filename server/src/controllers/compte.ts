@@ -167,9 +167,14 @@ export const getUsersNumber = async (req: Request, res: Response) => {
   }
 };
 
+type AccountGroup = {
+  year: number;
+  nbr: number;
+};
+
 export const getUsersNumberOfYear = async (req: Request, res: Response) => {
   try {
-    const rawNumberByYears: Array<any> =
+    const rawNumberByYears: Array<AccountGroup> =
       await prisma.$queryRaw`SELECT YEAR(dateCreationCompte) as year , count(*) as nbr
                              FROM compte group by YEAR(dateCreationCompte)`;
 
@@ -190,9 +195,9 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
     //   );
     // });
 
-    const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
-      return { year, nbr: Number(nbr) };
-    });
+    // const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
+    //   return { year, nbr: Number(nbr) };
+    // });
 
     // console.log(anneesArray);
 
@@ -203,7 +208,7 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
     //   }
     // });
 
-    return res.status(200).json(numberByYears);
+    return res.status(200).json(rawNumberByYears);
   } catch (e) {
     console.log(e);
     res
