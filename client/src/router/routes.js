@@ -16,6 +16,7 @@ import Home from 'app/Home.vue';
 import Employe from 'components/pages/Employe.vue';
 import Account from 'components/pages/Account.vue';
 import Dashboard from 'components/dashboard/Dashboard.vue';
+import Map from 'app/Map.vue';
 
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
@@ -55,10 +56,7 @@ const routes = [
       {
         path: '/compte/:id',
         component: Account,
-        meta: { role: Role.Administrateur,
-                title : 'details sur compte',
-           
-        },
+        meta: { role: Role.Administrateur, title: 'details sur compte' },
       },
       {
         path: '/employe',
@@ -107,6 +105,7 @@ const routes = [
         name: 'creationProjet',
         component: () => import('components/pages/CreateProject.vue'),
       },
+      { path: '/carte', name: 'carte', component: Map },
     ],
   },
   // { path: '/logout', component: Logout, name: 'logout' },
