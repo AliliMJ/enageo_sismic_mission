@@ -1,6 +1,6 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
-import bcrypt from "bcrypt";
+import { Prisma, PrismaClient } from '@prisma/client';
+import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -13,7 +13,7 @@ export const getUsers = async (req: Request, res: Response) => {
   } catch {
     res
       .status(500)
-      .json({ err: "Problème lors de la collection des utilisateurs" });
+      .json({ err: 'Problème lors de la collection des utilisateurs' });
   }
 };
 
@@ -47,7 +47,7 @@ export const insertUser = async (req: Request, res: Response) => {
   const { username, role, employeId } = req.body;
   const dateCreationCompte = new Date();
 
-  const hashPassword = await bcrypt.hash("123", 10);
+  const hashPassword = await bcrypt.hash('123', 10);
   try {
     const user = await prisma.compte.create({
       data: {
@@ -73,7 +73,7 @@ export const getUserById = async (req: Request, res: Response) => {
       where: { id: Number(id) },
     });
     if (user == null)
-      return res.status(400).json({ err: "Compte introuvable" });
+      return res.status(400).json({ err: 'Compte introuvable' });
 
     res.status(200).json(user);
   } catch {
@@ -110,7 +110,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
   } catch (e) {
     if (
       e instanceof Prisma.PrismaClientKnownRequestError &&
-      e.code === "P2025"
+      e.code === 'P2025'
     ) {
       return res.status(400).json({
         err: `Utilisateur ${req.params.id} introuvable`,
@@ -142,19 +142,19 @@ export const getUsersNumber = async (req: Request, res: Response) => {
 
     stat.nbUsers = await prisma.compte.count();
     stat.nbAdmins = await prisma.compte.count({
-      where: { role: "ADMINISTRATEUR" },
+      where: { role: 'ADMINISTRATEUR' },
     });
     stat.nbCMission = await prisma.compte.count({
-      where: { role: "CHEF_MISSION" },
+      where: { role: 'CHEF_MISSION' },
     });
     stat.NbCTerrain = await prisma.compte.count({
-      where: { role: "CHEF_TERRAIN" },
+      where: { role: 'CHEF_TERRAIN' },
     });
     stat.NbGestionnare = await prisma.compte.count({
-      where: { role: "GESTIONNAIRE" },
+      where: { role: 'GESTIONNAIRE' },
     });
     stat.nbDirecteur = await prisma.compte.count({
-      where: { role: "DIRECTEUR" },
+      where: { role: 'DIRECTEUR' },
     });
     stat.nbEmployes = await prisma.employe.count();
 
@@ -163,16 +163,18 @@ export const getUsersNumber = async (req: Request, res: Response) => {
     console.log(e);
     res
       .status(500)
-      .json({ err: "Problème lors de la collection des statistiques" });
+      .json({ err: 'Problème lors de la collection des statistiques' });
   }
 };
 
 export const getUsersNumberOfYear = async (req: Request, res: Response) => {
   try {
-
-   // let distinctAnnees: any[] = [];
-    const distinctAnnees =  await prisma.$queryRaw`SELECT YEAR(dateCreationCompte) as annee , count(*) as nombre
+    const rawNumberByYears: Array<any> =
+      await prisma.$queryRaw`SELECT YEAR(dateCreationCompte) as year , count(*) as nbr
                              FROM compte group by YEAR(dateCreationCompte)`;
+
+    // const accountCount: any =
+    //   await prisma.$queryRaw`Select count(*) as nbr from Compte`;
 
     //  const annees =
     //   await prisma.compte.findMany({
@@ -181,29 +183,31 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
     //     }
     //   })
 
-      // const anneesArray: any[] = [];
-      
-      // annees.forEach((element) => {
-      //   anneesArray.push(element.dateCreationCompte.getFullYear()
-      //   );
-      // });
+    // const anneesArray: any[] = [];
 
-    console.log("\n\n"+distinctAnnees);
+    // annees.forEach((element) => {
+    //   anneesArray.push(element.dateCreationCompte.getFullYear()
+    //   );
+    // });
+
+    const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
+      return { year, nbr: Number(nbr) };
+    });
+
     // console.log(anneesArray);
-    
+
     // const nombre = await prisma.compte.count({
     //   where : {
     //     dateCreationCompte : {gte : `01/01/`+annee , lte : `31/12/`+annee},
-       
+
     //   }
     // });
 
-    return res.status(200).json(distinctAnnees);
+    return res.status(200).json(numberByYears);
   } catch (e) {
     console.log(e);
     res
       .status(500)
-      .json({ err: "Problème lors de la collection des statistiques" });
+      .json({ err: 'Problème lors de la collection des statistiques' });
   }
 };
-
