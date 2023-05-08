@@ -1,4 +1,5 @@
 import { Response, Request } from "express";
+import { Prisma, PrismaClient } from '@prisma/client';
 
 export const getEmployes = async (req: Request, res: Response) => {
   // const value = req.query.like;
@@ -136,20 +137,30 @@ export const deleteEmploye = async (req: Request, res: Response) => {
   }
 };
 
-export const getEmployesNumberByYear = async (req: Request, res: Response) => {
+type EmployeGroup = {
+  year: number;
+  nbr: number;
+};
+
+export const getEmployesNumberOfYear = async (req: Request, res: Response) => {
   try {
-    const rawNumberByYears: Array<any> =
+    const rawNumberByYears: Array<EmployeGroup> =
       await prisma.$queryRaw`SELECT YEAR(dateRejoint) as year , count(*) as nbr
                              FROM employe group by YEAR(dateRejoint)`;
 
     const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
       return { year, nbr: Number(nbr) };
     });
+
+    console.log(numberByYears);
+
     return res.status(200).json(numberByYears);
   } catch (e) {
     console.log(e);
     res
       .status(500)
-      .json({ err: 'Problème lors de la collection des statistiques' });
+      .json({ err: 'Problème lors de la collection des statistiques des employes' });
   }
 };
+
+
