@@ -11,15 +11,7 @@ import {
 } from 'chart.js';
 import { Pie, Bar } from 'vue-chartjs';
 import axios from 'axios';
-import {
-  NSpace,
-  NGrid,
-  NGridItem,
-  NForm,
-  NCard,
-  NIcon,
-  NText,
-} from 'naive-ui';
+import { NSpace, NGrid, NGridItem, NForm, NCard, NIcon, NText } from 'naive-ui';
 import {
   TrashOutline as trash,
   FolderOpenOutline as folder,
@@ -139,13 +131,13 @@ const data1 = {
           </NSpace>
           {{ stat.nbUsers }}
         </NSpace>
-<<<<<<< HEAD
-      </NGridItem>
-      <NGridItem :span="1">
-=======
       </n-grid-item>
+      <n-grid-item :span="1">
+        <!-- <NCard
+        header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:15px"
         title="les employes"
         class="card"
+        content-style="font-size:30px;"
       >
         <template #header-extra>
           <n-icon class="cardIcon2">
@@ -164,15 +156,9 @@ const data1 = {
           </NSpace>
           {{ stat.nbEmployes }}
         </NSpace>
-<<<<<<< HEAD
-      </NGridItem>
-
-      <NGridItem :span="1">
-=======
       </n-grid-item>
 
       <n-grid-item :span="1">
->>>>>>> b278842b53969abeb25bdda9023107c7d5f9b9d6
         <!-- <NCard
         header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:15px"
         title="les comptes (2023)"
@@ -196,15 +182,9 @@ const data1 = {
           </NSpace>
           {{ datesdata[datesdata.length - 1] }}
         </NSpace>
-<<<<<<< HEAD
-      </NGridItem>
-
-      <NGridItem :span="1">
-=======
       </n-grid-item>
 
       <n-grid-item :span="1">
->>>>>>> b278842b53969abeb25bdda9023107c7d5f9b9d6
         <NSpace class="testCard" justify="space-between">
           <NSpace class="header">
             <n-icon class="headerIcon">
@@ -214,18 +194,6 @@ const data1 = {
           </NSpace>
           {{ datesdata[datesdata.length - 2] }}
         </NSpace>
-<<<<<<< HEAD
-      </NGridItem>
-      <NGridItem :span="2" class="pie">
-        <Pie :data="data" :options="options" />
-      </NGridItem>
-      <NGridItem :span="2">
-        <NSpace vertical>
-          <Bar :data="data1" :options="options1" class="bar1" />
-          <Bar :data="data1" :options="options1" class="bar2" />
-        </NSpace>
-      </NGridItem>
-=======
       </n-grid-item>
       <n-grid-item :span="2" class="pie">
         <Pie :data="data" :options="options" />
@@ -236,7 +204,6 @@ const data1 = {
           <Bar :data="data1" :options="options1" class="bar2" />
         </NSpace>
       </n-grid-item>
->>>>>>> b278842b53969abeb25bdda9023107c7d5f9b9d6
     </NGrid>
   </NSpace>
 </template>
