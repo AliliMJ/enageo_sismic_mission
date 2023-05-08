@@ -19,6 +19,12 @@ const { rendement, valueUnit } = defineProps({
   rendement: Object,
   valueUnit: String,
 });
+
+const emit = defineEmits(['remove']);
+
+const onRemoveBtnClicked = () => {
+  emit('remove', rendement.key);
+};
 function formatMinutes(timeInMinutes) {
   const hour = Math.ceil(timeInMinutes / 60)
     .toString()
@@ -56,7 +62,14 @@ const finishTime = formatMinutes(rendement.hFin);
     </template> -->
 
     <template #header-extra>
-      <NButton size="tiny" circle class="dismiss" type="error" quaternary>
+      <NButton
+        size="tiny"
+        circle
+        class="dismiss"
+        type="error"
+        quaternary
+        @click="onRemoveBtnClicked"
+      >
         <NIcon><Dismiss /></NIcon>
       </NButton>
     </template>

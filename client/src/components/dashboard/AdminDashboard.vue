@@ -11,15 +11,7 @@ import {
 } from 'chart.js';
 import { Pie, Bar } from 'vue-chartjs';
 import axios from 'axios';
-import {
-  NSpace,
-  NGrid,
-  NFormItemGi,
-  NForm,
-  NCard,
-  NIcon,
-  NText,
-} from 'naive-ui';
+import { NSpace, NGrid, NGridItem, NIcon } from 'naive-ui';
 import {
   TrashOutline as trash,
   FolderOpenOutline as folder,
@@ -114,8 +106,8 @@ const data1 = {
 
 <template>
   <NSpace class="space">
-    <NGrid x-gap="25" :cols="4">
-      <NFormItemGi :span="1">
+    <NGrid :x-gap="25" :y-gap="12" :cols="4">
+      <NGridItem :span="1">
         <!-- <NCard
         header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:23px"
         title="les comptes"
@@ -139,8 +131,8 @@ const data1 = {
           </NSpace>
           {{ stat.nbUsers }}
         </NSpace>
-      </NFormItemGi>
-      <NFormItemGi :span="1">
+      </NGridItem>
+      <NGridItem :span="1">
         <!-- <NCard
         header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:15px"
         title="les employes"
@@ -164,9 +156,9 @@ const data1 = {
           </NSpace>
           {{ stat.nbEmployes }}
         </NSpace>
-      </NFormItemGi>
+      </NGridItem>
 
-      <NFormItemGi :span="1">
+      <NGridItem :span="1">
         <!-- <NCard
         header-style="display:flex;flex-direction:row-reverse;font-size:20px;padding:15px"
         title="les comptes (2023)"
@@ -190,9 +182,9 @@ const data1 = {
           </NSpace>
           {{ datesdata[datesdata.length - 1] }}
         </NSpace>
-      </NFormItemGi>
+      </NGridItem>
 
-      <NFormItemGi :span="1">
+      <NGridItem :span="1">
         <NSpace class="testCard" justify="space-between">
           <NSpace class="header">
             <n-icon class="headerIcon">
@@ -202,16 +194,16 @@ const data1 = {
           </NSpace>
           {{ datesdata[datesdata.length - 2] }}
         </NSpace>
-      </NFormItemGi>
-      <NFormItemGi :span="2" class="pie">
+      </NGridItem>
+      <NGridItem :span="2" class="pie">
         <Pie :data="data" :options="options" />
-      </NFormItemGi>
-      <NFormItemGi :span="2">
-        <NSpace vertical justify="space-around">
+      </NGridItem>
+      <NGridItem :span="2">
+        <NSpace vertical>
           <Bar :data="data1" :options="options1" class="bar1" />
           <Bar :data="data1" :options="options1" class="bar2" />
         </NSpace>
-      </NFormItemGi>
+      </NGridItem>
     </NGrid>
   </NSpace>
 </template>
