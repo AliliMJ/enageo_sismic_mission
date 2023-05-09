@@ -1,42 +1,3 @@
-<template>
-  <NSpace vertical>
-    <Modal
-      title="Créer un nouveau compte"
-      :showModal="showModal"
-      @cancel="showModal = false"
-      @confirm="confirmAdd"
-    />
-
-    <NH1>les comptes</NH1>
-    <NSpace justify="end">
-      <!-- <searchUser v-model="searchUsername" :on-update="searchFilter" /> -->
-      <n-input
-        v-model:value="searchUsername"
-        @update:value="searchFilter"
-        placeholder="rechercher nom d'utilisateur"
-      >
-        <template #suffix>
-          <n-icon :component="search" />
-        </template>
-      </n-input>
-      <NButton
-        @click="showInsertEmployeModal"
-        class="button"
-        type="success"
-        icon-placement="right"
-      >
-        Créer compte
-        <template #icon>
-          <NIcon>
-            <Add />
-          </NIcon>
-        </template>
-      </NButton>
-    </NSpace>
-    <STable @onRowClicked="handleClick" :data="users" :columns="cols" />
-  </NSpace>
-</template>
-
 <script setup>
 import axios from 'axios';
 
@@ -141,3 +102,52 @@ const showInsertEmployeModal = () => {
   showModal.value = true;
 };
 </script>
+
+
+<template>
+  <NSpace vertical>
+    <Modal
+      title="Créer un nouveau compte"
+      :showModal="showModal"
+      @cancel="showModal = false"
+      @confirm="confirmAdd"
+    />
+
+    <NH1>La liste des comptes</NH1>
+    <NSpace justify="end">
+      <!-- <searchUser v-model="searchUsername" :on-update="searchFilter" /> -->
+      <n-input
+        v-model:value="searchUsername"
+        @update:value="searchFilter"
+        placeholder="Rechercher par nom d'utilisateur"
+        style="width:255px"
+      >
+        <template #suffix>
+          <n-icon :component="search" />
+        </template>
+      </n-input>
+      <NButton
+        @click="showInsertEmployeModal"
+        class="button"
+        type="success"
+        icon-placement="right"
+      >
+        Créer compte
+        <template #icon>
+          <NIcon>
+            <Add />
+          </NIcon>
+        </template>
+      </NButton>
+    </NSpace>
+    <NSpace class="tableContainer">
+    <STable @onRowClicked="handleClick" :data="users" :columns="cols"/>
+  </NSpace>
+  </NSpace>
+</template>
+
+<style scoped>
+
+
+</style>
+

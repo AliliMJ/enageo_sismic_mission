@@ -22,10 +22,10 @@ const router = useRouter();
     </NLayoutSider>
 
     <NLayoutContent>
-      <NCard :bordered="false" style="background-color: rgb(248, 248, 248);">
+      <NCard :bordered="false" style="background-color: rgb(248, 248, 248)">
         <Suspense>
-          <NScrollbar style="height: 85vh">
-            <RouterView />
+          <NScrollbar style="height: 95vh">
+            <RouterView/>
           </NScrollbar>
         </Suspense>
       </NCard>

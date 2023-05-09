@@ -186,7 +186,7 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
   try {
     const rawNumberByYears: Array<AccountGroup> =
       await prisma.$queryRaw`SELECT YEAR(dateCreationCompte) as year , count(*) as nbr
-                             FROM compte group by YEAR(dateCreationCompte)`;
+                             FROM compte group by YEAR(dateCreationCompte) ORDER BY year ASC`;
 
 
     const numberByYears = rawNumberByYears.map(({ year, nbr }) => {

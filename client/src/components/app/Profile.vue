@@ -16,6 +16,7 @@ import {
   NDatePicker,
   useDialog,
   useMessage,
+  NText
 } from 'naive-ui';
 import {
   Edit32Filled as Pen,
@@ -129,6 +130,10 @@ const updateUser = async () => {
   await axios.put(`http://localhost:3000/comptes/${user.id}`, req);
   message.success("utilisateur modifiee");
 };
+const roledisabled = ref(false);
+if(auth.user.role!='ADMINISTRATEUR'){
+  roledisabled.value=true;
+}
 
 /* end user operations */
 
@@ -245,6 +250,12 @@ fonction.forEach((element) => {
   });
 });
 
+const showModal = ref(false);
+
+const showChangePasswordModal = () => {
+  showModal.value = true;
+};
+
 </script>
 
 <template>
@@ -259,7 +270,7 @@ fonction.forEach((element) => {
         </NSpace>
       </template>
       <n-tabs type="line" animated>
-        <n-tab-pane name="data" tab="Données">
+        <n-tab-pane name="data" tab="Mes données">
           <NSpace justify="end" style="margin-bottom: 10px">
             <n-button
               text
@@ -388,7 +399,7 @@ fonction.forEach((element) => {
             </NSpace>
           </NSpace>
         </n-tab-pane>
-        <n-tab-pane name="compte" tab="Compte">
+        <n-tab-pane name="compte" tab="Mon compte">
           <NSpace justify="end" style="margin-bottom: 10px">
             <n-button
               text
@@ -417,7 +428,7 @@ fonction.forEach((element) => {
             <NForm :disabled="isEditUser">
               <NGrid :span="24" :x-gap="24">
                 <NFormItemGi :span="12" label="id">
-                  <NInput v-model:value="id" disabled />
+                  <NInput v-model:value="auth.user.id" disabled />
                 </NFormItemGi>
                 <NFormItemGi :span="12" label="nom d'utilisateur">
                   <NInput v-model:value="userRef.username" />
@@ -426,6 +437,7 @@ fonction.forEach((element) => {
                   <NSelect
                     v-model:value="userRef.role"
                     :options="roleOptions"
+                    :disabled="roledisabled"
                   />
                 </NFormItemGi>
                 <NFormItemGi :span="12" label="date creation de compte">
@@ -437,7 +449,10 @@ fonction.forEach((element) => {
                   />
                 </NFormItemGi>
               </NGrid>
-              <NSpace justify="end">
+              <NSpace justify="end" style="display:flex;align-items:center;">
+                <NText @click="showChangePasswordModal()" class="passwordText">
+                  changer mon mot de passe
+                </NText>
                 <n-button
                   type="success"
                   :disabled="isEditUser"
@@ -451,35 +466,6 @@ fonction.forEach((element) => {
         </n-tab-pane>
       </n-tabs>
     </n-card>
-
-    <NSpace vertical>
-      <NCard
-        header-style="display:flex;flex-direction:row-reverse;"
-        title="Contact"
-        style="
-          margin: 10px;
-          width: 400px;
-          box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-            rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-        "
-      >
-        <template #header-extra>
-          <n-icon class="contactIcon">
-            <contact />
-          </n-icon>
-        </template>
-        <NForm disabled>
-          <NGrid :span="12" :x-gap="12">
-            <NFormItemGi :span="18" label="Email">
-              <NInput v-model:value="employeRef.email" />
-            </NFormItemGi>
-            <NFormItemGi :span="18" label="Numéro de téléphone">
-              <NInput v-model:value="employeRef.numTel" />
-            </NFormItemGi>
-          </NGrid>
-        </NForm>
-      </NCard>
-    </NSpace>
 
     <!-- <NCard
           header-style="display:flex;flex-direction:row-reverse;"
@@ -517,6 +503,14 @@ fonction.forEach((element) => {
 </template>
 
 <style scoped>
+
+.passwordText {
+  text-decoration:underline;
+}
+
+.passwordText:hover {
+  cursor:pointer;
+}
 .trash {
   color: #d03050;
 }

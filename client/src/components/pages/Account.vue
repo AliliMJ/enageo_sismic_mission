@@ -22,13 +22,10 @@ import {
   Edit32Filled as Pen,
   ContactCard20Regular as contact,
   Info20Regular as detail,
-  PeopleTeam16Regular as team,
   BookContacts20Regular as personelInfo,
 } from "@vicons/fluent";
 import {
   TrashOutline as trash,
-  FolderOpenOutline as folder,
-  BriefcaseOutline as bag,
 } from "@vicons/ionicons5";
 
 import { ref, onMounted } from "vue";
@@ -55,7 +52,6 @@ const userRef = ref({
   role: user.role,
   dateCreate: new Date(user.dateCreationCompte).valueOf(),
 });
-console.log(employe);
 
 const employeRef = ref({
   id: String(user.employeId),
@@ -77,43 +73,21 @@ const employeRef = ref({
   regimTravail: employe.regimTravail,
 });
 
-// let equipeRef;
-// if(employe.Equipe!=null){
-//   equipeRef = ref({
-//     idEquipe : String(employe.Equipe.idEquipe),
-//     codeActivite : employe.Equipe.codeActivite,
-//     nom : employe.Equipe.nom,
-//     performance : String(employe.Equipe.performance),
-//     codeMission : employe.Equipe.codeMission
-//   })
-// }else{
-//   equipeRef=ref();
-// }
-
 const fonctionRef = ref(employe.fonction.idFonction);
 
-
-let missionRef
-if(employe.Mission!=null){
+let missionRef;
+if (employe.Mission != null) {
   missionRef = ref({
-    code : employe.Mission.codeMission,
-    methodologie : employe.Mission.methodologie,
-  })
-}else{
-  missionRef=ref();
+    code: employe.Mission.codeMission,
+    methodologie: employe.Mission.methodologie,
+  });
+} else {
+  missionRef = ref();
 }
-
-const wilayaRef = ref({
-  numWilaya: wilaya.numWilaya,
-  nom: wilaya.nom,
-});
 
 /* user operations */
 
 const deleteUser = async () => {
-  const req = {
-    id: Number(user.id),
-  };
   await axios.delete(`http://localhost:3000/comptes/${user.id}`);
 };
 
@@ -156,9 +130,7 @@ const deleteEmploye = async () => {
   try {
     await axios.delete(`http://localhost:3000/comptes/${user.id}`);
     await axios.delete(`http://localhost:3000/employes/${employeRef.value.id}`);
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 };
 
 function handleConfirmDeleteEmploye() {
@@ -179,26 +151,24 @@ function handleConfirmDeleteEmploye() {
 }
 
 const updateEmploye = async () => {
-    const req = {
-        id : Number(employeRef.value.id),
-        nom : employeRef.value.nom,
-        prenom : employeRef.value.prenom,
-         dateRejoint : new Date(employeRef.value.dateRejoint + 4000000),
-         dateNaissance : new Date(employeRef.value.dateNaiss + 4000000),
-         lieuNaissance : Number(employeRef.value.lieuNaiss),
-         email : employeRef.value.email,
-         numTel : employeRef.value.numTel,
-        adresse : employeRef.value.adresse,
-        sexe : employeRef.value.sexe,
-         numIdentite : employeRef.value.numId,
-         groupeSanguin : employeRef.value.groupeSanguin,
-         regimTravail : employeRef.value.regimTravail,
-        codeMission : employeRef.value.missionCode,
-        etat : employeRef.value.etat,
-        fonctionId : Number(fonctionRef.value),
-    }
-
-  console.log("request : "+req.fonctionId);
+  const req = {
+    id: Number(employeRef.value.id),
+    nom: employeRef.value.nom,
+    prenom: employeRef.value.prenom,
+    dateRejoint: new Date(employeRef.value.dateRejoint + 4000000),
+    dateNaissance: new Date(employeRef.value.dateNaiss + 4000000),
+    lieuNaissance: Number(employeRef.value.lieuNaiss),
+    email: employeRef.value.email,
+    numTel: employeRef.value.numTel,
+    adresse: employeRef.value.adresse,
+    sexe: employeRef.value.sexe,
+    numIdentite: employeRef.value.numId,
+    groupeSanguin: employeRef.value.groupeSanguin,
+    regimTravail: employeRef.value.regimTravail,
+    codeMission: employeRef.value.missionCode,
+    etat: employeRef.value.etat,
+    fonctionId: Number(fonctionRef.value),
+  };
   await axios.put(`http://localhost:3000/employes/${user.employeId}`, req);
   message.success("employe modifiee");
 };
@@ -248,6 +218,7 @@ const etatEmployeOptions = [
   { label: "En congé", value: "conge" },
   { label: "en maladie", value: "maladie" },
   { label: "en sanctionné", value: "sanctionne" },
+  { label: "en travail", value: "travail" },
 ];
 
 const fonctionOptions = [];
@@ -257,7 +228,6 @@ fonction.forEach((element) => {
     value: element.idFonction,
   });
 });
-
 </script>
 
 <template>
@@ -360,7 +330,11 @@ fonction.forEach((element) => {
                     <NFormItemGi :span="12" label="Regime de travail">
                       <NInput v-model:value="employeRef.regimTravail" />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="mission" v-if="employeRef.mission">
+                    <NFormItemGi
+                      :span="12"
+                      label="mission"
+                      v-if="employeRef.mission"
+                    >
                       <NInput
                         v-model:value="missionRef.code"
                         placeholder="non mission"
@@ -379,13 +353,6 @@ fonction.forEach((element) => {
                         v-model:value="fonctionRef"
                       />
                     </NFormItemGi>
-                    <!-- <NFormItemGi
-                      v-if="employeRef.equipe"
-                      :span="12"
-                      label="Equipe Id"
-                    >
-                      <NInput v-model:value="equipeRef.idEquipe" />
-                    </NFormItemGi> -->
                   </NGrid>
                   <NSpace justify="end">
                     <n-button
@@ -423,8 +390,6 @@ fonction.forEach((element) => {
                 <pen />
               </n-icon>
             </n-button>
-            <!-- <n-button type="error" @click="handleConfirmDelete"> supprimer </n-button>
-          <n-button type="warning" @click="isEditUser=!isEditUser"> modifier </n-button> -->
           </NSpace>
           <NCard title="details sur le compte">
             <NForm :disabled="isEditUser">
@@ -525,7 +490,6 @@ fonction.forEach((element) => {
             </NGrid>
           </NForm>
  </NCard> -->
-
   </NSpace>
 </template>
 
