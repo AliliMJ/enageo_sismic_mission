@@ -32,6 +32,8 @@ import {
 
 import { ref, onMounted } from 'vue';
 import { useAuth } from '../../stores/authentication';
+import passwordModal from '../common/changePassword.vue';
+
 const router = useRouter();
 const route = useRoute();
 const dialog = useDialog();
@@ -130,9 +132,9 @@ const updateUser = async () => {
   await axios.put(`http://localhost:3000/comptes/${user.id}`, req);
   message.success("utilisateur modifiee");
 };
-const roledisabled = ref(false);
-if(auth.user.role!='ADMINISTRATEUR'){
-  roledisabled.value=true;
+const roledisabled = ref(true);
+if(auth.user.role=='ADMINISTRATEUR'){
+  roledisabled.value=false;
 }
 
 /* end user operations */
@@ -304,7 +306,6 @@ const showChangePasswordModal = () => {
                     <NText> informations personnel </NText>
                   </NSpace>
                 </template>
-                <!--nom, prénom, date de naissance, sexe-->
                 <NForm :disabled="isEditEmploye">
                   <NGrid :span="24" :x-gap="24">
                     <NFormItemGi :span="12" label="id">
@@ -377,13 +378,6 @@ const showChangePasswordModal = () => {
                         v-model:value="fonctionRef"
                       />
                     </NFormItemGi>
-                    <!-- <NFormItemGi
-                      v-if="employeRef.equipe"
-                      :span="12"
-                      label="Equipe Id"
-                    >
-                      <NInput v-model:value="equipeRef.idEquipe" />
-                    </NFormItemGi> -->
                   </NGrid>
                   <NSpace justify="end">
                     <n-button
@@ -421,8 +415,6 @@ const showChangePasswordModal = () => {
                 <pen />
               </n-icon>
             </n-button>
-            <!-- <n-button type="error" @click="handleConfirmDelete"> supprimer </n-button>
-          <n-button type="warning" @click="isEditUser=!isEditUser"> modifier </n-button> -->
           </NSpace>
           <NCard title="details sur le compte">
             <NForm :disabled="isEditUser">
@@ -437,7 +429,7 @@ const showChangePasswordModal = () => {
                   <NSelect
                     v-model:value="userRef.role"
                     :options="roleOptions"
-                    :disabled="roledisabled"
+                    :disabled="roledisabled||isEditUser"
                   />
                 </NFormItemGi>
                 <NFormItemGi :span="12" label="date creation de compte">
@@ -466,7 +458,11 @@ const showChangePasswordModal = () => {
         </n-tab-pane>
       </n-tabs>
     </n-card>
-
+    <passwordModal
+      title="chnager mon mot de passed"
+      :showModal="showModal"
+      @cancel="showModal = false"
+    />
     <!-- <NCard
           header-style="display:flex;flex-direction:row-reverse;"
           title="Equipe"
