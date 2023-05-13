@@ -62,15 +62,14 @@ export const verifyPassword = async (req: Request, res: Response) => {
   try {
     const user = await prisma.compte.findUnique({ where: { username } });
 
-    if (user === null){
+    if (user === null) {
       return res.status(401).json({ err: 'Utilisateur introuvable' });
-    }else if(await bcrypt.compare(password, user.hashPassword)){
-      res.status(200).json({response : 1});
-    }else {
-      res.status(400).json({response : 0});
+    } else if (await bcrypt.compare(password, user.hashPassword)) {
+      return res.status(200).json({ response: 1 });
+    } else {
+      console.log('wtf is goining on');
+      return res.status(400).json({ response: 0 });
     }
-
-
   } catch {
     res.status(500).json({ err: 'Identification échouée' });
   }

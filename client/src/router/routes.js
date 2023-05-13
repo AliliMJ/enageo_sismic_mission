@@ -18,8 +18,7 @@ import Account from 'components/pages/Account.vue';
 import Dashboard from 'components/dashboard/Dashboard.vue';
 import Map from 'app/Map.vue';
 import CreateRapport from 'components/pages/CreateRapport.vue';
-import AtelierTable from 'components/tables/AtelierTable.vue';
-import MaterielAtelier from 'components/pages/MaterielAtelier.vue'
+import PivotTable from 'components/analysis/PivotTable.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -117,6 +116,11 @@ const routes = [
         meta: {
           title: 'Préférences',
         },
+      },
+      {
+        path: '/analyse',
+        name: Route.Analyse,
+        component: PivotTable,
       },
       {
         path: '/projet/creation',

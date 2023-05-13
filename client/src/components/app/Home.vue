@@ -14,7 +14,7 @@ import { useRouter } from 'vue-router';
 import Gestionnaire from './Gestionnaire.vue';
 import ChefMission from './ChefMission.vue';
 import ChefTerrain from './ChefTerrain.vue';
-import Directeur from './directeur.vue';
+import Directeur from './Directeur.vue';
 import Navbar from './Navbar.vue';
 
 import { useMessage, useDialog } from 'naive-ui';

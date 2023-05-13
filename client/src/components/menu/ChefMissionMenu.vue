@@ -31,8 +31,8 @@ const menuOptions = [
     icon: renderIcon(Project),
   },
   {
-    title: 'Analyse',
-    key: 'analyse',
+    title: renderMenuItem('Analyse', Route.Analyse),
+    key: Route.Analyse,
     icon: renderIcon(Analytics),
   },
   ...optionsCompte,
