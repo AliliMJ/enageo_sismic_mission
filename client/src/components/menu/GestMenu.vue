@@ -24,7 +24,7 @@ watch(route, (route) => {
 const menuOptions = [
   ...optionDashboard,
   {
-    label: 'Atelier',
+    label: renderMenuItem('Atelier mécanique', Route.Atelier),
     key: 'atelier',
     icon: renderIcon(Atelier),
   },

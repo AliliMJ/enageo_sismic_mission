@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt, { hash } from 'bcrypt';
 
 import prisma from '../utils/prisma.ts';
 import { Request, Response } from 'express';
@@ -59,8 +59,6 @@ export const loginUser = async (req: Request, res: Response) => {
 export const verifyPassword = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  console.log(req.body);
-
   try {
     const user = await prisma.compte.findUnique({ where: { username } });
 
@@ -73,6 +71,22 @@ export const verifyPassword = async (req: Request, res: Response) => {
     }
 
 
+  } catch {
+    res.status(500).json({ err: 'Identification échouée' });
+  }
+};
+
+export const changePassword = async (req: Request, res: Response) => {
+   const { username, password } = req.body;
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const user = await prisma.compte.update({
+     where: { username : username },
+     data : { hashPassword : hashPassword}, 
+    });
+    res.status(200).json(user);
   } catch {
     res.status(500).json({ err: 'Identification échouée' });
   }

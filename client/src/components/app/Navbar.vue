@@ -37,7 +37,8 @@ import {
 import { h } from "vue";
 import { useRouter } from 'vue-router';
 import { useAuth } from '../../stores/authentication';
-import {renderIcon , renderMenuItem , renderMenuItem1} from '../../utils/render';
+import {renderIcon , renderMenuItem} from '../../utils/render';
+//import { ref, onMounted, computed, watch } from 'vue';
 
 const router = useRouter();
 const auth = useAuth();

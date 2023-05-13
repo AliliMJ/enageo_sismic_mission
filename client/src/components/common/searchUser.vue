@@ -4,9 +4,6 @@ import axios from 'axios';
 import { NAutoComplete } from 'naive-ui';
 import { ref, computed, watch } from 'vue';
 import { defineEmits } from 'vue';
-import { useAuth } from '../../stores/authentication';
-
-const auth = useAuth();
 
 const users = ref([]);
 const options = computed(() => {

@@ -27,3 +27,31 @@ export const usernameFilter = (
 
   next();
 };
+
+export const enPanneMaterielFilter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const designation = req.query.like;
+
+  req.body.filter = {
+    designation: { startsWith: designation },
+  };
+
+  next();
+};
+
+export const goodMaterielFilter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const designation = req.query.like;
+
+  req.body.filter = {
+    designation: { startsWith: designation },
+  };
+
+  next();
+};

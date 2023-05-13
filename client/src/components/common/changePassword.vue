@@ -92,14 +92,24 @@ async function onConfirm () {
   username : auth.user.username,
   password : password1.value,
   }
-   const response = await axios.post('http://localhost:3000/verifyPassword',req).data;
+   const response = (await axios.post('http://localhost:3000/verifyPassword',req)).data;
 
-   const user = response.data;
+   if(password2.value===password3.value){
 
-   console.log("----> "+user.response);
+    const newReq = {
+      username : auth.user.username,
+       password : password3.value,
+    }
+
+    await axios.put('http://localhost:3000/changePassword',newReq);
+    message.success("le mot de passe est bien modifiee");
+   }else{
+    message.error("les deux mot de passe sont differents");
+   }
 
   }catch(e){
-    console.log(e);
+    console.log(e.response.data);
+    message.error("l'ancient mot de passe est incorrect");
   }
 
   // if (Number(response.response)==0) {
@@ -110,7 +120,7 @@ async function onConfirm () {
   //   }
   // }
 
-  //emit("confirm", event);
+  emit("confirm");
 };
 const onCancel = () => {
   emit("cancel");

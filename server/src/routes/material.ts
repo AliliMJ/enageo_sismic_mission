@@ -1,22 +1,38 @@
 import express from 'express';
 import paginate from '../middlewares/pagination';
+
+import { enPanneMaterielFilter ,goodMaterielFilter } from '../middlewares/filter';
+
 import {
   getMaterial,
   getMaterialTypes,
   getMaterialByCode,
   mettreEnPanne,
   demandeReparation,
-  reparer,
+  MettreEnReparation,
+  getMaterialByproject,
+  getMaterialEnPanneByproject,
+  getEnPanneMaterielByDesignation,
+  getMaterialGoodByproject,
+  getMaterialGoodByDesignation
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
 
 materialRouter.get('/', paginate, getMaterial);
+materialRouter.get('/EnPanneMateriel/designation/:idProjet',enPanneMaterielFilter,paginate,getEnPanneMaterielByDesignation);
+materialRouter.get('/goodMateriel/designation/:idProjet', goodMaterielFilter,paginate, getMaterialGoodByDesignation);
 
 materialRouter.get('/types', getMaterialTypes);
 
+materialRouter.get('/materielByProject/:idProjet', getMaterialByproject);
+materialRouter.get('/materielEnPanneByProject/:idProjet', getMaterialEnPanneByproject);
+materialRouter.get('/materielGoodByProject/:idProjet',  getMaterialGoodByproject);
+
+
+materialRouter.post('/mattreEnReparation/:codeMat',MettreEnReparation);
 materialRouter.get('/:codeMat', getMaterialByCode);
 
 materialRouter.post('/:codeMat/mettreEnPanne', mettreEnPanne);
-materialRouter.post('/:codeMat/reparer', reparer);
+
 materialRouter.post('/:codeMat/demanderReparation', demandeReparation);

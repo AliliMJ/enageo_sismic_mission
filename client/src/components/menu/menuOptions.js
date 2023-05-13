@@ -14,6 +14,7 @@ export const optionsSupervisor = [
     children: [{ label: 'Missions', key: Route.Mission }],
   },
 ];
+
 export const optionsChefMission = [
   {
     label: `Tables`,

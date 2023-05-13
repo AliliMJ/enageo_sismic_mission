@@ -1,8 +1,10 @@
 <script setup>
 import { NTag } from 'naive-ui';
+
 const { enPanne } = defineProps({
   enPanne: Boolean,
 });
+
 </script>
 
 <template>

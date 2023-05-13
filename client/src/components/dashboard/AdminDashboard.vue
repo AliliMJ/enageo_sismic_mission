@@ -1,133 +1,3 @@
-<script setup>
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-} from "chart.js";
-import { Pie, Bar } from "vue-chartjs";
-import axios from "axios";
-import { NSpace, NGrid, NGridItem, NForm, NCard, NIcon, NText } from "naive-ui";
-import {
-  PersonOutline as person,
-  StatsChart as chart,
-  BriefcaseOutline as bag,
-  MailOutline as mail
-} from "@vicons/ionicons5";
-import {
-  ArrowTrendingLines24Regular as arrowTop,
-  ArrowTrending20Regular as arrowTopSimple,
-} from "@vicons/fluent";
-
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-  CategoryScale,
-  LinearScale,
-  BarElement
-);
-
-const stat = (await axios.get(`http://localhost:3000/comptes/stats`)).data;
-
-const usersByYear = (await axios.get(`http://localhost:3000/comptes/dates`))
-  .data;
-
-const employesByYear = (await axios.get(`http://localhost:3000/employes/stats`))
-  .data;
-
-const pieOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: "bottom",
-    },
-  },
-};
-
-const pieData = {
-  labels: [
-    "Administrateur",
-    "chef mission",
-    "chef terrain",
-    "gestionnaire",
-    "directeur",
-  ],
-  datasets: [
-    {
-      backgroundColor: [" #F47A1F", "#FDBB2F", "#377B2B", "#7AC142", "#007CC3"],
-      data: [
-        Number(stat.nbAdmins),
-        Number(stat.nbCMission),
-        Number(stat.NbCTerrain),
-        Number(stat.NbGestionnare),
-        Number(stat.nbDirecteur),
-      ],
-    },
-  ],
-};
-
-const usersDates = [];
-usersByYear.forEach((element) => {
-  usersDates.push(element.year);
-});
-const usersDatesData = [];
-usersByYear.forEach((element) => {
-  usersDatesData.push(element.nbr);
-});
-
-const employesDates = [];
-employesByYear.forEach((element) => {
-  employesDates.push(element.year);
-});
-const employesDatesData = [];
-employesByYear.forEach((element) => {
-  employesDatesData.push(element.nbr);
-});
-
-const bar1Options = {
-  responsive: true,
-  maintainAspectRatio: false,
-};
-
-const bar1Data = {
-  labels: usersDates,
-  datasets: [
-    {
-      label: "nombre des comptes créé par année",
-      backgroundColor: ["rgb(54, 162, 235 , 0.2)"],
-      borderColor: ["rgb(54, 162, 235)"],
-      borderWidth: 1,
-      data: usersDatesData,
-    },
-  ],
-};
-
-const bar2Options = {
-  responsive: true,
-  maintainAspectRatio: false,
-};
-
-const bar2Data = {
-  labels: employesDates,
-  datasets: [
-    {
-      label: "nombre des employes rejoint par annee",
-      backgroundColor: ["rgba(255, 205, 86, 0.2)"],
-      borderColor: ["rgb(255, 205, 86)"],
-      borderWidth: 1,
-      data: employesDatesData,
-    },
-  ],
-};
-</script>
-
 <template>
   <NSpace class="space">
     <NGrid x-gap="20" y-gap="20" :cols="4">
@@ -300,6 +170,136 @@ const bar2Data = {
     </NGrid>
   </NSpace>
 </template>
+
+<script setup>
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+import { Pie, Bar } from "vue-chartjs";
+import axios from "axios";
+import { NSpace, NGrid, NGridItem, NForm, NCard, NIcon, NText } from "naive-ui";
+import {
+  PersonOutline as person,
+  StatsChart as chart,
+  BriefcaseOutline as bag,
+  MailOutline as mail
+} from "@vicons/ionicons5";
+import {
+  ArrowTrendingLines24Regular as arrowTop,
+  ArrowTrending20Regular as arrowTopSimple,
+} from "@vicons/fluent";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
+
+const stat = (await axios.get(`http://localhost:3000/comptes/stats`)).data;
+
+const usersByYear = (await axios.get(`http://localhost:3000/comptes/dates`))
+  .data;
+
+const employesByYear = (await axios.get(`http://localhost:3000/employes/stats`))
+  .data;
+
+const pieOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: "bottom",
+    },
+  },
+};
+
+const pieData = {
+  labels: [
+    "Administrateur",
+    "chef mission",
+    "chef terrain",
+    "gestionnaire",
+    "directeur",
+  ],
+  datasets: [
+    {
+      backgroundColor: [" #F47A1F", "#FDBB2F", "#377B2B", "#7AC142", "#007CC3"],
+      data: [
+        Number(stat.nbAdmins),
+        Number(stat.nbCMission),
+        Number(stat.NbCTerrain),
+        Number(stat.NbGestionnare),
+        Number(stat.nbDirecteur),
+      ],
+    },
+  ],
+};
+
+const usersDates = [];
+usersByYear.forEach((element) => {
+  usersDates.push(element.year);
+});
+const usersDatesData = [];
+usersByYear.forEach((element) => {
+  usersDatesData.push(element.nbr);
+});
+
+const employesDates = [];
+employesByYear.forEach((element) => {
+  employesDates.push(element.year);
+});
+const employesDatesData = [];
+employesByYear.forEach((element) => {
+  employesDatesData.push(element.nbr);
+});
+
+const bar1Options = {
+  responsive: true,
+  maintainAspectRatio: false,
+};
+
+const bar1Data = {
+  labels: usersDates,
+  datasets: [
+    {
+      label: "nombre des comptes créé par année",
+      backgroundColor: ["rgb(54, 162, 235 , 0.2)"],
+      borderColor: ["rgb(54, 162, 235)"],
+      borderWidth: 1,
+      data: usersDatesData,
+    },
+  ],
+};
+
+const bar2Options = {
+  responsive: true,
+  maintainAspectRatio: false,
+};
+
+const bar2Data = {
+  labels: employesDates,
+  datasets: [
+    {
+      label: "nombre des employes rejoint par annee",
+      backgroundColor: ["rgba(255, 205, 86, 0.2)"],
+      borderColor: ["rgb(255, 205, 86)"],
+      borderWidth: 1,
+      data: employesDatesData,
+    },
+  ],
+};
+</script>
 
 <style scooped>
 .pie {

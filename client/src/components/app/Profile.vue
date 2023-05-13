@@ -462,6 +462,7 @@ const showChangePasswordModal = () => {
       title="chnager mon mot de passed"
       :showModal="showModal"
       @cancel="showModal = false"
+      @confirm="showModal = false"
     />
     <!-- <NCard
           header-style="display:flex;flex-direction:row-reverse;"

@@ -1,0 +1,3 @@
+<template>
+    directeur dashboard
+</template>
