@@ -16,13 +16,11 @@ import DirecteurMenu from '../menu/DirecteurMenu.vue';
     </NLayoutSider>
 
     <NLayoutContent>
-      <NCard :bordered="false">
-        <Suspense>
-          <NScrollbar style="height: 85vh">
-            <RouterView />
-          </NScrollbar>
-        </Suspense>
-      </NCard>
+      <Suspense>
+        <NScrollbar style="height: 85vh">
+          <RouterView />
+        </NScrollbar>
+      </Suspense>
     </NLayoutContent>
   </NLayout>
 </template>
@@ -30,5 +28,9 @@ import DirecteurMenu from '../menu/DirecteurMenu.vue';
 <style scoped>
 .n-layout-sider {
   height: 100vh;
+}
+.n-layout-content {
+  padding-left: 10px;
+  padding-top: 10px;
 }
 </style>
