@@ -19,6 +19,8 @@ import Dashboard from 'components/dashboard/Dashboard.vue';
 import Map from 'app/Map.vue';
 import CreateRapport from 'components/pages/CreateRapport.vue';
 import PivotTable from 'components/analysis/PivotTable.vue';
+import AtelierTable from 'components/tables/AtelierTable.vue';
+import MaterielAtelier from 'components/pages/MaterielAtelier.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -83,7 +85,7 @@ const routes = [
         path: '/atelier',
         name: Route.Atelier,
         component: AtelierTable,
-        meta: { role: Role.Gestionnaire, title: 'l\'atelier mécanique'},
+        meta: { role: Role.Gestionnaire, title: "l'atelier mécanique" },
       },
       {
         path: '/atelier/:codeMat',
