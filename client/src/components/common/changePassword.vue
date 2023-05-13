@@ -54,8 +54,8 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref } from "vue";
+import axios from 'axios';
+import { ref } from 'vue';
 import {
   NModal,
   NScrollbar,
@@ -66,13 +66,13 @@ import {
   NFormItemGi,
   NInput,
   useMessage,
-} from "naive-ui";
-import { useAuth } from "../../stores/authentication";
+} from 'naive-ui';
+import { useAuth } from '../../stores/authentication';
 
-const emit = defineEmits(["confirm", "cancel"]);
-const password1 = ref("");
-const password2 = ref("");
-const password3 = ref("");
+const emit = defineEmits(['confirm', 'cancel']);
+const password1 = ref('');
+const password2 = ref('');
+const password3 = ref('');
 
 const auth = useAuth();
 
@@ -83,23 +83,22 @@ const props = defineProps({
   showModal: Boolean,
 });
 
+async function onConfirm() {
+  try {
+    const req = {
+      username: auth.user.username,
+      password: password1.value,
+    };
+    const response = (
+      await axios.post('http://localhost:3000/verifyPassword', req)
+    ).data;
 
+    console.log(response);
+    //const user = response.data;
 
-async function onConfirm () {
-
-  try{
-  const req = {
-  username : auth.user.username,
-  password : password1.value,
-  }
-   const response = await axios.post('http://localhost:3000/verifyPassword',req).data;
-
-   const user = response.data;
-
-   console.log("----> "+user.response);
-
-  }catch(e){
-    console.log(e);
+    //console.log("----> "+user.response);
+  } catch (e) {
+    console.log(e.response.data);
   }
 
   // if (Number(response.response)==0) {
@@ -111,9 +110,9 @@ async function onConfirm () {
   // }
 
   //emit("confirm", event);
-};
+}
 const onCancel = () => {
-  emit("cancel");
+  emit('cancel');
 };
 </script>
 

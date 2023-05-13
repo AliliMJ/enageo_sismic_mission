@@ -14,6 +14,7 @@ import { useRouter } from 'vue-router';
 import Gestionnaire from './Gestionnaire.vue';
 import ChefMission from './ChefMission.vue';
 import ChefTerrain from './ChefTerrain.vue';
+import Directeur from './Directeur.vue';
 import Navbar from './Navbar.vue';
 
 import { useMessage, useDialog } from 'naive-ui';
@@ -64,6 +65,7 @@ const logout = () => {
       <Gestionnaire v-else-if="auth.user?.role === Role.Gestionnaire" />
       <ChefMission v-else-if="auth.user?.role === Role.ChefMision" />
       <ChefTerrain v-else-if="auth.user?.role === Role.ChefTerrain" />
+      <Directeur v-else-if="auth.user?.role === Role.Directeur" />
     </NLayoutContent>
   </NLayout>
 </template>

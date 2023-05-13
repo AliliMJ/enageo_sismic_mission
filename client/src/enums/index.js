@@ -20,6 +20,7 @@ export const Route = Object.freeze({
   Terrain: 'terrain',
   Equipe: 'equipe',
   Rapport: 'rapport',
+  Analyse: 'analyse',
 });
 
 export const groupeSanguin = Object.freeze({
