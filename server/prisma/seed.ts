@@ -383,6 +383,7 @@ async function main() {
         designation: 'D1',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 1,
       },
       {
@@ -390,6 +391,7 @@ async function main() {
         designation: 'D2',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 2,
       },
       {
@@ -397,6 +399,7 @@ async function main() {
         designation: 'D1',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 3,
       },
       {
@@ -404,6 +407,7 @@ async function main() {
         designation: 'D1',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 1,
       },
       {
@@ -411,6 +415,7 @@ async function main() {
         designation: 'D1',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 1,
       },
       {
@@ -418,6 +423,7 @@ async function main() {
         designation: 'D3',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 1,
       },
       {
@@ -425,6 +431,7 @@ async function main() {
         designation: 'D3',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 2,
       },
       {
@@ -432,6 +439,7 @@ async function main() {
         designation: 'D1',
         status: 2,
         matricule: '0000',
+        idProjet : 1,
         idTypeMat: 3,
       },
     ],
