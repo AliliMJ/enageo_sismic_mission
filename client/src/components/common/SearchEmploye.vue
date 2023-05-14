@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { NAutoComplete } from 'naive-ui';
 import { ref, computed, watch } from 'vue';
-import { defineEmits } from 'vue'
 
 const employes = ref([]);
 const options = computed(() => {
@@ -12,7 +11,7 @@ const options = computed(() => {
   }));
 });
 
-const value = ref("");
+const value = ref('');
 watch(value, async () => {
   if (value.value.length > 0) {
     employes.value = (
@@ -21,12 +20,11 @@ watch(value, async () => {
   }
 });
 
-
 const emit = defineEmits(['sendId']);
 
-const sendId = function() {
-  emit("sendId",value.value.split(' ')[0])
-}
+const sendId = function () {
+  emit('sendId', value.value.split(' ')[0]);
+};
 </script>
 
 <template>

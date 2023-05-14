@@ -1,7 +1,7 @@
 <template>
   <n-modal v-model:show="props.showModal" :mask-closable="false" size="huge">
     <n-card
-      style="width: 700px; height:550px;"
+      style="width: 700px; height: 550px"
       :title="props.title"
       :bordered="false"
       size="huge"
@@ -19,8 +19,7 @@
         ajouter une materiel a la reparation
       </NSpace>
 
-      <NSpace vertical justify="space-between" style="height: 440px;">
-
+      <NSpace vertical justify="space-between" style="height: 440px">
         <NSpace vertical class="child1">
           <NSpace justify="end">
             <!-- <searchGoodMateriel
@@ -29,41 +28,41 @@
               style="width: 230px"
             /> -->
             <n-input
-        v-model:value="searchDesignation"
-        @update:value="searchFilter"
-        placeholder="Rechercher par designation"
-        style="width:255px"
-       >
-        <template #suffix>
-          <n-icon :component="search" />
-        </template>
-      </n-input>
+              v-model:value="searchDesignation"
+              @update:value="searchFilter"
+              placeholder="Rechercher par designation"
+              style="width: 255px"
+            >
+              <template #suffix>
+                <n-icon :component="search" />
+              </template>
+            </n-input>
           </NSpace>
           <NSpace>
-            <n-data-table
-              @onRowClicked="handleClick"
+            <NDataTable
               :data="goodMateriel"
               :columns="cols"
               style="font-size: 13px"
-              v-model:checked-row-keys="checkedRowKeysRef"
+              :row-key="rowKey"
+              :checked-row-keys="checkedRowKeysRef"
+              @update:checked-row-keys="handleCheck"
             />
           </NSpace>
-        </NSpace >
-        <NSpace>
         </NSpace>
+        <NSpace> </NSpace>
         <n-space justify="end">
-        <NButton @click="onConfirm" value="success" type="success"
-          >Confirmer</NButton
-        >
-        <NButton @click="onCancel">Annuler</NButton>
-      </n-space>
+          <NButton @click="onConfirm" value="success" type="success"
+            >Confirmer</NButton
+          >
+          <NButton @click="onCancel">Annuler</NButton>
+        </n-space>
       </NSpace>
     </n-card>
   </n-modal>
 </template>
 
 <script setup>
-import axios from "axios";
+import axios from 'axios';
 import {
   NModal,
   NCard,
@@ -76,12 +75,11 @@ import {
 } from "naive-ui";
 import { SearchOutline as search } from '@vicons/ionicons5';
 //import STable from "common/STable.vue";
-import { h } from "vue";
 //import StatusTag from "common/StatusTag.vue";
-import { ref,watch } from 'vue';
 import MaterielTag from 'common/MaterielTag.vue';
-
-const emit = defineEmits(["confirm", "cancel"]);
+import { h } from 'vue';
+import { ref, watch } from 'vue';
+const emit = defineEmits(['confirm', 'cancel']);
 
 const message = useMessage();
 
@@ -92,11 +90,13 @@ const props = defineProps({
 });
 
 const idProjet = ref(props.idProjet);
-const checkedRowKeysRef = ref([10, 1]);
+const checkedRowKeysRef = ref([]);
+const rowKey = (row) => {
+  return row.codeMat;
+};
 
 // function checkedRowKeys(){
 // }
-
 
 const goodMateriel = ref([]);
 
@@ -107,38 +107,37 @@ goodMateriel.value = (
 ).data;
 
 const cols = [
-{
-      type: "selection",
-      multiple: false,
-},
-  { title: "code materiel", key: "codeMat" },
-  { title: "designation", key: "designation" },
-  { title: "matricule", key: "matricule" },
   {
     title: "Status",
     key: "statuMateriel",
+    type: 'selection',
+    multiple: false,
+  },
+  { title: 'code materiel', key: 'codeMat' },
+  { title: 'designation', key: 'designation' },
+  { title: 'matricule', key: 'matricule' },
+  {
+    title: 'Status',
+    key: 'statuMateriel',
     render(row) {
       return h(MaterielTag, { statuMateriel: row.status });
-    },
   },
+}
 ];
 
-
-const handleClick = (good) => {
-  console.log("--->"+good.codeMat);
-
+const handleCheck = (rowKeys) => {
+  checkedRowKeysRef.value = rowKeys;
 };
 
 const onConfirm = () => {};
 
 const onCancel = () => {
-  emit("cancel");
+  emit('cancel');
 };
-
 
 const searchDesignation = ref('');
 const searchFilter = () => {
-  console.log("=======>"+searchDesignation.value);
+  console.log('=======>' + searchDesignation.value);
   watch(searchDesignation, async () => {
     if (searchDesignation.value.length > 0) {
       goodMateriel.value = (
@@ -147,14 +146,14 @@ const searchFilter = () => {
         )
       ).data;
     } else {
-      goodMateriel.value = (await axios.get(`http://localhost:3000/material/materielGoodByProject/${idProjet.value}`)).data;
+      goodMateriel.value = (
+        await axios.get(
+          `http://localhost:3000/material/materielGoodByProject/${idProjet.value}`
+        )
+      ).data;
     }
   });
 };
-
 </script>
 
-<style scoped>
-
-
-</style>
+<style scoped></style>
