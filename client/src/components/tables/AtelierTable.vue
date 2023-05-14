@@ -29,9 +29,9 @@ import Modal from 'common/addMaterielToPanne.vue'
 import { h } from 'vue';
 
 const router = useRouter();
-const route = useRoute();
-const dialog = useDialog();
-const message = useMessage();
+// const route = useRoute();
+// const dialog = useDialog();
+// const message = useMessage();
 
 const auth = useAuth();
 

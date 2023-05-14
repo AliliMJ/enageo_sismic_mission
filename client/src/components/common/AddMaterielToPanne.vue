@@ -40,7 +40,7 @@
       </n-input>
           </NSpace>
           <NSpace>
-            <STable
+            <n-data-table
               @onRowClicked="handleClick"
               :data="goodMateriel"
               :columns="cols"
@@ -58,8 +58,6 @@
         <NButton @click="onCancel">Annuler</NButton>
       </n-space>
       </NSpace>
-
-      
     </n-card>
   </n-modal>
 </template>
@@ -74,14 +72,14 @@ import {
   useMessage,
   NInput,
   NIcon,
-  NGrid,
-  NFormItemGi
+  NDataTable
 } from "naive-ui";
 import { SearchOutline as search } from '@vicons/ionicons5';
-import STable from "common/STable.vue";
+//import STable from "common/STable.vue";
 import { h } from "vue";
-import StatusTag from "common/StatusTag.vue";
-import { ref, onMounted, computed, watch } from 'vue';
+//import StatusTag from "common/StatusTag.vue";
+import { ref,watch } from 'vue';
+import MaterielTag from 'common/MaterielTag.vue';
 
 const emit = defineEmits(["confirm", "cancel"]);
 
@@ -118,9 +116,9 @@ const cols = [
   { title: "matricule", key: "matricule" },
   {
     title: "Status",
-    key: "status",
+    key: "statuMateriel",
     render(row) {
-      return h(StatusTag, { enPanne: row.enPanne });
+      return h(MaterielTag, { statuMateriel: row.status });
     },
   },
 ];
