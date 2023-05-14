@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { NAutoComplete } from 'naive-ui';
 import { ref, computed, watch } from 'vue';
-import { defineEmits } from 'vue';
 
 const materielEnPanne = ref([]);
 const options = computed(() => {
@@ -29,8 +28,6 @@ const emit = defineEmits(['sendCodeMat']);
 const sendCodeMat = function () {
   emit('sendCodeMat', searchValue.value.split(' ')[0]);
 };
-
-
 </script>
 
 <template>
