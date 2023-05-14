@@ -161,7 +161,9 @@ export const getEnPanneMaterielByDesignation = async (
 
     const materielEnPanne = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
-      where: { ...req.body.filter, enPanne: true, idProjet: idProjet },
+      where: { ...req.body.filter, 
+        OR :[{status : 0 } , {status : 1}], 
+        idProjet: idProjet },
     });
 
     res.status(200).json(materielEnPanne);
@@ -182,7 +184,15 @@ export const getMaterialEnPanneByproject = async (
     const materials = await prisma.materiel.findMany({
       where: {
         idProjet: idProjet,
-        status: 0,
+        OR : [
+          {
+            status: 0,
+          },
+          {
+            status: 1,
+          }
+        ]
+        
       },
     });
 
@@ -216,9 +226,11 @@ export const getMaterialGoodByDesignation = async (req: Request,res: Response) =
   try {
     const idProjet = Number(req.params.idProjet);
 
+    console.log("--> "+idProjet);
+
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
-      where: { ...req.body.filter, enPanne: false ,
+      where: { ...req.body.filter, status : 2 ,
       idProjet: idProjet,}
     });
 

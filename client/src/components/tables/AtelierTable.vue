@@ -24,7 +24,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, computed, watch } from 'vue';
 import { SearchOutline as search } from '@vicons/ionicons5';
 import { useAuth } from '../../stores/authentication';
-import StatusTag from 'common/StatusTag.vue';
+import MaterielTag from 'common/MaterielTag.vue';
 import Modal from 'common/addMaterielToPanne.vue'
 import { h } from 'vue';
 
@@ -56,9 +56,9 @@ const showModal = ref(false);
   { title: 'matricule', key: 'matricule' },
   {
     title: 'Status',
-    key: 'status',
+    key: 'statuMateriel',
     render(row) {
-      return h(StatusTag, { enPanne: row.enPanne });
+      return h(MaterielTag, { statuMateriel: row.status });
     },
   }
 ];
@@ -115,6 +115,7 @@ const props = defineProps(['projet.value.idProjet']);
           <n-icon :component="search" />
         </template>
       </n-input>
+      <NSpace justify="space-between">
       <NButton
        @click="showInsertEmployeModal"
         class="button"
@@ -128,6 +129,7 @@ const props = defineProps(['projet.value.idProjet']);
           </NIcon>
         </template>
       </NButton>
+    </NSpace>
     </NSpace>
     <NSpace class="tableContainer">
     </NSpace>
