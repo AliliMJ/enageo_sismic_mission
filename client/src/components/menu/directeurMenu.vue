@@ -24,6 +24,11 @@ const menuOptions = [
     key: Route.Analyse,
     icon: renderIcon(Analytics),
   },
+  {
+    title: renderMenuItem('Map', Route.Carte),
+    key: Route.Carte,
+    icon: renderIcon(Analytics),
+  },
 
   ...optionsCompte,
 ];
