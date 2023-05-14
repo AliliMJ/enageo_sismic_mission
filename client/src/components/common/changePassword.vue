@@ -83,20 +83,6 @@ const props = defineProps({
   showModal: Boolean,
 });
 
-async function onConfirm() {
-  try {
-    const req = {
-      username: auth.user.username,
-      password: password1.value,
-    };
-    const response = (
-      await axios.post('http://localhost:3000/verifyPassword', req)
-    ).data;
-
-    console.log(response);
-    //const user = response.data;
-
-<<<<<<< HEAD
 async function onConfirm () {
 
   try{
@@ -122,11 +108,6 @@ async function onConfirm () {
   }catch(e){
     console.log(e.response.data);
     message.error("l'ancient mot de passe est incorrect");
-=======
-    //console.log("----> "+user.response);
-  } catch (e) {
-    console.log(e.response.data);
->>>>>>> 45a1088020c5a5f25747f4806e7a4e982f0fd422
   }
 
   // if (Number(response.response)==0) {
@@ -137,13 +118,8 @@ async function onConfirm () {
   //   }
   // }
 
-<<<<<<< HEAD
-  emit("confirm");
-};
-=======
-  //emit("confirm", event);
+  emit("confirm", event);
 }
->>>>>>> 45a1088020c5a5f25747f4806e7a4e982f0fd422
 const onCancel = () => {
   emit('cancel');
 };
