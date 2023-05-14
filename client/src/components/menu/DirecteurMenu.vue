@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { NMenu, NDivider } from 'naive-ui';
+import { NMenu } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { optionsCompte, optionDashboard } from './menuOptions.js';
