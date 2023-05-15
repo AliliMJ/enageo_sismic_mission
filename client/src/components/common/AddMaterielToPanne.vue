@@ -42,7 +42,7 @@
             <NDataTable
               :data="goodMateriel"
               :columns="cols"
-              style="font-size: 13px"
+              style="font-size: 13px;width:620px"
               :row-key="rowKey"
               :checked-row-keys="checkedRowKeysRef"
               @update:checked-row-keys="handleCheck"
@@ -68,20 +68,20 @@ import {
   NCard,
   NSpace,
   NButton,
-  useMessage,
   NInput,
   NIcon,
-  NDataTable
+  NDataTable,
+  useDialog,
+  useMessage
 } from "naive-ui";
 import { SearchOutline as search } from '@vicons/ionicons5';
-//import STable from "common/STable.vue";
-//import StatusTag from "common/StatusTag.vue";
 import MaterielTag from 'common/MaterielTag.vue';
 import { h } from 'vue';
 import { ref, watch } from 'vue';
 const emit = defineEmits(['confirm', 'cancel']);
 
 const message = useMessage();
+const dialog = useDialog();
 
 const props = defineProps({
   title: String,
@@ -92,7 +92,7 @@ const props = defineProps({
 const idProjet = ref(props.idProjet);
 const checkedRowKeysRef = ref([]);
 const rowKey = (row) => {
-  return row.codeMat;
+  return row;
 };
 
 // function checkedRowKeys(){
@@ -127,9 +127,18 @@ const cols = [
 
 const handleCheck = (rowKeys) => {
   checkedRowKeysRef.value = rowKeys;
+  console.log("--->"+checkedRowKeysRef.value[0].designation);
 };
 
-const onConfirm = () => {};
+const onConfirm = async () => {
+  if(checkedRowKeysRef.value[0] === undefined){
+    message.warning("il faut choisir un materiel!!!",{ duration: 5e3 });
+  }else{
+    //( await axios.get(`http://localhost:3000/material/mettreEnPanne/${checkedRowKeysRef.value[0].codeMat}`));
+      message.success("matriel bien ajoutee a l'atelier");
+      emit('confirm',checkedRowKeysRef.value[0].codeMat);
+  }
+};
 
 const onCancel = () => {
   emit('cancel');

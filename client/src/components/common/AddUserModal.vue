@@ -68,17 +68,6 @@ const props = defineProps({
   showModal: Boolean,
 });
 
-// **** Function not in the right place ****
-// const insert = async () => {
-//   const req = {
-//     username: username.value,
-//     role: selectedRole.value,
-//     employeId: Number(employeId.value),
-//   };
-//   const empl = await axios.post('http://localhost:3000/users', req).data;
-//   console.log(empl);
-// };
-
 const employes = (await axios.get('http://localhost:3000/employes')).data;
 
 const EmployeOptions = [];

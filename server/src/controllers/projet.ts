@@ -88,9 +88,7 @@ export const getProjetByMission = async (req: Request, res: Response) => {
       where: { codeMission : codeMission },
       include: { Etats: true },
     });
-
-  
-
+    
     return res.status(200).json(projet);
   } catch {
     res.status(500).json({

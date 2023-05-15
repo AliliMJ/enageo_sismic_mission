@@ -87,7 +87,11 @@ const showInsertEmployeModal = () => {
   showModal.value = true;
 };
 
-async function confirmAdd(event) {
+async function confirmAdd(codeMatricule) {
+  console.log("----------------->"+codeMatricule);
+  const materiel = (await axios.post(`http://localhost:3000/material/mettreEnPanne/${codeMatricule}`)).data;
+  materielEnPanne.value.push(materiel.materielEnPanne);
+  showModal.value = false;
 }
 
 const props = defineProps(['projet.value.idProjet']);
