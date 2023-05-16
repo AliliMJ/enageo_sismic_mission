@@ -1,5 +1,4 @@
 <script setup>
-import { NScrollbar } from 'naive-ui';
 const result = await fetch('data.json');
 const data = await result.json();
 

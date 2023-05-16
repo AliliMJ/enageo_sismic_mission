@@ -30,7 +30,7 @@ export const getProjetById = async (req: Request, res: Response) => {
     const { idProjet } = req.params;
     const projet: any = await prisma.projet.findUnique({
       where: { idProjet: Number(idProjet) },
-      include: { Etats: true },
+      include: { Etats: true, Rapprots: true },
     });
 
     return res.status(200).json(projet);
@@ -81,14 +81,14 @@ export const insertProjet = async (req: Request, res: Response) => {
 };
 
 export const getProjetByMission = async (req: Request, res: Response) => {
-  const codeMission  = req.params.missionCode;
+  const codeMission = req.params.missionCode;
 
   try {
     const projet = await prisma.projet.findFirst({
-      where: { codeMission : codeMission },
+      where: { codeMission: codeMission },
       include: { Etats: true },
     });
-    
+
     return res.status(200).json(projet);
   } catch {
     res.status(500).json({
