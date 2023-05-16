@@ -12,6 +12,7 @@ import { fonctionRouter } from './routes/fonction.ts';
 import { equipeRouter } from './routes/equipe.ts';
 import { wilayaRouter } from './routes/wilaya.ts';
 import { typeMaterielRouter } from './routes/typeMateriel.ts';
+import { rapportRouter } from './routes/rapport.ts';
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use('/missions', missionRouter);
 app.use('/atelier', atelierRouter);
 app.use('/employes', employeRouter);
 app.use('/projets', projetRouter);
+app.use('/rapports', rapportRouter);
 app.use('/fonction', fonctionRouter);
 app.use('/equipes', equipeRouter);
 app.use('/wilaya', wilayaRouter);

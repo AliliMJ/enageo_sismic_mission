@@ -35,6 +35,9 @@ const cols = [
 function addProject() {
   router.push({ name: 'creationProjet' });
 }
+function handleClick(row) {
+  router.push(`/projet/${row.idProjet}`);
+}
 </script>
 
 <template>
@@ -50,6 +53,6 @@ function addProject() {
         </template>
       </NButton>
     </NSpace>
-    <STable :data="projects" :columns="cols" />
+    <STable @onRowClicked="handleClick" :data="projects" :columns="cols" />
   </NSpace>
 </template>

@@ -99,6 +99,10 @@ const routes = [
         mata: { role: Role.ChefMision },
       },
       {
+        path: '/projet/:idProjet',
+        component: () => import('components/pages/Projet.vue'),
+      },
+      {
         path: '/equipe',
         name: Route.Equipe,
         component: () => import('components/tables/EquipesTable.vue'),
@@ -131,7 +135,11 @@ const routes = [
       },
       { path: '/carte', name: 'carte', component: Map },
       { path: '/terrain', name: Route.Terrain },
-      { path: '/rapport', name: Route.Rapport },
+      {
+        path: '/rapport',
+        name: Route.Rapport,
+        component: () => import('components/pages/CreatedRapport.vue'),
+      },
       {
         path: 'rapport/create',
         name: 'createRapport',
