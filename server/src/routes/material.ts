@@ -16,6 +16,7 @@ import {
   getMaterialGoodByproject,
   getMaterialGoodByDesignation,
   getMaterialEnPanneWithReparations,
+  mettreBonEtat
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
@@ -32,7 +33,8 @@ materialRouter.get('/materielGoodByProject/:idProjet',  getMaterialGoodByproject
 
 materialRouter.get('/getMaterielWithReparations/:codeMat',getMaterialEnPanneWithReparations);
 
-materialRouter.post('/mattreEnReparation/:codeMat',MettreEnReparation);
+materialRouter.put('/mettreEnReparation/:codeMat',MettreEnReparation);
+materialRouter.put('/mettreBonEtat/:codeMat', mettreBonEtat);
 materialRouter.get('/:codeMat', getMaterialByCode);
 
 materialRouter.post('/mettreEnPanne/:codeMat', mettreEnPanne);

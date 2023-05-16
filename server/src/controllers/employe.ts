@@ -163,4 +163,20 @@ export const getEmployesNumberOfYear = async (req: Request, res: Response) => {
   }
 };
 
+export const getEmployeByMission = async (req: Request, res: Response) => {
+  try {
+    const codeMission = req.params.codeMission;
+
+    const employe = await prisma.employe.findMany({
+      where: { codeMission : codeMission },
+      include: { Equipe: true, Mission: true, fonction: true },
+    });
+    res.status(200).json(employe);
+  } catch {
+    res.status(500).json({
+      err: `Èchec lors de la collection de l'employe ${req.params.id}`,
+    });
+  }
+};
+
 

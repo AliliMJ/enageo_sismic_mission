@@ -11,7 +11,9 @@ import Fonction from '../common/Fonction.vue';
 import Position from '../common/Position.vue';
 import { useRouter } from 'vue-router';
 import SearchEmploye from '../common/SearchEmploye.vue';
+import { useAuth } from '../../stores/authentication';
 
+const auth = useAuth();
 const dialog = useDialog();
 
 function deleteEmploye(id) {
@@ -29,7 +31,9 @@ function updateEmploye(id) {
   window.alert(id);
 }
 
-const employes = (await axios.get('http://localhost:3000/employes')).data;
+const employe = (await axios.get(`http://localhost:3000/employes/${auth.user.id}`)).data;
+
+const employes = (await axios.get(`http://localhost:3000/employes/employeByMission/${employe.codeMission}`)).data;
 
 const router = useRouter();
 const cols = [
