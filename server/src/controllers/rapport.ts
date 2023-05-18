@@ -38,3 +38,7 @@ export const getRapportsByProjet = async (req: Request, res: Response) => {
       .json({ err: 'Problème lors de la collection des rapports' });
   }
 };
+
+export const insertRapport = async (req: Request, res: Response) => {
+  const { rendements } = req.body;
+};

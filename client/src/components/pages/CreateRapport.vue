@@ -10,11 +10,14 @@ import {
   NText,
   NDivider,
 } from 'naive-ui';
+import axios from 'axios';
 import AddRendementModal from 'common/AddRendementModal.vue';
 
 import ProductionCard from 'common/ProductionCard.vue';
 import { AddSquareMultiple20Regular as AddCard } from '@vicons/fluent';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const showModal = ref(false);
 let cardCount = 0;
@@ -30,6 +33,15 @@ function removeCard(key) {
   console.log('key:', key);
   console.log('rendements', rendements.value);
   rendements.value = rendements.value.filter((r) => r.key !== key);
+}
+
+async function createReport() {
+  await axios.post('http://localhost:3000/rapport', { rendements });
+  router.back();
+}
+
+function annuler() {
+  router.back();
 }
 </script>
 
@@ -77,8 +89,8 @@ function removeCard(key) {
     </template>
     <template #action>
       <n-space>
-        <n-button type="success">Créer rapport</n-button>
-        <n-button>Annuler</n-button>
+        <n-button type="success" @click="createReport">Créer rapport</n-button>
+        <n-button @click="annuler">Annuler</n-button>
       </n-space>
     </template>
   </n-card>

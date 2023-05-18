@@ -54,32 +54,32 @@ app.use('/equipes', equipeRouter);
 app.use('/wilaya', wilayaRouter);
 app.use('/consommation', consommationRoute);
 
-cron.schedule('0-59 * * * *', async () => {
-  const consommationCollection = mongo.db().collection('consommation');
-  try {
-    //get recent added data from mongodb
-    console.log('Extracting ...');
-    const consommations = await consommationCollection.find().toArray();
+// cron.schedule('0-59 * * * *', async () => {
+//   const consommationCollection = mongo.db().collection('consommation');
+//   try {
+//     //get recent added data from mongodb
+//     console.log('Extracting ...');
+//     const consommations = await consommationCollection.find().toArray();
 
-    //transform the data
-    console.log('Transforming ...');
-    const charges = datacraft.transformProcess(consommations);
-    console.log(charges);
+//     //transform the data
+//     console.log('Transforming ...');
+//     const charges = datacraft.transformProcess(consommations);
+//     console.log(charges);
 
-    //load to data warehouse
-    console.log('Loading ...');
-    if (charges.length > 0)
-      await warehouse.insert({
-        table: 'charges',
-        values: charges,
-        format: 'JSONEachRow',
-      });
-  } catch (e) {
-    console.log(e);
-  } finally {
-    await consommationCollection.deleteMany();
-  }
-});
+//     //load to data warehouse
+//     console.log('Loading ...');
+//     if (charges.length > 0)
+//       await warehouse.insert({
+//         table: 'charges',
+//         values: charges,
+//         format: 'JSONEachRow',
+//       });
+//   } catch (e) {
+//     console.log(e);
+//   } finally {
+//     await consommationCollection.deleteMany();
+//   }
+// });
 app.use('/typeMateriel', typeMaterielRouter);
 
 app.listen(3000, () => console.log('listening at port 3000...'));

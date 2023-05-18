@@ -10,6 +10,7 @@ import EtatProjet from '../common/EtatProjet.vue';
 
 import { useAuth } from 'stores/authentication.js';
 import { useRouter } from 'vue-router';
+import { Role } from '../../enums';
 
 const auth = useAuth();
 const router = useRouter();
@@ -44,7 +45,12 @@ function handleClick(row) {
   <NSpace vertical>
     <NH1>La liste des projets</NH1>
     <NSpace justify="end">
-      <NButton @click="addProject" type="success" icon-placement="right">
+      <NButton
+        v-if="auth.user?.role === Role.ChefMision"
+        @click="addProject"
+        type="success"
+        icon-placement="right"
+      >
         Créer un projet
         <template #icon>
           <NIcon>

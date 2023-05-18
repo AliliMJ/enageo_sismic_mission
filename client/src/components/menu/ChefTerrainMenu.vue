@@ -33,15 +33,11 @@ const menuOptions = [
     key: 'equipe',
     icon: renderIcon(Project),
   },
+
   {
-    title: renderMenuItem('Terrain', Route.Terrain),
-    key: 'terrain',
-    icon: renderIcon(Analytics),
-  },
-  {
-    title: renderMenuItem('Rapport', Route.Rapport),
-    key: 'rapport',
-    icon: renderIcon(Report),
+    title: renderMenuItem('Projet', Route.Projet),
+    key: 'projet',
+    icon: renderIcon(Project),
   },
 
   ...optionsCompte,

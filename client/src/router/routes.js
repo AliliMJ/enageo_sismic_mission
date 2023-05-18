@@ -103,6 +103,10 @@ const routes = [
         component: () => import('components/pages/Projet.vue'),
       },
       {
+        path: 'projet/:idProjet/creerRapport',
+        component: CreateRapport,
+      },
+      {
         path: '/equipe',
         name: Route.Equipe,
         component: () => import('components/tables/EquipesTable.vue'),
@@ -135,16 +139,6 @@ const routes = [
       },
       { path: '/carte', name: 'carte', component: Map },
       { path: '/terrain', name: Route.Terrain },
-      {
-        path: '/rapport',
-        name: Route.Rapport,
-        component: () => import('components/pages/CreatedRapport.vue'),
-      },
-      {
-        path: 'rapport/create',
-        name: 'createRapport',
-        component: CreateRapport,
-      },
       {
         path: 'projet/ressource',
         name: 'demandeRessource',
