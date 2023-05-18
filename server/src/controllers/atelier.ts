@@ -29,18 +29,18 @@ export const getReparationsByMaterialCode = async (
   res: Response
 ) => {
   try {
-    const  codeMat  = req.params.codeMat;
+    const codeMat = req.params.codeMat;
 
     const reparations = await prisma.reparation.findMany({
-      where: { codeMat : codeMat },
+      where: { codeMat: codeMat },
       orderBy: {
-        dPanne : 'asc',
+        dPanne: 'asc',
       },
     });
 
     return res.status(200).json(reparations);
-  } catch(e) {
-    console.log(e)
+  } catch (e) {
+    console.log(e);
     res.status(500).json({
       err: 'Problème lors de la collection des reparations pour ce matériel',
     });
@@ -52,9 +52,9 @@ export const getLastReparationsByMaterialCode = async (
   res: Response
 ) => {
   try {
-    const codeMat  = req.params.codeMat;
+    const codeMat = req.params.codeMat;
     const reparations = await prisma.reparation.findMany({
-      where: { codeMat : codeMat , dDebRep : null  },
+      where: { codeMat: codeMat, dDebRep: null },
     });
 
     return res.status(200).json(reparations);
@@ -70,15 +70,15 @@ export const getLastReparationsByMaterialCode1 = async (
   res: Response
 ) => {
   try {
-    const codeMat  = req.params.codeMat;
+    const codeMat = req.params.codeMat;
     const reparations = await prisma.reparation.findMany({
-      where: { codeMat : codeMat },
+      where: { codeMat: codeMat },
       orderBy: {
-        dPanne : 'asc',
+        dPanne: 'asc',
       },
     });
 
-    return res.status(200).json(reparations[reparations.length-1]);
+    return res.status(200).json(reparations[reparations.length - 1]);
   } catch {
     res.status(500).json({
       err: 'Problème lors de la collection des reparations pour ce matériel',
@@ -86,29 +86,21 @@ export const getLastReparationsByMaterialCode1 = async (
   }
 };
 
-export const getAtelierMecanique = async (
-  req: Request,
-  res: Response
-) => {
+export const getAtelierMecanique = async (req: Request, res: Response) => {
   try {
-
     const materielEnPanne = await prisma.materiel.findMany({
-      where: { OR : [
-        {status : 0} , 
-        {status : 1}
-      ] },
+      where: { OR: [{ status: 0 }, { status: 1 }] },
       orderBy: {
-        codeMat : 'asc',
+        codeMat: 'asc',
       },
     });
 
     const reparations = await prisma.reparation.findMany({
-      where: { dDebRep : null  },
+      where: { dDebRep: null },
       orderBy: {
-        codeMat : 'asc',
+        codeMat: 'asc',
       },
     });
-
 
     // let reparations = <any>[];
     // materielEnPanne.forEach(async (element) => {
@@ -118,9 +110,8 @@ export const getAtelierMecanique = async (
     //     dPanne : 'asc',
     //   },
     //   });
-    
-    //  });
 
+    //  });
 
     // let i=0;
     // const reparations = [];
@@ -132,40 +123,36 @@ export const getAtelierMecanique = async (
     // }
 
     type TypeAtelier = {
-      codeMat : String,
-      designation : String,
-      matricule : String,
-      status : Number,
-      dPanne : Date | null,
-      dDebRep : Date | null,
-      dFinRep : Date | null
+      codeMat: String;
+      designation: String;
+      matricule: String;
+      status: Number;
+      dPanne: Date | null;
+      dDebRep: Date | null;
+      dFinRep: Date | null;
     };
 
     const atelier = [];
-    
-    let i=0;
-    for(i=0;i<materielEnPanne.length;i++){
 
+    let i = 0;
+    for (i = 0; i < materielEnPanne.length; i++) {
       const vard: TypeAtelier = {
-      codeMat : materielEnPanne[i].codeMat,
-      designation : materielEnPanne[i].designation,
-      matricule :  materielEnPanne[i].matricule,
-      status : materielEnPanne[i].status,
-      dPanne :  reparations[i].dPanne,
-      dDebRep : reparations[i].dDebRep,
-      dFinRep : reparations[i].dFinRep
-      }
+        codeMat: materielEnPanne[i].codeMat,
+        designation: materielEnPanne[i].designation,
+        matricule: materielEnPanne[i].matricule,
+        status: materielEnPanne[i].status,
+        dPanne: reparations[i].dPanne,
+        dDebRep: reparations[i].dDebRep,
+        dFinRep: reparations[i].dFinRep,
+      };
 
       atelier.push(vard);
-
     }
 
-
-    return res.status(200).json({atelier});
+    return res.status(200).json({ atelier });
   } catch {
     res.status(500).json({
       err: 'Problème lors de la collection des reparations pour ce matériel',
     });
   }
 };
-
