@@ -1,12 +1,10 @@
 <template>
   <NSpace class="pageHeader">
-      details sur la reparation n {{ idRepRef }}
-    </NSpace>
-    <NSpace justify="space-between" class="historyButton">
-      <NSpace>
-
-      </NSpace>
-  <NButton
+    details sur la reparation n {{ idRepRef }}
+  </NSpace>
+  <NSpace justify="space-between" class="historyButton">
+    <NSpace> </NSpace>
+    <NButton
       @click="showHistoryModalAction"
       class="button"
       icon-placement="left"
@@ -41,11 +39,11 @@
           <NText style="font-weight: bold; font-size: 18px"
             >designation :
           </NText>
-          <NText style="font-size: 18px">  {{ designationRef }} </NText>
+          <NText style="font-size: 18px"> {{ designationRef }} </NText>
         </NGridItem>
         <NGridItem :span="6">
           <NText style="font-weight: bold; font-size: 18px">matrciule : </NText>
-          <NText style="font-size: 18px"> {{matriculeRef}} </NText>
+          <NText style="font-size: 18px"> {{ matriculeRef }} </NText>
         </NGridItem>
         <NGridItem :span="5">
           <NText style="font-weight: bold; font-size: 18px">l'etat : </NText>
@@ -55,7 +53,7 @@
           <NText style="font-weight: bold; font-size: 18px"
             >Type du materiel :
           </NText>
-          <NText style="font-size: 18px"> {{typeMaterielRef}} </NText>
+          <NText style="font-size: 18px"> {{ typeMaterielRef }} </NText>
         </NGridItem>
       </NGrid>
     </n-grid-item>
@@ -127,10 +125,10 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import STable from "common/STable.vue";
-import { History20Regular as history } from "@vicons/fluent";
-import HistoryModal from "common/ReparationHistory.vue";
+import axios from 'axios';
+import STable from 'common/STable.vue';
+import { History20Regular as history } from '@vicons/fluent';
+import HistoryModal from 'common/ReparationHistory.vue';
 import {
   NCard,
   NTabs,
@@ -148,9 +146,9 @@ import {
   useDialog,
   useMessage,
   NText,
-} from "naive-ui";
-import { ref, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
+} from 'naive-ui';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { h } from 'vue';
 import MaterielTag from 'common/MaterielTag.vue';
 
@@ -174,24 +172,30 @@ const matriculeRef = ref();
 const statusRef = ref();
 const typeMaterielRef = ref();
 
-const lastReparation = (await axios.get(`http://localhost:3000/atelier/lastReparation/${codeMat}`)).data;
+const lastReparation = (
+  await axios.get(`http://localhost:3000/atelier/lastReparation/${codeMat}`)
+).data;
 
-const materiel = (await axios.get(`http://localhost:3000/material/${codeMat}`)).data;
+const materiel = (await axios.get(`http://localhost:3000/material/${codeMat}`))
+  .data;
 
-const typeMateriel = (await axios.get(`http://localhost:3000/typeMateriel/getTypeMaterielById/${materiel.idTypeMat}`)).data;
+const typeMateriel = (
+  await axios.get(
+    `http://localhost:3000/typeMateriel/getTypeMaterielById/${materiel.idTypeMat}`
+  )
+).data;
 
-typeMaterielRef.value=typeMateriel.libelle;
+typeMaterielRef.value = typeMateriel.libelle;
 
-designationRef.value = materiel.designation
-matriculeRef.value = materiel.matricule
-if(Number(materiel.status)===1){
-    statusRef.value = "en reparation";
-}else{
-    statusRef.value = "en panne";
+designationRef.value = materiel.designation;
+matriculeRef.value = materiel.matricule;
+if (Number(materiel.status) === 1) {
+  statusRef.value = 'en reparation';
+} else {
+  statusRef.value = 'en panne';
 }
 
 //typeMaterielRef.value = materiel.typemateriel.libelle
-
 
 idRepRef.value = String(lastReparation.idRep);
 dPanneRef.value = new Date(lastReparation.dPanne).valueOf();
@@ -220,38 +224,36 @@ const mettreEnReparation = async () => {
         req
       )
     ).data;
-    message.success("materiel ajoutee a la reparation");
-    router.push("/atelier");
+    message.success('materiel ajoutee a la reparation');
+    router.push('/atelier');
   } else {
-    message.error("il faut remplit toutes les champs necissaires");
+    message.error('il faut remplit toutes les champs necissaires');
   }
 };
 
 const mettreEnBonEtat = async () => {
-    const req = {
+  const req = {
     idRep: Number(idRepRef.value),
     dFinRep: new Date(dFinRepRef.value + 4000000),
-    detailProbleme : detailRef.value
+    detailProbleme: detailRef.value,
   };
-  if ((dFinRepRef.value != null)&&(detailRef.value!=null)) {
+  if (dFinRepRef.value != null && detailRef.value != null) {
     const reparation = (
       await axios.put(
         ` http://localhost:3000/material/mettreBonEtat/${codeMat}`,
         req
       )
     ).data;
-    message.success("materiel ajoutee a bon etat");
-    router.push("/atelier");
+    message.success('materiel ajoutee a bon etat');
+    router.push('/atelier');
   } else {
-    message.error("il faut remplit toutes les champs necissaires");
+    message.error('il faut remplit toutes les champs necissaires');
   }
-
 };
 
 const showHistoryModalAction = () => {
   showHistoryModal.value = true;
 };
-
 </script>
 
 <style scoped>
@@ -288,7 +290,7 @@ const showHistoryModalAction = () => {
   padding: 10px;
 }
 
-.historyButton{
+.historyButton {
   margin-top: 10px;
   margin-bottom: 10px;
   margin-right: 10px;
