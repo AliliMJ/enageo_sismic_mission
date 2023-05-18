@@ -68,11 +68,12 @@ cron.schedule('0-59 * * * *', async () => {
 
     //load to data warehouse
     console.log('Loading ...');
-    await warehouse.insert({
-      table: 'charges',
-      values: charges,
-      format: 'JSONEachRow',
-    });
+    if (charges.length > 0)
+      await warehouse.insert({
+        table: 'charges',
+        values: charges,
+        format: 'JSONEachRow',
+      });
   } catch (e) {
     console.log(e);
   } finally {
