@@ -11,6 +11,7 @@ import { projetRouter } from './routes/projet.ts';
 import { fonctionRouter } from './routes/fonction.ts';
 import { equipeRouter } from './routes/equipe.ts';
 import { wilayaRouter } from './routes/wilaya.ts';
+import { typeMaterielRouter } from './routes/typeMateriel.ts';
 import { rapportRouter } from './routes/rapport.ts';
 import { Datacraft } from './database/datacraft.ts';
 
@@ -78,5 +79,6 @@ cron.schedule('0-59 * * * *', async () => {
     await consommationCollection.deleteMany();
   }
 });
+app.use('/typeMateriel', typeMaterielRouter);
 
 app.listen(3000, () => console.log('listening at port 3000...'));

@@ -31,7 +31,7 @@
               v-model:value="searchDesignation"
               @update:value="searchFilter"
               placeholder="Rechercher par designation"
-              style="width: 255px"
+              style="width: 280px"
             >
               <template #suffix>
                 <n-icon :component="search" />
@@ -46,10 +46,10 @@
               :row-key="rowKey"
               :checked-row-keys="checkedRowKeysRef"
               @update:checked-row-keys="handleCheck"
+              :max-height="300"
             />
           </NSpace>
         </NSpace>
-        <NSpace> </NSpace>
         <n-space justify="end">
           <NButton @click="onConfirm" value="success" type="success"
             >Confirmer</NButton
@@ -86,11 +86,12 @@ const dialog = useDialog();
 const props = defineProps({
   title: String,
   showModal: Boolean,
-  idProjet: String,
+  idProjet: Number,
 });
 
 const idProjet = ref(props.idProjet);
 const checkedRowKeysRef = ref([]);
+
 const rowKey = (row) => {
   return row;
 };

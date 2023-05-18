@@ -53,8 +53,8 @@ export const getLastReparationsByMaterialCode = async (
 ) => {
   try {
     const codeMat = req.params.codeMat;
-    const reparations = await prisma.reparation.findMany({
-      where: { codeMat: codeMat, dDebRep: null },
+    const reparations = await prisma.reparation.findFirst({
+      where: { codeMat: codeMat, dFinRep: null },
     });
 
     return res.status(200).json(reparations);
@@ -150,6 +150,22 @@ export const getAtelierMecanique = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ atelier });
+  } catch {
+    res.status(500).json({
+      err: 'Problème lors de la collection des reparations pour ce matériel',
+    });
+  }
+};
+
+export const getReparationsById = async (req: Request, res: Response) => {
+  try {
+    const idRep = Number(req.params.idRep);
+
+    const reparation = await prisma.reparation.findUnique({
+      where: { idRep: idRep },
+    });
+
+    return res.status(200).json(reparation);
   } catch {
     res.status(500).json({
       err: 'Problème lors de la collection des reparations pour ce matériel',
