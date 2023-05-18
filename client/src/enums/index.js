@@ -6,6 +6,17 @@ export const Role = Object.freeze({
   Directeur: 'DIRECTEUR',
 });
 
+export const Fonctions = Object.freeze({
+  ChefMision: 1,
+  ChefTerrain: 2,
+  Directeur: 3,
+  Administrateur: 4,
+  Gestionnaire: 5,
+  Ouvrier: 6,
+  Agent: 7,
+  Medcin: 8,
+});
+
 export const Route = Object.freeze({
   Admin: 'admin',
   Gestionnaire: 'gestionnaire',

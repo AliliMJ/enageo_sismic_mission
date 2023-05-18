@@ -2,15 +2,16 @@
 import axios from 'axios';
 
 import STable from 'common/STable.vue';
-import { NH1, NTag, NButton, NIcon, NSpace, useDialog , NInput } from 'naive-ui';
-import { h, ref , onMounted, computed, watch} from 'vue';
+import { NH1, NTag, NButton, NIcon, NSpace, useDialog, NInput } from 'naive-ui';
+import { h, ref, onMounted, computed, watch } from 'vue';
 import Modal from '../common/Modal.vue';
 import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
 import Position from '../common/Position.vue';
 import { useRouter } from 'vue-router';
-import { SearchOutline as search } from "@vicons/ionicons5";
+import { SearchOutline as search } from '@vicons/ionicons5';
 import { useAuth } from '../../stores/authentication';
+import { Fonctions } from '../../enums';
 
 const auth = useAuth();
 const dialog = useDialog();
@@ -30,10 +31,16 @@ function updateEmploye(id) {
   window.alert(id);
 }
 
-const employe = (await axios.get(`http://localhost:3000/employes/${auth.user.id}`)).data;
+const employe = (
+  await axios.get(`http://localhost:3000/employes/${auth.user.id}`)
+).data;
 
 const employes = ref([]);
- employes.value = (await axios.get(`http://localhost:3000/employes/employeByMission/${employe.codeMission}`)).data;
+employes.value = (
+  await axios.get(
+    `http://localhost:3000/employes/employeByMission/${employe.codeMission}`
+  )
+).data;
 
 const router = useRouter();
 const cols = [
@@ -41,13 +48,7 @@ const cols = [
 
   { title: 'nom', key: 'nom' },
   { title: 'prénom', key: 'prenom' },
-  {
-    title: 'fonction',
-    key: 'fonctionId',
-    render(row) {
-      return h(Fonction, { fonctionId: row.fonctionId });
-    },
-  },
+
   {
     title: 'Position',
     key: 'etatEmployeId',
@@ -62,6 +63,25 @@ const cols = [
       return new Date(row.dateRejoint).toLocaleDateString();
     },
   },
+  {
+    title: 'fonction',
+    key: 'fonctionId',
+    defaultFilterOptionValues: [],
+    filterOptions: [
+      { label: 'Chef mission', value: Fonctions.ChefMision },
+      { label: 'Chef terrain', value: Fonctions.ChefTerrain },
+      { label: 'Gestionnaire', value: Fonctions.Gestionnaire },
+
+      { label: 'Médcin', value: Fonctions.Medcin },
+      { label: 'Ouvrier', value: Fonctions.Ouvrier },
+    ],
+    filter(value, row) {
+      return row.fonctionId === value;
+    },
+    render(row) {
+      return h(Fonction, { fonctionId: row.fonctionId });
+    },
+  },
 ];
 
 const handleClick = (employe) => {
@@ -72,7 +92,7 @@ const showInsertEmployeModal = () => {
   showModal.value = true;
 };
 
-const searchName = ref("");
+const searchName = ref('');
 const searchFilter = () => {
   watch(searchName, async () => {
     if (searchName.value.length > 0) {
@@ -90,13 +110,12 @@ const searchFilter = () => {
     }
   });
 };
-
 </script>
 
 <template>
   <NSpace vertical>
     <Modal
-      :title="`affecter un employé au mission ${ employe.codeMission }`"
+      :title="`affecter un employé au mission ${employe.codeMission}`"
       :showModal="showModal"
       @cancel="showModal = false"
       @confirm="showModal = false"
@@ -126,7 +145,12 @@ const searchFilter = () => {
         </template>
       </NButton>
     </NSpace>
-    <STable @onRowClicked="handleClick" :data="employes" :columns="cols" pagination-behavior-on-filter="first"/>
+    <STable
+      @onRowClicked="handleClick"
+      :data="employes"
+      :columns="cols"
+      pagination-behavior-on-filter="first"
+    />
   </NSpace>
 </template>
 

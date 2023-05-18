@@ -8,6 +8,7 @@
     :max-height="290"
     size="small"
     :row-props="rowProps"
+    pagination-behavior-on-filter="first"
   >
   </n-data-table>
 </template>
