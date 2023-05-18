@@ -13,6 +13,29 @@ import { equipeRouter } from './routes/equipe.ts';
 import { wilayaRouter } from './routes/wilaya.ts';
 import { typeMaterielRouter } from './routes/typeMateriel.ts';
 import { rapportRouter } from './routes/rapport.ts';
+import { Datacraft } from './database/datacraft.ts';
+
+import { consommationRoute } from './routes/consommation.ts';
+import cron from 'node-cron';
+import { createClient } from '@clickhouse/client';
+const warehouse = createClient();
+
+const datacraft = Datacraft();
+datacraft.defineRule({
+  pattern: {
+    titre: 'string',
+    quantite: 'number',
+    coutTotal: 'number',
+    projet: { nom: 'string', chantier: 'string' },
+  },
+  map: (o: any) => ({
+    ressource: o.titre,
+    quantite: o.quantite,
+    coutTotal: o.coutTotal,
+    projet: o.projet.nom,
+    chantier: o.projet.chantier,
+  }),
+});
 
 const app = express();
 app.use(express.json());
@@ -29,7 +52,34 @@ app.use('/rapports', rapportRouter);
 app.use('/fonction', fonctionRouter);
 app.use('/equipes', equipeRouter);
 app.use('/wilaya', wilayaRouter);
-app.use('/typeMateriel', typeMaterielRouter);
+app.use('/consommation', consommationRoute);
 
+cron.schedule('0-59 * * * *', async () => {
+  const consommationCollection = mongo.db().collection('consommation');
+  try {
+    //get recent added data from mongodb
+    console.log('Extracting ...');
+    const consommations = await consommationCollection.find().toArray();
+
+    //transform the data
+    console.log('Transforming ...');
+    const charges = datacraft.transformProcess(consommations);
+    console.log(charges);
+
+    //load to data warehouse
+    console.log('Loading ...');
+    if (charges.length > 0)
+      await warehouse.insert({
+        table: 'charges',
+        values: charges,
+        format: 'JSONEachRow',
+      });
+  } catch (e) {
+    console.log(e);
+  } finally {
+    await consommationCollection.deleteMany();
+  }
+});
+app.use('/typeMateriel', typeMaterielRouter);
 
 app.listen(3000, () => console.log('listening at port 3000...'));

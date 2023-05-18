@@ -145,6 +145,11 @@ const routes = [
         name: 'createRapport',
         component: CreateRapport,
       },
+      {
+        path: 'projet/ressource',
+        name: 'demandeRessource',
+        component: () => import('components/pages/DemandeRessource.vue'),
+      },
     ],
   },
   // { path: '/logout', component: Logout, name: 'logout' },
