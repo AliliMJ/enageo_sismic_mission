@@ -179,4 +179,56 @@ export const getEmployeByMission = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteEmployeWithRemoveMission = async (req: Request, res: Response) => {
+  try {
+
+    const id = Number(req.params.id);
+
+    const employe = await prisma.employe.update({
+      where: { id : id },
+      data : {
+        codeMission : null
+      }
+    });
+
+    res.status(200).json(employe);
+  } catch {
+    res.status(500).json({
+      err: `Èchec lors de la collection de l'employe ${req.params.id}`,
+    });
+  }
+};
+
+export const getEmployesBymissionByName = async (req: Request, res: Response) => {
+  try {
+    const  codeMission = req.params.codeMission;
+    const employes = await prisma.employe.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter , codeMission : codeMission  },
+    });
+
+    res.status(200).json(employes);
+  } catch {
+    res
+      .status(500)
+      .json({ err: "Problème lors de la collection des employés" });
+  }
+};
+
+export const getEmployesWithOutMission = async (req: Request, res: Response) => {
+  try {
+    const employes = await prisma.employe.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter , codeMission : null  },
+    });
+
+    res.status(200).json(employes);
+  } catch {
+    res
+      .status(500)
+      .json({ err: "Problème lors de la collection des employés" });
+  }
+};
+
+
 

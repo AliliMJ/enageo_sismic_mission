@@ -2,15 +2,14 @@
 import axios from 'axios';
 
 import STable from 'common/STable.vue';
-import { NH1, NTag, NButton, NIcon, NSpace, useDialog } from 'naive-ui';
-import { h, ref } from 'vue';
+import { NH1, NTag, NButton, NIcon, NSpace, useDialog , NInput } from 'naive-ui';
+import { h, ref , onMounted, computed, watch} from 'vue';
 import Modal from '../common/Modal.vue';
-
 import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
 import Position from '../common/Position.vue';
 import { useRouter } from 'vue-router';
-import SearchEmploye from '../common/SearchEmploye.vue';
+import { SearchOutline as search } from "@vicons/ionicons5";
 import { useAuth } from '../../stores/authentication';
 
 const auth = useAuth();
@@ -33,7 +32,8 @@ function updateEmploye(id) {
 
 const employe = (await axios.get(`http://localhost:3000/employes/${auth.user.id}`)).data;
 
-const employes = (await axios.get(`http://localhost:3000/employes/employeByMission/${employe.codeMission}`)).data;
+const employes = ref([]);
+ employes.value = (await axios.get(`http://localhost:3000/employes/employeByMission/${employe.codeMission}`)).data;
 
 const router = useRouter();
 const cols = [
@@ -71,25 +71,54 @@ const showModal = ref(false);
 const showInsertEmployeModal = () => {
   showModal.value = true;
 };
+
+const searchName = ref("");
+const searchFilter = () => {
+  watch(searchName, async () => {
+    if (searchName.value.length > 0) {
+      employes.value = (
+        await axios.get(
+          `http://localhost:3000/employes/getEmployesBymissionByName/${employe.codeMission}?like=${searchName.value}`
+        )
+      ).data;
+    } else {
+      employes.value = (
+        await axios.get(
+          `http://localhost:3000/employes/employeByMission/${employe.codeMission}`
+        )
+      ).data;
+    }
+  });
+};
+
 </script>
 
 <template>
   <NSpace vertical>
-    <SearchEmploye />
     <Modal
-      title="Ajouter un employé"
+      :title="`affecter un employé au mission ${ employe.codeMission }`"
       :showModal="showModal"
       @cancel="showModal = false"
       @confirm="showModal = false"
     />
     <NH1>La liste des employés</NH1>
     <NSpace justify="end">
+      <n-input
+        v-model:value="searchName"
+        @update:value="searchFilter"
+        placeholder="Rechercher par nom"
+        style="width: 255px"
+      >
+        <template #suffix>
+          <n-icon :component="search" />
+        </template>
+      </n-input>
       <NButton
         @click="showInsertEmployeModal"
         type="success"
         icon-placement="right"
       >
-        Nouvel employé
+        Affecter nouvel employé
         <template #icon>
           <NIcon>
             <Add />
@@ -97,7 +126,7 @@ const showInsertEmployeModal = () => {
         </template>
       </NButton>
     </NSpace>
-    <STable @onRowClicked="handleClick" :data="employes" :columns="cols" />
+    <STable @onRowClicked="handleClick" :data="employes" :columns="cols" pagination-behavior-on-filter="first"/>
   </NSpace>
 </template>
 

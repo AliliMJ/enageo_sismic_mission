@@ -8,7 +8,10 @@ import {
   insertEmploye,
   updateEmploye,
   getEmployesNumberOfYear,
-  getEmployeByMission
+  getEmployeByMission,
+  deleteEmployeWithRemoveMission,
+  getEmployesBymissionByName,
+  getEmployesWithOutMission
 } from '../controllers/employe';
 import { employeNameFilter } from '../middlewares/filter';
 
@@ -18,6 +21,9 @@ employeRouter.get('/', employeNameFilter, paginate, getEmployes);
 employeRouter.get('/fonctions', getFonctions);
 employeRouter.get('/stats', getEmployesNumberOfYear);
 employeRouter.get('/employeByMission/:codeMission', getEmployeByMission);
+employeRouter.get('/getEmployesBymissionByName/:codeMission',employeNameFilter, paginate, getEmployesBymissionByName);
+employeRouter.get('/getEmployesWithoutMissionByName',employeNameFilter, paginate, getEmployesWithOutMission);
+employeRouter.put('/deleteEmployeWithMission/:id', deleteEmployeWithRemoveMission);
 employeRouter.get('/:id', getEmployeById);
 
 employeRouter.post('/', insertEmploye);

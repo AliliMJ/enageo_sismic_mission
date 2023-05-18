@@ -43,25 +43,6 @@ const searchFilter = () => {
   });
 };
 
-// const options = computed(() => {
-//   function filteredItems () {
-//       return this.items.filter(item => {
-//          return users.email.toLowerCase().indexOf(this.searchUsername.toLowerCase()) > -1
-//       })
-//     }
-// });
-
-//   const searchFilter = () => {
-//     computed: {
-//     function filteredItems () {
-//       return this.items.filter(item => {
-//          return users.email.toLowerCase().indexOf(this.searchUsername.toLowerCase()) > -1
-//       })
-//     }
-//   }
-// console.log("search : "+users1.value);
-// }
-
 const cols = [
   { title: 'id', key: 'id' },
   { title: "Nom d'utilisateur", key: 'username' },
