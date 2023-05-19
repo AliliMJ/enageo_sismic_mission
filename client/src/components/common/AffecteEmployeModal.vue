@@ -7,25 +7,40 @@
       size="huge"
       role="dialog"
       aria-modal="true"
+      header-style="padding:15px 30px"
+      content-style="padding:15px 30px"
     >
       <n-scrollbar style="max-height: 400px">
         <NSpace vertical justify="space-between">
+          <NSpace>
       <SearchEmployeWithoutMission
       @sendId="getId"
-      @keyup="test"/>
-
+      style="width:507px"/>
+      <NButton
+        @click="showInsertEmployeDetails"
+        type="success"
+        icon-placement="right"
+      >
+        Rechercher
+        <template #icon>
+          <NIcon>
+            <Search1 />
+          </NIcon>
+        </template>
+      </NButton>
+    </NSpace>
       <NSpace justify="space-between" style="margin-top:25px">
             <NSpace>
               <NText class="header" > id : </NText>
-              <NText> 1 </NText>
+              <NText> {{idRef}} </NText>
             </NSpace>
             <NSpace>
               <NText class="header"> nom : </NText>
-              <NText>  abouri  </NText>
+              <NText>  {{nomRef}}  </NText>
             </NSpace>
             <NSpace>
               <NText class="header"> prenom : </NText>
-              <NText>  Abdelkrim  </NText>
+              <NText>  {{prenomRef}}  </NText>
             </NSpace>
             <NSpace>
               <NText class="header">fonction : </NText>
@@ -55,8 +70,11 @@
 </template>
 
 <script setup>
-import { NModal, NCard,  NScrollbar, NButton , NSpace , NInput , NText} from 'naive-ui';
+import { NModal, NCard,  NScrollbar, NButton , NSpace , NInput , NText , NIcon} from 'naive-ui';
 import SearchEmployeWithoutMission from '../common/searchEmployeWithoutMission.vue';
+import { SearchCircleOutline as Search } from '@vicons/ionicons5';
+import { PersonSearchOutlined as Search1 } from '@vicons/material';
+
 import { ref} from "vue";
 import axios from "axios";
 
@@ -65,9 +83,12 @@ const emit = defineEmits(['confirm', 'cancel']);
 const idRef = ref();
 const nomRef = ref();
 const prenomRef = ref();
+const dateRejointRef = ref()
+const fonctionRef = ref();
+const regimTravail = ref();
 
 const onConfirm = () => {
-  emit('confirm');
+  emit('confirm',idRef.value);
 };
 const onCancel = () => {
   emit('cancel');
@@ -77,17 +98,23 @@ const props = defineProps({
   showModal: Boolean,
 });
 
- function getId(value) {
-//   const employe = (
-//   await axios.get("http://localhost:3000/employes/" + value)
-// ).data;
-//   const fonction = (await axios.get(`http://localhost:3000/fonction/${employe.fonctionId}`)).data;
-//   idRef.value = employe.id;
+function showInsertEmployeDetails() {
+const idRef = ref();
+const nomRef = ref();
+const prenomRef = ref();
+const dateRejointRef = ref()
+const fonctionRef = ref();
+const regimTravail = ref();
 }
 
-const test = () => {
-  console.log("j'ai terminee");
-}
+
+async function getId(value)  {
+    idRef.value = value;
+    const employe = (await axios.get('http://localhost:3000/employes/'+idRef.value)).data;
+    nomRef.value = employe.nom;
+    prenomRef.value = employe.prenom;
+  };
+
 
 </script>
 

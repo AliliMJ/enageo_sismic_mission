@@ -238,6 +238,9 @@ model Rendement {
 
 model Materiel {
   codeMat      String       @id
+  marque       String
+  modele       String
+  dateService  DateTime
   designation  String
   matricule    String
   Projet       Projet?      @relation(fields: [idProjet], references: [idProjet])
@@ -254,18 +257,9 @@ model Reparation {
   dDebRep        DateTime?
   dFinRep        DateTime?
   detailProbleme String?
-  Pannes         Panne[]
   Materiel       Materiel  @relation(fields: [codeMat], references: [codeMat])
+  cout           Float
   codeMat        String
-}
-
-model Panne {
-  id          Int        @id @default(autoincrement())
-  titre       String
-  cout        Float
-  description String
-  Reparations Reparation @relation(fields: [idRep], references: [idRep])
-  idRep       Int
 }
 
 model TypeMateriel {

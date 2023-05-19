@@ -44,3 +44,19 @@ export const getEquipesByMission = async (req: Request, res: Response) => {
     res.status(500).json({ err: 'Problème lors de la collection des equipes' });
   }
 };
+
+export const getEquipesByMission1 = async (req: Request, res: Response) => {
+  try {
+
+    const codeMission = req.params.codeMission;
+
+    const equipes = await prisma.equipe.findMany({
+      where : {
+        codeMission : codeMission
+      }
+    });
+      res.status(200).json(equipes);
+  } catch {
+    res.status(500).json({ err: 'Problème lors de la collection des equipes' });
+  }
+};

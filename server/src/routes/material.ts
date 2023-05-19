@@ -8,7 +8,6 @@ import {
   getMaterialTypes,
   getMaterialByCode,
   mettreEnPanne,
-  demandeReparation,
   MettreEnReparation,
   getMaterialByproject,
   getMaterialEnPanneByproject,
@@ -39,4 +38,3 @@ materialRouter.get('/:codeMat', getMaterialByCode);
 
 materialRouter.post('/mettreEnPanne/:codeMat', mettreEnPanne);
 
-materialRouter.post('/:codeMat/demanderReparation', demandeReparation);

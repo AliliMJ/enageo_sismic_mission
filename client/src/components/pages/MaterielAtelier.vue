@@ -1,39 +1,59 @@
 <template>
-  <NSpace class="pageHeader">
-    details sur la reparation n {{ idRepRef }}
-  </NSpace>
-  <NSpace justify="space-between" class="historyButton">
-    <NSpace> </NSpace>
-    <NButton
-      @click="showHistoryModalAction"
-      class="button"
-      icon-placement="left"
-      color="rgb(100,100,100)"
-    >
-      Consulter l'historique des reparations
-      <template #icon>
-        <NIcon>
-          <history />
-        </NIcon>
-      </template>
-    </NButton>
+  <NSpace class="pageHeader" style="margin-bottom: 10px">
+    details sur la reparation № {{ idRepRef }}
   </NSpace>
   <NGrid
     x-gap="20"
     y-gap="20"
     :cols="10"
-    style="padding-left: 5px; padding-right: 200px; width: 1200px"
+    style="padding-left: 5px; padding-right: 200px; width: 78vw"
   >
     <n-grid-item :span="10" class="div1">
-      <NGrid :span="10" :x-gap="15">
-        <NGridItem :span="30" style="margin-bottom: 15px">
-          <NText style="font-weight: bold; font-size: 18px"
-            >les informations sur le materiel :</NText
-          >
+      <NGrid :span="10" :x-gap="15" :y-gap="5">
+        <NGridItem :span="25" style="margin-bottom: 25px">
+          <NSpace justify="space-between">
+            <NText style="font-weight: bold; font-size: 18px"
+              >les informations sur le materiel :</NText
+            >
+            <NButton
+              @click="showHistoryModalAction"
+              class="button"
+              icon-placement="left"
+              color="rgb(100,100,100)"
+            >
+              Consulter l'historique des reparations
+              <template #icon>
+                <NIcon>
+                  <history />
+                </NIcon>
+              </template>
+            </NButton>
+          </NSpace>
         </NGridItem>
+        <!-- <NGridItem :span="25">
+            <n-divider style="weight:10px"/>
+        </NGridItem> -->
         <NGridItem :span="3">
           <NText style="font-weight: bold; font-size: 18px">id : </NText>
           <NText style="font-size: 18px"> {{ codeMat }} </NText>
+        </NGridItem>
+        <NGridItem :span="5">
+          <NText style="font-weight: bold; font-size: 18px">
+            la marque :
+          </NText>
+          <NText style="font-size: 18px"> {{ marqueRef }} </NText>
+        </NGridItem>
+        <NGridItem :span="7">
+          <NText style="font-weight: bold; font-size: 18px">
+            date mise en service :
+          </NText>
+          <NText style="font-size: 18px"> {{ dateServiceRef }} </NText>
+        </NGridItem>
+        <NGridItem :span="7">
+          <NText style="font-weight: bold; font-size: 18px">
+            le modèle :
+          </NText>
+          <NText style="font-size: 18px"> {{ modeleRef }} </NText>
         </NGridItem>
         <NGridItem :span="6">
           <NText style="font-weight: bold; font-size: 18px"
@@ -125,10 +145,10 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import STable from 'common/STable.vue';
-import { History20Regular as history } from '@vicons/fluent';
-import HistoryModal from 'common/ReparationHistory.vue';
+import axios from "axios";
+import STable from "common/STable.vue";
+import { History20Regular as history } from "@vicons/fluent";
+import HistoryModal from "common/ReparationHistory.vue";
 import {
   NCard,
   NTabs,
@@ -146,11 +166,12 @@ import {
   useDialog,
   useMessage,
   NText,
-} from 'naive-ui';
-import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { h } from 'vue';
-import MaterielTag from 'common/MaterielTag.vue';
+  NDivider,
+} from "naive-ui";
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { h } from "vue";
+import MaterielTag from "common/MaterielTag.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -168,6 +189,9 @@ const detailRef = ref();
 const coutRef = ref();
 
 const designationRef = ref();
+const marqueRef = ref();
+const modeleRef = ref();
+const dateServiceRef = ref();
 const matriculeRef = ref();
 const statusRef = ref();
 const typeMaterielRef = ref();
@@ -186,14 +210,16 @@ const typeMateriel = (
 ).data;
 
 typeMaterielRef.value = typeMateriel.libelle;
-
 designationRef.value = materiel.designation;
 matriculeRef.value = materiel.matricule;
 if (Number(materiel.status) === 1) {
-  statusRef.value = 'en reparation';
+  statusRef.value = "en reparation";
 } else {
-  statusRef.value = 'en panne';
+  statusRef.value = "en panne";
 }
+marqueRef.value = materiel.marque;
+modeleRef.value = materiel.modele;
+dateServiceRef.value = new Date(materiel.dateService).toLocaleDateString("fr");
 
 //typeMaterielRef.value = materiel.typemateriel.libelle
 
@@ -224,10 +250,10 @@ const mettreEnReparation = async () => {
         req
       )
     ).data;
-    message.success('materiel ajoutee a la reparation');
-    router.push('/atelier');
+    message.success("materiel ajoutee a la reparation");
+    router.push("/atelier");
   } else {
-    message.error('il faut remplit toutes les champs necissaires');
+    message.error("il faut remplit toutes les champs necissaires");
   }
 };
 
@@ -236,6 +262,7 @@ const mettreEnBonEtat = async () => {
     idRep: Number(idRepRef.value),
     dFinRep: new Date(dFinRepRef.value + 4000000),
     detailProbleme: detailRef.value,
+    cout: coutRef.value,
   };
   if (dFinRepRef.value != null && detailRef.value != null) {
     const reparation = (
@@ -244,10 +271,10 @@ const mettreEnBonEtat = async () => {
         req
       )
     ).data;
-    message.success('materiel ajoutee a bon etat');
-    router.push('/atelier');
+    message.success("materiel ajoutee a bon etat");
+    router.push("/atelier");
   } else {
-    message.error('il faut remplit toutes les champs necissaires');
+    message.error("il faut remplit toutes les champs necissaires");
   }
 };
 

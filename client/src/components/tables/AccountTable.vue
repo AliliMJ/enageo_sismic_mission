@@ -42,7 +42,20 @@ const searchFilter = () => {
     }
   });
 };
-
+async function confirmAdd(event) {
+  if (event.isValid == true) {
+    showModal.value = false;
+  }
+  if (event.isValid) {
+    try {
+      const user = (await axios.post('http://localhost:3000/comptes', event.data))
+        .data; // adds the user sent from the user modal (event.data)
+      users.value.push(user);
+    } catch {
+      console.log('Erreur');
+    }
+  }
+}
 const cols = [
   { title: 'id', key: 'id' },
   { title: "Nom d'utilisateur", key: 'username' },
@@ -60,20 +73,7 @@ const handleClick = (user) => {
   router.push(`/compte/${user.id}`);
 };
 
-async function confirmAdd(event) {
-  if (event.isValid == true) {
-    showModal.value = false;
-  }
-  if (event.isValid) {
-    try {
-      const user = (await axios.post('http://localhost:3000/comptes', event.data))
-        .data; // adds the user sent from the user modal (event.data)
-      users.value.push(user);
-    } catch {
-      console.log('Erreur');
-    }
-  }
-}
+
 
 /* script to add user */
 

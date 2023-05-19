@@ -11,7 +11,9 @@ import {
   getEmployeByMission,
   deleteEmployeWithRemoveMission,
   getEmployesBymissionByName,
-  getEmployesWithOutMission
+  getEmployesWithOutMission,
+  insertEmployeWithMission,
+  updateEmployeEquipe
 } from '../controllers/employe';
 import { employeNameFilter } from '../middlewares/filter';
 
@@ -24,6 +26,9 @@ employeRouter.get('/employeByMission/:codeMission', getEmployeByMission);
 employeRouter.get('/getEmployesBymissionByName/:codeMission',employeNameFilter, paginate, getEmployesBymissionByName);
 employeRouter.get('/getEmployesWithoutMissionByName',employeNameFilter, paginate, getEmployesWithOutMission);
 employeRouter.put('/deleteEmployeWithMission/:id', deleteEmployeWithRemoveMission);
+employeRouter.put('/insertEmployeWithMission/:id',insertEmployeWithMission);
+employeRouter.put('/updateEmployeEquipe/:id',updateEmployeEquipe);
+
 employeRouter.get('/:id', getEmployeById);
 
 employeRouter.post('/', insertEmploye);
