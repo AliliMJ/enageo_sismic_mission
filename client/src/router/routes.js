@@ -21,6 +21,7 @@ import CreateRapport from 'components/pages/CreateRapport.vue';
 import PivotTable from 'components/analysis/PivotTable.vue';
 import AtelierTable from 'components/tables/AtelierTable.vue';
 import MaterielAtelier from 'components/pages/MaterielAtelier.vue';
+import Materiel from 'components/pages/materiel.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -80,6 +81,11 @@ const routes = [
         name: Route.Material,
         component: MaterialTable,
         meta: { role: Role.Gestionnaire, title: 'les matériels' },
+      },
+      {
+        path: '/materiel/:codeMat',
+        component: Materiel,
+        meta: { role: Role.Gestionnaire, title: 'details sur le materiel' },
       },
       {
         path: '/atelier',
