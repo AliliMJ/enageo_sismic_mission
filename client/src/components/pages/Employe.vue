@@ -17,6 +17,7 @@ import {
   useDialog,
   useMessage,
   NText,
+  NAlert
 } from "naive-ui";
 import {
   Edit32Filled as Pen,
@@ -24,10 +25,9 @@ import {
   Info20Regular as detail,
   BookContacts20Regular as personelInfo,
 } from "@vicons/fluent";
-import {
-  TrashOutline as trash,
-} from "@vicons/ionicons5";
-
+import { TrashOutline as trash,
+         BriefcaseOutline as bag} from "@vicons/ionicons5";
+import AffecteEquipeModal from '../common/AffecteEquipeModal.vue';
 import { ref, onMounted } from "vue";
 const router = useRouter();
 const route = useRoute();
@@ -36,12 +36,10 @@ const message = useMessage();
 
 const id = route.params.id;
 
-const isEditUser = ref(true);
 const isEditEmploye = ref(true);
+const affecteEquipeModal = ref(false);
 
-const employe = (
-  await axios.get("http://localhost:3000/employes/" + id)
-).data;
+const employe = (await axios.get("http://localhost:3000/employes/" + id)).data;
 const wilaya = (await axios.get("http://localhost:3000/wilaya")).data;
 const fonction = (await axios.get("http://localhost:3000/fonction")).data;
 const missions = (await axios.get("http://localhost:3000/missions")).data;
@@ -66,7 +64,8 @@ const employeRef = ref({
   regimTravail: employe.regimTravail,
 });
 
-const fonctionRef = ref(employe.fonction.idFonction);
+const fonctionRef = ref(Number(employe.fonction.idFonction));
+
 
 let missionRef;
 if (employe.Mission != null) {
@@ -78,14 +77,27 @@ if (employe.Mission != null) {
   missionRef = ref();
 }
 
+let equipeRef;
+if (employeRef.value.equipe != null) {
+  equipeRef = ref({
+    idEquipe: String(employeRef.value.equipe.idEquipe),
+    codeActivite: employeRef.value.equipe.codeActivite,
+    nom: employeRef.value.equipe.nom,
+    performance: String(employeRef.value.equipe.performance),
+    codeMission: employeRef.value.equipe.codeMission,
+  });
+} else {
+  equipeRef = ref();
+}
+
 /* employe operations */
 
 const deleteEmployeWithMission = async () => {
   try {
-    await axios.put(`http://localhost:3000/employes/deleteEmployeWithMission/${id}`);
-  } catch (error) {
-
-  }
+    await axios.put(
+      `http://localhost:3000/employes/deleteEmployeWithMission/${id}`
+    );
+  } catch (error) {}
 };
 
 function handleConfirmDeleteEmploye() {
@@ -125,29 +137,11 @@ const updateEmploye = async () => {
     fonctionId: Number(fonctionRef.value),
   };
   await axios.put(`http://localhost:3000/employes/${id}`, req);
-  message.success("employe modifiee");
+  message.success("employé modifiée");
+  isEditEmploye.value = true;
 };
 
 /* end employe operations */
-
-const roleOptions = [
-  {
-    label: "Chef mision",
-    value: "CHEF_MISSION",
-  },
-  {
-    label: "Chef terrain",
-    value: "CHEF_TERRAIN",
-  },
-  {
-    label: "Gestionnaire",
-    value: "GESTIONNAIRE",
-  },
-  {
-    label: "administrateur",
-    value: "ADMINISTRATEUR",
-  },
-];
 
 const groupeSanguinOptions = [
   { label: "A+", value: "A+" },
@@ -186,13 +180,11 @@ fonction.forEach((element) => {
 
 const missionOptions = [];
 missions.forEach((element) => {
-  console.log(""+element.codeMission);
   missionOptions.push({
-    label: element.codeMission + " (" + element.methodologie+")",
+    label: element.codeMission + " (" + element.methodologie + ")",
     value: element.codeMission,
   });
 });
-
 </script>
 
 <template>
@@ -200,7 +192,7 @@ missions.forEach((element) => {
     <n-card style="margin: 10px; width: 750px">
       <template #header>
         <NSpace justify="start">
-          <n-icon :size="30">
+          <n-icon :size="25">
             <detail />
           </n-icon>
           <NText> Détails </NText>
@@ -334,12 +326,67 @@ missions.forEach((element) => {
             </NSpace>
           </NSpace>
         </n-tab-pane>
+        <n-tab-pane name="team" tab="Equipe" v-if="fonctionRef!=2&&fonctionRef!=5&&fonctionRef!=7">
+          <NSpace v-if="equipeRef != null">
+            <NSpace vertical>
+              <NSpace>
+                <NCard style="width: 700px">
+                  <template #header>
+                    <NSpace justify="start">
+                      <n-icon :size="30">
+                        <personelInfo />
+                      </n-icon>
+                      <NText> information sur l'equipe </NText>
+                    </NSpace>
+                  </template>
+                  <!--nom, prénom, date de naissance, sexe-->
+                  <NForm :disabled="isEditEmploye">
+                    <NGrid :span="24" :x-gap="24">
+                      <NFormItemGi :span="12" label="id">
+                        <NInput v-model:value="equipeRef.idEquipe" disabled />
+                      </NFormItemGi>
+                      <NFormItemGi :span="12" label="code Activite">
+                        <NInput
+                          v-model:value="equipeRef.codeActivite"
+                          disabled
+                        />
+                      </NFormItemGi>
+                      <NFormItemGi :span="12" label="nom">
+                        <NInput v-model:value="equipeRef.nom" disabled />
+                      </NFormItemGi>
+                      <NFormItemGi :span="12" label="performance">
+                        <NInput
+                          v-model:value="equipeRef.performance"
+                          disabled
+                        />
+                      </NFormItemGi>
+                      <NFormItemGi :span="12" label="Mission">
+                        <NInput
+                          v-model:value="equipeRef.codeMission"
+                          disabled
+                        />
+                      </NFormItemGi>
+                    </NGrid>
+                  </NForm>
+                </NCard>
+              </NSpace>
+            </NSpace>
+          </NSpace>
+          <NSpace vertical v-if="equipeRef==null">
+            <n-alert title="employé sans équipe" type="warning" closable>
+            <NSpace vertical v-if="equipeRef==null">
+            <NText> ce employe n'est pas affecté a aucun equipe </NText>
+            <NText style="text-decoration:underline;cursor:pointer" @click="affecteEquipeModal=true"> vous voulez lui affecter un équipe ? </NText>
+            </NSpace>
+             </n-alert>
+          </NSpace>
+        </n-tab-pane>
       </n-tabs>
     </n-card>
 
     <NSpace vertical>
-      <NCard
-        header-style="display:flex;flex-direction:row-reverse;"
+        <NCard
+        header-style="display:flex;flex-direction:row-reverse"
         title="Contact"
         style="
           margin: 10px;
@@ -347,11 +394,11 @@ missions.forEach((element) => {
           box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
             rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
         "
-      >
+       >
         <template #header-extra>
           <n-icon class="cardIcon">
-            <contact />
-          </n-icon>
+            <contact style="font-size:25px;position:absolute;top:-4px" />
+          </n-icon >
         </template>
         <NForm disabled>
           <NGrid :span="12" :x-gap="12">
@@ -364,39 +411,42 @@ missions.forEach((element) => {
           </NGrid>
         </NForm>
       </NCard>
-    </NSpace>
 
-    <!-- <NCard
-          header-style="display:flex;flex-direction:row-reverse;"
-          title="Equipe"
-          style="margin-bottom: 16px; width: 700px"
-          v-if="equipeRef"
-         >
-          <template #header-extra>
-            <n-icon class="contactIcon">
-              <team />
-            </n-icon>
-          </template>
-          <NForm disabled >
-            <NGrid :span="24" :x-gap="24">
-              <NFormItemGi :span="12" label="id de l'equipe">
-                <NInput v-model:value="equipeRef.idEquipe" />
-              </NFormItemGi>
-              <NFormItemGi :span="12" label="code d'activite">
-                <NInput v-model:value="equipeRef.codeActivite" />
-              </NFormItemGi>
-              <NFormItemGi :span="12" label="nom">
-                <NInput v-model:value="equipeRef.nom" />
-              </NFormItemGi>
-              <NFormItemGi :span="12" label="performance">
-                <NInput v-model:value="equipeRef.performance" />
-              </NFormItemGi>
-              <NFormItemGi :span="12" label="code de la mission">
-                <NInput v-model:value="equipeRef.codeMission" />
-              </NFormItemGi>
-            </NGrid>
-          </NForm>
- </NCard> -->
+      <NCard
+        header-style="display:flex;flex-direction:row-reverse"
+        title="Fonction"
+        style="
+          margin: 10px;
+          width: 400px;
+          box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+            rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+        "
+       >
+        <template #header-extra>
+          <n-icon class="cardIcon">
+            <bag style="font-size:25px;position:absolute;top:-4px" />
+          </n-icon >
+        </template>
+        <NForm disabled>
+          <NGrid :span="12" :x-gap="12">
+            <NFormItemGi :span="18" label="la fonction">
+              <NInput  v-model:value="employeRef.fonction.nom"/>
+            </NFormItemGi>
+            <NFormItemGi :span="18" label="description">
+              <NInput  v-model:value="employeRef.fonction.description" type="textarea"/>
+            </NFormItemGi>
+          </NGrid>
+        </NForm>
+      </NCard>
+
+    </NSpace>
+<AffecteEquipeModal
+      :showModal="affecteEquipeModal"
+      :codeMission="missionRef.code"
+      :idEmploye="employeRef.id"
+      @cancel="affecteEquipeModal = false"
+      @confirm="affecteEquipeModal = false"
+/>
   </NSpace>
 </template>
 
@@ -422,12 +472,13 @@ missions.forEach((element) => {
   font-size: 20px;
 }
 
-.contactIcon {
-  margin-right: 10px;
-  font-size: 25px;
-}
+
 
 .cardShadow {
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+}
+
+.cardIcon {
+  margin-right: 25px;
 }
 </style>

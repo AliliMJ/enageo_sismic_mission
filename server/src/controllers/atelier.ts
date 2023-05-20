@@ -14,15 +14,15 @@ export const getReparations = async (req: Request, res: Response) => {
   }
 };
 
-export const getPannes = async (req: Request, res: Response) => {
-  try {
-    const pannes = await prisma.panne.findMany();
+// export const getPannes = async (req: Request, res: Response) => {
+//   try {
+//     const pannes = await prisma.panne.findMany();
 
-    return res.status(200).json(pannes);
-  } catch {
-    res.status(500).json({ err: 'Problème lors de la collection des pannes' });
-  }
-};
+//     return res.status(200).json(pannes);
+//   } catch {
+//     res.status(500).json({ err: 'Problème lors de la collection des pannes' });
+//   }
+// };
 
 export const getReparationsByMaterialCode = async (
   req: Request,

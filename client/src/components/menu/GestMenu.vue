@@ -13,6 +13,8 @@ import {
   CubeOutline as Cube,
   ConstructOutline as Atelier,
   BarChartOutline as Dashboard,
+  CarOutline as car,
+  PeopleOutline as people
 } from '@vicons/ionicons5';
 
 const route = useRoute();
@@ -29,17 +31,16 @@ const menuOptions = [
     icon: renderIcon(Atelier),
   },
   {
-    label: `Espace`,
-    key: 'space',
-    icon: renderIcon(Cube),
-    children: [
-      {
-        label: renderMenuItem('Matériel', Route.Material),
-        key: Route.Material,
-      },
-      { label: renderMenuItem('Employés', Route.Employe), key: Route.Employe },
-    ],
+    label: renderMenuItem('Matériel', Route.Material),
+    key: Route.Material,
+    icon: renderIcon(car),
   },
+  {
+    label: renderMenuItem('Employés', Route.Employe),
+    key: Route.Employe,
+    icon: renderIcon(people),
+  },
+  
   ...optionsCompte,
 ];
 </script>

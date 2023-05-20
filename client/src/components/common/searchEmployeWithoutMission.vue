@@ -26,9 +26,10 @@ watch(value, async () => {
 
 const emit = defineEmits(['sendId']);
 
-const sendId = function () {
-  emit('sendId', value.value.split(' ')[0]);
+const sendId = function (v) {
+  emit('sendId',v);
 };
+
 </script>
 
 <template>
@@ -36,6 +37,6 @@ const sendId = function () {
     placeholder="Sélectionnez un employe"
     :options="options"
     v-model:value="value"
-    @update:value="sendId"
+    @select="sendId"
   />
 </template>

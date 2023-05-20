@@ -1,82 +1,89 @@
 <template>
-    <n-data-table
-      pagination-behavior-on-filter="first"
-      :columns="columns"
-      :data="data"
-      :pagination="pagination"
+  <n-space vertical>
+    <n-select
+      placeholder="Please select a song"
+      :options="options"
+      @update:value="handleUpdateValue"
     />
-  </template>
-  
- <script setup>
-  import {NDataTable} from 'naive-ui';
-</script>
+    <n-select
+      multiple
+      placeholder="Please Select Songs"
+      :options="options"
+      @update:value="handleUpdateValue"
+    />
+  </n-space>
+</template>
 
-  <script>
-  import { defineComponent } from "vue";
-  
-  const columns = [
-    {
-      title: "Name",
-      key: "name"
-    },
-    {
-      title: "Age",
-      key: "age"
-    },
-    {
-      title: "Address",
-      key: "address",
-      defaultFilterOptionValues: [],
-      filterOptions: [
+<script>
+import { defineComponent } from "vue";
+import { useMessage } from "naive-ui";
+
+export default defineComponent({
+  setup() {
+    const message = useMessage();
+    return {
+      handleUpdateValue(value, option) {
+        message.info("value: " + JSON.stringify(value));
+        message.info("option: " + JSON.stringify(option));
+      },
+      options: [
         {
-          label: "London",
-          value: "London"
+          label: "Drive My Car",
+          value: "song1"
         },
         {
-          label: "New York",
-          value: "New York"
+          label: "Norwegian Wood",
+          value: "song2"
+        },
+        {
+          label: "You Won't See",
+          value: "song3"
+        },
+        {
+          label: "Nowhere Man",
+          value: "song4"
+        },
+        {
+          label: "Think For Yourself",
+          value: "song5"
+        },
+        {
+          label: "The Word",
+          value: "song6"
+        },
+        {
+          label: "Michelle",
+          value: "song7"
+        },
+        {
+          label: "What goes on",
+          value: "song8"
+        },
+        {
+          label: "Girl",
+          value: "song9"
+        },
+        {
+          label: "I'm looking through you",
+          value: "song10"
+        },
+        {
+          label: "In My Life",
+          value: "song11"
+        },
+        {
+          label: "Wait",
+          value: "song12"
         }
-      ],
-      filter(value, row) {
-        return !!~row.address.indexOf(String(value));
-      }
-    }
-  ];
-  
-  const data = [
-    {
-      key: 1,
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park"
-    },
-    {
-      key: 2,
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park"
-    },
-    {
-      key: 3,
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park"
-    },
-    {
-      key: 4,
-      name: "Jim Red",
-      age: 32,
-      address: "London No. 2 Lake Park"
-    }
-  ];
-  
-  export default defineComponent({
-    setup() {
-      return {
-        data,
-        columns,
-        pagination: { pageSize: 3 }
-      };
-    }
-  });
-  </script>
+      ]
+    };
+  }
+});
+</script>
+
+<script setup>
+import {
+NSelect,
+NSpace
+} from "naive-ui";
+</script>

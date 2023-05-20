@@ -2,9 +2,9 @@
 import axios from 'axios';
 
 import STable from 'common/STable.vue';
-import { NH1, NTag, NButton, NIcon, NSpace, useDialog, NInput } from 'naive-ui';
+import { NH1, NTag, NButton, NIcon, NSpace, useDialog, NInput , useMessage, } from 'naive-ui';
 import { h, ref, onMounted, computed, watch } from 'vue';
-import Modal from '../common/Modal.vue';
+import AffecteEmployeModal from '../common/AffecteEmployeModal.vue';
 import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
 import Position from '../common/Position.vue';
@@ -15,6 +15,7 @@ import { Fonctions } from '../../enums';
 
 const auth = useAuth();
 const dialog = useDialog();
+const message = useMessage();
 
 function deleteEmploye(id) {
   dialog.warning({
@@ -27,8 +28,16 @@ function deleteEmploye(id) {
   });
 }
 
-function updateEmploye(id) {
-  window.alert(id);
+async function confirmAdd(id) {
+  const req= {
+    codeMission : employe.codeMission
+  };
+  const emp = (
+  await axios.put(`http://localhost:3000/employes/insertEmployeWithMission/${id}`,req)
+).data;
+employes.value.push(emp);
+message.success('employé ajoutée à la mission',{ duration: 5e3 });
+showModal.value = false;
 }
 
 const employe = (
@@ -48,7 +57,24 @@ const cols = [
 
   { title: 'nom', key: 'nom' },
   { title: 'prénom', key: 'prenom' },
-
+  {
+    title: 'fonction',
+    key: 'fonctionId',
+    defaultFilterOptionValues: [],
+    filterOptions: [
+      { label: 'Chef mission', value: Fonctions.ChefMision },
+      { label: 'Chef terrain', value: Fonctions.ChefTerrain },
+      { label: 'Gestionnaire', value: Fonctions.Gestionnaire },
+      { label: 'Médcin', value: Fonctions.Medcin },
+      { label: 'Ouvrier', value: Fonctions.Ouvrier },
+    ],
+    filter(value, row) {
+      return row.fonctionId === value;
+    },
+    render(row) {
+      return h(Fonction, { fonctionId: row.fonctionId });
+    },
+  },
   {
     title: 'Position',
     key: 'etatEmployeId',
@@ -61,25 +87,6 @@ const cols = [
     key: 'dateRejoint',
     render(row) {
       return new Date(row.dateRejoint).toLocaleDateString();
-    },
-  },
-  {
-    title: 'fonction',
-    key: 'fonctionId',
-    defaultFilterOptionValues: [],
-    filterOptions: [
-      { label: 'Chef mission', value: Fonctions.ChefMision },
-      { label: 'Chef terrain', value: Fonctions.ChefTerrain },
-      { label: 'Gestionnaire', value: Fonctions.Gestionnaire },
-
-      { label: 'Médcin', value: Fonctions.Medcin },
-      { label: 'Ouvrier', value: Fonctions.Ouvrier },
-    ],
-    filter(value, row) {
-      return row.fonctionId === value;
-    },
-    render(row) {
-      return h(Fonction, { fonctionId: row.fonctionId });
     },
   },
 ];
@@ -114,11 +121,11 @@ const searchFilter = () => {
 
 <template>
   <NSpace vertical>
-    <Modal
+    <AffecteEmployeModal
       :title="`affecter un employé au mission ${employe.codeMission}`"
       :showModal="showModal"
       @cancel="showModal = false"
-      @confirm="showModal = false"
+      @confirm="confirmAdd"
     />
     <NH1>La liste des employés</NH1>
     <NSpace justify="end">

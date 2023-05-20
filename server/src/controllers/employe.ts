@@ -152,8 +152,6 @@ export const getEmployesNumberOfYear = async (req: Request, res: Response) => {
       return { year, nbr: Number(nbr) };
     });
 
-    console.log(numberByYears);
-
     return res.status(200).json(numberByYears);
   } catch (e) {
     console.log(e);
@@ -168,7 +166,11 @@ export const getEmployeByMission = async (req: Request, res: Response) => {
     const codeMission = req.params.codeMission;
 
     const employe = await prisma.employe.findMany({
-      where: { codeMission : codeMission },
+      where: { codeMission : codeMission ,
+     NOT : {
+        fonctionId : 1,
+      }, 
+    },
       include: { Equipe: true, Mission: true, fonction: true },
     });
     res.status(200).json(employe);
@@ -227,6 +229,54 @@ export const getEmployesWithOutMission = async (req: Request, res: Response) => 
     res
       .status(500)
       .json({ err: "Problème lors de la collection des employés" });
+  }
+};
+
+export const insertEmployeWithMission = async (req: Request, res: Response) => {
+  try {
+
+    const codeMission = req.body.codeMission;
+    const id = Number(req.params.id);
+
+    const employe = await prisma.employe.update({
+      where : {
+        id : id
+      },
+      data : {
+        codeMission : codeMission
+      }
+    })
+
+    return res.status(200).json(employe);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ err: 'Problème lors de la affecte du employe a une mission' });
+  }
+};
+
+export const updateEmployeEquipe = async (req: Request, res: Response) => {
+  try {
+
+    const idEquipe = Number(req.body.idEquipe);
+    const id = Number(req.params.id)
+
+    const employe = await prisma.employe.update({
+      where : {
+        id : id
+      },
+      data : {
+        idEquipe : idEquipe
+      }
+    })
+
+    return res.status(200).json(employe);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ err: 'Problème lors de la affecte du employe a une mission' });
   }
 };
 

@@ -56,7 +56,7 @@ export const mettreEnPanne = async (req: Request, res: Response) => {
         data : {
           codeMat : codeMat,
           dPanne : new Date(),
-
+          cout : 0
         }
     });
 
@@ -67,29 +67,29 @@ export const mettreEnPanne = async (req: Request, res: Response) => {
   }
 };
 
-export const demandeReparation = async (req: Request, res: Response) => {
-  try {
-    const { pannes, detail } = req.body;
-    const { codeMat } = req.params;
+// export const demandeReparation = async (req: Request, res: Response) => {
+//   try {
+//     const { pannes, detail } = req.body;
+//     const { codeMat } = req.params;
 
-    await prisma.reparation.create({
-      data: {
-        codeMat,
-        detailProbleme: detail,
-        Pannes: { create: pannes.map((p: number) => ({ id: p })) },
-      },
-    });
+//     await prisma.reparation.create({
+//       data: {
+//         codeMat,
+//         detailProbleme: detail,
+//         Pannes: { create: pannes.map((p: number) => ({ id: p })) },
+//       },
+//     });
 
-    await prisma.materiel.update({
-      where: { codeMat },
-      data: { status : 0 },
-    });
+//     await prisma.materiel.update({
+//       where: { codeMat },
+//       data: { status : 0 },
+//     });
 
-    return res.status(200).send(`Matériel ${codeMat} est mis en panne`);
-  } catch {
-    res.status(500).json({ err: "Problème lors de la collection ce matériel" });
-  }
-};
+//     return res.status(200).send(`Matériel ${codeMat} est mis en panne`);
+//   } catch {
+//     res.status(500).json({ err: "Problème lors de la collection ce matériel" });
+//   }
+// };
 
 export const MettreEnReparation = async (req: Request, res: Response) => {
   try {
@@ -128,14 +128,15 @@ export const mettreBonEtat = async (req: Request, res: Response) => {
     const  codeMat  = req.params.codeMat;
     const idRep = req.body.idRep;
     const dFinRep = req.body.dFinRep;
-    //const cout = req.body.cout;
+    const cout = Number(req.body.cout);
     const detailProbleme = req.body.detailProbleme;
 
     const reparation = await prisma.reparation.update({
       data: {
         codeMat : codeMat,
         dFinRep : dFinRep,
-        detailProbleme : detailProbleme
+        detailProbleme : detailProbleme,
+        cout : cout
       },
       where : {
         idRep : idRep

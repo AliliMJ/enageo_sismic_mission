@@ -2,7 +2,6 @@ import express from 'express';
 import paginate from '../middlewares/pagination';
 import {
   getReparations,
-  getPannes,
   getReparationsByMaterialCode,
   getLastReparationsByMaterialCode,
   getLastReparationsByMaterialCode1,
@@ -14,7 +13,6 @@ export const atelierRouter = express.Router();
 
 atelierRouter.get('/reparations', paginate, getReparations);
 
-atelierRouter.get('/pannes', getPannes);
 atelierRouter.get('/getAtelier', getAtelierMecanique);
 atelierRouter.get('/getReparationsById/:idRep',getReparationsById);
 
