@@ -17,6 +17,14 @@ export const Fonctions = Object.freeze({
   Medcin: 8,
 });
 
+export const Activites = Object.freeze({
+  Enregistrement: 'ENRG',
+  Topographie: 'TOPO',
+  Pose: 'POSE',
+  Ramasse: 'RAM',
+  Layonnage: 'LAY',
+});
+
 export const Route = Object.freeze({
   Admin: 'admin',
   Gestionnaire: 'gestionnaire',
