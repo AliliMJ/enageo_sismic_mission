@@ -87,7 +87,7 @@ model Projet {
 
   Coodonnes  Coordonne[]
   Rapprots   Rapport[]
-  Evenements Evenement[]
+  Evenement Evenement[]
 }
 
 model Client {
@@ -290,8 +290,13 @@ enum EtatEmploye {
 
 model Evenement {
   id             Int           @id @default(autoincrement())
+  titre          String
+  date           DateTime @db.Date
+  Heure          String
   type           TypeEvenement
   description    String
-  Projet         Projet        @relation(fields: [projetIdProjet], references: [idProjet])
-  projetIdProjet Int
+  readed         Boolean @default(false)
+  Projet         Projet        @relation(fields: [idProjet], references: [idProjet])
+  idProjet Int
 }
+
