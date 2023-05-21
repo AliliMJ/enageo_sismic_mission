@@ -10,23 +10,32 @@ import {
   NText,
   NDivider,
 } from 'naive-ui';
-import axios from 'axios';
+
 import AddRendementModal from 'common/AddRendementModal.vue';
 
 import ProductionCard from 'common/ProductionCard.vue';
 import { AddSquareMultiple20Regular as AddCard } from '@vicons/fluent';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import { Activites } from '../../enums';
+import axios from 'axios';
+
 const router = useRouter();
+const route = useRoute();
 
 const showModal = ref(false);
 let cardCount = 0;
 
 const rendements = ref([]);
+const resume = ref(null);
 
 function handleConfirmAdd(rendement) {
   cardCount++;
-  rendements.value.push({ key: cardCount, ...rendement });
+  rendements.value.push({
+    key: cardCount,
+    ...rendement,
+    activite: selectedActivity.value,
+  });
   showModal.value = false;
 }
 function removeCard(key) {
@@ -36,12 +45,23 @@ function removeCard(key) {
 }
 
 async function createReport() {
-  await axios.post('http://localhost:3000/rapport', { rendements });
+  const idProjet = route.params.idProjet;
+  await axios.post('http://localhost:3000/rapports', {
+    rendements: rendements.value,
+    idProjet,
+    resume: resume.value,
+  });
   router.back();
 }
 
 function annuler() {
   router.back();
+}
+
+const selectedActivity = ref('');
+function openModal(activity) {
+  selectedActivity.value = activity;
+  showModal.value = true;
 }
 </script>
 
@@ -61,7 +81,7 @@ function annuler() {
             id="add-rendement-button"
             ghost
             type="success"
-            @click="showModal = true"
+            @click="() => openModal(Activites.Enregistrement)"
           >
             Ajouter
             <template #icon
@@ -84,6 +104,7 @@ function annuler() {
           placeholder="Veuillez écrire un résumé pour ce rapport"
           style="width: 50%"
           :resizable="false"
+          v-model:value="resume"
         />
       </NSpace>
     </template>
