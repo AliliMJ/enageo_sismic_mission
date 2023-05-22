@@ -66,15 +66,12 @@
   </template>
   
   <script setup>
-  import axios from 'axios';
   import {
     NModal,
     NCard,
     NSpace,
     NButton,
     NInput,
-    NIcon,
-    NDataTable,
     useDialog,
     useMessage,
     NGrid,
@@ -83,10 +80,8 @@
     NDatePicker,
     NTimePicker
   } from "naive-ui";
-  import { SearchOutline as search } from '@vicons/ionicons5';
-  import MaterielTag from 'common/MaterielTag.vue';
-  import { h } from 'vue';
-  import { ref, watch } from 'vue';
+
+  import { ref, } from 'vue';
   const emit = defineEmits(['confirm', 'cancel']);
   
   const message = useMessage();
@@ -118,17 +113,18 @@
 
   const onConfirm = async () => {
     //console.log(titreRef.value+" "+typeRef.value+" "+new Date(dateRef.value).toLocaleDateString('fr')+" "+heureRef.value+" "+descriptionRef.value);
+    console.log("la date : "+dateRef.value);
     if((titreRef.value!=null)&&(typeRef.value!=null)&&(dateRef.value!=null)&&(descriptionRef.value!=null)){
     const event = {
         id : props.nb,
         titre : titreRef.value,
         type : typeRef.value,
-        date : new Date(dateRef.value).toLocaleDateString('fr'),
+        date : dateRef.value,
         Heure : heureRef.value,
         readed : false,
         description : descriptionRef.value
     }
-    console.log(event);
+    console.log(event.date);
     emit('confirm',event);
     titreRef.value = null;
     typeRef.value=null;

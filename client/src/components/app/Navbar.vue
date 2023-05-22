@@ -1,18 +1,17 @@
 <template>
-  <!-- <n-loading-bar-provider>
-  <n-message-provider>
-    <n-notification-provider>
-      <n-dialog-provider> -->
-
   <NSpace justify="space-between" class="space">
     <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" />
     <NSpace justify="space-between" class="space1">
-      <NButton @click="showEvenementModal=!showEvenementModal" class="notification-btn" type="warning" v-if="auth.user?.role === Role.ChefTerrain"
+      <NButton
+        @click="showEvenementModal = !showEvenementModal"
+        type="warning"
+        v-if="auth.user?.role === Role.ChefTerrain"
         >signaler un evenement
         <template #icon>
           <NIcon><alert /></NIcon>
         </template>
       </NButton>
+      <NSpace v-if="auth.user?.role != Role.ChefTerrain"> </NSpace>
       <NSpace class="space-drop" justify="space-between">
         <n-popover placement="bottom" trigger="click">
           <template #trigger>
@@ -27,7 +26,11 @@
           <NSpace>
             <NSpace vertical>
               <NSpace justify="end">
-                <NText @click="readAllNotifications" class="readButton">
+                <NText
+                  @click="readAllNotifications"
+                  class="readButton"
+                  v-if="auth.user.role === Role.ChefMision"
+                >
                   marquer tous comme lu</NText
                 >
               </NSpace>
@@ -42,15 +45,18 @@
                 v-for="evenement in evenements"
                 key="evenements.key"
               >
-                <NSpace vertical style="width:20vw;">
+                <NSpace vertical style="width: 20vw">
                   <NText style="font-weight: bold">{{ evenement.titre }}</NText>
                   <NText style="font-size: 12px">
                     {{ evenement.date }} à {{ evenement.Heure }}</NText
                   >
                   <NText v-if="evenement.readed === false" class="dot">•</NText>
                   <NSpace justify="end">
-                    <NText @click="seeDetails(evenement.id)" class="see-text">voir plus...</NText>
+                    <NText @click="seeDetails(evenement)" class="see-text"
+                      >voir plus...</NText
+                    >
                   </NSpace>
+                  <n-divider style="width: 20vw; margin: 0px" />
                 </NSpace>
               </NSpace>
             </NSpace>
@@ -72,27 +78,24 @@
       </NSpace>
     </NSpace>
   </NSpace>
-  <!-- 
-   </n-dialog-provider>
-    </n-notification-provider>
-  </n-message-provider>
-</n-loading-bar-provider> -->
-
-<Modal
+  <Modal
     :showModal="showEvenementModal"
     :idProjet="idProjetRef"
     :nb="evenements.length"
     @cancel="showEvenementModal = false"
     @confirm="handleConfirmEvent"
   />
-
+  <DetailModal
+    :showModal="showEvenementDetailsModal"
+    @close="showEvenementDetailsModal = false"
+    :evenement="evenement"
+  />
 </template>
 
 <script setup>
 import {
   NSpace,
   NIcon,
-  NImage,
   NButton,
   NDropdown,
   useMessage,
@@ -102,11 +105,11 @@ import {
   NPopover,
   NBadge,
   NDivider,
+  useNotification,
 } from "naive-ui";
 import {
   PersonCircleOutline as Persone,
   NotificationsOutline as notification,
-  PersonCircleOutline as UserIcon,
   LogOutOutline as LogoutIcon,
   SettingsOutline as Settings,
   PersonOutline as Person,
@@ -117,28 +120,38 @@ import { useRouter } from "vue-router";
 import { useAuth } from "../../stores/authentication";
 import { renderIcon, renderMenuItem } from "../../utils/render";
 import axios from "axios";
-import { ref } from "vue";
-import { Role } from '../../enums';
+import { ref, onMounted } from "vue";
+import { Role } from "../../enums";
 import Modal from "common/addEvenementModal.vue";
-//import { ref, onMounted, computed, watch } from 'vue';
+import DetailModal from "common/NotificationDetailModal.vue";
 
 const router = useRouter();
 const auth = useAuth();
 const dialog = useDialog();
 const message = useMessage();
-// const notificationVue = useNotification();
+const notificationVue = useNotification();
 
 const showEvenementModal = ref(false);
+const showEvenementDetailsModal = ref(false);
 
+const evenement = ref();
+
+const employe = ref([]);
+const projet = ref([]);
 const evenements = ref([]);
 
-const employe = (await axios.get("http://localhost:3000/employes/" + auth.user.id)).data;
-const projet = (
+
+  employe.value = (
+  await axios.get("http://localhost:3000/employes/" + auth.user.id)
+).data;
+ projet.value = (
   await axios.get(
-    `http://localhost:3000/projets/projetByMission/${employe.codeMission}`
+    `http://localhost:3000/projets/projetByMissionWithEvenements/${employe.value.codeMission}`
   )
 ).data;
-evenements.value = (await axios.get(`http://localhost:3000/evenement/${projet.idProjet}`)).data;
+
+evenements.value = projet.value.Evenement;
+
 
 const numberNotReaded = ref(0);
 const idProjetRef = ref(evenements.value[0].idProjet);
@@ -151,18 +164,37 @@ evenements.value.forEach((item, index, arr) => {
   }
 });
 
-// onMounted(async () => {
-//   if(numberNotReaded.value>0){
-//     notificationVue.create({
-//           title: "Wouldn't it be Nice",
-//           description: "From the Beach Boys",
-//           content: `abdelkrim`,
-//           meta: "2019-5-27 15:11",
-//           duration: 2500,
-//           keepAliveOnHover: true
-// });
-// }
-// });
+onMounted(async () => {
+  if (numberNotReaded.value > 0 && auth.user.role === Role.ChefMision) {
+    let markAsRead = false;
+    const n = notificationVue.create({
+      title: "Il y a des nouvelles notifications !!",
+      content: `vous avez (${numberNotReaded.value}) nouveaux événements qu'ils ne sont pas encore lus`,
+      meta: new Date().toLocaleDateString("fr"),
+      action: () =>
+        h(
+          NButton,
+          {
+            text: true,
+            type: "primary",
+            onClick: () => {
+              markAsRead = true;
+              n.destroy();
+            },
+          },
+          {
+            default: () => "marquer comme lu",
+          }
+        ),
+      onClose: () => {
+        if (!markAsRead) {
+          message.warning("Please mark as read");
+          return false;
+        }
+      },
+    });
+  }
+});
 
 const options = [
   {
@@ -198,8 +230,9 @@ function handleSelect(key) {
   }
 }
 
-function seeDetails(id){
-  console.log(id);
+function seeDetails(event) {
+  evenement.value = event;
+  showEvenementDetailsModal.value = true;
 }
 
 function renderCustomHeader() {
@@ -244,46 +277,35 @@ function handleConfirm() {
 }
 
 async function handleConfirmEvent(event) {
+  const req = {
+    titre: event.titre,
+    type: event.type,
+    date: new Date(event.date),
+    Heure: event.Heure,
+    description: event.description,
+  };
+  event.date = new Date(event.date).toLocaleDateString("fr");
   evenements.value.unshift(event);
   numberNotReaded.value++;
   showEvenementModal.value = false;
 
-  const req = {
-    titre : event.titre,
-    type : event.type,
-    date : new Date(event.date),
-    Heure : event.Heure,
-    description : event.description
-  }
+  console.log(event.date);
 
-  console.log(req.date);
+  console.log("--->" + req.date);
 
-  await axios.post(`http://localhost:3000/evenement/insertEvenement/${projet.idProjet}`,req);
-
+  await axios.post(
+    `http://localhost:3000/evenement/insertEvenement/${projet.value.idProjet}`,
+    req
+  );
 }
 
- async function readAllNotifications() {
+async function readAllNotifications() {
   console.log("readed");
   evenements.value.forEach((item, index, arr) => {
     arr[index].readed = true;
   });
 
-  await axios.put(`http://localhost:3000/evenement/setTrue/${projet.idProjet}`);
-  numberNotReaded.value=0;
-  //   notificationVue.create({
-  //           title: "Wouldn't it be Nice",
-  //           description: "From the Beach Boys",
-  //           content: `abdelkrim`,
-  //           meta: "2019-5-27 15:11",
-  //           duration: 2500,
-  //           keepAliveOnHover: true
-  // });
-  // notificationVue.warning({
-  //   content: "What to say?",
-  //   meta: "I don't know",
-  //   duration: 2500,
-  //   keepAliveOnHover: true,
-  // });
+  await axios.put(`http://localhost:3000/evenement/setTrue/${projet.value.idProjet}`);
 }
 </script>
 
@@ -293,7 +315,7 @@ async function handleConfirmEvent(event) {
 }
 
 .space1 {
-  width: 45vw;
+  width: 55vw;
   margin-right: 30px;
 }
 
@@ -333,8 +355,8 @@ async function handleConfirmEvent(event) {
 }
 
 .see-text {
-  cursor : pointer;
+  cursor: pointer;
   /* text-decoration:underline; */
-  font-size:10px;
+  font-size: 10px;
 }
 </style>

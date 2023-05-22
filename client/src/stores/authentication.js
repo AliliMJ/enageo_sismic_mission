@@ -5,6 +5,7 @@ export const useAuth = defineStore('authentication', {
   state: () => ({
     user: null,
     isAuthenticated: false,
+    employe : null
   }),
   persist: true,
   actions: {
@@ -14,13 +15,15 @@ export const useAuth = defineStore('authentication', {
           username,
           password,
         });
-        
         const user = response.data;
+        
+        const employe = (await axios.get("http://localhost:3000/employes/" + user.employeId)).data;
 
         //const user = { role: Role.Administrateur };
         this.$patch({
           user,
           isAuthenticated: true,
+          employe
         });
 
         return Promise.resolve('Successful');
