@@ -117,7 +117,8 @@
 ];
 
   const onConfirm = async () => {
-    console.log(titreRef.value+" "+typeRef.value+" "+new Date(dateRef.value).toLocaleDateString('fr')+" "+heureRef.value+" "+descriptionRef.value);
+    //console.log(titreRef.value+" "+typeRef.value+" "+new Date(dateRef.value).toLocaleDateString('fr')+" "+heureRef.value+" "+descriptionRef.value);
+    if((titreRef.value!=null)&&(typeRef.value!=null)&&(dateRef.value!=null)&&(descriptionRef.value!=null)){
     const event = {
         id : props.nb,
         titre : titreRef.value,
@@ -129,11 +130,15 @@
     }
     console.log(event);
     emit('confirm',event);
-    titreRef.value = "";
-    typeRef.value="";
-    dateRef.value = 0;
+    titreRef.value = null;
+    typeRef.value=null;
+    dateRef.value = null;
     heureRef.value="00:00";
-    descriptionRef.value="";
+    descriptionRef.value=null;
+    message.success("l'evenement est bien declancher")
+  }else{
+    message.error("il faut remplir tous les champs")
+  }
   };
   
   const onCancel = () => {

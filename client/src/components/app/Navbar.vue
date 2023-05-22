@@ -34,7 +34,7 @@
 
               <NSpace
                 style="
-                  background-color: rgb(252, 252, 252);
+                  background-color: rgb(255, 255, 255);
                   width: 20vw;
                   padding: 5px;
                   position: relative;
@@ -42,12 +42,15 @@
                 v-for="evenement in evenements"
                 key="evenements.key"
               >
-                <NSpace vertical>
+                <NSpace vertical style="width:20vw;">
                   <NText style="font-weight: bold">{{ evenement.titre }}</NText>
                   <NText style="font-size: 12px">
                     {{ evenement.date }} à {{ evenement.Heure }}</NText
                   >
                   <NText v-if="evenement.readed === false" class="dot">•</NText>
+                  <NSpace justify="end">
+                    <NText @click="seeDetails(evenement.id)" class="see-text">voir plus...</NText>
+                  </NSpace>
                 </NSpace>
               </NSpace>
             </NSpace>
@@ -128,7 +131,14 @@ const message = useMessage();
 const showEvenementModal = ref(false);
 
 const evenements = ref([]);
-evenements.value = (await axios.get(`http://localhost:3000/evenement/1`)).data;
+
+const employe = (await axios.get("http://localhost:3000/employes/" + auth.user.id)).data;
+const projet = (
+  await axios.get(
+    `http://localhost:3000/projets/projetByMission/${employe.codeMission}`
+  )
+).data;
+evenements.value = (await axios.get(`http://localhost:3000/evenement/${projet.idProjet}`)).data;
 
 const numberNotReaded = ref(0);
 const idProjetRef = ref(evenements.value[0].idProjet);
@@ -188,6 +198,10 @@ function handleSelect(key) {
   }
 }
 
+function seeDetails(id){
+  console.log(id);
+}
+
 function renderCustomHeader() {
   return h(
     "div",
@@ -229,22 +243,33 @@ function handleConfirm() {
   });
 }
 
-function handleConfirmEvent(event) {
+async function handleConfirmEvent(event) {
   evenements.value.unshift(event);
   numberNotReaded.value++;
   showEvenementModal.value = false;
 
-  //await axios.put(`http://localhost:3000/evenement/setTrue/${idProjetRef.value}`);
+  const req = {
+    titre : event.titre,
+    type : event.type,
+    date : new Date(event.date),
+    Heure : event.Heure,
+    description : event.description
+  }
+
+  console.log(req.date);
+
+  await axios.post(`http://localhost:3000/evenement/insertEvenement/${projet.idProjet}`,req);
 
 }
 
- function readAllNotifications() {
+ async function readAllNotifications() {
   console.log("readed");
   evenements.value.forEach((item, index, arr) => {
     arr[index].readed = true;
   });
 
-
+  await axios.put(`http://localhost:3000/evenement/setTrue/${projet.idProjet}`);
+  numberNotReaded.value=0;
   //   notificationVue.create({
   //           title: "Wouldn't it be Nice",
   //           description: "From the Beach Boys",
@@ -305,5 +330,11 @@ function handleConfirmEvent(event) {
 
 .space-drop {
   width: 10vw;
+}
+
+.see-text {
+  cursor : pointer;
+  /* text-decoration:underline; */
+  font-size:10px;
 }
 </style>

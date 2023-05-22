@@ -31,7 +31,8 @@ export const setAllevenemtnsReaded = async (req: Request, res: Response) => {
     });
 
     res.status(200).json(evenements);
-  } catch {
+  } catch(e) {
+    console.log(e);
     res
       .status(500)
       .json({ err: "Problème lors de la mise les evenement a lu" });
@@ -45,18 +46,19 @@ export const insertnewEvenement = async (req: Request, res: Response) => {
 
     const evenements = await prisma.evenement.create({
       data: {
-        titre,
-        type,
-        date,
-        Heure,
-        description,
+        titre : titre,
+        type : type,
+        date : date,
+        Heure : Heure,
+        description : description,
         readed: false,
-        idProjet
+        idProjet : idProjet
       },
     });
 
     res.status(200).json(evenements);
-  } catch {
+  } catch(e) {
+    console.log(e);
     res
       .status(500)
       .json({ err: "Problème lors de l'insertion de l'evenement" });
