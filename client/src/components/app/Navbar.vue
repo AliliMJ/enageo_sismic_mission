@@ -2,58 +2,199 @@
   <NSpace justify="space-between" class="space">
     <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" />
     <NSpace justify="space-between" class="space1">
-      <n-button text style="font-size: 30px">
-        <n-icon>
-          <notification />
-        </n-icon>
-      </n-button>
+      <NButton
+        @click="showEvenementModal = !showEvenementModal"
+        type="warning"
+        v-if="auth.user?.role === Role.ChefTerrain"
+        >signaler un evenement
+        <template #icon>
+          <NIcon><alert /></NIcon>
+        </template>
+      </NButton>
+      <NSpace v-if="auth.user?.role != Role.ChefTerrain"> </NSpace>
+      <NSpace class="space-drop" justify="space-between">
+        <n-popover placement="bottom" trigger="click">
+          <template #trigger>
+            <n-button text style="font-size: 30px">
+              <n-badge :value="numberNotReaded" processing show-zero>
+                <n-icon>
+                  <notification />
+                </n-icon>
+              </n-badge>
+            </n-button>
+          </template>
+          <NSpace>
+            <NSpace vertical>
+              <NSpace justify="end">
+                <NText
+                  @click="readAllNotifications"
+                  class="readButton"
+                  v-if="auth.user.role === Role.ChefMision"
+                >
+                  marquer tous comme lu</NText
+                >
+              </NSpace>
 
-      <n-dropdown
-        trigger="hover"
-        :options="options"
-        @select="handleSelect"
-        style="width: 180px"
-      >
-        <n-button text style="font-size: 30px">
-          <n-icon>
-            <Persone />
-          </n-icon>
-        </n-button>
-      </n-dropdown>
+              <NSpace
+                style="
+                  background-color: rgb(255, 255, 255);
+                  width: 20vw;
+                  padding: 5px;
+                  position: relative;
+                "
+                v-for="evenement in evenements"
+                key="evenements.key"
+              >
+                <NSpace vertical style="width: 20vw">
+                  <NText style="font-weight: bold">{{ evenement.titre }}</NText>
+                  <NText style="font-size: 12px">
+                    {{ evenement.date }} à {{ evenement.Heure }}</NText
+                  >
+                  <NText v-if="evenement.readed === false" class="dot">•</NText>
+                  <NSpace justify="end">
+                    <NText @click="seeDetails(evenement)" class="see-text"
+                      >voir plus...</NText
+                    >
+                  </NSpace>
+                  <n-divider style="width: 20vw; margin: 0px" />
+                </NSpace>
+              </NSpace>
+            </NSpace>
+          </NSpace>
+        </n-popover>
+
+        <n-dropdown
+          trigger="hover"
+          :options="options"
+          @select="handleSelect"
+          style="width: 180px"
+        >
+          <n-button text style="font-size: 30px">
+            <n-icon>
+              <Persone />
+            </n-icon>
+          </n-button>
+        </n-dropdown>
+      </NSpace>
     </NSpace>
   </NSpace>
+  <Modal
+    :showModal="showEvenementModal"
+    :idProjet="idProjetRef"
+    :nb="evenements.length"
+    @cancel="showEvenementModal = false"
+    @confirm="handleConfirmEvent"
+  />
+  <DetailModal
+    :showModal="showEvenementDetailsModal"
+    @close="showEvenementDetailsModal = false"
+    :evenement="evenement"
+  />
 </template>
 
 <script setup>
 import {
   NSpace,
   NIcon,
-  NImage,
   NButton,
   NDropdown,
   useMessage,
   NAvatar,
   NText,
   useDialog,
+  NPopover,
+  NBadge,
+  NDivider,
+  useNotification,
 } from "naive-ui";
 import {
   PersonCircleOutline as Persone,
   NotificationsOutline as notification,
-  PersonCircleOutline as UserIcon,
   LogOutOutline as LogoutIcon,
   SettingsOutline as Settings,
   PersonOutline as Person,
+  AlertCircleOutline as alert,
 } from "@vicons/ionicons5";
 import { h } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../../stores/authentication";
 import { renderIcon, renderMenuItem } from "../../utils/render";
-//import { ref, onMounted, computed, watch } from 'vue';
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import { Role } from "../../enums";
+import Modal from "common/addEvenementModal.vue";
+import DetailModal from "common/NotificationDetailModal.vue";
 
 const router = useRouter();
 const auth = useAuth();
 const dialog = useDialog();
 const message = useMessage();
+const notificationVue = useNotification();
+
+const showEvenementModal = ref(false);
+const showEvenementDetailsModal = ref(false);
+
+const evenement = ref();
+
+const employe = ref([]);
+const projet = ref([]);
+const evenements = ref([]);
+
+
+  employe.value = (
+  await axios.get("http://localhost:3000/employes/" + auth.user.id)
+).data;
+ projet.value = (
+  await axios.get(
+    `http://localhost:3000/projets/projetByMissionWithEvenements/${employe.value.codeMission}`
+  )
+).data;
+
+evenements.value = projet.value.Evenement;
+
+
+const numberNotReaded = ref(0);
+const idProjetRef = ref(evenements.value[0].idProjet);
+
+evenements.value.forEach((item, index, arr) => {
+  arr[index].date = new Date(item.date).toLocaleDateString("fr");
+
+  if (arr[index].readed === false) {
+    numberNotReaded.value++;
+  }
+});
+
+onMounted(async () => {
+  if (numberNotReaded.value > 0 && auth.user.role === Role.ChefMision) {
+    let markAsRead = false;
+    const n = notificationVue.create({
+      title: "Il y a des nouvelles notifications !!",
+      content: `vous avez (${numberNotReaded.value}) nouveaux événements qu'ils ne sont pas encore lus`,
+      meta: new Date().toLocaleDateString("fr"),
+      action: () =>
+        h(
+          NButton,
+          {
+            text: true,
+            type: "primary",
+            onClick: () => {
+              markAsRead = true;
+              n.destroy();
+            },
+          },
+          {
+            default: () => "marquer comme lu",
+          }
+        ),
+      onClose: () => {
+        if (!markAsRead) {
+          message.warning("Please mark as read");
+          return false;
+        }
+      },
+    });
+  }
+});
 
 const options = [
   {
@@ -87,6 +228,11 @@ function handleSelect(key) {
   if (String(key) == "logout") {
     handleConfirm();
   }
+}
+
+function seeDetails(event) {
+  evenement.value = event;
+  showEvenementDetailsModal.value = true;
 }
 
 function renderCustomHeader() {
@@ -129,6 +275,38 @@ function handleConfirm() {
     },
   });
 }
+
+async function handleConfirmEvent(event) {
+  const req = {
+    titre: event.titre,
+    type: event.type,
+    date: new Date(event.date),
+    Heure: event.Heure,
+    description: event.description,
+  };
+  event.date = new Date(event.date).toLocaleDateString("fr");
+  evenements.value.unshift(event);
+  numberNotReaded.value++;
+  showEvenementModal.value = false;
+
+  console.log(event.date);
+
+  console.log("--->" + req.date);
+
+  await axios.post(
+    `http://localhost:3000/evenement/insertEvenement/${projet.value.idProjet}`,
+    req
+  );
+}
+
+async function readAllNotifications() {
+  console.log("readed");
+  evenements.value.forEach((item, index, arr) => {
+    arr[index].readed = true;
+  });
+
+  await axios.put(`http://localhost:3000/evenement/setTrue/${projet.value.idProjet}`);
+}
 </script>
 
 <style scoped>
@@ -137,7 +315,7 @@ function handleConfirm() {
 }
 
 .space1 {
-  width: 100px;
+  width: 55vw;
   margin-right: 30px;
 }
 
@@ -157,5 +335,28 @@ function handleConfirm() {
   padding: 0;
   border: none;
   background: none;
+}
+
+.readButton {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.dot {
+  position: absolute;
+  right: -5px;
+  top: -25px;
+  font-size: 30px;
+  color: red;
+}
+
+.space-drop {
+  width: 10vw;
+}
+
+.see-text {
+  cursor: pointer;
+  /* text-decoration:underline; */
+  font-size: 10px;
 }
 </style>

@@ -13,6 +13,7 @@ import { equipeRouter } from './routes/equipe.ts';
 import { wilayaRouter } from './routes/wilaya.ts';
 import { typeMaterielRouter } from './routes/typeMateriel.ts';
 import { rapportRouter } from './routes/rapport.ts';
+import { evenementRouter } from './routes/evenement.ts';
 import { Datacraft } from './database/datacraft.ts';
 
 import { consommationRoute } from './routes/consommation.ts';
@@ -53,6 +54,7 @@ app.use('/fonction', fonctionRouter);
 app.use('/equipes', equipeRouter);
 app.use('/wilaya', wilayaRouter);
 app.use('/consommation', consommationRoute);
+app.use('/evenement', evenementRouter);
 
 // cron.schedule('0-59 * * * *', async () => {
 //   const consommationCollection = mongo.db().collection('consommation');

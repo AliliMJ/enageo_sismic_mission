@@ -85,10 +85,10 @@ model Projet {
 
   Materiel Materiel[]
 
-  Terrain          Terrain     @relation(fields: [terrainIdTerrain], references: [idTerrain])
+  Terrain          Terrain?    @relation(fields: [terrainIdTerrain], references: [idTerrain])
   Rapprots         Rapport[]
   Evenements       Evenement[]
-  terrainIdTerrain Int
+  terrainIdTerrain Int?
 }
 
 model Client {
@@ -289,9 +289,13 @@ enum EtatEmploye {
 }
 
 model Evenement {
-  id             Int           @id @default(autoincrement())
-  type           TypeEvenement
-  description    String
-  Projet         Projet        @relation(fields: [projetIdProjet], references: [idProjet])
-  projetIdProjet Int
+  id          Int           @id @default(autoincrement())
+  titre       String
+  date        DateTime      @db.Date
+  Heure       String
+  type        TypeEvenement
+  description String
+  readed      Boolean       @default(false)
+  Projet      Projet        @relation(fields: [idProjet], references: [idProjet])
+  idProjet    Int
 }

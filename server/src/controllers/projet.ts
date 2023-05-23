@@ -117,3 +117,29 @@ export const getProjetsEnCours = async (req: Request, res: Response) => {
     res.send(e);
   }
 };
+export const getProjetByMissionWithEvenements = async (
+  req: Request,
+  res: Response
+) => {
+  const codeMission = req.params.missionCode;
+
+  try {
+    const projet = await prisma.projet.findFirst({
+      where: { codeMission: codeMission },
+      include: {
+        Etats: true,
+        Evenement: {
+          orderBy: {
+            id: 'desc',
+          },
+        },
+      },
+    });
+
+    return res.status(200).json(projet);
+  } catch {
+    res.status(500).json({
+      err: 'Problème lors de la collection de ce projet',
+    });
+  }
+};

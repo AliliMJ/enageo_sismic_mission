@@ -16,6 +16,7 @@ import ChefMission from './ChefMission.vue';
 import ChefTerrain from './ChefTerrain.vue';
 import Directeur from './Directeur.vue';
 import Navbar from './Navbar.vue';
+import NavbarEmpty from './NavbarEmpty.vue'
 
 import { useMessage, useDialog } from 'naive-ui';
 import { Role } from '../../enums';
@@ -56,10 +57,14 @@ const logout = () => {
       <NIcon><Logout /></NIcon>
     </template>
   </NButton>
-
   <NLayout>
-    <NLayoutHeader bordered> <Navbar /></NLayoutHeader>
+    <Suspense>
+    <NLayoutHeader bordered > 
+      <NavbarEmpty v-if="auth.user?.role === Role.Directeur || auth.user?.role === Role.Administrateur" />
+      <Navbar v-else-if="auth.user?.role === Role.Gestionnaire || auth.user?.role === Role.ChefMision || auth.user?.role === Role.ChefTerrain" />
+    </NLayoutHeader>
 
+    </Suspense>
     <NLayoutContent>
       <Admin v-if="auth.user?.role === Role.Administrateur" />
       <Gestionnaire v-else-if="auth.user?.role === Role.Gestionnaire" />
@@ -78,6 +83,7 @@ const logout = () => {
   z-index: 10;
   width: 250px;
 }
+
 .n-layout-header {
   padding: 10px;
 }

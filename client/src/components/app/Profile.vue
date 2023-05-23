@@ -44,10 +44,8 @@ const auth = useAuth();
 const isEditUser = ref(true);
 const isEditEmploye = ref(true);
 
-const user = (await axios.get(`http://localhost:3000/comptes/${auth.user.id}`)).data;
-const employe = (
-  await axios.get('http://localhost:3000/employes/' + user.employeId)
-).data;
+const user = auth.user;
+const employe = auth.employe
 const wilaya = (await axios.get("http://localhost:3000/wilaya")).data;
 const fonction = (await axios.get("http://localhost:3000/fonction")).data;
 
@@ -93,36 +91,36 @@ if(employe.Mission!=null){
   missionRef=ref();
 }
 
-const wilayaRef = ref({
-  numWilaya: wilaya.numWilaya,
-  nom: wilaya.nom,
-});
+// const wilayaRef = ref({
+//   numWilaya: wilaya.numWilaya,
+//   nom: wilaya.nom,
+// });
 
 /* user operations */
 
-const deleteUser = async () => {
-  const req = {
-    id: Number(user.id),
-  };
-  await axios.delete(`http://localhost:3000/comptes/${user.id}`);
-};
+// const deleteUser = async () => {
+//   const req = {
+//     id: Number(user.id),
+//   };
+//   await axios.delete(`http://localhost:3000/comptes/${user.id}`);
+// };
 
-function handleConfirmDeleteUser() {
-  dialog.warning({
-    title: "Confirmation",
-    content: "êtes-vous sûr de supprimer cette utilisateur?",
-    positiveText: "Supprimer",
-    negativeText: "Annuler",
-    onPositiveClick: () => {
-      message.success("utilisateur supprimer");
-      deleteUser();
-      router.push("/comptes");
-    },
-    onNegativeClick: () => {
-      message.error("Suppression annulée");
-    },
-  });
-}
+// function handleConfirmDeleteUser() {
+//   dialog.warning({
+//     title: "Confirmation",
+//     content: "êtes-vous sûr de supprimer cette utilisateur?",
+//     positiveText: "Supprimer",
+//     negativeText: "Annuler",
+//     onPositiveClick: () => {
+//       message.success("utilisateur supprimer");
+//       deleteUser();
+//       router.push("/comptes");
+//     },
+//     onNegativeClick: () => {
+//       message.error("Suppression annulée");
+//     },
+//   });
+// }
 
 const updateUser = async () => {
   const req = {
@@ -143,34 +141,34 @@ if(auth.user.role=='ADMINISTRATEUR'){
 
 /* employe operations */
 
-const deleteEmploye = async () => {
-  const req = {
-    id: Number(employeRef.value.id),
-  };
-  try {
-    await axios.delete(`http://localhost:3000/comptes/${user.id}`);
-    await axios.delete(`http://localhost:3000/employes/${employeRef.value.id}`);
-  } catch (error) {
-    console.error(error);
-  }
-};
+// const deleteEmploye = async () => {
+//   const req = {
+//     id: Number(employeRef.value.id),
+//   };
+//   try {
+//     await axios.delete(`http://localhost:3000/comptes/${user.id}`);
+//     await axios.delete(`http://localhost:3000/employes/${employeRef.value.id}`);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
-function handleConfirmDeleteEmploye() {
-  dialog.warning({
-    title: "Confirmation",
-    content: "êtes-vous sûr de supprimer cette employe?",
-    positiveText: "Supprimer",
-    negativeText: "Annuler",
-    onPositiveClick: () => {
-      message.success("employe supprimer");
-      deleteEmploye();
-      router.push("/comptes");
-    },
-    onNegativeClick: () => {
-      message.error("Suppression annulée");
-    },
-  });
-}
+// function handleConfirmDeleteEmploye() {
+//   dialog.warning({
+//     title: "Confirmation",
+//     content: "êtes-vous sûr de supprimer cette employe?",
+//     positiveText: "Supprimer",
+//     negativeText: "Annuler",
+//     onPositiveClick: () => {
+//       message.success("employe supprimer");
+//       deleteEmploye();
+//       router.push("/comptes");
+//     },
+//     onNegativeClick: () => {
+//       message.error("Suppression annulée");
+//     },
+//   });
+// }
 
 const updateEmploye = async () => {
     const req = {
@@ -274,7 +272,7 @@ const showChangePasswordModal = () => {
       <n-tabs type="line" animated>
         <n-tab-pane name="data" tab="Mes données">
           <NSpace justify="end" style="margin-bottom: 10px">
-            <n-button
+            <!-- <n-button
               text
               style="font-size: 30px"
               class="trash"
@@ -283,7 +281,7 @@ const showChangePasswordModal = () => {
               <n-icon>
                 <trash />
               </n-icon>
-            </n-button>
+            </n-button> -->
             <n-button
               text
               style="font-size: 30px"
@@ -365,14 +363,14 @@ const showChangePasswordModal = () => {
                         placeholder="non mission"
                       />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="etat de l'employe">
+                    <NFormItemGi :span="12" label="etat">
                       <NSelect
                         placeholder="etat"
                         :options="etatEmployeOptions"
                         v-model:value="employeRef.etat"
                       />
                     </NFormItemGi>
-                    <NFormItemGi :span="12" label="fonction de l'employe">
+                    <NFormItemGi :span="12" label="fonction">
                       <NSelect
                         :options="fonctionOptions"
                         v-model:value="fonctionRef"
@@ -395,7 +393,7 @@ const showChangePasswordModal = () => {
         </n-tab-pane>
         <n-tab-pane name="compte" tab="Mon compte">
           <NSpace justify="end" style="margin-bottom: 10px">
-            <n-button
+            <!-- <n-button
               text
               style="font-size: 30px"
               class="trash"
@@ -404,7 +402,7 @@ const showChangePasswordModal = () => {
               <n-icon>
                 <trash />
               </n-icon>
-            </n-button>
+            </n-button> -->
             <n-button
               text
               style="font-size: 30px"

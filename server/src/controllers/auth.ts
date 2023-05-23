@@ -67,7 +67,6 @@ export const verifyPassword = async (req: Request, res: Response) => {
     } else if (await bcrypt.compare(password, user.hashPassword)) {
       return res.status(200).json({ response: 1 });
     } else {
-      console.log('wtf is goining on');
       return res.status(400).json({ response: 0 });
     }
   } catch {
