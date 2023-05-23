@@ -1,66 +1,56 @@
 <script setup>
-import mapboxgl from 'mapbox-gl';
 import { onMounted } from 'vue';
 
 onMounted(() => {
   mapboxgl.accessToken =
-    'pk.eyJ1IjoiYWxpbGltaiIsImEiOiJjbGhiMDBkZXIwMWs4M3JuNDdxMjNyMHhyIn0.q2o6eXdUQxZ8RHMsW5LKOA';
+    'pk.eyJ1IjoiYWxpbGltaiIsImEiOiJja2t2bGU3ZmQxOGxnMnBwbDRzcW5vZ2d1In0.xxhq9fjQcLmxmbV45xLU6g';
+
+  const geojson = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [6.094, 31.7],
+        },
+        properties: {
+          title: 'Mapbox',
+          description: 'Washington, D.C.',
+        },
+      },
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [5.579, 23.646],
+        },
+        properties: {
+          title: 'Mapbox',
+          description: 'San Francisco, California',
+        },
+      },
+    ],
+  };
 
   const map = new mapboxgl.Map({
-    container: 'map', // container ID
-    // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-    style: 'mapbox://styles/alilimj/clhb0hkej012701pgeseia8sn', // style URL
-    center: [6.137343, 45.137451], // starting position
-    zoom: 5, // starting zoom
-    // maxBounds: [
-    //   [-8.668735, 19.05737], // Southwest coordinates of Algeria
-    //   [11.979383, 37.35001], // Northeast coordinates of Algeria
-    // ],
+    container: 'map',
+    style: 'mapbox://styles/alilimj/clhw3641v021y01r05bmz06s8',
+    center: [4.442, 28.044],
+    zoom: 3,
+    maxBounds: [
+      [-4.781, 15.711], // Southwest coordinates of Algeria
+      [15.44, 39.982], // Northeast coordinates of Algeria
+    ],
   });
 
-  // map.on('load', () => {
-  //   map.addSource('maine', {
-  //     type: 'geojson',
-  //     data: {
-  //       type: 'Feature',
-  //       properties: { name: 'Null Island' },
-  //       geometry: {
-  //         type: 'Polygon',
-  //         // These coordinates outline Maine.
-  //         coordinates: [
-  //           [
-  //             [6.458, 31.768],
-  //             [6.618, 31.923],
-  //             [6.904, 31.711],
-  //             [6.458, 31.768],
-  //           ],
-  //         ],
-  //       },
-  //     },
-  //   });
-  //   map.addLayer({
-  //     id: 'maine',
-  //     type: 'fill',
-  //     source: 'maine', // reference the data source
-  //     layout: {},
-  //     paint: {
-  //       'fill-color': '#0080ff', // blue color fill
-  //       'fill-opacity': 0.5,
-  //     },
-  //   });
-  //   map.addLayer({
-  //     id: 'outline',
-  //     type: 'line',
-  //     source: 'maine',
-  //     layout: {},
-  //     paint: {
-  //       'line-color': '#000',
-  //       'line-width': 3,
-  //     },
-  //   });
+  // add markers to map
+  for (const feature of geojson.features) {
+    // create a HTML element for each feature
 
-  // });
-  new mapboxgl.Marker().setLngLat([-63.292236, -18.281518]).addTo(map);
+    // make a marker for each feature and add it to the map
+    new mapboxgl.Marker().setLngLat(feature.geometry.coordinates).addTo(map);
+  }
 });
 </script>
 

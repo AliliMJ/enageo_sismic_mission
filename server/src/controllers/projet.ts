@@ -96,3 +96,24 @@ export const getProjetByMission = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getProjetsEnCours = async (req: Request, res: Response) => {
+  try {
+    const projects = await prisma.$queryRaw`
+  SELECT p.*
+  FROM Projet p
+  JOIN EtatProjet ep ON p.idProjet = ep.idProjet
+  WHERE ep.etat = 'EN_PRODUCTION'
+    AND ep.id = (
+      SELECT MAX(ep2.id)
+      FROM EtatProjet ep2
+      WHERE ep2.idProjet = p.idProjet
+    );
+`;
+
+    console.log(projects);
+    res.json(projects);
+  } catch (e) {
+    res.send(e);
+  }
+};

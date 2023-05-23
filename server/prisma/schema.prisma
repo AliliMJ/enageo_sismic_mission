@@ -85,9 +85,10 @@ model Projet {
 
   Materiel Materiel[]
 
-  Coodonnes  Coordonne[]
-  Rapprots   Rapport[]
-  Evenements Evenement[]
+  Terrain          Terrain     @relation(fields: [terrainIdTerrain], references: [idTerrain])
+  Rapprots         Rapport[]
+  Evenements       Evenement[]
+  terrainIdTerrain Int
 }
 
 model Client {
@@ -154,8 +155,6 @@ model Coordonne {
   latitude  Float
 
   Terrain          Terrain? @relation(fields: [terrainIdTerrain], references: [idTerrain])
-  Projet           Projet?  @relation(fields: [projetIdProjet], references: [idProjet])
-  projetIdProjet   Int?
   terrainIdTerrain Int?
 }
 
@@ -165,6 +164,7 @@ model Terrain {
   numWilaya     Int
   distanceSiege Float
   Coordonnes    Coordonne[]
+  Projet        Projet[]
 }
 
 model Wilaya {
@@ -245,7 +245,7 @@ model Materiel {
   matricule    String
   Projet       Projet?      @relation(fields: [idProjet], references: [idProjet])
   idProjet     Int?
-  status      Int
+  status       Int
   Reparations  Reparation[]
   TypeMateriel TypeMateriel @relation(fields: [idTypeMat], references: [idTypeMat])
   idTypeMat    Int
@@ -253,7 +253,7 @@ model Materiel {
 
 model Reparation {
   idRep          Int       @id @default(autoincrement())
-  dPanne         DateTime?  
+  dPanne         DateTime?
   dDebRep        DateTime?
   dFinRep        DateTime?
   detailProbleme String?
