@@ -14,7 +14,8 @@ import {
   ConstructOutline as Atelier,
   BarChartOutline as Dashboard,
   CarOutline as car,
-  PeopleOutline as people
+  PeopleOutline as people,
+  BusOutline as bus
 } from '@vicons/ionicons5';
 
 const route = useRoute();
@@ -33,7 +34,7 @@ const menuOptions = [
   {
     label: renderMenuItem('Matériel', Route.Material),
     key: Route.Material,
-    icon: renderIcon(car),
+    icon: renderIcon(bus),
   },
   {
     label: renderMenuItem('Employés', Route.Employe),
