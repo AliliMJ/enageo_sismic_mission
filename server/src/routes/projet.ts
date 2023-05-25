@@ -6,6 +6,7 @@ import {
   getProjetByMission,
   getProjetsEnCours,
   getProjetByMissionWithEvenements,
+  updateProjet,
 } from '../controllers/projet';
 
 export const projetRouter = express.Router();
@@ -20,4 +21,5 @@ projetRouter.get(
 projetRouter.get('/projetByMission/:missionCode', getProjetByMission);
 projetRouter.post('/create', insertProjet);
 projetRouter.get('/:idProjet', getProjetById);
+projetRouter.put('/:idProjet', updateProjet);
 projetRouter.post('/', getProjets);

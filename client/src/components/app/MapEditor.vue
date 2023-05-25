@@ -2,7 +2,7 @@
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-
+import { area } from '@turf/turf';
 import { onMounted, defineEmits } from 'vue';
 import { NCard, NButton } from 'naive-ui';
 
@@ -44,9 +44,8 @@ onMounted(() => {
     console.log(data);
     const answer = document.getElementById('calculated-area');
     if (data.features.length > 0) {
-      const area = turf.area(data);
       // Restrict the area to 2 decimal points.
-      const rounded_area = Math.round(area / 1000);
+      const rounded_area = Math.round(area(data) / 1000);
       answer.innerHTML = `<p><strong>${rounded_area}</strong> km carrés</p>`;
     } else {
       answer.innerHTML = '';

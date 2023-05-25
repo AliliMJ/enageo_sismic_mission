@@ -153,3 +153,23 @@ export const getProjetByMissionWithEvenements = async (
     });
   }
 };
+
+export const updateProjet = async (req: Request, res: Response) => {
+  const data = req.body;
+  console.log(data);
+  try {
+    const idProjet = Number(req.params.idProjet);
+    const project = await prisma.projet.update({
+      where: { idProjet },
+      data: {
+        Etats: { create: data.createdStates },
+      },
+    });
+    res.json(project);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      err: 'Problème lors de la mise à jour de ce projet',
+    });
+  }
+};
