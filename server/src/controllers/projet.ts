@@ -100,15 +100,19 @@ export const getProjetByMission = async (req: Request, res: Response) => {
 export const getProjetsEnCours = async (req: Request, res: Response) => {
   try {
     const projects = await prisma.$queryRaw`
-  SELECT p.*
+  SELECT p.*, c.longitude, c.latitude
   FROM Projet p
   JOIN EtatProjet ep ON p.idProjet = ep.idProjet
+  JOIN Terrain t ON p.terrainIdTerrain = t.idTerrain
+  JOIN Coordonne c ON t.idTerrain = c.terrainIdTerrain
   WHERE ep.etat = 'EN_PRODUCTION'
     AND ep.id = (
       SELECT MAX(ep2.id)
       FROM EtatProjet ep2
       WHERE ep2.idProjet = p.idProjet
-    );
+    )
+
+LIMIT 1;
 `;
 
     console.log(projects);
@@ -128,7 +132,7 @@ export const getProjetByMissionWithEvenements = async (
       where: { codeMission: codeMission },
       include: {
         Etats: true,
-        Evenement: {
+        Evenements: {
           orderBy: {
             id: 'desc',
           },
