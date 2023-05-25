@@ -1,6 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router';
 import AppConfig from 'config/AppConfig.vue';
+import Pivot from './components/analysis/PivotTable.vue';
 </script>
 
 <template>
@@ -15,7 +16,8 @@ import AppConfig from 'config/AppConfig.vue';
       </NLayoutContent>
     </NLayout> -->
 
-    <RouterView />
+    <!-- <RouterView /> -->
+    <Pivot />
   </app-config>
 </template>
 
