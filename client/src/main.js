@@ -11,4 +11,4 @@ pinia.use(piniaPluginPersistedstate);
 app.use(router);
 app.use(pinia);
 
-//app.mount('#app');
+app.mount('#app');

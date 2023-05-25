@@ -41,7 +41,7 @@ const data = [
 ];
 
 $(function () {
-  $('#output').pivot(data, {
+  $('#output').pivotUI(data, {
     rows: ['chantier'],
     cols: ['mois'],
   });
@@ -54,5 +54,6 @@ $(function () {
 <style scoped>
 #output {
   font-family: Verdana;
+  word-break: keep-all;
 }
 </style>

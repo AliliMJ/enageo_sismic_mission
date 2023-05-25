@@ -2,7 +2,7 @@
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import '../../dist/turf/turf.js';
+
 import { onMounted, defineEmits } from 'vue';
 import { NCard, NButton } from 'naive-ui';
 
