@@ -43,7 +43,7 @@ export const getProjetById = async (req: Request, res: Response) => {
 
 export const insertProjet = async (req: Request, res: Response) => {
   const {
-    plan, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
+    coordinates, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
     userid,
     nom = '',
     description = '',
@@ -62,12 +62,18 @@ export const insertProjet = async (req: Request, res: Response) => {
         .json({ err: `Cet utilisateur n'a pas accès à cette mission` });
     const projet = await prisma.projet.create({
       data: {
-        Plan: { create: plan },
         Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
         codeMission: mission.codeMission,
         nom,
         description,
         budget,
+      },
+    });
+    await prisma.terrain.create({
+      data: {
+        Coordonnes: { create: coordinates },
+        numWilaya: 1,
+        Projet: { connect: { idProjet: projet.idProjet } },
       },
     });
     res.status(201).json(projet);

@@ -79,8 +79,6 @@ model Projet {
   Mission     Mission  @relation(fields: [codeMission], references: [codeMission])
   codeMission String
 
-  Plan Tache[]
-
   Etats EtatProjet[]
 
   Materiel Materiel[]
@@ -89,6 +87,7 @@ model Projet {
   Rapprots         Rapport[]
   Evenements       Evenement[]
   terrainIdTerrain Int?
+  Tache            Tache[]
 }
 
 model Client {
@@ -159,12 +158,12 @@ model Coordonne {
 }
 
 model Terrain {
-  idTerrain     Int         @id @default(autoincrement())
-  Wilaya        Wilaya      @relation(fields: [numWilaya], references: [numWilaya])
-  numWilaya     Int
-  distanceSiege Float
-  Coordonnes    Coordonne[]
-  Projet        Projet[]
+  idTerrain  Int         @id @default(autoincrement())
+  Wilaya     Wilaya      @relation(fields: [numWilaya], references: [numWilaya])
+  numWilaya  Int
+  //distanceSiege Float
+  Coordonnes Coordonne[]
+  Projet     Projet[]
 }
 
 model Wilaya {

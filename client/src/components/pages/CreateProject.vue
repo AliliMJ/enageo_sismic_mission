@@ -3,21 +3,16 @@
 //choisir des objectifs et etablir des plans
 import axios from 'axios';
 import MapEditor from 'app/MapEditor.vue';
+import { useRouter } from 'vue-router';
 import {
   NForm,
-  NDynamicInput,
-  NFormItem,
   NEmpty,
   NInput,
   NH1,
-  NSelect,
   NSpace,
   NCard,
-  NDatePicker,
   NButton,
   NInputNumber,
-  NDivider,
-  NText,
   NGrid,
   NFormItemGi,
   NModal,
@@ -31,6 +26,7 @@ const colCoordinates = [
 ];
 
 const auth = useAuth();
+const router = useRouter();
 const showMapEditor = ref(false);
 const coordinates = ref([]);
 
@@ -39,8 +35,6 @@ function addCoordinates(data) {
     return { longitude: c[0], latitude: c[1] };
   });
   coordinates.value = co;
-  console.log(data);
-  console.log(co);
 }
 
 async function createProject() {
@@ -50,14 +44,9 @@ async function createProject() {
       nom: model.value.name,
       description: model.value.description,
       budget: model.value.budget,
-      plan: model.value.dynamic.map((p) => ({
-        valeur: p.value,
-        duree: p.duration,
-        objectifId: p.objectif,
-        debut: new Date(p.start),
-      })),
+      coordinates: coordinates.value,
     });
-    alert('Project created!');
+    router.back();
   } catch (e) {
     console.log(e);
   }
