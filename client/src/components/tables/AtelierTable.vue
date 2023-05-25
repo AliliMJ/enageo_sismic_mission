@@ -1,17 +1,17 @@
 <script setup>
-import STable from "common/STable.vue";
-import axios from "axios";
-import { NSpace, NButton, NIcon, NInput, NH1 } from "naive-ui";
-import { Add } from "@vicons/ionicons5";
-import { History20Regular as history } from "@vicons/fluent";
-import { useRouter} from "vue-router";
-import { ref, onMounted, watch } from "vue";
-import { SearchOutline as search } from "@vicons/ionicons5";
-import { useAuth } from "../../stores/authentication";
-import MaterielTag from "common/MaterielTag.vue";
-import Modal from "common/addMaterielToPanne.vue";
-import HistoryModal from "common/ReparationHistory.vue";
-import { h } from "vue";
+import STable from '../common/STable.vue';
+import axios from 'axios';
+import { NSpace, NButton, NIcon, NInput, NH1 } from 'naive-ui';
+import { Add } from '@vicons/ionicons5';
+
+import { useRouter } from 'vue-router';
+import { ref, watch } from 'vue';
+import { SearchOutline as search } from '@vicons/ionicons5';
+import { useAuth } from '../../stores/authentication';
+import MaterielTag from '../common/MaterielTag.vue';
+import Modal from '../common/AddMaterielToPanne.vue';
+
+import { h } from 'vue';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -23,8 +23,8 @@ import {
   LinearScale,
   PointElement,
   LineElement,
-} from "chart.js";
-import { Line , Bar } from "vue-chartjs";
+} from 'chart.js';
+import { Line, Bar } from 'vue-chartjs';
 const router = useRouter();
 // const route = useRoute();
 // const dialog = useDialog();
@@ -48,15 +48,15 @@ projet.value = (
   )
 ).data;
 
-  materielEnPanne.value = (
-    await axios.get(
-      `http://localhost:3000/material/materielEnPanneByProject/${Number(
-        projet.value.idProjet
-      )}`
-    )
-  ).data;
+materielEnPanne.value = (
+  await axios.get(
+    `http://localhost:3000/material/materielEnPanneByProject/${Number(
+      projet.value.idProjet
+    )}`
+  )
+).data;
 
-  ChartJS.register(
+ChartJS.register(
   ArcElement,
   Tooltip,
   Legend,
@@ -65,11 +65,16 @@ projet.value = (
   LinearScale,
   BarElement,
   PointElement,
-  LineElement,
+  LineElement
 );
 
-const stat = (await axios.get(`http://localhost:3000/statistiques/atelierstatistiques/${Number(projet.value.idProjet)}`)).data;
-
+const stat = (
+  await axios.get(
+    `http://localhost:3000/statistiques/atelierstatistiques/${Number(
+      projet.value.idProjet
+    )}`
+  )
+).data;
 
 /* start employes joined per year */
 
@@ -93,11 +98,11 @@ const barData = {
   labels: pannesDates.value,
   datasets: [
     {
-      label: "nombre des pannes par les marque des vehicules",
-      backgroundColor: ["rgb(255, 0, 0 , 0.3)"],
-      borderColor: ["rgb(255, 0, 0)"],
+      label: 'nombre des pannes par les marque des vehicules',
+      backgroundColor: ['rgb(255, 0, 0 , 0.3)'],
+      borderColor: ['rgb(255, 0, 0)'],
       borderWidth: 1,
-      data:  pannesData.value,
+      data: pannesData.value,
     },
   ],
 };
@@ -113,36 +118,35 @@ stat.nbPannesByMonth.forEach((element) => {
   pannesData1.value.push(element.nbr);
 });
 
-
 const lineData = {
   labels: pannesDates1.value,
   datasets: [
     {
       label: 'nombres des pannes par les mois',
       backgroundColor: 'rgb(255,0,0)',
-      borderColor:'rgb(255,0,0)',
+      borderColor: 'rgb(255,0,0)',
       data: pannesData1.value,
       // cubicInterpolationMode: 'monotone',
       fill: false,
-      tension: 0.4
-    }
-  ]
-}
+      tension: 0.4,
+    },
+  ],
+};
 
 const lineOptions = {
   responsive: true,
-  maintainAspectRatio: false
-}
+  maintainAspectRatio: false,
+};
 
 /* end line chart */
 
 const cols = [
-  { title: "code materiel", key: "codeMat" },
-  { title: "designation", key: "designation" },
-  { title: "matricule", key: "matricule" },
+  { title: 'code materiel', key: 'codeMat' },
+  { title: 'designation', key: 'designation' },
+  { title: 'matricule', key: 'matricule' },
   {
-    title: "Status",
-    key: "statuMateriel",
+    title: 'Status',
+    key: 'statuMateriel',
     render(row) {
       return h(MaterielTag, { statuMateriel: row.status });
     },
@@ -153,7 +157,7 @@ const handleClick = (materielEnPanne) => {
   router.push(`/atelier/${materielEnPanne.codeMat}`);
 };
 
-const searchDesignation = ref("");
+const searchDesignation = ref('');
 const searchFilter = () => {
   watch(searchDesignation, async () => {
     if (searchDesignation.value.length > 0) {
@@ -190,7 +194,7 @@ async function confirmAdd(codeMatricule) {
   showModal.value = false;
 }
 
-const props = defineProps(["Number(projet.value.idProjet)"]);
+const props = defineProps(['Number(projet.value.idProjet)']);
 </script>
 
 <template>
@@ -230,13 +234,13 @@ const props = defineProps(["Number(projet.value.idProjet)"]);
       />
     </NSpace>
   </NSpace>
-  <NSpace style="margin-top:15px;margin-left:5px">
+  <NSpace style="margin-top: 15px; margin-left: 5px">
     <NSpace vertical class="bar-space">
-          <Bar :data="barData" :options="barOptions" style="height: 180px" />
-        </NSpace>
-        <NSpace vertical class="line-space">
-          <Line :data="lineData" :options="lineOptions" />
-        </NSpace>
+      <Bar :data="barData" :options="barOptions" style="height: 180px" />
+    </NSpace>
+    <NSpace vertical class="line-space">
+      <Line :data="lineData" :options="lineOptions" />
+    </NSpace>
   </NSpace>
   <Modal
     v-if="showModal"
@@ -248,9 +252,8 @@ const props = defineProps(["Number(projet.value.idProjet)"]);
 </template>
 
 <style scoped>
-
 .bar-space {
-  width:38vw;
+  width: 38vw;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
@@ -258,13 +261,11 @@ const props = defineProps(["Number(projet.value.idProjet)"]);
 }
 
 .line-space {
-  width:38vw;
+  width: 38vw;
   height: 180px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
   padding: 3px 10px;
 }
-
-
 </style>

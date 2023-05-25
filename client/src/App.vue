@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView } from 'vue-router';
-import AppConfig from 'config/AppConfig.vue';
+import AppConfig from './config/AppConfig.vue';
 import Pivot from './components/analysis/PivotTable.vue';
 </script>
 

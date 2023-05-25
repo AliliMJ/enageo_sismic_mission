@@ -10,12 +10,9 @@ import { optionsCompte, optionDashboard } from './menuOptions.js';
 import { renderIcon, renderMenuItem } from '../../utils/render.js';
 import { Route } from '../../enums';
 import {
-  CubeOutline as Cube,
   ConstructOutline as Atelier,
-  BarChartOutline as Dashboard,
-  CarOutline as car,
   PeopleOutline as people,
-  BusOutline as bus
+  BusOutline as bus,
 } from '@vicons/ionicons5';
 
 const route = useRoute();
@@ -41,7 +38,7 @@ const menuOptions = [
     key: Route.Employe,
     icon: renderIcon(people),
   },
-  
+
   ...optionsCompte,
 ];
 </script>

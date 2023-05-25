@@ -2,7 +2,7 @@
   <NSpace justify="space-between" class="space">
     <img
       class="logoImg"
-      src="@/assets/ENAGEOTEXT.png"
+      src="../../assets/ENAGEOTEXT.png"
       alt="erreur"
       @click="imageClick"
     />
@@ -127,8 +127,9 @@ import { renderIcon, renderMenuItem } from '../../utils/render';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { Role } from '../../enums';
-import Modal from 'common/addEvenementModal.vue';
-import DetailModal from 'common/NotificationDetailModal.vue';
+
+import Modal from '../common/AddEvenementModal.vue';
+import DetailModal from '../common/NotificationDetailModal.vue';
 
 const router = useRouter();
 const auth = useAuth();

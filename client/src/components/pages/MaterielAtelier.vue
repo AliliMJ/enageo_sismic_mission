@@ -145,37 +145,28 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import STable from "common/STable.vue";
-import { History20Regular as history } from "@vicons/fluent";
-import HistoryModal from "common/ReparationHistory.vue";
+import axios from 'axios';
+
+import { History20Regular as history } from '@vicons/fluent';
+import HistoryModal from '../common/ReparationHistory.vue';
 import {
-  NCard,
-  NTabs,
-  NTabPane,
   NSpace,
   NButton,
   NIcon,
   NGrid,
-  NForm,
   NFormItemGi,
   NGridItem,
   NInput,
-  NSelect,
   NDatePicker,
-  useDialog,
   useMessage,
   NText,
-  NDivider,
-} from "naive-ui";
-import { ref, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { h } from "vue";
-import MaterielTag from "common/MaterielTag.vue";
+} from 'naive-ui';
+import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
-const dialog = useDialog();
+
 const message = useMessage();
 
 const codeMat = route.params.codeMat;
@@ -213,13 +204,13 @@ typeMaterielRef.value = typeMateriel.libelle;
 designationRef.value = materiel.designation;
 matriculeRef.value = materiel.matricule;
 if (Number(materiel.status) === 1) {
-  statusRef.value = "en reparation";
+  statusRef.value = 'en reparation';
 } else {
-  statusRef.value = "en panne";
+  statusRef.value = 'en panne';
 }
 marqueRef.value = materiel.marque;
 modeleRef.value = materiel.modele;
-dateServiceRef.value = new Date(materiel.dateService).toLocaleDateString("fr");
+dateServiceRef.value = new Date(materiel.dateService).toLocaleDateString('fr');
 
 //typeMaterielRef.value = materiel.typemateriel.libelle
 
@@ -250,10 +241,10 @@ const mettreEnReparation = async () => {
         req
       )
     ).data;
-    message.success("materiel ajoutee a la reparation");
-    router.push("/atelier");
+    message.success('materiel ajoutee a la reparation');
+    router.push('/atelier');
   } else {
-    message.error("il faut remplit toutes les champs necissaires");
+    message.error('il faut remplit toutes les champs necissaires');
   }
 };
 
@@ -271,10 +262,10 @@ const mettreEnBonEtat = async () => {
         req
       )
     ).data;
-    message.success("materiel ajoutee a bon etat");
-    router.push("/atelier");
+    message.success('materiel ajoutee a bon etat');
+    router.push('/atelier');
   } else {
-    message.error("il faut remplit toutes les champs necissaires");
+    message.error('il faut remplit toutes les champs necissaires');
   }
 };
 

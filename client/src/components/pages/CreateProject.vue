@@ -2,7 +2,7 @@
 //choisir le client
 //choisir des objectifs et etablir des plans
 import axios from 'axios';
-import MapEditor from 'app/MapEditor.vue';
+import MapEditor from '../app/MapEditor.vue';
 import { useRouter } from 'vue-router';
 import {
   NForm,

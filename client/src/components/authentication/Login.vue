@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useMessage } from 'naive-ui';
 import { useRouter } from 'vue-router';
-import { useAuth } from 'stores/authentication.js';
+import { useAuth } from '../../stores/authentication';
 
 const auth = useAuth();
 const message = useMessage();
@@ -45,7 +45,7 @@ export default {
     <transition appear :css="false" @before-enter="beforeEnter" @enter="enter">
       <div class="container">
         <h1 class="authLabel">Authentification</h1>
-        <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" />
+        <img class="logoImg" src="../../assets/ENAGEOTEXT.png" alt="erreur" />
         <form>
           <div class="inputContainer">
             <input

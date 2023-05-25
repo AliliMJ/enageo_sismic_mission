@@ -3,8 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    
-    <script src="thirdparty/turf/turf.js"></script>
     <link rel="stylesheet" href="thirdparty/pivot/pivot.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,14 +15,60 @@ rel="stylesheet"
 />
   </head>
   <body>
-    <div id="app"></div>
+
+    <div id="output"></div>
     <script type="module" src="/src/main.js"></script>
     <script src="thirdparty/jquery/jquery.min.js"></script>
     <script src="thirdparty/jquey-ui/jquery-ui.min.js"></script>
-   
-    <script src="thirdparty/pivot/pivot.js"></script>
-    <script src="thirdparty/pivot/pivot.fr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js" integrity="sha512-XgJh9jgd6gAHu9PcRBBAp0Hda8Tg87zi09Q2639t0tQpFFQhGpeCgaiEFji36Ozijjx9agZxB0w53edOFGCQ0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="thirdparty/turf/turf.js"></script>
+    <script>
+const data = [{"chaniter":"EGS60", "mois":"janvier", "production":100, "année":2018 },
+{"chaniter":"EGS60", "mois":"févirier", "production":90, "année":2018 },
+{"chaniter":"EGS60", "mois":"mars", "production":120, "année":2018 },
+{"chaniter":"EGS60", "mois":"avril", "production":70, "année":2018 },
+{"chaniter":"EGS60", "mois":"mai", "production":30, "année":2018 },
+{"chaniter":"EGS60", "mois":"juin", "production":111 , "année":2018},
+{"chaniter":"EGS60", "mois":"juillet", "production":96, "année":2018 },
+{"chaniter":"EGS60", "mois":"aout", "production":77, "année":2018 },
+{"chaniter":"EGS60", "mois":"spectembre", "production":49, "année":2018},
+{"chaniter":"EGS60", "mois":"octobre", "production":130 , "année":2018},
+{"chaniter":"EGS60", "mois":"novembre", "production":102, "année":2018 },
+{"chaniter":"EGS60", "mois":"decembre", "production":99 , "année":2018},
+
+{"chaniter":"EGS60", "mois":"janvier", "production":100, "année":2019 },
+{"chaniter":"EGS60", "mois":"févirier", "production":90, "année":2019 },
+{"chaniter":"EGS60", "mois":"mars", "production":120, "année":2019 },
+{"chaniter":"EGS60", "mois":"avril", "production":70, "année":2019 },
+{"chaniter":"EGS60", "mois":"mai", "production":30, "année":2019 },
+{"chaniter":"EGS60", "mois":"juin", "production":111 , "année":2019},
+{"chaniter":"EGS60", "mois":"juillet", "production":96, "année":2019 },
+{"chaniter":"EGS60", "mois":"aout", "production":77, "année":2019 },
+{"chaniter":"EGS60", "mois":"spectembre", "production":49, "année":2019},
+{"chaniter":"EGS60", "mois":"octobre", "production":130 , "année":2019},
+{"chaniter":"EGS60", "mois":"novembre", "production":102, "année":2019 },
+{"chaniter":"EGS60", "mois":"decembre", "production":99 , "année":2019},
+
+{"chaniter":"EGS170", "mois":"janvier", "production":100, "année":2019 },
+{"chaniter":"EGS170", "mois":"févirier", "production":90, "année":2019 },
+{"chaniter":"EGS170", "mois":"mars", "production":120, "année":2019 },
+{"chaniter":"EGS170", "mois":"avril", "production":70, "année":2019 },
+{"chaniter":"EGS170", "mois":"mai", "production":30, "année":2019 },
+{"chaniter":"EGS170", "mois":"juin", "production":111 , "année":2019},
+{"chaniter":"EGS170", "mois":"juillet", "production":96, "année":2019 },
+{"chaniter":"EGS170", "mois":"aout", "production":77, "année":2019 },
+{"chaniter":"EGS170", "mois":"spectembre", "production":49, "année":2019},
+{"chaniter":"EGS170", "mois":"octobre", "production":130 , "année":2019},
+{"chaniter":"EGS170", "mois":"novembre", "production":102, "année":2019 },
+{"chaniter":"EGS170", "mois":"decembre", "production":99 , "année":2019}
+
+]
+
+$(function () {
+  $('#output').pivotUI(data, {});
+});
+    </script>
   </body>
 </html>
-
 

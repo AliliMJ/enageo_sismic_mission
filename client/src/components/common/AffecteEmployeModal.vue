@@ -15,10 +15,10 @@
           <NSpace>
             <SearchEmployeWithoutMission @sendId="getId" style="width: 640px" />
           </NSpace>
-          <n-divider title-placement="left" v-if="idRef!=null">
+          <n-divider title-placement="left" v-if="idRef != null">
             les informations sur employe
           </n-divider>
-          <NSpace justify="space-between" v-if="idRef!=null">
+          <NSpace justify="space-between" v-if="idRef != null">
             <NSpace>
               <NText class="header"> id : </NText>
               <NText> {{ idRef }} </NText>
@@ -60,28 +60,25 @@ import {
   NText,
   NIcon,
   NDivider,
-} from "naive-ui";
-import SearchEmployeWithoutMission from "../common/searchEmployeWithoutMission.vue";
-import { SearchCircleOutline as Search } from "@vicons/ionicons5";
-import { PersonSearchOutlined as Search1 } from "@vicons/material";
+} from 'naive-ui';
+import SearchEmployeWithoutMission from './searchEmployeWithoutMission.vue';
 
-import { ref } from "vue";
-import axios from "axios";
+import { ref } from 'vue';
+import axios from 'axios';
 
-const emit = defineEmits(["confirm", "cancel"]);
+const emit = defineEmits(['confirm', 'cancel']);
 
 const idRef = ref();
 const nomRef = ref();
 const prenomRef = ref();
-const dateRejointRef = ref();
+
 const fonctionRef = ref();
-const regimTravail = ref();
 
 const onConfirm = () => {
-  emit("confirm", idRef.value);
+  emit('confirm', idRef.value);
 };
 const onCancel = () => {
-  emit("cancel");
+  emit('cancel');
 };
 const props = defineProps({
   title: String,
@@ -91,7 +88,7 @@ const props = defineProps({
 async function getId(value) {
   idRef.value = value;
   const employe = (
-    await axios.get("http://localhost:3000/employes/" + idRef.value)
+    await axios.get('http://localhost:3000/employes/' + idRef.value)
   ).data;
   console.log(employe);
   nomRef.value = employe.nom;

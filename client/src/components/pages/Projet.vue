@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
-import RapportTable from 'components/tables/RapportTable.vue';
+import RapportTable from '../tables/RapportTable.vue';
 import { NButton, NSpace, NStep, NSteps } from 'naive-ui';
 import { ref } from 'vue';
 

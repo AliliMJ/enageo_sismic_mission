@@ -1,11 +1,11 @@
 <script setup>
 import axios from 'axios';
 
-import STable from 'common/STable.vue';
+import STable from '../common/STable.vue';
 
 import { NH1 } from 'naive-ui';
-import { h } from 'vue';
-import { useAuth } from 'stores/authentication.js';
+
+import { useAuth } from '../../stores/authentication.js';
 const auth = useAuth();
 
 const equipes = (

@@ -1,10 +1,8 @@
 <script setup>
-import axios from 'axios';
-
-import STable from 'common/STable.vue';
+import STable from '../common/STable.vue';
 
 import { NH1 } from 'naive-ui';
-import { h } from 'vue';
+
 const props = defineProps({
   rapports: Array,
 });

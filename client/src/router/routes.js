@@ -8,20 +8,21 @@ import { Role, Route } from '../enums';
 //import ItemInfo from 'components/items/ItemInfo.vue';
 
 //import Dashboard from 'components/dashboard/Dashboard.vue';
-import Login from 'components/authentication/Login.vue';
-import MaterialTable from 'components/tables/MaterialTable.vue';
-import EmployesTable from 'components/tables/EmployesTable.vue';
-import AccountTable from 'components/tables/AccountTable.vue';
-import Home from 'app/Home.vue';
-import Employe from 'components/pages/Employe.vue';
-import Account from 'components/pages/Account.vue';
-import Dashboard from 'components/dashboard/Dashboard.vue';
-import Map from 'app/Map.vue';
-import CreateRapport from 'components/pages/CreateRapport.vue';
-import PivotTable from 'components/analysis/PivotTable.vue';
-import AtelierTable from 'components/tables/AtelierTable.vue';
-import MaterielAtelier from 'components/pages/MaterielAtelier.vue';
-import Materiel from 'components/pages/materiel.vue';
+
+import Login from '../components/authentication/Login.vue';
+import MaterialTable from '../components/tables/MaterialTable.vue';
+import EmployesTable from '../components/tables/EmployesTable.vue';
+import AccountTable from '../components/tables/AccountTable.vue';
+import Home from '../components/app/Home.vue';
+import Employe from '../components/pages/Employe.vue';
+import Account from '../components/pages/Account.vue';
+import Dashboard from '../components/dashboard/Dashboard.vue';
+import Map from '../components/app/Map.vue';
+import CreateRapport from '../components/pages/CreateRapport.vue';
+import PivotTable from '../components/analysis/PivotTable.vue';
+import AtelierTable from '../components/tables/AtelierTable.vue';
+import MaterielAtelier from '../components/pages/MaterielAtelier.vue';
+import Materiel from '../components/pages/materiel.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -101,12 +102,12 @@ const routes = [
       {
         path: '/projet',
         name: Route.Projet,
-        component: () => import('components/tables/ProjectTable.vue'),
+        component: () => import('../components/tables/ProjectTable.vue'),
         mata: { role: Role.ChefMision },
       },
       {
         path: '/projet/:idProjet',
-        component: () => import('components/pages/Projet.vue'),
+        component: () => import('../components/pages/Projet.vue'),
       },
       {
         path: 'projet/:idProjet/creerRapport',
@@ -115,12 +116,12 @@ const routes = [
       {
         path: '/equipe',
         name: Route.Equipe,
-        component: () => import('components/tables/EquipesTable.vue'),
+        component: () => import('../components/tables/EquipesTable.vue'),
       },
       {
         path: '/profile',
         name: Route.Profile,
-        component: () => import('app/Profile.vue'),
+        component: () => import('../components/app/Profile.vue'),
         meta: {
           title: 'Mon profile',
         },
@@ -128,7 +129,7 @@ const routes = [
       {
         path: '/preference',
         name: Route.Preference,
-        component: () => import('app/Preference.vue'),
+        component: () => import('../components/app/Preference.vue'),
         meta: {
           title: 'Préférences',
         },
@@ -141,18 +142,18 @@ const routes = [
       {
         path: '/projet/creation',
         name: 'creationProjet',
-        component: () => import('components/pages/CreateProject.vue'),
+        component: () => import('../components/pages/CreateProject.vue'),
       },
       { path: '/carte', name: 'carte', component: Map },
       { path: '/terrain', name: Route.Terrain },
       {
         path: '/demandeRessource',
         name: 'demandeRessource',
-        component: () => import('components/pages/DemandeRessource.vue'),
+        component: () => import('../components/pages/DemandeRessource.vue'),
       },
       {
         path: '/creerRessource',
-        component: () => import('components/pages/CreateResource.vue'),
+        component: () => import('../components/pages/CreateResource.vue'),
       },
     ],
   },
