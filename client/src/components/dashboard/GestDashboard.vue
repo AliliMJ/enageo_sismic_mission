@@ -27,9 +27,9 @@
       <n-grid-item :span="1">
         <div class="testCard">
           <div class="row1">
-            <div class="card-title">En réparation</div>
+            <div class="card-title">Les employés ({{ employesDates[employesDates.length-1] }})</div>
             <div class="card-number">
-              {{ gestStat.nbMaterielEnReparation }}
+              {{ employesDatesData[employesDatesData.length-1] }}
             </div>
           </div>
           <div class="row2">
@@ -44,12 +44,17 @@
       </n-grid-item>
       <n-grid-item :span="2">
         <NSpace vertical class="type-pie">
-          <Pie :data="pieData1" :options="pieOptions" />
+          <Pie :data="pieData1" :options="pieOptions1" />
         </NSpace>
       </n-grid-item>
-      <n-grid-item :span="2">
+      <!-- <n-grid-item :span="2">
         <NSpace vertical class="bar">
           <Bar :data="barData1" :options="barOptions1" style="height: 180px" />
+        </NSpace>
+      </n-grid-item> -->
+      <n-grid-item :span="3">
+        <NSpace vertical class="bar">
+          <Bar :data="barData1" :options="barOptions" style="height: 180px" />
         </NSpace>
       </n-grid-item>
     </NGrid>
@@ -122,18 +127,17 @@
           <NSpace>
             <n-tooltip trigger="hover">
               <template #trigger>
-                <n-progress type="circle" color="red" :percentage="((gestStat.nbMaterielEnPanne+gestStat.nbMaterielEnReparation)/gestStat.NbTotalMateriel)*100" class="progress1" />
+                <n-progress type="circle" :color="progressColor1" :percentage="gestStat.pourcentageMateriel" class="progress1" />
               </template>
-              pourcentage des véhicules trouvée à l'atelier mécanique
+              pourcentage des véhicules trouvée à l'atelier mécanique ( en panne ou bien en réparation)
             </n-tooltip>
           </NSpace>
           <NSpace>
             <n-tooltip trigger="hover">
               <template #trigger>
-                <n-progress type="circle" :percentage="60" class="progress1" />
+                <n-progress type="circle" :percentage="gestStat.pourcentageEmployes" class="progress1" :color="progressColor2"/>
               </template>
-              If it looks like a duck, walks like a duck, and quacks like a
-              duck...it must be a duck.
+              pourcentage des employés non disponible dans la mission (en maladie ou en congé)
             </n-tooltip>
           </NSpace>
         </NSpace>
@@ -171,6 +175,9 @@ import {
   NDivider,
   NProgress,
   NTooltip,
+  useNotification,
+  NButton,
+  useMessage
 } from "naive-ui";
 import {
   PersonOutline as person,
@@ -186,12 +193,11 @@ import {
   ArrowTrendingLines24Regular as arrowTop,
   ArrowTrending20Regular as arrowTopSimple,
 } from "@vicons/fluent";
-import { ref } from "vue";
+import { ref ,  onMounted , h} from "vue";
 import { useAuth } from "../../stores/authentication";
 
 const auth = useAuth();
-
-const stat = (await axios.get(`http://localhost:3000/comptes/stats`)).data;
+const message = useMessage();
 
 const gestStat = (
   await axios.get(
@@ -219,6 +225,21 @@ gestStat.nbMatType.forEach((element) => {
 gestStat.nbMatType.forEach((element) => {
   pieDataArray.value.push(element.nbr);
 });
+
+const progressColor1 = ref("green");
+const progressColor2 = ref("green");
+
+if(gestStat.pourcentageMateriel==50){
+  progressColor1.value = "orange"
+}else if(gestStat.pourcentageMateriel>50){
+  progressColor1.value = "red"
+}
+
+if(gestStat.pourcentageEmployes==50){
+  progressColor2.value = "orange"
+}else if(gestStat.pourcentageEmployes>50){
+  progressColor2.value = "red"
+}
 
 /* start employes joined per year */
 
@@ -259,6 +280,19 @@ gestStat.nombreEmpEtat.forEach((element) => {
   employesEtatData.value.push(element.nb);
 });
 /* end employes par etat */
+
+/* start employes par annee */
+
+// const employesDates = [];
+// employesByYear.forEach((element) => {
+//   employesDates.push(element.year);
+// });
+// const employesDatesData = [];
+// employesByYear.forEach((element) => {
+//   employesDatesData.push(element.nbr);
+// });
+
+/* end employes par annee */
 
 const pieOptions = {
   responsive: true,
@@ -332,7 +366,7 @@ const barData1 = {
   labels: employesfonctions.value,
   datasets: [
     {
-      label: "nombre des employés rejoints par an",
+      label: "nombre des employés pa leur fonction",
       backgroundColor: ["rgb(54, 162, 235 , 0.2)"],
       borderColor: ["rgb(54, 162, 235)"],
       borderWidth: 1,
@@ -340,6 +374,72 @@ const barData1 = {
     },
   ],
 };
+
+const notificationVue = useNotification();
+
+onMounted(async () => {
+  if (gestStat.pourcentageMateriel > 50 ) {
+    let markAsRead = false;
+    const n = notificationVue.create({
+      title: "fait attention à l'atelier mécanique",
+      content: `Un pourcentage de ${gestStat.pourcentageMateriel}% des véhicules sont trouvés à l'atelier mécanique`,
+      meta: new Date().toLocaleDateString("fr"),
+      action: () =>
+        h(
+          NButton,
+          {
+            text: true,
+            type: "primary",
+            onClick: () => {
+              markAsRead = true;
+              n.destroy();
+            },
+          },
+          {
+            default: () => "marquer comme lu",
+          }
+        ),
+      onClose: () => {
+        if (!markAsRead) {
+          message.warning("Please mark as read");
+          return false;
+        }
+      },
+    });
+  }
+
+  if (gestStat.pourcentageEmployes > 50 ) {
+    let markAsRead = false;
+    const n = notificationVue.create({
+      title: "fait attention aux employés ",
+      content: `Un pourcentage de ${gestStat.pourcentageEmployes}% sont soit en maladie ou bien en congé`,
+      meta: new Date().toLocaleDateString("fr"),
+      action: () =>
+        h(
+          NButton,
+          {
+            text: true,
+            type: "primary",
+            onClick: () => {
+              markAsRead = true;
+              n.destroy();
+            },
+          },
+          {
+            default: () => "marquer comme lu",
+          }
+        ),
+      onClose: () => {
+        if (!markAsRead) {
+          message.warning("Please mark as read");
+          return false;
+        }
+      },
+    });
+  }
+
+});
+
 </script>
 
 <style scooped>

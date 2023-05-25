@@ -35,8 +35,10 @@ export const getGestionnaireStatistiques = async (
       nbMaterielEnReparation: 0,
       nbMaterielBonEtat: 0,
       NbTotalMateriel: 0,
+      pourcentageMateriel: 0,
 
       nbEmployes: 0,
+      pourcentageEmployes: 0,
       nombreEmpEtat: [
         {
           etat: "en mission",
@@ -59,7 +61,7 @@ export const getGestionnaireStatistiques = async (
       nbMatMarque: {},
       nbMatModele: {},
       nbMatType: {},
-      numberEmpByYears : {}
+      numberEmpByYears: {},
     };
 
     const codeMission = req.params.codeMission;
@@ -237,21 +239,78 @@ export const getGestionnaireStatistiques = async (
       m.idProjet = ${projet?.idProjet} GROUP BY t.idTypeMat`;
 
     stat.nbMatType = rawNumberByType.map(({ typeM, nbr }) => {
-      return { typeM , nbr: Number(nbr) };
+      return { typeM, nbr: Number(nbr) };
     });
 
     const rawNumberByYears: Array<EmployeGroup> =
       await prisma.$queryRaw`SELECT YEAR(dateRejoint) as year , count(*) as nbr
-                             FROM employe group by YEAR(dateRejoint) ORDER BY year ASC`;
+                             FROM employe WHERE codeMission = ${codeMission} group by YEAR(dateRejoint) ORDER BY year ASC`;
 
     stat.numberEmpByYears = rawNumberByYears.map(({ year, nbr }) => {
       return { year, nbr: Number(nbr) };
+    });
+
+    stat.pourcentageMateriel = ((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation)/stat.NbTotalMateriel)*100;
+    stat.pourcentageEmployes = ((stat.nombreEmpEtat[1].nb+stat.nombreEmpEtat[2].nb)/stat.nbEmployes)*100;
+
+    res.status(200).json(stat);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ err: "Problème lors de la collection des statistiques" });
+  }
+};
+
+
+
+type MaterielPannesType = {
+  dates: String;
+  nbr: number;
+};
+
+type MaterielPannesMarque = {
+  marque: String;
+  nbr: number;
+};
+
+export const atelierStatistiques = async (req: Request, res: Response) => {
+  try {
+    const idProjet = Number(req.params.idProjet);
+
+    const stat = {
+      nbPannesByMonth: {},
+      nbPannesByMarque: {},
+    };
+
+    await prisma.$queryRaw`SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))`;
+    const rawNumberByYears: Array<MaterielPannesType> =
+      await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
+    FROM reparation r , materiel m 
+    WHERE r.codeMat = m.codeMat AND
+          m.idProjet = ${idProjet}
+    GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
+    ORDER BY dates`;
+
+    stat.nbPannesByMonth = rawNumberByYears.map(({ dates, nbr }) => {
+      return { dates, nbr: Number(nbr) };
+    });
+
+    const rqwNumberByMarque: Array<MaterielPannesMarque> =
+      await prisma.$queryRaw`SELECT m.marque , count(*) as nbr FROM 
+    sismicvision.reparation r , sismicvision.materiel m 
+    WHERE r.codeMat = m.codeMat AND
+        m.idProjet = ${idProjet}
+    GROUP BY m.marque`;
+
+    stat.nbPannesByMarque = rqwNumberByMarque.map(({ marque, nbr }) => {
+      return { marque, nbr: Number(nbr) };
     });
 
     res.status(200).json(stat);
   } catch {
     res
       .status(500)
-      .json({ err: "Problème lors de la collection des statistiques" });
+      .json({ err: "Problème lors de la collection des atelier statistiques" });
   }
 };

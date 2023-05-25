@@ -12,7 +12,19 @@ import MaterielTag from "common/MaterielTag.vue";
 import Modal from "common/addMaterielToPanne.vue";
 import HistoryModal from "common/ReparationHistory.vue";
 import { h } from "vue";
-
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+} from "chart.js";
+import { Line , Bar } from "vue-chartjs";
 const router = useRouter();
 // const route = useRoute();
 // const dialog = useDialog();
@@ -29,13 +41,13 @@ const showModal = ref(false);
 employe.value = (
   await axios.get(`http://localhost:3000/employes/${auth.user.employeId}`)
 ).data;
+
 projet.value = (
   await axios.get(
     `http://localhost:3000/projets/projetByMission/${employe.value.codeMission}`
   )
 ).data;
 
-onMounted(async () => {
   materielEnPanne.value = (
     await axios.get(
       `http://localhost:3000/material/materielEnPanneByProject/${Number(
@@ -43,7 +55,86 @@ onMounted(async () => {
       )}`
     )
   ).data;
+
+  ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+);
+
+const stat = (await axios.get(`http://localhost:3000/statistiques/atelierstatistiques/${Number(projet.value.idProjet)}`)).data;
+
+
+/* start employes joined per year */
+
+const pannesDates = ref([]);
+stat.nbPannesByMarque.forEach((element) => {
+  pannesDates.value.push(element.marque);
 });
+const pannesData = ref([]);
+stat.nbPannesByMarque.forEach((element) => {
+  pannesData.value.push(element.nbr);
+});
+
+/* end employes joined per year */
+
+const barOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+};
+
+const barData = {
+  labels: pannesDates.value,
+  datasets: [
+    {
+      label: "nombre des pannes par les marque des vehicules",
+      backgroundColor: ["rgb(255, 0, 0 , 0.3)"],
+      borderColor: ["rgb(255, 0, 0)"],
+      borderWidth: 1,
+      data:  pannesData.value,
+    },
+  ],
+};
+
+/* start line chart */
+
+const pannesDates1 = ref([]);
+stat.nbPannesByMonth.forEach((element) => {
+  pannesDates1.value.push(element.dates);
+});
+const pannesData1 = ref([]);
+stat.nbPannesByMonth.forEach((element) => {
+  pannesData1.value.push(element.nbr);
+});
+
+
+const lineData = {
+  labels: pannesDates1.value,
+  datasets: [
+    {
+      label: 'nombres des pannes par les mois',
+      backgroundColor: 'rgb(255,0,0)',
+      borderColor:'rgb(255,0,0)',
+      data: pannesData1.value,
+      // cubicInterpolationMode: 'monotone',
+      fill: false,
+      tension: 0.4
+    }
+  ]
+}
+
+const lineOptions = {
+  responsive: true,
+  maintainAspectRatio: false
+}
+
+/* end line chart */
 
 const cols = [
   { title: "code materiel", key: "codeMat" },
@@ -139,7 +230,16 @@ const props = defineProps(["Number(projet.value.idProjet)"]);
       />
     </NSpace>
   </NSpace>
+  <NSpace style="margin-top:15px;margin-left:5px">
+    <NSpace vertical class="bar-space">
+          <Bar :data="barData" :options="barOptions" style="height: 180px" />
+        </NSpace>
+        <NSpace vertical class="line-space">
+          <Line :data="lineData" :options="lineOptions" />
+        </NSpace>
+  </NSpace>
   <Modal
+    v-if="showModal"
     :showModal="showModal"
     @cancel="showModal = false"
     @confirm="confirmAdd"
@@ -147,4 +247,24 @@ const props = defineProps(["Number(projet.value.idProjet)"]);
   />
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.bar-space {
+  width:38vw;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 8px;
+  padding: 3px 10px;
+}
+
+.line-space {
+  width:38vw;
+  height: 180px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 8px;
+  padding: 3px 10px;
+}
+
+
+</style>

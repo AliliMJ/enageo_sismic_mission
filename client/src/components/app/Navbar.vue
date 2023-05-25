@@ -1,6 +1,6 @@
 <template>
   <NSpace justify="space-between" class="space">
-    <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" />
+    <img class="logoImg" src="@/assets/ENAGEOTEXT.png" alt="erreur" @click="imageClick" />
     <NSpace justify="space-between" class="space1">
       <NButton
         @click="showEvenementModal = !showEvenementModal"
@@ -300,12 +300,15 @@ async function handleConfirmEvent(event) {
 }
 
 async function readAllNotifications() {
-  console.log("readed");
   evenements.value.forEach((item, index, arr) => {
     arr[index].readed = true;
   });
-
+  numberNotReaded.value=0;
   await axios.put(`http://localhost:3000/evenement/setTrue/${projet.value.idProjet}`);
+}
+
+function imageClick() {
+  router.push("/");
 }
 </script>
 
