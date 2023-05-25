@@ -7,11 +7,13 @@ import { h, ref, onMounted, computed, watch } from 'vue';
 import AffecteEmployeModal from '../common/AffecteEmployeModal.vue';
 import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
+import etatEmpEnum from '../common/Fonction.vue';
 import Position from '../common/Position.vue';
 import { useRouter } from 'vue-router';
 import { SearchOutline as search } from '@vicons/ionicons5';
 import { useAuth } from '../../stores/authentication';
 import { Fonctions } from '../../enums';
+import EtatEmployeTag from "common/EtatEmployeTag.vue";
 
 const auth = useAuth();
 const dialog = useDialog();
@@ -76,10 +78,19 @@ const cols = [
     },
   },
   {
-    title: 'Position',
-    key: 'etatEmployeId',
+    title: 'Etat',
+    key: 'etat',
+    defaultFilterOptionValues: [],
+    filterOptions: [
+      { label: 'En mission', value: 'mission' },
+      { label: 'En conge', value: 'conge' },
+      { label: 'En maladie', value: 'maladie' },
+    ],
+    filter(value, row) {
+      return row.etat === value;
+    },
     render(row) {
-      return h(Position, { etatEmployeId: row.etatEmployeId });
+      return h(EtatEmployeTag , { EtatEmploye: row.etat });
     },
   },
   {

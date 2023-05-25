@@ -54,3 +54,10 @@ export const groupeSanguin = Object.freeze({
   OP: 'O+',
   ON: 'O-',
 });
+
+export const etatEmployeEnum = Object.freeze({
+  Mission: 'mission',
+  Conge: 'conge',
+  Maladie: 'maladie',
+  Travail: 'travail'
+});
