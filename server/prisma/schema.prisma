@@ -122,7 +122,7 @@ model EtatProjet {
 enum TypeEtatProjet {
   PLANIFICATION
   EN_PRODUCTION
-  CLOTURE
+  Termine
 }
 
 model Objectif {

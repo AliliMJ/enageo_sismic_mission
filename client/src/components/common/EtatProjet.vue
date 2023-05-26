@@ -1,24 +1,38 @@
 <script setup>
-const { projectStates } = defineProps({
+import { etatProjetText } from '../../enums';
+import { NTag, NIcon } from 'naive-ui';
+import {
+  CloseCircle as Annule,
+  CheckmarkCircle as Done,
+  PauseCircle as Planing,
+  HelpCircle as Unknown,
+  EllipsisHorizontalCircleSharp as Progress,
+} from '@vicons/ionicons5';
+const { projectStates, annule } = defineProps({
   projectStates: Object,
+  annule: Boolean,
 });
-
-const libStates = {
-  PLANIFICATION: 'Planification',
-  EN_PRODUCTION: 'En cours',
-  CLOTURE: 'Terminé',
-  ANNULE: 'Annulé',
-};
-let currentState;
-
-if (projectStates.length > 0) {
-  currentState =
-    libStates[
-      projectStates.sort((e1, e2) => {
-        return new Date(e1.dPassageEtat) - new Date(e2.dPassageEtat);
-      })[0]?.etat
-    ] ?? 'Inconnue';
-} else currentState = '';
+const stateIndex = projectStates.length - 1;
+const currentState = etatProjetText[stateIndex] ?? 'Inconnue';
+function getTagType() {
+  if (annule) return 'error';
+  if (stateIndex === 0) return 'warning';
+  if (stateIndex === 1) return 'info';
+  if (stateIndex === 2) return 'success';
+}
 </script>
 
-<template>{{ currentState }}</template>
+<template>
+  <n-tag round :type="getTagType()"
+    >{{ currentState }}
+    <template #icon>
+      <NIcon>
+        <Annule v-if="annule" />
+        <Done v-else-if="stateIndex === 2" />
+        <Progress v-else-if="stateIndex === 1" />
+        <Planing v-else-if="stateIndex === 0" />
+        <Unknown v-else />
+      </NIcon>
+    </template>
+  </n-tag>
+</template>

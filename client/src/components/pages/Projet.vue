@@ -33,10 +33,7 @@ function redirectReportCreation() {
   router.push('/projet/' + idProjet + '/creerRapport');
 }
 
-const current = computed(() => {
-  if (etats.value.length > 2) return 4;
-  else return etats.value.length;
-});
+const current = ref(etats.value.length > 2 ? 4 : etats.value.length);
 const dateOptions = { day: '2-digit', month: 'long', year: 'numeric' };
 
 function next() {
@@ -74,6 +71,7 @@ function cancel() {
 async function save() {
   axios.put(`http://localhost:3000/projets/${idProjet}`, {
     createdStates: createdStates.value,
+    annule: project.value.annule,
   });
   createdStates.value = [];
   showSave.value = false;

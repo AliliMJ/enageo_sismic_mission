@@ -156,13 +156,14 @@ export const getProjetByMissionWithEvenements = async (
 
 export const updateProjet = async (req: Request, res: Response) => {
   const data = req.body;
-  console.log(data);
+
   try {
     const idProjet = Number(req.params.idProjet);
     const project = await prisma.projet.update({
       where: { idProjet },
       data: {
         Etats: { create: data.createdStates },
+        annule: data.annule,
       },
     });
     res.json(project);

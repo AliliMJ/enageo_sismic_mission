@@ -28,7 +28,7 @@ const cols = [
     title: 'état',
     key: 'Etats',
     render(row) {
-      return h(EtatProjet, { projectStates: row.Etats });
+      return h(EtatProjet, { projectStates: row.Etats, annule: row.annule });
     },
   },
 ];
