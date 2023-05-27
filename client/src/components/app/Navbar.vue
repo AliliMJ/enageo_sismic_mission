@@ -21,14 +21,14 @@
         <n-popover placement="bottom" trigger="click">
           <template #trigger>
             <n-button text style="font-size: 30px">
-              <n-badge :value="numberNotReaded" processing>
+              <n-badge :value="numberNotReaded" show-zero>
                 <n-icon>
                   <notification />
                 </n-icon>
               </n-badge>
             </n-button>
           </template>
-          <NSpace>
+          <NSpace v-if="evenements.length != 0">
             <NSpace vertical>
               <NSpace justify="end">
                 <NText
@@ -66,6 +66,16 @@
               </NSpace>
             </NSpace>
           </NSpace>
+
+          <NSpace v-if="evenements.length === 0">
+            <n-empty description="il ya pas des notifications">
+              <template #icon>
+                <n-icon>
+                  <check />
+                </n-icon>
+              </template>
+            </n-empty>
+          </NSpace>
         </n-popover>
 
         <n-dropdown
@@ -85,7 +95,7 @@
   </NSpace>
   <Modal
     :showModal="showEvenementModal"
-    :idProjet="idProjetRef"
+    :idProjet="projet.idProjet"
     :nb="evenements.length"
     @cancel="showEvenementModal = false"
     @confirm="handleConfirmEvent"
@@ -111,7 +121,8 @@ import {
   NBadge,
   NDivider,
   useNotification,
-} from 'naive-ui';
+  NEmpty
+} from "naive-ui";
 import {
   PersonCircleOutline as Persone,
   NotificationsOutline as notification,
@@ -119,17 +130,18 @@ import {
   SettingsOutline as Settings,
   PersonOutline as Person,
   AlertCircleOutline as alert,
-} from '@vicons/ionicons5';
-import { h } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuth } from '../../stores/authentication';
-import { renderIcon, renderMenuItem } from '../../utils/render';
-import axios from 'axios';
-import { ref, onMounted } from 'vue';
-import { Role } from '../../enums';
+  CheckboxOutline as check
+} from "@vicons/ionicons5";
+import { h } from "vue";
+import { useRouter } from "vue-router";
+import { useAuth } from "../../stores/authentication";
+import { renderIcon, renderMenuItem } from "../../utils/render";
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import { Role } from "../../enums";
 
-import Modal from '../common/AddEvenementModal.vue';
-import DetailModal from '../common/NotificationDetailModal.vue';
+import Modal from "../common/AddEvenementModal.vue";
+import DetailModal from "../common/NotificationDetailModal.vue";
 
 const router = useRouter();
 const auth = useAuth();
@@ -146,22 +158,20 @@ const employe = ref([]);
 const projet = ref([]);
 const evenements = ref([]);
 
-employe.value = (
-  await axios.get('http://localhost:3000/employes/' + auth.user.id)
-).data;
+employe.value = auth.employe;
+
 projet.value = (
   await axios.get(
     `http://localhost:3000/projets/projetByMissionWithEvenements/${employe.value.codeMission}`
   )
 ).data;
 
-evenements.value = projet.value.Evenement ?? [];
+evenements.value = projet.value.Evenements ?? [];
 
 const numberNotReaded = ref(0);
-const idProjetRef = ref(evenements.value[0]?.idProjet);
 
 evenements.value.forEach((item, index, arr) => {
-  arr[index].date = new Date(item.date).toLocaleDateString('fr');
+  arr[index].date = new Date(item.date).toLocaleDateString("fr");
 
   if (arr[index].readed === false) {
     numberNotReaded.value++;
@@ -172,27 +182,27 @@ onMounted(async () => {
   if (numberNotReaded.value > 0 && auth.user.role === Role.ChefMision) {
     let markAsRead = false;
     const n = notificationVue.create({
-      title: 'Il y a des nouvelles notifications !!',
+      title: "Il y a des nouvelles notifications !!",
       content: `vous avez (${numberNotReaded.value}) nouveaux événements qu'ils ne sont pas encore lus`,
-      meta: new Date().toLocaleDateString('fr'),
+      meta: new Date().toLocaleDateString("fr"),
       action: () =>
         h(
           NButton,
           {
             text: true,
-            type: 'primary',
+            type: "primary",
             onClick: () => {
               markAsRead = true;
               n.destroy();
             },
           },
           {
-            default: () => 'marquer comme lu',
+            default: () => "marquer comme lu",
           }
         ),
       onClose: () => {
         if (!markAsRead) {
-          message.warning('Please mark as read');
+          message.warning("Please mark as read");
           return false;
         }
       },
@@ -202,34 +212,34 @@ onMounted(async () => {
 
 const options = [
   {
-    key: 'header',
-    type: 'render',
+    key: "header",
+    type: "render",
     render: renderCustomHeader,
   },
   {
-    key: 'header-divider',
-    type: 'divider',
+    key: "header-divider",
+    type: "divider",
     // icon: renderIcon(Persone),
   },
   {
-    label: renderMenuItem('Profile', 'profile'),
-    key: 'profile',
+    label: renderMenuItem("Profile", "profile"),
+    key: "profile",
     icon: renderIcon(Person),
   },
   {
-    label: renderMenuItem('Préférences', 'preference'),
-    key: 'settings',
+    label: renderMenuItem("Préférences", "preference"),
+    key: "settings",
     icon: renderIcon(Settings),
   },
   {
-    label: 'se deconnecter',
-    key: 'logout',
+    label: "se deconnecter",
+    key: "logout",
     icon: renderIcon(LogoutIcon),
   },
 ];
 
 function handleSelect(key) {
-  if (String(key) == 'logout') {
+  if (String(key) == "logout") {
     handleConfirm();
   }
 }
@@ -241,21 +251,21 @@ function seeDetails(event) {
 
 function renderCustomHeader() {
   return h(
-    'div',
+    "div",
     {
-      style: 'display: flex; align-items: center; padding: 8px 12px;',
+      style: "display: flex; align-items: center; padding: 8px 12px;",
     },
     [
       h(NAvatar, {
         round: true,
-        style: 'margin-right: 12px;',
-        src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/demo1.JPG',
+        style: "margin-right: 12px;",
+        src: "https://07akioni.oss-cn-beijing.aliyuncs.com/demo1.JPG",
       }),
-      h('div', null, [
-        h('div', null, [
+      h("div", null, [
+        h("div", null, [
           h(NText, { depth: 2 }, { default: () => auth.user.username }),
         ]),
-        h('div', { style: 'font-size: 12px;' }, [
+        h("div", { style: "font-size: 12px;" }, [
           h(NText, { depth: 3 }, { default: () => auth.user.role }),
         ]),
       ]),
@@ -265,17 +275,17 @@ function renderCustomHeader() {
 
 function handleConfirm() {
   dialog.warning({
-    title: 'Confirmation',
-    content: 'êtes-vous sûr de déconnecter?',
-    positiveText: 'Déconnecter',
-    negativeText: 'Annuler',
+    title: "Confirmation",
+    content: "êtes-vous sûr de déconnecter?",
+    positiveText: "Déconnecter",
+    negativeText: "Annuler",
     onPositiveClick: () => {
-      message.success('Déconnexion effectué avec success');
+      message.success("Déconnexion effectué avec success");
       auth.logout();
-      router.push('/login');
+      router.push("/login");
     },
     onNegativeClick: () => {
-      message.error('Déconnexion annulée');
+      message.error("Déconnexion annulée");
     },
   });
 }
@@ -288,14 +298,14 @@ async function handleConfirmEvent(event) {
     Heure: event.Heure,
     description: event.description,
   };
-  event.date = new Date(event.date).toLocaleDateString('fr');
+  event.date = new Date(event.date).toLocaleDateString("fr");
   evenements.value.unshift(event);
   numberNotReaded.value++;
   showEvenementModal.value = false;
 
   console.log(event.date);
 
-  console.log('--->' + req.date);
+  console.log("--->" + req.date);
 
   await axios.post(
     `http://localhost:3000/evenement/insertEvenement/${projet.value.idProjet}`,
@@ -314,7 +324,7 @@ async function readAllNotifications() {
 }
 
 function imageClick() {
-  router.push('/');
+  router.push("/");
 }
 </script>
 

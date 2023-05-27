@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 import STable from '../common/STable.vue';
-import { NSpace, NButton, NIcon, NInput, NH1 } from 'naive-ui';
+import { NSpace, NButton, NIcon, NInput, NH1 , useMessage} from 'naive-ui';
 import { h } from 'vue';
 import MaterielTag from '../common/MaterielTag.vue';
 import { useAuth } from '../../stores/authentication';

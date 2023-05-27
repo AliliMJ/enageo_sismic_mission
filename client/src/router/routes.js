@@ -22,7 +22,7 @@ import CreateRapport from '../components/pages/CreateRapport.vue';
 import PivotTable from '../components/analysis/PivotTable.vue';
 import AtelierTable from '../components/tables/AtelierTable.vue';
 import MaterielAtelier from '../components/pages/MaterielAtelier.vue';
-import Materiel from '../components/pages/materiel.vue';
+import Materiel from '../components/pages/Materiel.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -45,7 +45,7 @@ const routes = [
     meta: {
       requireAuth: true,
       title: 'Tableau de board',
-      icon: '../assets/ENA_GEO.png',
+      icon: 'src/assets/ENA_GEO.png',
     },
     children: [
       { path: '', name: Route.Dashboard, component: Dashboard },
