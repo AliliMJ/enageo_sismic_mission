@@ -1,18 +1,6 @@
 <script setup>
 import axios from 'axios';
 
-<<<<<<< HEAD
-import STable from "common/STable.vue";
-import { NSpace, NButton, NIcon, NInput, NH1 , useMessage} from "naive-ui";
-import { h } from "vue";
-import MaterielTag from "common/MaterielTag.vue";
-import { useAuth } from "../../stores/authentication";
-import { useRouter} from "vue-router";
-import { ref , watch } from "vue";
-import Modal from "common/AffecteMaterielModal.vue";
-import { SearchOutline as search ,
-          Add} from "@vicons/ionicons5";
-=======
 import STable from '../common/STable.vue';
 import { NSpace, NButton, NIcon, NInput, NH1 } from 'naive-ui';
 import { h } from 'vue';
@@ -22,7 +10,6 @@ import { useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
 import Modal from '../common/AffecteGoodMaterielModal.vue';
 import { SearchOutline as search, Add } from '@vicons/ionicons5';
->>>>>>> 2464b55c5b507e52a316dbec5a50ba1aacc06c3d
 
 const auth = useAuth();
 const router = useRouter();
@@ -77,25 +64,6 @@ const cols = [
   // },
 ];
 
-const searchDesignation = ref('');
-const searchFilter = () => {
-  watch(searchDesignation, async () => {
-    if (searchDesignation.value.length > 0) {
-      materials.value = (
-        await axios.get(
-          `http://localhost:3000/material/goodMateriel/designation/${projet.value.idProjet}?like=${searchDesignation.value}`
-        )
-      ).data;
-    } else {
-      materials.value = (
-        await axios.get(
-          `http://localhost:3000/material/materielGoodByProject/${projet.value.idProjet}`
-        )
-      ).data;
-    }
-  });
-};
-
 const handleClick = (materiel) => {
   router.push(`/materiel/${materiel.codeMat}`);
 };
@@ -121,7 +89,6 @@ async function confirmAdd(codeMatricule) {
 
 const searchDesignation = ref('');
 const searchFilter = () => {
-  console.log('=======>' + searchDesignation.value);
   watch(searchDesignation, async () => {
     if (searchDesignation.value.length > 0) {
       materiels.value = (
@@ -170,11 +137,7 @@ const searchFilter = () => {
       </NButton>
     </NSpace>
     <NSpace>
-<<<<<<< HEAD
       <STable :data="materiels" :columns="cols" @onRowClicked="handleClick"/>
-=======
-      <STable :data="materials" :columns="cols" @onRowClicked="handleClick" />
->>>>>>> 2464b55c5b507e52a316dbec5a50ba1aacc06c3d
     </NSpace>
   </NSpace>
   <Modal
