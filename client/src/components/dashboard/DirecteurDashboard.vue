@@ -39,6 +39,7 @@ onMounted(() => {
       ],
     },
     options: {
+      responsive: true,
       scales: {
         y: {
           min: 0,
