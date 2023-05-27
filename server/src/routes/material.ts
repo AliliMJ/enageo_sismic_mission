@@ -15,14 +15,22 @@ import {
   getMaterialGoodByproject,
   getMaterialGoodByDesignation,
   getMaterialEnPanneWithReparations,
-  mettreBonEtat
+  mettreBonEtat,
+  getMaterialByDesignation,
+  getMaterialByWithoutProjet,
+  getMaterialByWithoutProjetDesignation,
+  ajouterMaterielToProjet
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
 
 materialRouter.get('/', paginate, getMaterial);
+materialRouter.get('/materielWithoutProjet', paginate, getMaterialByWithoutProjet);
 materialRouter.get('/EnPanneMateriel/designation/:idProjet',enPanneMaterielFilter,paginate,getEnPanneMaterielByDesignation);
 materialRouter.get('/goodMateriel/designation/:idProjet', goodMaterielFilter,paginate, getMaterialGoodByDesignation);
+materialRouter.get('/allMateriel/designation/:idProjet', goodMaterielFilter,paginate, getMaterialByDesignation);
+materialRouter.get('/allMaterielWithoutProjet/designation/:idProjet', goodMaterielFilter,paginate, getMaterialByWithoutProjetDesignation);
+materialRouter.put('/ajouterMaterielWithProject/:idProjet', goodMaterielFilter,paginate, ajouterMaterielToProjet);
 
 materialRouter.get('/types', getMaterialTypes);
 

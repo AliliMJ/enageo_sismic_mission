@@ -17,7 +17,7 @@ import {
   useDialog,
   useMessage,
   NText,
-  NAlert
+  NAlert,
 } from "naive-ui";
 import {
   Edit32Filled as Pen,
@@ -25,9 +25,11 @@ import {
   Info20Regular as detail,
   BookContacts20Regular as personelInfo,
 } from "@vicons/fluent";
-import { TrashOutline as trash,
-         BriefcaseOutline as bag} from "@vicons/ionicons5";
-import AffecteEquipeModal from '../common/AffecteEquipeModal.vue';
+import {
+  TrashOutline as trash,
+  BriefcaseOutline as bag,
+} from "@vicons/ionicons5";
+import AffecteEquipeModal from "../common/AffecteEquipeModal.vue";
 import { ref, onMounted } from "vue";
 const router = useRouter();
 const route = useRoute();
@@ -65,7 +67,6 @@ const employeRef = ref({
 });
 
 const fonctionRef = ref(Number(employe.fonction.idFonction));
-
 
 let missionRef;
 if (employe.Mission != null) {
@@ -270,7 +271,7 @@ missions.forEach((element) => {
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="l'adresse">
                       <NInput v-model:value="employeRef.adresse" />
-                    </NFormItemGi>
+                  F  </NFormItemGi>
                     <NFormItemGi :span="12" label="Sexe">
                       <NSelect v-model:value="employeRef.sexe" />
                     </NFormItemGi>
@@ -326,7 +327,11 @@ missions.forEach((element) => {
             </NSpace>
           </NSpace>
         </n-tab-pane>
-        <n-tab-pane name="team" tab="Equipe" v-if="fonctionRef!=2&&fonctionRef!=5&&fonctionRef!=7">
+        <n-tab-pane
+          name="team"
+          tab="Equipe"
+          v-if="fonctionRef != 2 && fonctionRef != 5 && fonctionRef != 7"
+        >
           <NSpace v-if="equipeRef != null">
             <NSpace vertical>
               <NSpace>
@@ -372,20 +377,25 @@ missions.forEach((element) => {
               </NSpace>
             </NSpace>
           </NSpace>
-          <NSpace vertical v-if="equipeRef==null">
+          <NSpace vertical v-if="equipeRef == null">
             <n-alert title="employé sans équipe" type="warning" closable>
-            <NSpace vertical v-if="equipeRef==null">
-            <NText> ce employe n'est pas affecté a aucun equipe </NText>
-            <NText style="text-decoration:underline;cursor:pointer" @click="affecteEquipeModal=true"> vous voulez lui affecter un équipe ? </NText>
-            </NSpace>
-             </n-alert>
+              <NSpace vertical v-if="equipeRef == null">
+                <NText> ce employe n'est pas affecté a aucun equipe </NText>
+                <NText
+                  style="text-decoration: underline; cursor: pointer"
+                  @click="affecteEquipeModal = true"
+                >
+                  vous voulez lui affecter un équipe ?
+                </NText>
+              </NSpace>
+            </n-alert>
           </NSpace>
         </n-tab-pane>
       </n-tabs>
     </n-card>
 
     <NSpace vertical>
-        <NCard
+      <NCard
         header-style="display:flex;flex-direction:row-reverse"
         title="Contact"
         style="
@@ -394,11 +404,11 @@ missions.forEach((element) => {
           box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
             rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
         "
-       >
+      >
         <template #header-extra>
           <n-icon class="cardIcon">
-            <contact style="font-size:25px;position:absolute;top:-4px" />
-          </n-icon >
+            <contact style="font-size: 25px; position: absolute; top: -4px" />
+          </n-icon>
         </template>
         <NForm disabled>
           <NGrid :span="12" :x-gap="12">
@@ -421,32 +431,34 @@ missions.forEach((element) => {
           box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
             rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
         "
-       >
+      >
         <template #header-extra>
           <n-icon class="cardIcon">
-            <bag style="font-size:25px;position:absolute;top:-4px" />
-          </n-icon >
+            <bag style="font-size: 25px; position: absolute; top: -4px" />
+          </n-icon>
         </template>
         <NForm disabled>
           <NGrid :span="12" :x-gap="12">
             <NFormItemGi :span="18" label="la fonction">
-              <NInput  v-model:value="employeRef.fonction.nom"/>
+              <NInput v-model:value="employeRef.fonction.nom" />
             </NFormItemGi>
             <NFormItemGi :span="18" label="description">
-              <NInput  v-model:value="employeRef.fonction.description" type="textarea"/>
+              <NInput
+                v-model:value="employeRef.fonction.description"
+                type="textarea"
+              />
             </NFormItemGi>
           </NGrid>
         </NForm>
       </NCard>
-
     </NSpace>
-<AffecteEquipeModal
+    <AffecteEquipeModal
       :showModal="affecteEquipeModal"
       :codeMission="missionRef.code"
       :idEmploye="employeRef.id"
       @cancel="affecteEquipeModal = false"
       @confirm="affecteEquipeModal = false"
-/>
+    />
   </NSpace>
 </template>
 
@@ -471,8 +483,6 @@ missions.forEach((element) => {
   margin-right: 10px;
   font-size: 20px;
 }
-
-
 
 .cardShadow {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;

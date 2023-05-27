@@ -317,3 +317,90 @@ export const getMaterialEnPanneWithReparations = async (req: Request,res: Respon
       });
   }
 };
+
+export const getMaterialByDesignation = async (req: Request,res: Response) => {
+  try {
+    const idProjet = Number(req.params.idProjet);
+
+    const materiels = await prisma.materiel.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter ,
+      idProjet: idProjet,}
+    });
+
+    return res.status(200).json(materiels);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels par designation",
+      });
+  }
+};
+
+export const getMaterialByWithoutProjet = async (req: Request,res: Response) => {
+  try {
+    const idProjet = Number(req.params.idProjet);
+
+    const materiels = await prisma.materiel.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter ,
+      idProjet: null,}
+    });
+
+    return res.status(200).json(materiels);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels non affecter au projet",
+      });
+  }
+};
+
+export const getMaterialByWithoutProjetDesignation = async (req: Request,res: Response) => {
+  try {
+    const idProjet = Number(req.params.idProjet);
+
+    const materiels = await prisma.materiel.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter ,
+      idProjet: null,}
+    });
+
+    return res.status(200).json(materiels);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels non affecter au projet",
+      });
+  }
+};
+
+export const ajouterMaterielToProjet = async (req: Request,res: Response) => {
+  try {
+    const idProjet = Number(req.params.idProjet);
+
+    const codeMat = req.body.codeMat;
+
+    console.log(codeMat);
+
+    const materiel = await prisma.materiel.update({
+      data : {idProjet : idProjet},
+      where : {codeMat : codeMat}
+    });
+
+    return res.status(200).json(materiel);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels non affecter au projet",
+      });
+  }
+};

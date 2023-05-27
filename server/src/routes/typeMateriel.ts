@@ -1,7 +1,8 @@
 import express from 'express';
 
 import {
-    getTypeMaterialById
+    getTypeMaterialById,
+    getAllTypes
   } from '../controllers/typeMateriel';
 
 
@@ -9,3 +10,4 @@ import {
 
 
  typeMaterielRouter.get('/getTypeMaterielById/:id', getTypeMaterialById);
+ typeMaterielRouter.get('/getAllTypes', getAllTypes);

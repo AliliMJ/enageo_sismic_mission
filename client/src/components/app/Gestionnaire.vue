@@ -16,7 +16,7 @@ import GestMenu from '../menu/GestMenu.vue';
     </NLayoutSider>
 
     <NLayoutContent>
-      <NCard :bordered="false" content-style="padding:10px;background:rgb(248, 248, 248);" footer-style="padding:0px">
+      <NCard :bordered="false" content-style="padding:15px;background:rgb(248, 248, 248);" footer-style="padding:0px">
         <Suspense>
           <NScrollbar style="height: 90vh">
             <RouterView />

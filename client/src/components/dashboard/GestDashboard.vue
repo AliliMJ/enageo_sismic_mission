@@ -3,65 +3,69 @@
     <NText class="page-header">Tableau de board de gestionnaire</NText>
   </NSpace>
 
-  <NSpace class="space1" justify="space-between">
-    <NGrid x-gap="15" y-gap="15" :cols="2" style="width: 39.5vw">
-      <n-grid-item :span="1">
-        <div class="testCard">
-          <div class="row1">
-            <div class="card-title">Les employés</div>
-            <div class="card-number">
-              {{ gestStat.nbEmployes }}
+ 
+  <NGrid :cols="2" x-gap="15" y-gap="15" item-responsive>
+    <n-grid-item span="0:2 1000:1">
+      <NGrid x-gap="10" y-gap="10" :cols="4" class="grid1">
+        <n-grid-item :span="2">
+          <div class="testCard">
+            <div class="row1">
+              <div class="card-title">Les employés</div>
+              <div class="card-number">
+                {{ gestStat.nbEmployes }}
+              </div>
+            </div>
+            <div class="row2">
+              <n-icon class="card-icon">
+                <bag />
+              </n-icon>
+              <n-icon>
+                <chart style="color: orange" />
+              </n-icon>
             </div>
           </div>
-          <div class="row2">
-            <n-icon class="card-icon">
-              <bag />
-            </n-icon>
-            <n-icon>
-              <chart style="color: orange" />
-            </n-icon>
-          </div>
-        </div>
-      </n-grid-item>
+        </n-grid-item>
 
-      <n-grid-item :span="1">
-        <div class="testCard">
-          <div class="row1">
-            <div class="card-title">
-              Les employés ({{ employesDates[employesDates.length - 1] }})
+        <n-grid-item :span="2">
+          <div class="testCard">
+            <div class="row1">
+              <div class="card-title">
+                Les employés ({{ employesDates[employesDates.length - 1] }})
+              </div>
+              <div class="card-number">
+                {{ employesDatesData[employesDatesData.length - 1] }}
+              </div>
             </div>
-            <div class="card-number">
-              {{ employesDatesData[employesDatesData.length - 1] }}
+            <div class="row2">
+              <n-icon class="card-icon">
+                <clock />
+              </n-icon>
+              <n-icon>
+                <chart style="color: orange" />
+              </n-icon>
             </div>
           </div>
-          <div class="row2">
-            <n-icon class="card-icon">
-              <clock />
-            </n-icon>
-            <n-icon>
-              <chart style="color: orange" />
-            </n-icon>
-          </div>
-        </div>
-      </n-grid-item>
-      <n-grid-item :span="2">
-        <NSpace vertical class="type-pie">
-          <Pie :data="pieData1" :options="pieOptions1" />
-        </NSpace>
-      </n-grid-item>
-      <!-- <n-grid-item :span="2">
+        </n-grid-item>
+        <n-grid-item :span="4">
+          <NSpace vertical class="type-pie">
+            <Pie :data="pieData1" :options="pieOptions1" />
+          </NSpace>
+        </n-grid-item>
+        <!-- <n-grid-item :span="2">
         <NSpace vertical class="bar">
           <Bar :data="barData1" :options="barOptions1" style="height: 180px" />
         </NSpace>
       </n-grid-item> -->
-      <n-grid-item :span="3">
-        <NSpace vertical class="bar">
-          <Bar :data="barData1" :options="barOptions" style="height: 180px" />
-        </NSpace>
-      </n-grid-item>
-    </NGrid>
+        <n-grid-item :span="4">
+          <NSpace vertical class="bar">
+            <Bar :data="barData1" :options="barOptions"  />
+          </NSpace>
+        </n-grid-item>
+      </NGrid>
+    </n-grid-item>
 
-    <NGrid x-gap="15" y-gap="15" :cols="3" style="width: 39.5vw">
+    <n-grid-item span="0:2 1000:1">
+    <NGrid x-gap="10" y-gap="10" :cols="3">
       <n-grid-item :span="1">
         <div class="testCard">
           <div class="row1">
@@ -158,11 +162,12 @@
       </n-grid-item>
       <n-grid-item :span="3">
         <NSpace vertical class="bar">
-          <Bar :data="barData" :options="barOptions" style="height: 180px" />
+          <Bar :data="barData" :options="barOptions"  />
         </NSpace>
       </n-grid-item>
     </NGrid>
-  </NSpace>
+  </n-grid-item>
+  </NGrid>
 </template>
 
 <script setup>
@@ -457,8 +462,8 @@ onMounted(async () => {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
-  padding: 3px 10px;
-  height: 19vw;
+  padding: 5px 10px;
+  /* height: 19vw; */
 }
 
 .progress1 {
@@ -466,7 +471,7 @@ onMounted(async () => {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
   padding: 10px 34px;
-  height: 8vw;
+  /* height: 8vw; */
   text-align: center;
 }
 
@@ -475,7 +480,7 @@ onMounted(async () => {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
   padding: 10px 34px;
-  height: 8vw;
+  /* height: 8vw; */
   text-align: center;
 }
 
@@ -539,4 +544,5 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
 }
+
 </style>

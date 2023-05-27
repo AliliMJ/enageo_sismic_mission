@@ -244,14 +244,16 @@ export const getGestionnaireStatistiques = async (
 
     const rawNumberByYears: Array<EmployeGroup> =
       await prisma.$queryRaw`SELECT YEAR(dateRejoint) as year , count(*) as nbr
-                             FROM employe WHERE codeMission = ${codeMission} group by YEAR(dateRejoint) ORDER BY year ASC`;
+                             FROM employe WHERE codeMission = ${codeMission} AND
+                             fonctionId!=1
+                             group by YEAR(dateRejoint) ORDER BY year ASC`;
 
     stat.numberEmpByYears = rawNumberByYears.map(({ year, nbr }) => {
       return { year, nbr: Number(nbr) };
     });
 
-    stat.pourcentageMateriel = ((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation)/stat.NbTotalMateriel)*100;
-    stat.pourcentageEmployes = ((stat.nombreEmpEtat[1].nb+stat.nombreEmpEtat[2].nb)/stat.nbEmployes)*100;
+    stat.pourcentageMateriel = Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation)/stat.NbTotalMateriel)*100);
+    stat.pourcentageEmployes = Number(((stat.nombreEmpEtat[1].nb+stat.nombreEmpEtat[2].nb)/stat.nbEmployes)*100);
 
     res.status(200).json(stat);
   } catch (e) {
