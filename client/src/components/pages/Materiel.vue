@@ -1,6 +1,6 @@
 <script setup>
-import axios from "axios";
-import { useRouter, useRoute } from "vue-router";
+import axios from 'axios';
+import { useRouter, useRoute } from 'vue-router';
 import {
   NCard,
   NTabs,
@@ -17,7 +17,7 @@ import {
   useDialog,
   useMessage,
   NText,
-} from "naive-ui";
+} from 'naive-ui';
 import {
   Edit32Filled as Pen,
   ContactCard20Regular as contact,
@@ -26,15 +26,15 @@ import {
   BookContacts20Regular as personelInfo,
   VehicleTruckProfile20Regular as truck,
   History20Regular as history,
-} from "@vicons/fluent";
+} from '@vicons/fluent';
 import {
   TrashOutline as trash,
   FolderOpenOutline as folder,
-} from "@vicons/ionicons5";
-import MaterielTag from "common/MaterielTag.vue";
-import { ref, onMounted } from "vue";
-import { useAuth } from "../../stores/authentication";
-import HistoryModal from "common/ReparationHisotryNoEdit.vue";
+} from '@vicons/ionicons5';
+import MaterielTag from '../common/MaterielTag.vue';
+import { ref, onMounted } from 'vue';
+import { useAuth } from '../../stores/authentication';
+import HistoryModal from '../common/ReparationHisotryNoEdit.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -82,23 +82,22 @@ const typeRef = ref(materiel.idTypeMat);
 </script>
 
 <template>
-  
   <NSpace vertical>
-    <NSpace justify="end" style="margin-right:20px">
-          <NButton
-            @click="showHistoryModal=true"
-            class="button"
-            icon-placement="left"
-            color="rgb(100,100,100)"
-          >
-            Consulter l'historique des reparations
-            <template #icon>
-              <NIcon>
-                <history />
-              </NIcon>
-            </template>
-          </NButton>
-        </NSpace>
+    <NSpace justify="end" style="margin-right: 20px">
+      <NButton
+        @click="showHistoryModal = true"
+        class="button"
+        icon-placement="left"
+        color="rgb(100,100,100)"
+      >
+        Consulter l'historique des reparations
+        <template #icon>
+          <NIcon>
+            <history />
+          </NIcon>
+        </template>
+      </NButton>
+    </NSpace>
     <NSpace>
       <NCard style="width: 79vw">
         <template #header>

@@ -1,6 +1,6 @@
 <script setup>
-import axios from "axios";
-import STable from "common/STable.vue";
+import axios from 'axios';
+import STable from './STable.vue';
 import {
   NModal,
   NCard,
@@ -16,8 +16,8 @@ import {
   NText,
   NDatePicker,
   NFormItemGi,
-} from "naive-ui";
-import { ref, watch } from "vue";
+} from 'naive-ui';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   showHistoryModal: Boolean,
@@ -42,7 +42,7 @@ const materielRef = ref({
 
 const reparations = materielRef.value.reparations;
 
-const emit = defineEmits(["confirm", "cancel"]);
+const emit = defineEmits(['confirm', 'cancel']);
 
 const idRepRef = ref();
 const dPanneRef = ref();
@@ -52,33 +52,33 @@ const detailRef = ref();
 const coutRef = ref();
 
 const cols = [
-  { title: "code reparation", key: "idRep" },
+  { title: 'code reparation', key: 'idRep' },
   {
-    title: "date de la panne",
-    key: "dPanne",
+    title: 'date de la panne',
+    key: 'dPanne',
     render(row) {
-      return new Date(row.dPanne).toLocaleDateString("fr");
+      return new Date(row.dPanne).toLocaleDateString('fr');
     },
   },
   {
-    title: "date du debut reparation",
-    key: "dDebRep",
+    title: 'date du debut reparation',
+    key: 'dDebRep',
     render(row) {
       if (row.dDebRep === null) {
-        return "pas encore";
+        return 'pas encore';
       } else {
-        return new Date(row.dDebRep).toLocaleDateString("fr");
+        return new Date(row.dDebRep).toLocaleDateString('fr');
       }
     },
   },
   {
-    title: "date fin reparation",
-    key: "dFinRep",
+    title: 'date fin reparation',
+    key: 'dFinRep',
     render(row) {
       if (row.dFinRep === null) {
-        return "pas encore";
+        return 'pas encore';
       } else {
-        return new Date(row.dFinRep).toLocaleDateString("fr");
+        return new Date(row.dFinRep).toLocaleDateString('fr');
       }
     },
   },
@@ -112,7 +112,7 @@ const handleClick = async (reparationRow) => {
 };
 
 const onCancel = () => {
-  emit("cancel");
+  emit('cancel');
 };
 </script>
 
