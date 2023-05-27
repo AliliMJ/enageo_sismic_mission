@@ -15,7 +15,7 @@ import DirecteurMenu from '../menu/DirecteurMenu.vue';
       <DirecteurMenu />
     </NLayoutSider>
 
-    <NLayoutContent>
+    <NLayoutContent embedded>
       <Suspense>
         <NScrollbar style="height: 85vh">
           <RouterView />

@@ -1,11 +1,21 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
-import { NCard } from 'naive-ui';
+import {
+  NCard,
+  NTag,
+  NH2,
+  NText,
+  NRow,
+  NCol,
+  NStatistic,
+  NButton,
+  NEllipsis,
+  NSpace,
+} from 'naive-ui';
 import mapboxgl from 'mapbox-gl';
 
 const projects = (await axios.get('http://localhost:3000/projets/prod')).data;
-console.log(projects);
 
 const showPanel = ref(false);
 const selectedProject = ref(null);
@@ -139,36 +149,86 @@ onMounted(() => {
       map.getCanvas().style.cursor = '';
     });
   });
-  // add markers to map
-  // for (const feature of geojson.features) {
-  //   // create a HTML element for each feature
-  //   const el = document.createElement('div');
-  //   el.className = 'marker';
-
-  //   // make a marker for each feature and add it to the map
-  //   new mapboxgl.Marker(el)
-  //     .setLngLat(feature.geometry.coordinates)
-  //     .setPopup(
-  //       new mapboxgl.Popup({ offset: 25 }).setHTML(
-  //         `<h3>${feature.properties.title}</h3>`
-  //       )
-  //     )
-  //     .addTo(map);
-  // }
 });
+
+//mission
+//project name
+//wilaya
+//budget
+//vp
+//vp restants
+// description
+//date début production
 </script>
 
 <template>
   <div style="height: 85vh; width: 100%" id="map">
-    <n-card id="info" title="Informations" v-if="showPanel">
-      {{ selectedProject }}
+    <n-card id="info" title="Sol d'or" v-if="selectedProject">
+      <template #action>
+        <n-space>
+          <n-button type="info"> Visiter le terrain </n-button>
+          <n-button> Fermer </n-button>
+        </n-space>
+      </template>
+
+      <template #header-extra>
+        <n-tag type="info">EGS210</n-tag>
+      </template>
+      <n-h2>Description</n-h2>
+      <n-ellipsis :line-clamp="2">
+        <n-text
+          >Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio itaque
+          q</n-text
+        >
+      </n-ellipsis>
+
+      <n-h2>Statistiques</n-h2>
+
+      <n-row>
+        <n-col :span="12">
+          <n-statistic label="Production">
+            12
+
+            <template #suffix> % </template></n-statistic
+          >
+        </n-col>
+        <n-col :span="12">
+          <n-statistic label="Budget">
+            12k
+            <template #suffix>
+              <n-text strong depth="3">Dinars</n-text>
+            </template>
+          </n-statistic>
+        </n-col>
+      </n-row>
+      <n-row>
+        <n-statistic label="Temps passé">
+          29
+
+          <template #suffix>
+            <n-text strong depth="3">Jours</n-text>
+          </template>
+        </n-statistic>
+      </n-row>
     </n-card>
   </div>
 </template>
 
-<style>
+<style scoped>
 #map {
   position: relative;
+}
+#info .n-h2 {
+  font-size: 1rem;
+}
+#info .n-h1 {
+  font-size: 1.5rem;
+}
+#info .n-text {
+  font-size: 0.875rem;
+}
+#desc {
+  padding-bottom: 6px;
 }
 #info {
   position: absolute;
@@ -176,7 +236,7 @@ onMounted(() => {
   right: 10px;
   bottom: 25px;
   z-index: 1;
-  width: 20%;
+  width: 30%;
 }
 
 .marker {
