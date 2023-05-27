@@ -2,24 +2,25 @@
 import axios from "axios";
 
 import STable from "common/STable.vue";
-import { NSpace, NButton, NIcon, NInput, NH1 } from "naive-ui";
+import { NSpace, NButton, NIcon, NInput, NH1 , useMessage} from "naive-ui";
 import { h } from "vue";
 import MaterielTag from "common/MaterielTag.vue";
 import { useAuth } from "../../stores/authentication";
 import { useRouter} from "vue-router";
 import { ref , watch } from "vue";
-import Modal from "common/AffecteGoodMaterielModal.vue";
+import Modal from "common/AffecteMaterielModal.vue";
 import { SearchOutline as search ,
           Add} from "@vicons/ionicons5";
 
 const auth = useAuth();
 const router = useRouter();
+const message = useMessage();
 
 const showModal = ref(false);
 
 const employe = ref();
 const projet = ref();
-const materials = ref([]);
+const materiels = ref([]);
 
 employe.value = (
   await axios.get(`http://localhost:3000/employes/${auth.user.employeId}`)
@@ -30,7 +31,7 @@ projet.value = (
   )
 ).data;
 
- materials.value = (
+ materiels.value = (
   await axios.get(
     `http://localhost:3000/material/materielByProject/${projet.value.idProjet}`
   )
@@ -64,31 +65,47 @@ const cols = [
   // },
 ];
 
-const searchDesignation = ref("");
-const searchFilter = () => {
-  watch(searchDesignation, async () => {
-    if (searchDesignation.value.length > 0) {
-      materials.value = (
-        await axios.get(
-          `http://localhost:3000/material/goodMateriel/designation/${projet.value.idProjet}?like=${searchDesignation.value}`
-        )
-      ).data;
-    } else {
-      materials.value = (
-        await axios.get(
-          `http://localhost:3000/material/materielGoodByProject/${projet.value.idProjet}`
-        )
-      ).data;
-    }
-  });
-};
-
 const handleClick = (materiel) => {
   router.push(`/materiel/${materiel.codeMat}`);
 };
 
 const showInsertMaterielModal = () => {
   showModal.value = true;
+};
+
+async function confirmAdd(codeMatricule) {
+
+  const req = {
+    codeMat : String(codeMatricule)
+  };
+
+  const materiel = (
+    await axios.put(
+      `http://localhost:3000/material/ajouterMaterielWithProject/${projet.value.idProjet}`,req
+    )
+  ).data;
+ materiels.value.push(materiel);
+  showModal.value = false;
+}
+
+const searchDesignation = ref('');
+const searchFilter = () => {
+  console.log('=======>' + searchDesignation.value);
+  watch(searchDesignation, async () => {
+    if (searchDesignation.value.length > 0) {
+      materiels.value = (
+        await axios.get(
+          `http://localhost:3000/material/allMateriel/designation/${projet.value.idProjet}?like=${searchDesignation.value}`
+        )
+      ).data;
+    } else {
+      materiels.value = (
+        await axios.get(
+          `http://localhost:3000/material/materielByProject/${projet.value.idProjet}`
+        )
+      ).data;
+    }
+  });
 };
 </script>
 
@@ -122,10 +139,11 @@ const showInsertMaterielModal = () => {
       </NButton>
     </NSpace>
     <NSpace>
-      <STable :data="materials" :columns="cols" @onRowClicked="handleClick"/>
+      <STable :data="materiels" :columns="cols" @onRowClicked="handleClick"/>
     </NSpace>
   </NSpace>
   <Modal
+    v-if="showModal"
     :showModal="showModal"
     @cancel="showModal = false"
     @confirm="confirmAdd"

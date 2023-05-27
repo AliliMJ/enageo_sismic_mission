@@ -3,63 +3,69 @@
     <NText class="page-header">Tableau de board de gestionnaire</NText>
   </NSpace>
 
-  <NSpace class="space1" justify="space-between">
-    <NGrid x-gap="15" y-gap="15" :cols="2" style="width: 39.5vw">
-      <n-grid-item :span="1">
-        <div class="testCard">
-          <div class="row1">
-            <div class="card-title">Les employés</div>
-            <div class="card-number">
-              {{ gestStat.nbEmployes }}
+ 
+  <NGrid :cols="2" x-gap="15" y-gap="15" item-responsive>
+    <n-grid-item span="0:2 1000:1">
+      <NGrid x-gap="10" y-gap="10" :cols="4" class="grid1">
+        <n-grid-item :span="2">
+          <div class="testCard">
+            <div class="row1">
+              <div class="card-title">Les employés</div>
+              <div class="card-number">
+                {{ gestStat.nbEmployes }}
+              </div>
+            </div>
+            <div class="row2">
+              <n-icon class="card-icon">
+                <bag />
+              </n-icon>
+              <n-icon>
+                <chart style="color: orange" />
+              </n-icon>
             </div>
           </div>
-          <div class="row2">
-            <n-icon class="card-icon">
-              <bag />
-            </n-icon>
-            <n-icon>
-              <chart style="color: orange" />
-            </n-icon>
-          </div>
-        </div>
-      </n-grid-item>
+        </n-grid-item>
 
-      <n-grid-item :span="1">
-        <div class="testCard">
-          <div class="row1">
-            <div class="card-title">Les employés ({{ employesDates[employesDates.length-1] }})</div>
-            <div class="card-number">
-              {{ employesDatesData[employesDatesData.length-1] }}
+        <n-grid-item :span="2">
+          <div class="testCard">
+            <div class="row1">
+              <div class="card-title">
+                Les employés ({{ employesDates[employesDates.length - 1] }})
+              </div>
+              <div class="card-number">
+                {{ employesDatesData[employesDatesData.length - 1] }}
+              </div>
+            </div>
+            <div class="row2">
+              <n-icon class="card-icon">
+                <clock />
+              </n-icon>
+              <n-icon>
+                <chart style="color: orange" />
+              </n-icon>
             </div>
           </div>
-          <div class="row2">
-            <n-icon class="card-icon">
-              <clock />
-            </n-icon>
-            <n-icon>
-              <chart style="color: orange" />
-            </n-icon>
-          </div>
-        </div>
-      </n-grid-item>
-      <n-grid-item :span="2">
-        <NSpace vertical class="type-pie">
-          <Pie :data="pieData1" :options="pieOptions1" />
-        </NSpace>
-      </n-grid-item>
-      <!-- <n-grid-item :span="2">
+        </n-grid-item>
+        <n-grid-item :span="4">
+          <NSpace vertical class="type-pie">
+            <Pie :data="pieData1" :options="pieOptions1" />
+          </NSpace>
+        </n-grid-item>
+        <!-- <n-grid-item :span="2">
         <NSpace vertical class="bar">
           <Bar :data="barData1" :options="barOptions1" style="height: 180px" />
         </NSpace>
       </n-grid-item> -->
-      <n-grid-item :span="3">
-        <NSpace vertical class="bar">
-          <Bar :data="barData1" :options="barOptions" style="height: 180px" />
-        </NSpace>
-      </n-grid-item>
-    </NGrid>
+        <n-grid-item :span="4">
+          <NSpace vertical class="bar">
+            <Bar :data="barData1" :options="barOptions"  />
+          </NSpace>
+        </n-grid-item>
+      </NGrid>
+    </n-grid-item>
 
-    <NGrid x-gap="15" y-gap="15" :cols="3" style="width: 39.5vw">
+    <n-grid-item span="0:2 1000:1">
+    <NGrid x-gap="10" y-gap="10" :cols="3">
       <n-grid-item :span="1">
         <div class="testCard">
           <div class="row1">
@@ -127,28 +133,41 @@
           <NSpace>
             <n-tooltip trigger="hover">
               <template #trigger>
-                <n-progress type="circle" :color="progressColor1" :percentage="gestStat.pourcentageMateriel" class="progress1" />
+                <n-progress
+                  type="circle"
+                  :color="progressColor1"
+                  :percentage="gestStat.pourcentageMateriel"
+                  class="progress1"
+                />
               </template>
-              pourcentage des véhicules trouvée à l'atelier mécanique ( en panne ou bien en réparation)
+              pourcentage des véhicules trouvée à l'atelier mécanique ( en panne
+              ou bien en réparation)
             </n-tooltip>
           </NSpace>
           <NSpace>
             <n-tooltip trigger="hover">
               <template #trigger>
-                <n-progress type="circle" :percentage="gestStat.pourcentageEmployes" class="progress1" :color="progressColor2"/>
+                <n-progress
+                  type="circle"
+                  :percentage="gestStat.pourcentageEmployes"
+                  class="progress1"
+                  :color="progressColor2"
+                />
               </template>
-              pourcentage des employés non disponible dans la mission (en maladie ou en congé)
+              pourcentage des employés non disponible dans la mission (en
+              maladie ou en congé)
             </n-tooltip>
           </NSpace>
         </NSpace>
       </n-grid-item>
       <n-grid-item :span="3">
         <NSpace vertical class="bar">
-          <Bar :data="barData" :options="barOptions" style="height: 180px" />
+          <Bar :data="barData" :options="barOptions"  />
         </NSpace>
       </n-grid-item>
     </NGrid>
-  </NSpace>
+  </n-grid-item>
+  </NGrid>
 </template>
 
 <script setup>
@@ -177,7 +196,7 @@ import {
   NTooltip,
   useNotification,
   NButton,
-  useMessage
+  useMessage,
 } from "naive-ui";
 import {
   PersonOutline as person,
@@ -193,7 +212,7 @@ import {
   ArrowTrendingLines24Regular as arrowTop,
   ArrowTrending20Regular as arrowTopSimple,
 } from "@vicons/fluent";
-import { ref ,  onMounted , h} from "vue";
+import { ref, onMounted, h } from "vue";
 import { useAuth } from "../../stores/authentication";
 
 const auth = useAuth();
@@ -229,16 +248,16 @@ gestStat.nbMatType.forEach((element) => {
 const progressColor1 = ref("green");
 const progressColor2 = ref("green");
 
-if(gestStat.pourcentageMateriel==50){
-  progressColor1.value = "orange"
-}else if(gestStat.pourcentageMateriel>50){
-  progressColor1.value = "red"
+if (gestStat.pourcentageMateriel == 50) {
+  progressColor1.value = "orange";
+} else if (gestStat.pourcentageMateriel > 50) {
+  progressColor1.value = "red";
 }
 
-if(gestStat.pourcentageEmployes==50){
-  progressColor2.value = "orange"
-}else if(gestStat.pourcentageEmployes>50){
-  progressColor2.value = "red"
+if (gestStat.pourcentageEmployes == 50) {
+  progressColor2.value = "orange";
+} else if (gestStat.pourcentageEmployes > 50) {
+  progressColor2.value = "red";
 }
 
 /* start employes joined per year */
@@ -254,7 +273,6 @@ gestStat.numberEmpByYears.forEach((element) => {
 
 /* end employes joined per year */
 
-
 /* start employes par fonction */
 
 const employesfonctions = ref([]);
@@ -267,7 +285,6 @@ gestStat.NbEmpFonction.forEach((element) => {
 });
 
 /* end employes par fonction */
-
 
 /* start employes par etat */
 
@@ -313,7 +330,13 @@ const pieData = {
   labels: pieLabelsArray.value,
   datasets: [
     {
-      backgroundColor: [" #EC6B56", "#FFC154", " #47B39C", "#58508D", "#003F5C"],
+      backgroundColor: [
+        " #EC6B56",
+        "#FFC154",
+        " #47B39C",
+        "#58508D",
+        "#003F5C",
+      ],
       data: pieDataArray.value,
     },
   ],
@@ -378,7 +401,7 @@ const barData1 = {
 const notificationVue = useNotification();
 
 onMounted(async () => {
-  if (gestStat.pourcentageMateriel > 50 ) {
+  if (gestStat.pourcentageMateriel > 50) {
     let markAsRead = false;
     const n = notificationVue.create({
       title: "fait attention à l'atelier mécanique",
@@ -408,7 +431,7 @@ onMounted(async () => {
     });
   }
 
-  if (gestStat.pourcentageEmployes > 50 ) {
+  if (gestStat.pourcentageEmployes > 50) {
     let markAsRead = false;
     const n = notificationVue.create({
       title: "fait attention aux employés ",
@@ -437,9 +460,7 @@ onMounted(async () => {
       },
     });
   }
-
 });
-
 </script>
 
 <style scooped>
@@ -447,8 +468,8 @@ onMounted(async () => {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
-  padding: 3px 10px;
-  height: 19vw;
+  padding: 5px 10px;
+  /* height: 19vw; */
 }
 
 .progress1 {
@@ -456,7 +477,7 @@ onMounted(async () => {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
   padding: 10px 34px;
-  height: 8vw;
+  /* height: 8vw; */
   text-align: center;
 }
 
@@ -465,7 +486,7 @@ onMounted(async () => {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
   padding: 10px 34px;
-  height: 8vw;
+  /* height: 8vw; */
   text-align: center;
 }
 
@@ -529,4 +550,5 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
 }
+
 </style>

@@ -1,12 +1,14 @@
 <template>
-  <n-modal v-model:show="props.showModal" :mask-closable="false" size="huge">
+  <n-modal v-model:show="props.showModal" :mask-closable="false">
     <n-card
-      style="width: 700px; height: 550px"
+      style="width: 700px; height: 450px"
       :title="props.title"
       :bordered="false"
       size="huge"
       role="dialog"
       aria-modal="true"
+      header-style="padding:15px 30px"
+      content-style="padding:15px 30px"
     >
       <NSpace
         style="
@@ -19,7 +21,7 @@
         ajouter une materiel a la reparation
       </NSpace>
 
-      <NSpace vertical justify="space-between" style="height: 440px">
+      <NSpace vertical justify="space-between">
         <NSpace vertical class="child1">
           <NSpace justify="end">
             <!-- <searchGoodMateriel
@@ -40,9 +42,9 @@
           </NSpace>
           <NSpace>
             <NDataTable
-              :data="goodMateriel"
+              :data="materiels"
               :columns="cols"
-              style="font-size: 13px;width:620px"
+              style="font-size: 13px; width: 620px"
               :row-key="rowKey"
               :checked-row-keys="checkedRowKeysRef"
               @update:checked-row-keys="handleCheck"
@@ -50,117 +52,126 @@
             />
           </NSpace>
         </NSpace>
+      </NSpace>
+
+      <template #footer>
         <n-space justify="end">
-          <NButton @click="onConfirm" value="success" type="success"
-            >Confirmer</NButton
-          >
+          <NButton @click="onConfirm" type="success">Confirmer</NButton>
           <NButton @click="onCancel">Annuler</NButton>
         </n-space>
-      </NSpace>
+      </template>
     </n-card>
   </n-modal>
 </template>
 
 <script setup>
-import axios from 'axios';
 import {
   NModal,
   NCard,
-  NSpace,
+  NScrollbar,
   NButton,
+  NSpace,
   NInput,
+  NText,
   NIcon,
+  NDivider,
   NDataTable,
-  useDialog,
   useMessage
 } from "naive-ui";
-import { SearchOutline as search } from '@vicons/ionicons5';
-import MaterielTag from 'common/MaterielTag.vue';
-import { h } from 'vue';
-import { ref, watch } from 'vue';
-const emit = defineEmits(['confirm', 'cancel']);
+import { SearchCircleOutline as search } from "@vicons/ionicons5";
+import { PersonSearchOutlined as Search1 } from "@vicons/material";
+import { useAuth } from "../../stores/authentication";
+import { ref , h , watch } from "vue";
+import MaterielTag from "common/MaterielTag.vue";
+import axios from "axios";
 
 const message = useMessage();
-const dialog = useDialog();
 
-const props = defineProps({
-  title: String,
-  showModal: Boolean,
-  idProjet: Number,
-});
-
-const idProjet = ref(props.idProjet);
 const checkedRowKeysRef = ref([]);
 
 const rowKey = (row) => {
   return String(row.codeMat);
 };
 
-const goodMateriel = ref([]);
-
-goodMateriel.value = (
-  await axios.get(
-    `http://localhost:3000/material/materielGoodByProject/${idProjet.value}`
-  )
-).data;
-
-const cols = [
-  {
-    title: "Status",
-    key: "statuMateriel",
-    type: 'selection',
-    multiple: false,
-  },
-  { title: 'code materiel', key: 'codeMat' },
-  { title: 'designation', key: 'designation' },
-  { title: 'matricule', key: 'matricule' },
-  {
-    title: 'Status',
-    key: 'statuMateriel',
-    render(row) {
-      return h(MaterielTag, { statuMateriel: row.status });
-  },
-}
-];
-
-const handleCheck = (rowKeys) => {
-  checkedRowKeysRef.value = rowKeys;
-  console.log("--->"+checkedRowKeysRef.value);
-};
+const emit = defineEmits(["confirm", "cancel"]);
 
 const onConfirm = async () => {
   if(checkedRowKeysRef.value === undefined){
     message.warning("il faut choisir un materiel!!!",{ duration: 5e3 });
   }else{
-    //( await axios.get(`http://localhost:3000/material/mettreEnPanne/${checkedRowKeysRef.value[0].codeMat}`));
       message.success("matriel bien ajoutee a l'atelier");
       emit('confirm',checkedRowKeysRef.value);
   }
 };
 
 const onCancel = () => {
-  emit('cancel');
+  emit("cancel");
+};
+const props = defineProps({
+  title: String,
+  showModal: Boolean,
+});
+
+const materiels = ref([]);
+materiels.value = (
+  await axios.get("http://localhost:3000/material/materielWithoutProjet")
+).data;
+
+const cols = [
+{
+    title: "Status",
+    key: "statuMateriel",
+    type: 'selection',
+    multiple: false,
+  },
+  { title: "Code", key: "codeMat" },
+  { title: "Marque", key: "marque" },
+  { title: "modèle", key: "modele" },
+  { title: "Désignation", key: "designation" },
+  {
+    title: "date du mise en service",
+    key: "dateService",
+    render(row) {
+      return new Date(row.dateService).toLocaleDateString("fr");
+    },
+  },
+  {
+    title: "Status",
+    key: "status",
+    render(row) {
+      return h(MaterielTag, { statuMateriel: row.status });
+    },
+  },
+];
+
+const handleCheck = (rowKeys) => {
+  checkedRowKeysRef.value = rowKeys;
 };
 
 const searchDesignation = ref('');
 const searchFilter = () => {
-  console.log('=======>' + searchDesignation.value);
   watch(searchDesignation, async () => {
     if (searchDesignation.value.length > 0) {
-      goodMateriel.value = (
+      materiels.value = (
         await axios.get(
-          `http://localhost:3000/material/goodMateriel/designation/${idProjet.value}?like=${searchDesignation.value}`
+          `http://localhost:3000/material/allMaterielWithoutProjet/designation?like=${searchDesignation.value}`
         )
       ).data;
     } else {
-      goodMateriel.value = (
+      materiels.value = (
         await axios.get(
-          `http://localhost:3000/material/materielGoodByProject/${idProjet.value}`
+          `http://localhost:3000/material/materielWithoutProjet`
         )
       ).data;
     }
   });
 };
+
 </script>
 
-<style scoped></style>
+<style scoped>
+.header {
+  font-weight: bold;
+  margin-right: 5px;
+}
+</style>
