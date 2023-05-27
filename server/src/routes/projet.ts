@@ -1,15 +1,25 @@
 import express from 'express';
-import { getProjets,
-        getProjetById, 
-        insertProjet,
-        getProjetByMission,
-        getProjetByMissionWithEvenements } from '../controllers/projet';
+import {
+  getProjets,
+  getProjetById,
+  insertProjet,
+  getProjetByMission,
+  getProjetsEnCours,
+  getProjetByMissionWithEvenements,
+  updateProjet,
+} from '../controllers/projet';
 
 export const projetRouter = express.Router();
 
-projetRouter.post('/', getProjets);
-projetRouter.get('/:idProjet', getProjetById);
-projetRouter.get('/projetByMission/:missionCode', getProjetByMission);
-projetRouter.get('/projetByMissionWithEvenements/:missionCode', getProjetByMissionWithEvenements);
+projetRouter.get('/prod', getProjetsEnCours);
 
+projetRouter.get(
+  '/projetByMissionWithEvenements/:missionCode',
+  getProjetByMissionWithEvenements
+);
+
+projetRouter.get('/projetByMission/:missionCode', getProjetByMission);
 projetRouter.post('/create', insertProjet);
+projetRouter.get('/:idProjet', getProjetById);
+projetRouter.put('/:idProjet', updateProjet);
+projetRouter.post('/', getProjets);

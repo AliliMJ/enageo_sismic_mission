@@ -180,24 +180,21 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-} from "chart.js";
-import { Pie, Bar } from "vue-chartjs";
-import axios from "axios";
+} from 'chart.js';
+import { Pie, Bar } from 'vue-chartjs';
+import axios from 'axios';
 import {
   NSpace,
   NGrid,
   NGridItem,
-  NForm,
-  NCard,
   NIcon,
   NText,
-  NDivider,
   NProgress,
   NTooltip,
   useNotification,
   NButton,
   useMessage,
-} from "naive-ui";
+} from 'naive-ui';
 import {
   PersonOutline as person,
   StatsChart as chart,
@@ -207,13 +204,10 @@ import {
   BuildOutline as build,
   Close as close,
   HourglassOutline as clock,
-} from "@vicons/ionicons5";
-import {
-  ArrowTrendingLines24Regular as arrowTop,
-  ArrowTrending20Regular as arrowTopSimple,
-} from "@vicons/fluent";
-import { ref, onMounted, h } from "vue";
-import { useAuth } from "../../stores/authentication";
+} from '@vicons/ionicons5';
+
+import { ref, onMounted, h } from 'vue';
+import { useAuth } from '../../stores/authentication';
 
 const auth = useAuth();
 const message = useMessage();
@@ -245,19 +239,19 @@ gestStat.nbMatType.forEach((element) => {
   pieDataArray.value.push(element.nbr);
 });
 
-const progressColor1 = ref("green");
-const progressColor2 = ref("green");
+const progressColor1 = ref('green');
+const progressColor2 = ref('green');
 
 if (gestStat.pourcentageMateriel == 50) {
-  progressColor1.value = "orange";
+  progressColor1.value = 'orange';
 } else if (gestStat.pourcentageMateriel > 50) {
-  progressColor1.value = "red";
+  progressColor1.value = 'red';
 }
 
 if (gestStat.pourcentageEmployes == 50) {
-  progressColor2.value = "orange";
+  progressColor2.value = 'orange';
 } else if (gestStat.pourcentageEmployes > 50) {
-  progressColor2.value = "red";
+  progressColor2.value = 'red';
 }
 
 /* start employes joined per year */
@@ -316,12 +310,12 @@ const pieOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: "top",
+      position: 'top',
     },
     title: {
       display: true,
-      text: "Distribution des véhicules par type",
-      position: "bottom",
+      text: 'Distribution des véhicules par type',
+      position: 'bottom',
     },
   },
 };
@@ -331,11 +325,11 @@ const pieData = {
   datasets: [
     {
       backgroundColor: [
-        " #EC6B56",
-        "#FFC154",
-        " #47B39C",
-        "#58508D",
-        "#003F5C",
+        ' #EC6B56',
+        '#FFC154',
+        ' #47B39C',
+        '#58508D',
+        '#003F5C',
       ],
       data: pieDataArray.value,
     },
@@ -347,12 +341,12 @@ const pieOptions1 = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: "top",
+      position: 'top',
     },
     title: {
       display: true,
-      text: "Distribution des employés par leur état actual",
-      position: "bottom",
+      text: 'Distribution des employés par leur état actual',
+      position: 'bottom',
     },
   },
 };
@@ -361,7 +355,7 @@ const pieData1 = {
   labels: employesetat.value,
   datasets: [
     {
-      backgroundColor: [" #F47A1F", "#FDBB2F", "#377B2B", "#7AC142", "#007CC3"],
+      backgroundColor: [' #F47A1F', '#FDBB2F', '#377B2B', '#7AC142', '#007CC3'],
       data: employesEtatData.value,
     },
   ],
@@ -376,9 +370,9 @@ const barData = {
   labels: employesDates.value,
   datasets: [
     {
-      label: "nombre des employés rejoints par an",
-      backgroundColor: ["rgb(54, 162, 235 , 0.2)"],
-      borderColor: ["rgb(54, 162, 235)"],
+      label: 'nombre des employés rejoints par an',
+      backgroundColor: ['rgb(54, 162, 235 , 0.2)'],
+      borderColor: ['rgb(54, 162, 235)'],
       borderWidth: 1,
       data: employesDatesData.value,
     },
@@ -389,9 +383,9 @@ const barData1 = {
   labels: employesfonctions.value,
   datasets: [
     {
-      label: "nombre des employés pa leur fonction",
-      backgroundColor: ["rgb(54, 162, 235 , 0.2)"],
-      borderColor: ["rgb(54, 162, 235)"],
+      label: 'nombre des employés pa leur fonction',
+      backgroundColor: ['rgb(54, 162, 235 , 0.2)'],
+      borderColor: ['rgb(54, 162, 235)'],
       borderWidth: 1,
       data: employesNbrData.value,
     },
@@ -406,25 +400,25 @@ onMounted(async () => {
     const n = notificationVue.create({
       title: "fait attention à l'atelier mécanique",
       content: `Un pourcentage de ${gestStat.pourcentageMateriel}% des véhicules sont trouvés à l'atelier mécanique`,
-      meta: new Date().toLocaleDateString("fr"),
+      meta: new Date().toLocaleDateString('fr'),
       action: () =>
         h(
           NButton,
           {
             text: true,
-            type: "primary",
+            type: 'primary',
             onClick: () => {
               markAsRead = true;
               n.destroy();
             },
           },
           {
-            default: () => "marquer comme lu",
+            default: () => 'marquer comme lu',
           }
         ),
       onClose: () => {
         if (!markAsRead) {
-          message.warning("Please mark as read");
+          message.warning('Please mark as read');
           return false;
         }
       },
@@ -434,27 +428,27 @@ onMounted(async () => {
   if (gestStat.pourcentageEmployes > 50) {
     let markAsRead = false;
     const n = notificationVue.create({
-      title: "fait attention aux employés ",
+      title: 'fait attention aux employés ',
       content: `Un pourcentage de ${gestStat.pourcentageEmployes}% sont soit en maladie ou bien en congé`,
-      meta: new Date().toLocaleDateString("fr"),
+      meta: new Date().toLocaleDateString('fr'),
       action: () =>
         h(
           NButton,
           {
             text: true,
-            type: "primary",
+            type: 'primary',
             onClick: () => {
               markAsRead = true;
               n.destroy();
             },
           },
           {
-            default: () => "marquer comme lu",
+            default: () => 'marquer comme lu',
           }
         ),
       onClose: () => {
         if (!markAsRead) {
-          message.warning("Please mark as read");
+          message.warning('Please mark as read');
           return false;
         }
       },
@@ -463,7 +457,7 @@ onMounted(async () => {
 });
 </script>
 
-<style scooped>
+<style scoped>
 .type-pie {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;

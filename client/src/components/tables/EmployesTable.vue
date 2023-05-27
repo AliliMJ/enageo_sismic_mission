@@ -1,19 +1,27 @@
 <script setup>
 import axios from 'axios';
 
-import STable from 'common/STable.vue';
-import { NH1, NTag, NButton, NIcon, NSpace, useDialog, NInput , useMessage, } from 'naive-ui';
-import { h, ref, onMounted, computed, watch } from 'vue';
+import STable from '../common/STable.vue';
+import {
+  NH1,
+  NTag,
+  NButton,
+  NIcon,
+  NSpace,
+  useDialog,
+  NInput,
+  useMessage,
+} from 'naive-ui';
+import { h, ref, watch } from 'vue';
 import AffecteEmployeModal from '../common/AffecteEmployeModal.vue';
 import { Add } from '@vicons/ionicons5';
 import Fonction from '../common/Fonction.vue';
-import etatEmpEnum from '../common/Fonction.vue';
-import Position from '../common/Position.vue';
+
 import { useRouter } from 'vue-router';
 import { SearchOutline as search } from '@vicons/ionicons5';
 import { useAuth } from '../../stores/authentication';
 import { Fonctions } from '../../enums';
-import EtatEmployeTag from "common/EtatEmployeTag.vue";
+import EtatEmployeTag from '../common/EtatEmployeTag.vue';
 
 const auth = useAuth();
 const dialog = useDialog();
@@ -31,15 +39,18 @@ function deleteEmploye(id) {
 }
 
 async function confirmAdd(id) {
-  const req= {
-    codeMission : employe.codeMission
+  const req = {
+    codeMission: employe.codeMission,
   };
   const emp = (
-  await axios.put(`http://localhost:3000/employes/insertEmployeWithMission/${id}`,req)
-).data;
-employes.value.push(emp);
-message.success('employé ajoutée à la mission',{ duration: 5e3 });
-showModal.value = false;
+    await axios.put(
+      `http://localhost:3000/employes/insertEmployeWithMission/${id}`,
+      req
+    )
+  ).data;
+  employes.value.push(emp);
+  message.success('employé ajoutée à la mission', { duration: 5e3 });
+  showModal.value = false;
 }
 
 const employe = (
@@ -90,7 +101,7 @@ const cols = [
       return row.etat === value;
     },
     render(row) {
-      return h(EtatEmployeTag , { EtatEmploye: row.etat });
+      return h(EtatEmployeTag, { EtatEmploye: row.etat });
     },
   },
   {

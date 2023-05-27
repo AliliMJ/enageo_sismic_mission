@@ -79,15 +79,16 @@ model Projet {
   Mission     Mission  @relation(fields: [codeMission], references: [codeMission])
   codeMission String
 
-  Plan Tache[]
-
   Etats EtatProjet[]
 
   Materiel Materiel[]
 
-  Coodonnes  Coordonne[]
-  Rapprots   Rapport[]
-  Evenement Evenement[]
+  Terrain          Terrain?    @relation(fields: [terrainIdTerrain], references: [idTerrain])
+  Rapprots         Rapport[]
+  Evenements       Evenement[]
+  terrainIdTerrain Int?
+  Tache            Tache[]
+  annule           Boolean     @default(false)
 }
 
 model Client {
@@ -122,7 +123,6 @@ enum TypeEtatProjet {
   PLANIFICATION
   EN_PRODUCTION
   CLOTURE
-  ANNULE
 }
 
 model Objectif {
@@ -154,17 +154,16 @@ model Coordonne {
   latitude  Float
 
   Terrain          Terrain? @relation(fields: [terrainIdTerrain], references: [idTerrain])
-  Projet           Projet?  @relation(fields: [projetIdProjet], references: [idProjet])
-  projetIdProjet   Int?
   terrainIdTerrain Int?
 }
 
 model Terrain {
-  idTerrain     Int         @id @default(autoincrement())
-  Wilaya        Wilaya      @relation(fields: [numWilaya], references: [numWilaya])
-  numWilaya     Int
-  distanceSiege Float
-  Coordonnes    Coordonne[]
+  idTerrain  Int         @id @default(autoincrement())
+  Wilaya     Wilaya      @relation(fields: [numWilaya], references: [numWilaya])
+  numWilaya  Int
+  //distanceSiege Float
+  Coordonnes Coordonne[]
+  Projet     Projet[]
 }
 
 model Wilaya {
@@ -245,7 +244,7 @@ model Materiel {
   matricule    String
   Projet       Projet?      @relation(fields: [idProjet], references: [idProjet])
   idProjet     Int?
-  status      Int
+  status       Int
   Reparations  Reparation[]
   TypeMateriel TypeMateriel @relation(fields: [idTypeMat], references: [idTypeMat])
   idTypeMat    Int
@@ -253,7 +252,7 @@ model Materiel {
 
 model Reparation {
   idRep          Int       @id @default(autoincrement())
-  dPanne         DateTime?  
+  dPanne         DateTime?
   dDebRep        DateTime?
   dFinRep        DateTime?
   detailProbleme String?
@@ -289,14 +288,13 @@ enum EtatEmploye {
 }
 
 model Evenement {
-  id             Int           @id @default(autoincrement())
-  titre          String
-  date           DateTime @db.Date
-  Heure          String
-  type           TypeEvenement
-  description    String
-  readed         Boolean @default(false)
-  Projet         Projet        @relation(fields: [idProjet], references: [idProjet])
-  idProjet Int
+  id          Int           @id @default(autoincrement())
+  titre       String
+  date        DateTime      @db.Date
+  Heure       String
+  type        TypeEvenement
+  description String
+  readed      Boolean       @default(false)
+  Projet      Projet        @relation(fields: [idProjet], references: [idProjet])
+  idProjet    Int
 }
-

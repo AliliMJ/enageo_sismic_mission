@@ -11,7 +11,6 @@ import {
 } from 'naive-ui';
 import {
   ArrowRight24Filled as ArrowRight,
-  Delete16Regular as Delete,
   Dismiss48Regular as Dismiss,
 } from '@vicons/fluent';
 

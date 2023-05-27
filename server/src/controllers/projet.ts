@@ -43,7 +43,7 @@ export const getProjetById = async (req: Request, res: Response) => {
 
 export const insertProjet = async (req: Request, res: Response) => {
   const {
-    plan, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
+    coordinates, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
     userid,
     nom = '',
     description = '',
@@ -62,12 +62,18 @@ export const insertProjet = async (req: Request, res: Response) => {
         .json({ err: `Cet utilisateur n'a pas accès à cette mission` });
     const projet = await prisma.projet.create({
       data: {
-        Plan: { create: plan },
         Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
         codeMission: mission.codeMission,
         nom,
         description,
         budget,
+      },
+    });
+    await prisma.terrain.create({
+      data: {
+        Coordonnes: { create: coordinates },
+        numWilaya: 1,
+        Projet: { connect: { idProjet: projet.idProjet } },
       },
     });
     res.status(201).json(projet);
@@ -97,24 +103,73 @@ export const getProjetByMission = async (req: Request, res: Response) => {
   }
 };
 
-export const getProjetByMissionWithEvenements = async (req: Request, res: Response) => {
+export const getProjetsEnCours = async (req: Request, res: Response) => {
+  try {
+    const projects = await prisma.$queryRaw`
+  SELECT p.*, c.longitude, c.latitude
+  FROM Projet p
+  JOIN EtatProjet ep ON p.idProjet = ep.idProjet
+  JOIN Terrain t ON p.terrainIdTerrain = t.idTerrain
+  JOIN Coordonne c ON t.idTerrain = c.terrainIdTerrain
+  WHERE ep.etat = 'EN_PRODUCTION'
+    AND ep.id = (
+      SELECT MAX(ep2.id)
+      FROM EtatProjet ep2
+      WHERE ep2.idProjet = p.idProjet
+    )
+
+LIMIT 1;
+`;
+
+    console.log(projects);
+    res.json(projects);
+  } catch (e) {
+    res.send(e);
+  }
+};
+export const getProjetByMissionWithEvenements = async (
+  req: Request,
+  res: Response
+) => {
   const codeMission = req.params.missionCode;
 
   try {
     const projet = await prisma.projet.findFirst({
       where: { codeMission: codeMission },
-      include: { Etats: true ,
-      Evenement : {
-        orderBy : {
-          id : 'desc'
-        }
-      } },
+      include: {
+        Etats: true,
+        Evenements: {
+          orderBy: {
+            id: 'desc',
+          },
+        },
+      },
     });
 
     return res.status(200).json(projet);
   } catch {
     res.status(500).json({
       err: 'Problème lors de la collection de ce projet',
+    });
+  }
+};
+
+export const updateProjet = async (req: Request, res: Response) => {
+  const data = req.body;
+  console.log(data);
+  try {
+    const idProjet = Number(req.params.idProjet);
+    const project = await prisma.projet.update({
+      where: { idProjet },
+      data: {
+        Etats: { create: data.createdStates },
+      },
+    });
+    res.json(project);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      err: 'Problème lors de la mise à jour de ce projet',
     });
   }
 };

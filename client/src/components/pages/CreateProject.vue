@@ -2,45 +2,41 @@
 //choisir le client
 //choisir des objectifs et etablir des plans
 import axios from 'axios';
+import MapEditor from '../app/MapEditor.vue';
+import { useRouter } from 'vue-router';
 import {
   NForm,
-  NDynamicInput,
-  NFormItem,
+  NEmpty,
   NInput,
   NH1,
-  NSelect,
   NSpace,
   NCard,
-  NDatePicker,
   NButton,
   NInputNumber,
-  NDivider,
-  NText,
   NGrid,
   NFormItemGi,
+  NModal,
+  NDataTable,
 } from 'naive-ui';
 import { ref } from 'vue';
 import { useAuth } from '../../stores/authentication';
+const colCoordinates = [
+  { title: 'longitude', key: 'longitude' },
+  { title: 'latitude', key: 'latitude' },
+];
 
 const auth = useAuth();
+const router = useRouter();
+const showMapEditor = ref(false);
+const coordinates = ref([]);
 
-const selectOptions = [
-  {
-    label: 'Points Vibrés',
-    value: 1,
-  },
-  {
-    label: 'Surface étudiée (km carrés)',
-    value: 2,
-  },
-];
+function addCoordinates(data) {
+  const co = data.map((c) => {
+    return { longitude: c[0], latitude: c[1] };
+  });
+  coordinates.value = co;
+}
 
-const clientOptions = [
-  {
-    label: 'Sonatrach',
-    value: 1,
-  },
-];
 async function createProject() {
   try {
     await axios.post('http://localhost:3000/projets/create', {
@@ -48,14 +44,9 @@ async function createProject() {
       nom: model.value.name,
       description: model.value.description,
       budget: model.value.budget,
-      plan: model.value.dynamic.map((p) => ({
-        valeur: p.value,
-        duree: p.duration,
-        objectifId: p.objectif,
-        debut: new Date(p.start),
-      })),
+      coordinates: coordinates.value,
     });
-    alert('Project created!');
+    router.back();
   } catch (e) {
     console.log(e);
   }
@@ -64,13 +55,6 @@ const model = ref({
   name: null,
   budget: null,
   description: null,
-  dynamic: [],
-});
-const onCreate = () => ({
-  objectif: null,
-  value: '',
-  start: null,
-  duration: null,
 });
 </script>
 
@@ -104,66 +88,24 @@ const onCreate = () => ({
         </NGrid>
         <NButton type="success" @click="createProject">Créer le projet</NButton>
       </NCard>
-      <NCard title="Plan">
-        <NDynamicInput v-model:value="model.dynamic" :on-create="onCreate">
-          <template #create-button-default> Ajouter un plan </template>
-          <template #default="{ value, index }">
-            <NSpace>
-              <NFormItem
-                ignore-path-change
-                :show-label="false"
-                :path="`dynamic[${index}].objectif`"
-              >
-                <n-select
-                  placeholder="Sélectionnez un objectif"
-                  v-model:value="model.dynamic[index].objectif"
-                  :options="selectOptions"
-                />
-              </NFormItem>
-
-              <NFormItem
-                ignore-path-change
-                :show-label="false"
-                :path="`dynamic[${index}].value`"
-              >
-                <n-input
-                  v-model:value="model.dynamic[index].value"
-                  placeholder="Valeur"
-                  @keydown.enter.prevent
-                />
-              </NFormItem>
-              <NFormItem
-                ignore-path-change
-                :show-label="false"
-                :path="`dynamic[${index}].start`"
-              >
-                <NDatePicker
-                  v-model:value="model.dynamic[index].start"
-                  type="date"
-                  placeholder="Date de début"
-                />
-              </NFormItem>
-              <NFormItem
-                ignore-path-change
-                :show-label="false"
-                :path="`dynamic[${index}].duration`"
-              >
-                <NInputNumber
-                  :show-button="false"
-                  v-model:value="model.dynamic[index].duration"
-                  placeholder="Durée"
+      <NCard title="Les coordonnées">
+        <n-data-table :columns="colCoordinates" :data="coordinates">
+          <template #empty>
+            <n-empty description="Aucune coordonnée">
+              <template #extra>
+                <NButton dashed @click="showMapEditor = true"
+                  >Ouvrir la carte</NButton
                 >
-                  <template #suffix>
-                    <NText depth="3" strong>Jours</NText>
-                  </template>
-                </NInputNumber>
-              </NFormItem>
-              <NDivider />
-            </NSpace>
+              </template>
+            </n-empty>
           </template>
-        </NDynamicInput>
+        </n-data-table>
       </NCard>
     </NSpace>
+
+    <n-modal v-model:show="showMapEditor">
+      <MapEditor @finish="addCoordinates" />
+    </n-modal>
   </NForm>
 </template>
 <style scoped>

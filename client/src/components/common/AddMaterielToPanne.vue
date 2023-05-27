@@ -42,7 +42,7 @@
             <NDataTable
               :data="goodMateriel"
               :columns="cols"
-              style="font-size: 13px;width:620px"
+              style="font-size: 13px; width: 620px"
               :row-key="rowKey"
               :checked-row-keys="checkedRowKeysRef"
               @update:checked-row-keys="handleCheck"
@@ -72,10 +72,10 @@ import {
   NIcon,
   NDataTable,
   useDialog,
-  useMessage
-} from "naive-ui";
+  useMessage,
+} from 'naive-ui';
 import { SearchOutline as search } from '@vicons/ionicons5';
-import MaterielTag from 'common/MaterielTag.vue';
+import MaterielTag from './MaterielTag.vue';
 import { h } from 'vue';
 import { ref, watch } from 'vue';
 const emit = defineEmits(['confirm', 'cancel']);
@@ -106,8 +106,8 @@ goodMateriel.value = (
 
 const cols = [
   {
-    title: "Status",
-    key: "statuMateriel",
+    title: 'Status',
+    key: 'statuMateriel',
     type: 'selection',
     multiple: false,
   },
@@ -119,8 +119,8 @@ const cols = [
     key: 'statuMateriel',
     render(row) {
       return h(MaterielTag, { statuMateriel: row.status });
+    },
   },
-}
 ];
 
 const handleCheck = (rowKeys) => {

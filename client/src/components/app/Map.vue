@@ -1,69 +1,198 @@
 <script setup>
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+import { NCard } from 'naive-ui';
 import mapboxgl from 'mapbox-gl';
-import { onMounted } from 'vue';
+
+const projects = (await axios.get('http://localhost:3000/projets/prod')).data;
+console.log(projects);
+
+const showPanel = ref(false);
+const selectedProject = ref(null);
+
+function showProjectDetails(project) {
+  selectedProject.value = project;
+  showPanel.value = true;
+}
 
 onMounted(() => {
   mapboxgl.accessToken =
     'pk.eyJ1IjoiYWxpbGltaiIsImEiOiJjbGhiMDBkZXIwMWs4M3JuNDdxMjNyMHhyIn0.q2o6eXdUQxZ8RHMsW5LKOA';
 
+  const geojson = {
+    type: 'FeatureCollection',
+    features: projects.map((p) => {
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [p.longitude, p.latitude],
+        },
+        properties: {
+          title: p.nom,
+          description: p.description,
+          chantier: p.codeMission,
+          icon: 'bar',
+        },
+      };
+    }),
+  };
+
   const map = new mapboxgl.Map({
-    container: 'map', // container ID
-    // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-    style: 'mapbox://styles/alilimj/clhb0hkej012701pgeseia8sn', // style URL
-    center: [6.137343, 45.137451], // starting position
-    zoom: 5, // starting zoom
-    // maxBounds: [
-    //   [-8.668735, 19.05737], // Southwest coordinates of Algeria
-    //   [11.979383, 37.35001], // Northeast coordinates of Algeria
-    // ],
+    container: 'map',
+    style: 'mapbox://styles/alilimj/clhw3641v021y01r05bmz06s8',
+    center: [4.442, 28.044],
+    zoom: 3,
+    maxBounds: [
+      [-4.781, 15.711], // Southwest coordinates of Algeria
+      [15.44, 39.982], // Northeast coordinates of Algeria
+    ],
   });
 
-  // map.on('load', () => {
-  //   map.addSource('maine', {
-  //     type: 'geojson',
-  //     data: {
-  //       type: 'Feature',
-  //       properties: { name: 'Null Island' },
-  //       geometry: {
-  //         type: 'Polygon',
-  //         // These coordinates outline Maine.
-  //         coordinates: [
-  //           [
-  //             [6.458, 31.768],
-  //             [6.618, 31.923],
-  //             [6.904, 31.711],
-  //             [6.458, 31.768],
-  //           ],
-  //         ],
-  //       },
-  //     },
-  //   });
-  //   map.addLayer({
-  //     id: 'maine',
-  //     type: 'fill',
-  //     source: 'maine', // reference the data source
-  //     layout: {},
-  //     paint: {
-  //       'fill-color': '#0080ff', // blue color fill
-  //       'fill-opacity': 0.5,
-  //     },
-  //   });
-  //   map.addLayer({
-  //     id: 'outline',
-  //     type: 'line',
-  //     source: 'maine',
-  //     layout: {},
-  //     paint: {
-  //       'line-color': '#000',
-  //       'line-width': 3,
-  //     },
-  //   });
+  const size = 100;
 
-  // });
-  new mapboxgl.Marker().setLngLat([-63.292236, -18.281518]).addTo(map);
+  // This implements `StyleImageInterface`
+  // to draw a pulsing dot icon on the map.
+  const pulsingDot = {
+    width: size,
+    height: size,
+    data: new Uint8Array(size * size * 4),
+
+    // When the layer is added to the map,
+    // get the rendering context for the map canvas.
+    onAdd: function () {
+      const canvas = document.createElement('canvas');
+      canvas.width = this.width;
+      canvas.height = this.height;
+      this.context = canvas.getContext('2d');
+    },
+
+    // Call once before every frame where the icon will be used.
+    render: function () {
+      const duration = 1000;
+      const t = (performance.now() % duration) / duration;
+
+      const radius = (size / 2) * 0.3;
+      const outerRadius = (size / 2) * 0.7 * t + radius;
+      const context = this.context;
+
+      // Draw the outer circle.
+      context.clearRect(0, 0, this.width, this.height);
+      context.beginPath();
+      context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+      context.fillStyle = `rgba(255, 200, 200, ${1 - t})`;
+      context.fill();
+
+      // Draw the inner circle.
+      context.beginPath();
+      context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+      context.fillStyle = 'rgba(255, 100, 100, 1)';
+      context.strokeStyle = 'white';
+      context.lineWidth = 2 + 4 * (1 - t);
+      context.fill();
+      context.stroke();
+
+      // Update this image's data with data from the canvas.
+      this.data = context.getImageData(0, 0, this.width, this.height).data;
+
+      // Continuously repaint the map, resulting
+      // in the smooth animation of the dot.
+      map.triggerRepaint();
+
+      // Return `true` to let the map know that the image was updated.
+      return true;
+    },
+  };
+
+  map.on('load', () => {
+    map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+    map.addSource('projets', { type: 'geojson', data: geojson });
+    // Add a projet layer
+    map.addLayer({
+      id: 'projetLayer',
+      type: 'symbol',
+      source: 'projets',
+
+      layout: {
+        'icon-image': 'pulsing-dot',
+        'text-field': ['get', 'chantier'],
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-offset': [0, 1.25],
+        'text-anchor': 'top',
+      },
+    });
+
+    map.on('click', 'projetLayer', (e) => {
+      showProjectDetails(e.features[0].properties);
+      map.flyTo({
+        center: e.features[0].geometry.coordinates,
+      });
+    });
+
+    // Change the cursor to a pointer when the it enters a feature in the 'circle' layer.
+    map.on('mouseenter', 'projetLayer', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'projetLayer', () => {
+      map.getCanvas().style.cursor = '';
+    });
+  });
+  // add markers to map
+  // for (const feature of geojson.features) {
+  //   // create a HTML element for each feature
+  //   const el = document.createElement('div');
+  //   el.className = 'marker';
+
+  //   // make a marker for each feature and add it to the map
+  //   new mapboxgl.Marker(el)
+  //     .setLngLat(feature.geometry.coordinates)
+  //     .setPopup(
+  //       new mapboxgl.Popup({ offset: 25 }).setHTML(
+  //         `<h3>${feature.properties.title}</h3>`
+  //       )
+  //     )
+  //     .addTo(map);
+  // }
 });
 </script>
 
 <template>
-  <div style="height: 85vh; width: 100%" id="map"></div>
+  <div style="height: 85vh; width: 100%" id="map">
+    <n-card id="info" title="Informations" v-if="showPanel">
+      {{ selectedProject }}
+    </n-card>
+  </div>
 </template>
+
+<style>
+#map {
+  position: relative;
+}
+#info {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  bottom: 25px;
+  z-index: 1;
+  width: 20%;
+}
+
+.marker {
+  background-image: url('https://art.pixilart.com/42e019c236fe77a.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.mapboxgl-popup {
+  max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
+</style>

@@ -10,35 +10,6 @@
       header-style="padding:15px 30px"
       content-style="padding:15px 30px"
     >
-      <n-scrollbar style="max-height: 400px">
-        <NSpace vertical justify="space-between">
-          <NSpace>
-            <SearchEmployeWithoutMission @sendId="getId" style="width: 640px" />
-          </NSpace>
-          <n-divider title-placement="left" v-if="idRef != null">
-            les informations sur employe
-          </n-divider>
-          <NSpace justify="space-between" v-if="idRef != null">
-            <NSpace>
-              <NText class="header"> id : </NText>
-              <NText> {{ idRef }} </NText>
-            </NSpace>
-            <NSpace>
-              <NText class="header"> nom : </NText>
-              <NText> {{ nomRef }} </NText>
-            </NSpace>
-            <NSpace>
-              <NText class="header"> prenom : </NText>
-              <NText> {{ prenomRef }} </NText>
-            </NSpace>
-            <NSpace>
-              <NText class="header">fonction : </NText>
-              <NText> {{ fonctionRef }} </NText>
-            </NSpace>
-          </NSpace>
-        </NSpace>
-        <n-divider />
-      </n-scrollbar>
       <template #footer>
         <n-space justify="end">
           <NButton @click="onConfirm" type="success">Confirmer</NButton>
@@ -61,7 +32,6 @@ import {
   NIcon,
   NDivider,
 } from 'naive-ui';
-import SearchEmployeWithoutMission from './searchEmployeWithoutMission.vue';
 
 import { ref } from 'vue';
 import axios from 'axios';
@@ -71,8 +41,9 @@ const emit = defineEmits(['confirm', 'cancel']);
 const idRef = ref();
 const nomRef = ref();
 const prenomRef = ref();
-
+const dateRejointRef = ref();
 const fonctionRef = ref();
+const regimTravail = ref();
 
 const onConfirm = () => {
   emit('confirm', idRef.value);

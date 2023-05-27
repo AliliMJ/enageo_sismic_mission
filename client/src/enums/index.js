@@ -59,5 +59,11 @@ export const etatEmployeEnum = Object.freeze({
   Mission: 'mission',
   Conge: 'conge',
   Maladie: 'maladie',
-  Travail: 'travail'
+  Travail: 'travail',
 });
+
+export const etatProjet = Object.freeze([
+  'PLANIFICATION',
+  'EN_PRODUCTION',
+  'CLOTURE',
+]);

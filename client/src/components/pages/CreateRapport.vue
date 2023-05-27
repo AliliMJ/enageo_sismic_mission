@@ -11,9 +11,9 @@ import {
   NDivider,
 } from 'naive-ui';
 
-import AddRendementModal from 'common/AddRendementModal.vue';
+import AddRendementModal from '../common/AddRendementModal.vue';
 
-import ProductionCard from 'common/ProductionCard.vue';
+import ProductionCard from '../common/ProductionCard.vue';
 import { AddSquareMultiple20Regular as AddCard } from '@vicons/fluent';
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';

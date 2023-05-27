@@ -1,11 +1,11 @@
 <script setup>
 import axios from 'axios';
 
-import STable from 'common/STable.vue';
+import STable from '../common/STable.vue';
 import { NH1, NButton, NIcon, NSpace, useDialog, NInput } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Modal from '../common/AddUserModal.vue';
 import { SearchOutline as search } from '@vicons/ionicons5';
 const router = useRouter();
@@ -48,8 +48,9 @@ async function confirmAdd(event) {
   }
   if (event.isValid) {
     try {
-      const user = (await axios.post('http://localhost:3000/comptes', event.data))
-        .data; // adds the user sent from the user modal (event.data)
+      const user = (
+        await axios.post('http://localhost:3000/comptes', event.data)
+      ).data; // adds the user sent from the user modal (event.data)
       users.value.push(user);
     } catch {
       console.log('Erreur');
@@ -73,8 +74,6 @@ const handleClick = (user) => {
   router.push(`/compte/${user.id}`);
 };
 
-
-
 /* script to add user */
 
 const showModal = ref(false);
@@ -83,7 +82,6 @@ const showInsertEmployeModal = () => {
   showModal.value = true;
 };
 </script>
-
 
 <template>
   <NSpace vertical>
@@ -101,7 +99,7 @@ const showInsertEmployeModal = () => {
         v-model:value="searchUsername"
         @update:value="searchFilter"
         placeholder="Rechercher par nom d'utilisateur"
-        style="width:255px"
+        style="width: 255px"
       >
         <template #suffix>
           <n-icon :component="search" />
@@ -122,13 +120,9 @@ const showInsertEmployeModal = () => {
       </NButton>
     </NSpace>
     <NSpace class="tableContainer">
-    <STable @onRowClicked="handleClick" :data="users" :columns="cols"/>
-  </NSpace>
+      <STable @onRowClicked="handleClick" :data="users" :columns="cols" />
+    </NSpace>
   </NSpace>
 </template>
 
-<style scoped>
-
-
-</style>
-
+<style scoped></style>

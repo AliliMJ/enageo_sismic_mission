@@ -54,7 +54,7 @@ import {
   NSelect,
   useMessage,
 } from 'naive-ui';
-import SearchEmploye from '../common/SearchEmploye.vue';
+import SearchEmploye from './SearchEmploye.vue';
 
 const emit = defineEmits(['confirm', 'cancel']);
 const username = ref('');
@@ -121,9 +121,9 @@ const onConfirm = () => {
       employeId: Number(employeId.value),
       role: selectedRole.value,
     };
-    username.value='';
-    selectedRole.value=undefined;
-    employeId.value=undefined;
+    username.value = '';
+    selectedRole.value = undefined;
+    employeId.value = undefined;
 
     //insert();
   }

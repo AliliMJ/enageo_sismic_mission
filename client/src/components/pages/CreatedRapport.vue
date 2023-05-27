@@ -1,7 +1,6 @@
 <script setup>
 import { NButton } from 'naive-ui';
 import router from '../../router/routes';
-import { Route } from '../../enums';
 
 function openCreationRapport() {
   router.push({ name: 'createRapport' });

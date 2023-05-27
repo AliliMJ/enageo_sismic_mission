@@ -1,14 +1,14 @@
 <script setup>
 import axios from 'axios';
 
-import STable from 'common/STable.vue';
+import STable from '../common/STable.vue';
 
 import { NH1, NSpace, NButton, NIcon } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { h } from 'vue';
 import EtatProjet from '../common/EtatProjet.vue';
 
-import { useAuth } from 'stores/authentication.js';
+import { useAuth } from '../../stores/authentication.js';
 import { useRouter } from 'vue-router';
 import { Role } from '../../enums';
 
