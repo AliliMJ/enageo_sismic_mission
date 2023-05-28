@@ -19,7 +19,8 @@ import {
   getMaterialByDesignation,
   getMaterialByWithoutProjet,
   getMaterialByWithoutProjetDesignation,
-  ajouterMaterielToProjet
+  ajouterMaterielToProjet,
+  updateMateriel
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
@@ -45,4 +46,6 @@ materialRouter.put('/mettreBonEtat/:codeMat', mettreBonEtat);
 materialRouter.get('/:codeMat', getMaterialByCode);
 
 materialRouter.post('/mettreEnPanne/:codeMat', mettreEnPanne);
+
+materialRouter.put('/updateMateriel', updateMateriel);
 

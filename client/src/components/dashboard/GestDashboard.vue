@@ -1,173 +1,171 @@
 <template>
-  <NSpace style="margin-bottom: 10px">
+  <NSpace style="margin-bottom: 15px;margin-left: 40px;">
     <NText class="page-header">Tableau de board de gestionnaire</NText>
   </NSpace>
+    <NGrid :cols="2" x-gap="15" y-gap="15" item-responsive style="width:99%;padding-left:5px">
+      <n-grid-item span="0:2 1000:1">
+        <NGrid x-gap="10" y-gap="10" :cols="4" class="grid1">
+          <n-grid-item :span="2">
+            <div class="testCard">
+              <div class="row1">
+                <div class="card-title">Les employés</div>
+                <div class="card-number">
+                  {{ gestStat.nbEmployes }}
+                </div>
+              </div>
+              <div class="row2">
+                <n-icon class="card-icon">
+                  <bag />
+                </n-icon>
+                <n-icon>
+                  <chart style="color: orange" />
+                </n-icon>
+              </div>
+            </div>
+          </n-grid-item>
 
- 
-  <NGrid :cols="2" x-gap="15" y-gap="15" item-responsive>
-    <n-grid-item span="0:2 1000:1">
-      <NGrid x-gap="10" y-gap="10" :cols="4" class="grid1">
-        <n-grid-item :span="2">
-          <div class="testCard">
-            <div class="row1">
-              <div class="card-title">Les employés</div>
-              <div class="card-number">
-                {{ gestStat.nbEmployes }}
+          <n-grid-item :span="2">
+            <div class="testCard">
+              <div class="row1">
+                <div class="card-title">
+                  Les employés ({{ employesDates[employesDates.length - 1] }})
+                </div>
+                <div class="card-number">
+                  {{ employesDatesData[employesDatesData.length - 1] }}
+                </div>
+              </div>
+              <div class="row2">
+                <n-icon class="card-icon">
+                  <clock />
+                </n-icon>
+                <n-icon>
+                  <chart style="color: orange" />
+                </n-icon>
               </div>
             </div>
-            <div class="row2">
-              <n-icon class="card-icon">
-                <bag />
-              </n-icon>
-              <n-icon>
-                <chart style="color: orange" />
-              </n-icon>
-            </div>
-          </div>
-        </n-grid-item>
-
-        <n-grid-item :span="2">
-          <div class="testCard">
-            <div class="row1">
-              <div class="card-title">
-                Les employés ({{ employesDates[employesDates.length - 1] }})
-              </div>
-              <div class="card-number">
-                {{ employesDatesData[employesDatesData.length - 1] }}
-              </div>
-            </div>
-            <div class="row2">
-              <n-icon class="card-icon">
-                <clock />
-              </n-icon>
-              <n-icon>
-                <chart style="color: orange" />
-              </n-icon>
-            </div>
-          </div>
-        </n-grid-item>
-        <n-grid-item :span="4">
-          <NSpace vertical class="type-pie">
-            <Pie :data="pieData1" :options="pieOptions1" />
-          </NSpace>
-        </n-grid-item>
-        <!-- <n-grid-item :span="2">
+          </n-grid-item>
+          <n-grid-item :span="4">
+            <NSpace vertical class="type-pie">
+              <Pie :data="pieData1" :options="pieOptions1" />
+            </NSpace>
+          </n-grid-item>
+          <!-- <n-grid-item :span="2">
         <NSpace vertical class="bar">
           <Bar :data="barData1" :options="barOptions1" style="height: 180px" />
         </NSpace>
       </n-grid-item> -->
-        <n-grid-item :span="4">
-          <NSpace vertical class="bar">
-            <Bar :data="barData1" :options="barOptions"  />
-          </NSpace>
-        </n-grid-item>
-      </NGrid>
-    </n-grid-item>
+          <n-grid-item :span="4">
+            <NSpace vertical class="bar">
+              <Bar :data="barData1" :options="barOptions" />
+            </NSpace>
+          </n-grid-item>
+        </NGrid>
+      </n-grid-item>
 
-    <n-grid-item span="0:2 1000:1">
-    <NGrid x-gap="10" y-gap="10" :cols="3">
-      <n-grid-item :span="1">
-        <div class="testCard">
-          <div class="row1">
-            <div class="card-title">les véhicules</div>
-            <div class="card-number">
-              {{ gestStat.NbTotalMateriel }}
+      <n-grid-item span="0:2 1000:1">
+        <NGrid x-gap="10" y-gap="10" :cols="3">
+          <n-grid-item :span="1">
+            <div class="testCard">
+              <div class="row1">
+                <div class="card-title">les véhicules</div>
+                <div class="card-number">
+                  {{ gestStat.NbTotalMateriel }}
+                </div>
+              </div>
+              <div class="row2">
+                <n-icon class="card-icon">
+                  <bus />
+                </n-icon>
+                <n-icon>
+                  <chart style="color: orange" />
+                </n-icon>
+              </div>
             </div>
-          </div>
-          <div class="row2">
-            <n-icon class="card-icon">
-              <bus />
-            </n-icon>
-            <n-icon>
-              <chart style="color: orange" />
-            </n-icon>
-          </div>
-        </div>
-      </n-grid-item>
+          </n-grid-item>
 
-      <n-grid-item :span="1">
-        <div class="testCard">
-          <div class="row1">
-            <div class="card-title">En panne</div>
-            <div class="card-number">
-              {{ gestStat.nbMaterielEnPanne }}
+          <n-grid-item :span="1">
+            <div class="testCard">
+              <div class="row1">
+                <div class="card-title">En panne</div>
+                <div class="card-number">
+                  {{ gestStat.nbMaterielEnPanne }}
+                </div>
+              </div>
+              <div class="row2">
+                <n-icon class="card-icon">
+                  <build />
+                </n-icon>
+                <n-icon>
+                  <chart style="color: orange" />
+                </n-icon>
+              </div>
             </div>
-          </div>
-          <div class="row2">
-            <n-icon class="card-icon">
-              <build />
-            </n-icon>
-            <n-icon>
-              <chart style="color: orange" />
-            </n-icon>
-          </div>
-        </div>
-      </n-grid-item>
-      <n-grid-item :span="1">
-        <div class="testCard">
-          <div class="row1">
-            <div class="card-title">En réparation</div>
-            <div class="card-number">
-              {{ gestStat.nbMaterielEnReparation }}
+          </n-grid-item>
+          <n-grid-item :span="1">
+            <div class="testCard">
+              <div class="row1">
+                <div class="card-title">En réparation</div>
+                <div class="card-number">
+                  {{ gestStat.nbMaterielEnReparation }}
+                </div>
+              </div>
+              <div class="row2">
+                <n-icon class="card-icon">
+                  <clock />
+                </n-icon>
+                <n-icon>
+                  <chart style="color: orange" />
+                </n-icon>
+              </div>
             </div>
-          </div>
-          <div class="row2">
-            <n-icon class="card-icon">
-              <clock />
-            </n-icon>
-            <n-icon>
-              <chart style="color: orange" />
-            </n-icon>
-          </div>
-        </div>
-      </n-grid-item>
+          </n-grid-item>
 
-      <n-grid-item :span="2">
-        <NSpace vertical class="type-pie">
-          <Pie :data="pieData" :options="pieOptions" />
-        </NSpace>
-      </n-grid-item>
+          <n-grid-item :span="2">
+            <NSpace vertical class="type-pie">
+              <Pie :data="pieData" :options="pieOptions" />
+            </NSpace>
+          </n-grid-item>
 
-      <n-grid-item :span="1">
-        <NSpace vertical>
-          <NSpace>
-            <n-tooltip trigger="hover">
-              <template #trigger>
-                <n-progress
-                  type="circle"
-                  :color="progressColor1"
-                  :percentage="gestStat.pourcentageMateriel"
-                  class="progress1"
-                />
-              </template>
-              pourcentage des véhicules trouvée à l'atelier mécanique ( en panne
-              ou bien en réparation)
-            </n-tooltip>
-          </NSpace>
-          <NSpace>
-            <n-tooltip trigger="hover">
-              <template #trigger>
-                <n-progress
-                  type="circle"
-                  :percentage="gestStat.pourcentageEmployes"
-                  class="progress1"
-                  :color="progressColor2"
-                />
-              </template>
-              pourcentage des employés non disponible dans la mission (en
-              maladie ou en congé)
-            </n-tooltip>
-          </NSpace>
-        </NSpace>
-      </n-grid-item>
-      <n-grid-item :span="3">
-        <NSpace vertical class="bar">
-          <Bar :data="barData" :options="barOptions"  />
-        </NSpace>
+          <n-grid-item :span="1">
+            <NSpace vertical>
+              <NSpace>
+                <n-tooltip trigger="hover">
+                  <template #trigger>
+                    <n-progress
+                      type="circle"
+                      :color="progressColor1"
+                      :percentage="gestStat.pourcentageMateriel"
+                      class="progress1"
+                    />
+                  </template>
+                  pourcentage des véhicules trouvée à l'atelier mécanique ( en
+                  panne ou bien en réparation)
+                </n-tooltip>
+              </NSpace>
+              <NSpace>
+                <n-tooltip trigger="hover">
+                  <template #trigger>
+                    <n-progress
+                      type="circle"
+                      :percentage="gestStat.pourcentageEmployes"
+                      class="progress1"
+                      :color="progressColor2"
+                    />
+                  </template>
+                  pourcentage des employés non disponible dans la mission (en
+                  maladie ou en congé)
+                </n-tooltip>
+              </NSpace>
+            </NSpace>
+          </n-grid-item>
+          <n-grid-item :span="3">
+            <NSpace vertical class="bar">
+              <Bar :data="barData" :options="barOptions" />
+            </NSpace>
+          </n-grid-item>
+        </NGrid>
       </n-grid-item>
     </NGrid>
-  </n-grid-item>
-  </NGrid>
 </template>
 
 <script setup>
@@ -180,9 +178,9 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-} from 'chart.js';
-import { Pie, Bar } from 'vue-chartjs';
-import axios from 'axios';
+} from "chart.js";
+import { Pie, Bar } from "vue-chartjs";
+import axios from "axios";
 import {
   NSpace,
   NGrid,
@@ -194,7 +192,7 @@ import {
   useNotification,
   NButton,
   useMessage,
-} from 'naive-ui';
+} from "naive-ui";
 import {
   PersonOutline as person,
   StatsChart as chart,
@@ -204,10 +202,10 @@ import {
   BuildOutline as build,
   Close as close,
   HourglassOutline as clock,
-} from '@vicons/ionicons5';
+} from "@vicons/ionicons5";
 
-import { ref, onMounted, h } from 'vue';
-import { useAuth } from '../../stores/authentication';
+import { ref, onMounted, h } from "vue";
+import { useAuth } from "../../stores/authentication";
 
 const auth = useAuth();
 const message = useMessage();
@@ -239,19 +237,19 @@ gestStat.nbMatType.forEach((element) => {
   pieDataArray.value.push(element.nbr);
 });
 
-const progressColor1 = ref('green');
-const progressColor2 = ref('green');
+const progressColor1 = ref("green");
+const progressColor2 = ref("green");
 
 if (gestStat.pourcentageMateriel == 50) {
-  progressColor1.value = 'orange';
+  progressColor1.value = "orange";
 } else if (gestStat.pourcentageMateriel > 50) {
-  progressColor1.value = 'red';
+  progressColor1.value = "red";
 }
 
 if (gestStat.pourcentageEmployes == 50) {
-  progressColor2.value = 'orange';
+  progressColor2.value = "orange";
 } else if (gestStat.pourcentageEmployes > 50) {
-  progressColor2.value = 'red';
+  progressColor2.value = "red";
 }
 
 /* start employes joined per year */
@@ -310,12 +308,12 @@ const pieOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: 'top',
+      position: "top",
     },
     title: {
       display: true,
-      text: 'Distribution des véhicules par type',
-      position: 'bottom',
+      text: "Distribution des véhicules par type",
+      position: "bottom",
     },
   },
 };
@@ -325,11 +323,11 @@ const pieData = {
   datasets: [
     {
       backgroundColor: [
-        ' #EC6B56',
-        '#FFC154',
-        ' #47B39C',
-        '#58508D',
-        '#003F5C',
+        " #EC6B56",
+        "#FFC154",
+        " #47B39C",
+        "#58508D",
+        "#003F5C",
       ],
       data: pieDataArray.value,
     },
@@ -341,12 +339,12 @@ const pieOptions1 = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: 'top',
+      position: "top",
     },
     title: {
       display: true,
-      text: 'Distribution des employés par leur état actual',
-      position: 'bottom',
+      text: "Distribution des employés par leur état actual",
+      position: "bottom",
     },
   },
 };
@@ -355,7 +353,7 @@ const pieData1 = {
   labels: employesetat.value,
   datasets: [
     {
-      backgroundColor: [' #F47A1F', '#FDBB2F', '#377B2B', '#7AC142', '#007CC3'],
+      backgroundColor: [" #F47A1F", "#FDBB2F", "#377B2B", "#7AC142", "#007CC3"],
       data: employesEtatData.value,
     },
   ],
@@ -370,9 +368,9 @@ const barData = {
   labels: employesDates.value,
   datasets: [
     {
-      label: 'nombre des employés rejoints par an',
-      backgroundColor: ['rgb(54, 162, 235 , 0.2)'],
-      borderColor: ['rgb(54, 162, 235)'],
+      label: "nombre des employés rejoints par an",
+      backgroundColor: ["rgb(54, 162, 235 , 0.2)"],
+      borderColor: ["rgb(54, 162, 235)"],
       borderWidth: 1,
       data: employesDatesData.value,
     },
@@ -383,9 +381,9 @@ const barData1 = {
   labels: employesfonctions.value,
   datasets: [
     {
-      label: 'nombre des employés pa leur fonction',
-      backgroundColor: ['rgb(54, 162, 235 , 0.2)'],
-      borderColor: ['rgb(54, 162, 235)'],
+      label: "nombre des employés pa leur fonction",
+      backgroundColor: ["rgb(54, 162, 235 , 0.2)"],
+      borderColor: ["rgb(54, 162, 235)"],
       borderWidth: 1,
       data: employesNbrData.value,
     },
@@ -400,25 +398,25 @@ onMounted(async () => {
     const n = notificationVue.create({
       title: "fait attention à l'atelier mécanique",
       content: `Un pourcentage de ${gestStat.pourcentageMateriel}% des véhicules sont trouvés à l'atelier mécanique`,
-      meta: new Date().toLocaleDateString('fr'),
+      meta: new Date().toLocaleDateString("fr"),
       action: () =>
         h(
           NButton,
           {
             text: true,
-            type: 'primary',
+            type: "primary",
             onClick: () => {
               markAsRead = true;
               n.destroy();
             },
           },
           {
-            default: () => 'marquer comme lu',
+            default: () => "marquer comme lu",
           }
         ),
       onClose: () => {
         if (!markAsRead) {
-          message.warning('Please mark as read');
+          message.warning("Please mark as read");
           return false;
         }
       },
@@ -428,27 +426,27 @@ onMounted(async () => {
   if (gestStat.pourcentageEmployes > 50) {
     let markAsRead = false;
     const n = notificationVue.create({
-      title: 'fait attention aux employés ',
+      title: "fait attention aux employés ",
       content: `Un pourcentage de ${gestStat.pourcentageEmployes}% sont soit en maladie ou bien en congé`,
-      meta: new Date().toLocaleDateString('fr'),
+      meta: new Date().toLocaleDateString("fr"),
       action: () =>
         h(
           NButton,
           {
             text: true,
-            type: 'primary',
+            type: "primary",
             onClick: () => {
               markAsRead = true;
               n.destroy();
             },
           },
           {
-            default: () => 'marquer comme lu',
+            default: () => "marquer comme lu",
           }
         ),
       onClose: () => {
         if (!markAsRead) {
-          message.warning('Please mark as read');
+          message.warning("Please mark as read");
           return false;
         }
       },
@@ -470,18 +468,15 @@ onMounted(async () => {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
-  padding: 10px 34px;
-  /* height: 8vw; */
-  text-align: center;
+  padding: 15px 38px;
 }
 
 .progress2 {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
-  padding: 10px 34px;
-  /* height: 8vw; */
-  text-align: center;
+  padding: 15px 38px;
+
 }
 
 .bar {
@@ -502,8 +497,7 @@ onMounted(async () => {
   flex-direction: row;
   justify-content: space-between;
   background-color: white;
-  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
-    rgba(17, 17, 26, 0.1) 0px 0px 8px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: bold;
@@ -544,5 +538,9 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
 }
+
+/* .big-space {
+  margin: 0px 5px;
+} */
 
 </style>
