@@ -45,7 +45,7 @@ const routes = [
     meta: {
       requireAuth: true,
       title: 'Tableau de board',
-      icon: '../assets/ENA_GEO.png',
+      icon: 'src/assets/ENA_GEO.png',
     },
     children: [
       { path: '', name: Route.Dashboard, component: Dashboard },
