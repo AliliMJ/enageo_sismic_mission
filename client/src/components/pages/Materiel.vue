@@ -43,21 +43,16 @@ const message = useMessage();
 
 const auth = useAuth();
 
-const materielRef = ref();
 const isEdit = ref(true);
 const showHistoryModal = ref(false);
 
-const materiel = (
+const materiel = ref();
+ materiel.value = (
   await axios.get(
     `http://localhost:3000/material/getMaterielWithReparations/${route.params.codeMat}`
   )
 ).data;
-
-// const typeMateriel = (
-//   await axios.get(
-//     `http://localhost:3000/typeMateriel/getTypeMaterielById/${materiel.idTypeMat}`
-//   )
-// ).data;
+materiel.value.dateService = new Date(materiel.value.dateService).valueOf();
 
 const typeMateriel = (
   await axios.get(`http://localhost:3000/typeMateriel/getAllTypes`)
@@ -71,19 +66,22 @@ typeMateriel.forEach((element) => {
   });
 });
 
-const codeMatRef = ref(materiel.codeMat);
-const marqueRef = ref(materiel.marque);
-const modeleRef = ref(materiel.modele);
-const designationRef = ref(materiel.designation);
-const dateSeriveRef = ref(new Date(materiel.dateService).valueOf());
-const etatref = ref(materiel.status);
-const matriculeRef = ref(materiel.matricule);
-const typeRef = ref(materiel.idTypeMat);
+async function updateMateriel() {
+
+  const req = {
+    materiel : materiel.value
+  };
+  
+   (
+  await axios.put(`http://localhost:3000/material/updateMateriel`,req)
+).data;
+}
+
 </script>
 
 <template>
   <NSpace vertical>
-    <NSpace justify="end" style="margin-right: 20px">
+    <NSpace justify="end">
       <NButton
         @click="showHistoryModal = true"
         class="button"
@@ -99,7 +97,7 @@ const typeRef = ref(materiel.idTypeMat);
       </NButton>
     </NSpace>
     <NSpace>
-      <NCard style="width: 79vw">
+      <NCard>
         <template #header>
           <NSpace jusitfy="space-between">
             <NSpace>
@@ -130,38 +128,38 @@ const typeRef = ref(materiel.idTypeMat);
         <NForm :disabled="isEdit">
           <NGrid :span="24" :x-gap="24">
             <NFormItemGi :span="4" label="code du materiel">
-              <NInput v-model:value="codeMatRef" />
+              <NInput v-model:value="materiel.codeMat" />
             </NFormItemGi>
             <NFormItemGi :span="6" label="La marque">
-              <NInput v-model:value="marqueRef" />
+              <NInput v-model:value="materiel.marque" />
             </NFormItemGi>
             <NFormItemGi :span="6" label="Le modele">
-              <NInput v-model:value="modeleRef" />
+              <NInput v-model:value="materiel.modele" />
             </NFormItemGi>
             <NFormItemGi :span="6" label="Date de mise en service">
               <NDatePicker
                 format="dd/MM/yyyy"
                 type="date"
-                v-model:value="dateSeriveRef"
+                v-model:value="materiel.dateService"
               />
             </NFormItemGi>
             <NFormItemGi :span="6" label="designation">
-              <NInput v-model:value="designationRef" />
+              <NInput v-model:value="materiel.designation" />
             </NFormItemGi>
 
             <NFormItemGi :span="6" label="matricule">
-              <NInput v-model:value="matriculeRef" />
+              <NInput v-model:value="materiel.matricule" />
             </NFormItemGi>
             <NFormItemGi :span="6" label="type du materiel">
               <NSelect
                 placeholder="type du materiel"
                 :options="typeOptions"
-                v-model:value="typeRef"
+                v-model:value="materiel.idTypeMat"
               />
             </NFormItemGi>
           </NGrid>
           <NSpace justify="end">
-            <n-button type="success" :disabled="isEditUser" @click="updateUser">
+            <n-button type="success" :disabled="isEdit" @click="updateMateriel">
               Confirmer
             </n-button>
           </NSpace>

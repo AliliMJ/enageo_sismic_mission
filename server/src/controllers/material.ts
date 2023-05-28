@@ -404,3 +404,26 @@ export const ajouterMaterielToProjet = async (req: Request,res: Response) => {
       });
   }
 };
+
+export const updateMateriel = async (req: Request,res: Response) => {
+  try {
+    
+    const material = req.body.materiel;
+
+    console.log(material);
+
+    // const materiel = await prisma.materiel.update({
+    //   data : {material},
+    //   where : {material.codeMat}
+    // });
+
+    return res.status(200).json(1);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels non affecter au projet",
+      });
+  }
+};

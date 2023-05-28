@@ -7,10 +7,6 @@ import {
   NSpace,
   NButton,
   NInput,
-  NIcon,
-  NDataTable,
-  useDialog,
-  useMessage,
   NGrid,
   NGridItem,
   NText,
@@ -52,7 +48,7 @@ const detailRef = ref();
 const coutRef = ref();
 
 const cols = [
-  { title: 'code reparation', key: 'idRep' },
+  { title: 'code', key: 'idRep' },
   {
     title: 'date de la panne',
     key: 'dPanne',
@@ -61,7 +57,7 @@ const cols = [
     },
   },
   {
-    title: 'date du debut reparation',
+    title: 'Début réparation',
     key: 'dDebRep',
     render(row) {
       if (row.dDebRep === null) {
@@ -72,7 +68,7 @@ const cols = [
     },
   },
   {
-    title: 'date fin reparation',
+    title: 'Fin réparation',
     key: 'dFinRep',
     render(row) {
       if (row.dFinRep === null) {
@@ -123,7 +119,7 @@ const onCancel = () => {
     size="huge"
   >
     <n-card
-      style="width: 1300px; height: 650px"
+      style="width: 1150px; height: 520px"
       :bordered="false"
       size="huge"
       role="dialog"
