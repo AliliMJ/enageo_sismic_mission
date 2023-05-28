@@ -12,6 +12,7 @@ import {
   NButton,
   NEllipsis,
   NSpace,
+  NH1,
 } from 'naive-ui';
 import mapboxgl from 'mapbox-gl';
 
@@ -163,7 +164,10 @@ onMounted(() => {
 
 <template>
   <div style="height: 85vh; width: 100%" id="map">
-    <n-card id="info" title="Sol d'or" v-if="selectedProject">
+    <n-card id="info" v-if="selectedProject">
+      <template #header>
+        <n-h1>Sol d'or</n-h1>
+      </template>
       <template #action>
         <n-space>
           <n-button type="info"> Visiter le terrain </n-button>
@@ -223,6 +227,7 @@ onMounted(() => {
 }
 #info .n-h1 {
   font-size: 1.5rem;
+  margin: 0;
 }
 #info .n-text {
   font-size: 0.875rem;

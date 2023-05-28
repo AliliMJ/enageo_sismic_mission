@@ -1,12 +1,10 @@
 <script setup>
 import STable from '../common/STable.vue';
 
-import { NH1 } from 'naive-ui';
-
 const props = defineProps({
   rapports: Array,
 });
-
+console.log(props.rapports);
 const cols = [
   { title: 'Id', key: 'idRapport' },
   { title: 'Titre', key: 'titre' },
@@ -25,6 +23,5 @@ const cols = [
 </script>
 
 <template>
-  <NH1>Rapports</NH1>
-  <STable :data="rapports" :columns="cols" />
+  <STable :data="props.rapports" :columns="cols" />
 </template>

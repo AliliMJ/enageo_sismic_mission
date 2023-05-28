@@ -54,7 +54,9 @@ export const insertRapport = async (req: Request, res: Response) => {
           date: new Date(),
           titre: '',
           resume,
-          idProjet: Number(idProjet),
+          Projet: {
+            connect: { idProjet: Number(idProjet) },
+          },
           Rendements: {
             create: rendements.map((r: any) => {
               const equipe = projet.Mission.Equipes.filter(

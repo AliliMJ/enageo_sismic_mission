@@ -84,7 +84,7 @@ model Projet {
   Materiel Materiel[]
 
   Terrain          Terrain?    @relation(fields: [terrainIdTerrain], references: [idTerrain])
-  Rapprots         Rapport[]
+  Rapports         Rapport[]
   Evenements       Evenement[]
   terrainIdTerrain Int?
   Tache            Tache[]

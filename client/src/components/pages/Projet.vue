@@ -10,22 +10,35 @@ import {
   NH1,
   NButtonGroup,
   NIcon,
+  NCard,
 } from 'naive-ui';
+import StatProjet from '../dashboard/StatProjet.vue';
 import { computed, ref } from 'vue';
 import { etatProjet } from '../../enums';
 import { ArrowForward, Close, SaveOutline as Save } from '@vicons/ionicons5';
-
+import { useAuth } from '../../stores/authentication';
+import { Role } from '../../enums';
+const auth = useAuth();
 const router = useRouter();
 const route = useRoute();
 const idProjet = route.params.idProjet;
 
-const projetData = (
-  await axios.get(`http://localhost:3000/projets/${idProjet}`)
-).data;
+const project = ref({});
+const etats = ref([]);
+const current = ref(0);
+const rapports = ref([]);
+onMounted(async () => {
+  const projetData = (
+    await axios.get(`http://localhost:3000/projets/${idProjet}`)
+  ).data;
 
-const project = ref(projetData);
+  project.value = projetData;
+  etats.value = projetData.Etats;
+  current.value = etats.value.length > 2 ? 4 : etats.value.length;
+  rapports.value = projetData.Rapports;
+  console.log(projetData);
+});
 
-const etats = ref(project.value.Etats);
 const createdStates = ref([]);
 const showSave = ref(false);
 
@@ -33,7 +46,6 @@ function redirectReportCreation() {
   router.push('/projet/' + idProjet + '/creerRapport');
 }
 
-const current = ref(etats.value.length > 2 ? 4 : etats.value.length);
 const dateOptions = { day: '2-digit', month: 'long', year: 'numeric' };
 
 function next() {
@@ -77,88 +89,104 @@ async function save() {
   showSave.value = false;
 }
 const status = computed(() => {
-  if (project.value.annule) return 'error';
+  if (project.value?.annule) return 'error';
   else return 'process';
 });
 </script>
 
 <template>
   <NSpace vertical>
+    <n-h1>Statistiques</n-h1>
+    <StatProjet />
     <div>
       <n-h1>Etat du projet</n-h1>
-      <n-space vertical class="status">
-        <n-steps :current="current" :status="status">
-          <n-step title="Planification">
-            <div class="n-step-description" v-if="etats[0]">
-              {{
-                new Date(etats[0].dPassageEtat).toLocaleDateString(
-                  'fr-FR',
-                  dateOptions
-                )
-              }}
-            </div>
-          </n-step>
-          <n-step title="Production">
-            <div class="n-step-description" v-if="etats[1]">
-              {{
-                new Date(etats[1].dPassageEtat).toLocaleDateString(
-                  'fr-FR',
-                  dateOptions
-                )
-              }}
-            </div>
-          </n-step>
-          <n-step title="Terminé">
-            <div class="n-step-description" v-if="etats[2]">
-              {{
-                new Date(etats[2].dPassageEtat).toLocaleDateString(
-                  'fr-FR',
-                  dateOptions
-                )
-              }}
-            </div>
-          </n-step>
-        </n-steps>
-        <n-button-group>
-          <n-button round @click="cancel" v-if="current < 3 && !project.annule">
-            Annuler le projet
+      <n-card title="Les phases du projet">
+        <n-space vertical class="status">
+          <n-steps :current="current" :status="status">
+            <n-step title="Planification">
+              <div class="n-step-description" v-if="etats[0]">
+                {{
+                  new Date(etats[0].dPassageEtat).toLocaleDateString(
+                    'fr-FR',
+                    dateOptions
+                  )
+                }}
+              </div>
+            </n-step>
+            <n-step title="Production">
+              <div class="n-step-description" v-if="etats[1]">
+                {{
+                  new Date(etats[1].dPassageEtat).toLocaleDateString(
+                    'fr-FR',
+                    dateOptions
+                  )
+                }}
+              </div>
+            </n-step>
+            <n-step title="Terminé">
+              <div class="n-step-description" v-if="etats[2]">
+                {{
+                  new Date(etats[2].dPassageEtat).toLocaleDateString(
+                    'fr-FR',
+                    dateOptions
+                  )
+                }}
+              </div>
+            </n-step>
+          </n-steps>
+          <n-button-group v-if="auth.user?.role === Role.ChefMision">
+            <n-button
+              round
+              @click="cancel"
+              v-if="current < 3 && !project.annule"
+            >
+              Annuler le projet
+              <template #icon>
+                <NIcon>
+                  <Close />
+                </NIcon>
+              </template>
+            </n-button>
+            <n-button
+              round
+              @click="next"
+              v-if="current < 4 && !project.annule"
+              icon-placement="right"
+            >
+              État suivant
+              <template #icon>
+                <NIcon>
+                  <ArrowForward />
+                </NIcon>
+              </template>
+            </n-button>
+          </n-button-group>
+
+          <NButton type="success" @click="save" v-if="showSave"
+            >Sauvegarder
+
             <template #icon>
               <NIcon>
-                <Close />
+                <Save />
               </NIcon>
             </template>
-          </n-button>
-          <n-button
-            round
-            @click="next"
-            v-if="current < 4 && !project.annule"
-            icon-placement="right"
-          >
-            État suivant
-            <template #icon>
-              <NIcon>
-                <ArrowForward />
-              </NIcon>
-            </template>
-          </n-button>
-        </n-button-group>
-
-        <NButton type="success" @click="save" v-if="showSave"
-          >Sauvegarder
-
-          <template #icon>
-            <NIcon>
-              <Save />
-            </NIcon>
-          </template>
-        </NButton>
-      </n-space>
+          </NButton>
+        </n-space>
+      </n-card>
     </div>
+    <n-h1>Rapports journaliers</n-h1>
+    <n-card>
+      <RapportTable :rapports="rapports" />
 
-    <RapportTable :rapports="project.Rapports" />
-    <n-button @click="redirectReportCreation" type="success"
-      >Créer un rapport</n-button
-    >
+      <template #footer>
+        <n-button
+          @click="redirectReportCreation"
+          type="success"
+          v-if="auth.user?.role === Role.ChefTerrain"
+          >Créer un rapport</n-button
+        >
+      </template>
+    </n-card>
   </NSpace>
 </template>
 

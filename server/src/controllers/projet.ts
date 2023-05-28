@@ -30,7 +30,7 @@ export const getProjetById = async (req: Request, res: Response) => {
     const { idProjet } = req.params;
     const projet: any = await prisma.projet.findUnique({
       where: { idProjet: Number(idProjet) },
-      include: { Etats: true, Rapprots: true },
+      include: { Etats: true, Rapports: true },
     });
 
     return res.status(200).json(projet);
