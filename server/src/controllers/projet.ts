@@ -105,12 +105,11 @@ export const getProjetByMission = async (req: Request, res: Response) => {
 
 export const getProjetsEnCours = async (req: Request, res: Response) => {
   try {
-    const projects = await prisma.$queryRaw`
-  SELECT p.*, c.longitude, c.latitude
+    const idsProjets: Array<{ idProjet: number }> = await prisma.$queryRaw`
+  SELECT p.idProjet
   FROM Projet p
   JOIN EtatProjet ep ON p.idProjet = ep.idProjet
-  JOIN Terrain t ON p.terrainIdTerrain = t.idTerrain
-  JOIN Coordonne c ON t.idTerrain = c.terrainIdTerrain
+
   WHERE ep.etat = 'EN_PRODUCTION'
     AND ep.id = (
       SELECT MAX(ep2.id)
@@ -118,30 +117,29 @@ export const getProjetsEnCours = async (req: Request, res: Response) => {
       WHERE ep2.idProjet = p.idProjet
     )
 
-
 `;
 
-    res.json(projects);
-  } catch (e) {
-    res.send({
-      err: 'Problème lors de la collection des projets en productions',
+    const projects = await prisma.projet.findMany({
+      where: { idProjet: { in: idsProjets.map((p) => p.idProjet) } },
+      include: { Terrain: { include: { Coordonnes: true } } },
     });
+
+    res.status(200).json(projects);
+  } catch (e) {
+    res.status(500).send({ err: 'Internal error' });
   }
 };
-
 export const getProjetEnCoursByMission = async (
   req: Request,
   res: Response
 ) => {
   try {
-    const codeMission = String(req.params.codeMission);
+    const codeMission = req.params.codeMission;
 
-    const projects = await prisma.$queryRaw`
-  SELECT p.*, c.longitude, c.latitude
+    const idsProjets: number[] = await prisma.$queryRaw`
+  SELECT  p.*
   FROM Projet p
   JOIN EtatProjet ep ON p.idProjet = ep.idProjet
-  JOIN Terrain t ON p.terrainIdTerrain = t.idTerrain
-  JOIN Coordonne c ON t.idTerrain = c.terrainIdTerrain
   WHERE ep.etat = 'EN_PRODUCTION'
   AND   p.codeMission=${codeMission}
        
@@ -150,14 +148,16 @@ export const getProjetEnCoursByMission = async (
       FROM EtatProjet ep2
       WHERE ep2.idProjet = p.idProjet
     )
-
-LIMIT 1;
 `;
 
-    console.log(projects);
-    res.json(projects);
+    const projects = await prisma.projet.findMany({
+      where: { idProjet: { in: idsProjets } },
+      include: { Terrain: { include: { Coordonnes: true } } },
+    });
+
+    res.status(200).json(projects);
   } catch (e) {
-    res.send(e);
+    res.status(500).send({ err: 'Internal error' });
   }
 };
 

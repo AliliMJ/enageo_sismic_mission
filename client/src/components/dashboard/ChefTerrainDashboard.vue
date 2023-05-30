@@ -1,21 +1,30 @@
 <script setup>
 import { NH1, NH2, NCard, NTag, NButton, NText } from 'naive-ui';
+import axios from 'axios';
+import { useAuth } from '../../stores/authentication.js';
+
+const auth = useAuth();
+
+const projet = (
+  await axios.get(
+    `http://localhost:3000/projets/prodByMission/${auth.employe?.codeMission}'`
+  )
+).data;
+
+console.log(auth.employe?.codeMission);
 </script>
 
 <template>
   <n-h1> Le projet en production </n-h1>
   <n-card id="prod">
     <template #header>
-      <n-h1>Sol d'or</n-h1>
+      <n-h1>{{ projet.nom }}</n-h1>
     </template>
     <template #header-extra>
-      <n-tag type="info" size="small">EGS210</n-tag>
+      <n-tag type="info" size="small">{{ projet.codeMission }}</n-tag>
     </template>
     <n-h2>Description</n-h2>
-    <n-text
-      >Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio itaque
-      q</n-text
-    >
+    <n-text>{{ projet.description }}</n-text>
 
     <template #footer>
       <n-button type="info">Consulter</n-button>

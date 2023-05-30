@@ -25,6 +25,13 @@ export const Activites = Object.freeze({
   Layonnage: 'LAY',
 });
 
+export const ActiviteUnit = Object.freeze({
+  Enregistrement: 'Points vibrés',
+  Topographie: 'Piquets',
+  Pose: 'Grappe',
+  Ramasse: 'Grappe',
+});
+
 export const Route = Object.freeze({
   Admin: 'admin',
   Gestionnaire: 'gestionnaire',

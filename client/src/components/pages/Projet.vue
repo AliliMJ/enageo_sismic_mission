@@ -182,7 +182,7 @@ const status = computed(() => {
     </div>
     <n-h1>Rapports journaliers</n-h1>
     <n-card>
-      <RapportTable :rapports="rapports" />
+      <RapportTable :rapports="rapports" :idProject="idProjet" />
 
       <template #footer>
         <n-button

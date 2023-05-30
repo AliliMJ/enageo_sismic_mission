@@ -1,8 +1,13 @@
 <script setup>
 import STable from '../common/STable.vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
 
 const props = defineProps({
   rapports: Array,
+  idProject: String,
 });
 console.log(props.rapports);
 const cols = [
@@ -15,13 +20,13 @@ const cols = [
       return new Date(row.date).toLocaleDateString();
     },
   },
-  {
-    title: 'Projet',
-    key: 'Projet.nom',
-  },
 ];
+
+function handleClick(row) {
+  router.push(`/projet/${props.idProject}/rapport/${row.idRapport}`);
+}
 </script>
 
 <template>
-  <STable :data="props.rapports" :columns="cols" />
+  <STable @onRowClicked="handleClick" :data="props.rapports" :columns="cols" />
 </template>

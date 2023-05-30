@@ -5,29 +5,31 @@ import {
   NTabPane,
   NSpace,
   NButton,
-  NIcon,
   NInput,
   NText,
-  NDivider,
+  NH1,
+  useMessage,
 } from 'naive-ui';
 
 import AddRendementModal from '../common/AddRendementModal.vue';
+import TabRendement from '../common/TabRendement.vue';
 
-import ProductionCard from '../common/ProductionCard.vue';
-import { AddSquareMultiple20Regular as AddCard } from '@vicons/fluent';
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { Activites } from '../../enums';
+import { Activites, ActiviteUnit } from '../../enums';
+
 import axios from 'axios';
 
 const router = useRouter();
 const route = useRoute();
+const message = useMessage();
 
 const showModal = ref(false);
 let cardCount = 0;
 
 const rendements = ref([]);
 const resume = ref(null);
+const titre = ref(null);
 
 function handleConfirmAdd(rendement) {
   cardCount++;
@@ -39,19 +41,24 @@ function handleConfirmAdd(rendement) {
   showModal.value = false;
 }
 function removeCard(key) {
-  console.log('key:', key);
-  console.log('rendements', rendements.value);
   rendements.value = rendements.value.filter((r) => r.key !== key);
 }
 
 async function createReport() {
   const idProjet = route.params.idProjet;
-  await axios.post('http://localhost:3000/rapports', {
-    rendements: rendements.value,
-    idProjet,
-    resume: resume.value,
-  });
-  router.back();
+
+  try {
+    await axios.post('http://localhost:3000/rapports', {
+      rendements: rendements.value,
+      idProjet,
+      resume: resume.value,
+      titre: titre.value,
+    });
+    router.back();
+    message.success('Un rapport a été ajouté');
+  } catch (e) {
+    message.error(e?.response?.data?.err);
+  }
 }
 
 function annuler() {
@@ -59,67 +66,28 @@ function annuler() {
 }
 
 const selectedActivity = ref('');
+
 function openModal(activity) {
   selectedActivity.value = activity;
   showModal.value = true;
 }
+
+let tabs = Object.keys(Activites).map((a) => {
+  return { name: Activites[a], title: a, unit: ActiviteUnit[a] };
+});
 </script>
 
 <template>
-  <n-card title="Création d'un rapport de production" style="min-height: 500px">
-    <n-tabs type="line" animated>
-      <n-tab-pane name="enregistrement" tab="Enregistrement">
-        <n-space class="rendments-cards">
-          <ProductionCard
-            v-for="rendement of rendements"
-            :rendement="rendement"
-            valueUnit="Points vibrés"
-            @remove="removeCard"
-          />
-
-          <n-button
-            class="add-rendement-button"
-            ghost
-            type="success"
-            @click="() => openModal(Activites.Enregistrement)"
-          >
-            Ajouter
-            <template #icon
-              ><NIcon :size="30"><AddCard /></NIcon
-            ></template>
-          </n-button>
-        </n-space>
-      </n-tab-pane>
-      <n-tab-pane name="topo" tab="Topographie">
-        <n-space class="rendments-cards">
-          <ProductionCard
-            v-for="rendement of rendements.filter(
-              (r) => r.activite === Activites.Enregistrement
-            )"
-            :rendement="rendement"
-            valueUnit="Points vibrés"
-            @remove="removeCard"
-          />
-
-          <n-button
-            class="add-rendement-button"
-            ghost
-            type="success"
-            @click="() => openModal(Activites.Enregistrement)"
-          >
-            Ajouter
-            <template #icon
-              ><NIcon :size="30"><AddCard /></NIcon
-            ></template>
-          </n-button>
-        </n-space>
-      </n-tab-pane>
-      <n-tab-pane name="pose" tab="Pose"> Pose </n-tab-pane>
-      <n-tab-pane name="ramasse" tab="Ramasse"> Pose </n-tab-pane>
-    </n-tabs>
-    <template #footer>
-      <n-divider />
+  <n-h1>Création du rapport du jour</n-h1>
+  <n-space vertical>
+    <n-card>
       <NSpace vertical>
+        <NText strong> Titre du rapport </NText>
+        <n-input
+          placeholder="Saisissez un titre pour ce rapport"
+          style="width: 50%"
+          v-model:value="titre"
+        />
         <NText strong> Résumé du rapport </NText>
 
         <n-input
@@ -130,15 +98,30 @@ function openModal(activity) {
           v-model:value="resume"
         />
       </NSpace>
-    </template>
-    <template #action>
-      <n-space>
-        <n-button type="success" @click="createReport">Créer rapport</n-button>
-        <n-button @click="annuler">Annuler</n-button>
-      </n-space>
-    </template>
-  </n-card>
+      <template #footer>
+        <n-space>
+          <n-button type="success" @click="createReport"
+            >Créer rapport</n-button
+          >
+          <n-button @click="annuler">Annuler</n-button>
+        </n-space>
+      </template>
+    </n-card>
 
+    <n-card title="Rendement des équipes" style="min-height: 500px">
+      <n-tabs type="line" animated>
+        <n-tab-pane v-for="tab of tabs" :name="tab.name" :tab="tab.title">
+          <TabRendement
+            :activite="tab.name"
+            :rendements="rendements.filter((r) => r.activite === tab.name)"
+            :valueUnit="tab.unit"
+            @openModal="openModal"
+            @remove="removeCard"
+          />
+        </n-tab-pane>
+      </n-tabs>
+    </n-card>
+  </n-space>
   <add-rendement-modal
     :showModal="showModal"
     @confirm="handleConfirmAdd"
