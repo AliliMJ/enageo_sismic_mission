@@ -128,30 +128,36 @@ export const getProjetsEnCours = async (req: Request, res: Response) => {
     });
   }
 };
-export const getProjetByMissionWithEvenements = async (
+
+export const getProjetEnCoursByMission = async (
   req: Request,
   res: Response
 ) => {
-  const codeMission = req.params.missionCode;
-
   try {
-    const projet = await prisma.projet.findFirst({
-      where: { codeMission: codeMission },
-      include: {
-        Etats: true,
-        Evenements: {
-          orderBy: {
-            id: 'desc',
-          },
-        },
-      },
-    });
+    const codeMission = String(req.params.codeMission);
 
-    return res.status(200).json(projet);
-  } catch {
-    res.status(500).json({
-      err: 'Problème lors de la collection de ce projet',
-    });
+    const projects = await prisma.$queryRaw`
+  SELECT p.*, c.longitude, c.latitude
+  FROM Projet p
+  JOIN EtatProjet ep ON p.idProjet = ep.idProjet
+  JOIN Terrain t ON p.terrainIdTerrain = t.idTerrain
+  JOIN Coordonne c ON t.idTerrain = c.terrainIdTerrain
+  WHERE ep.etat = 'EN_PRODUCTION'
+  AND   p.codeMission=${codeMission}
+       
+    AND ep.id = (
+      SELECT MAX(ep2.id)
+      FROM EtatProjet ep2
+      WHERE ep2.idProjet = p.idProjet
+    )
+
+LIMIT 1;
+`;
+
+    console.log(projects);
+    res.json(projects);
+  } catch (e) {
+    res.send(e);
   }
 };
 

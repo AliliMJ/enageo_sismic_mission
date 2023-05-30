@@ -95,7 +95,7 @@
   </NSpace>
   <Modal
     :showModal="showEvenementModal"
-    :idProjet="projet.idProjet"
+    :codeMission="mission.codeMission"
     :nb="evenements.length"
     @cancel="showEvenementModal = false"
     @confirm="handleConfirmEvent"
@@ -154,19 +154,26 @@ const showEvenementDetailsModal = ref(false);
 
 const evenement = ref();
 
-const employe = ref([]);
-const projet = ref([]);
 const evenements = ref([]);
+const mission = ref();
 
-employe.value = auth.employe;
 
-projet.value = (
+mission.value = (
   await axios.get(
-    `http://localhost:3000/projets/projetByMissionWithEvenements/${employe.value.codeMission}`
+    `http://localhost:3000/missions/MissionWithEvents/${auth.employe.codeMission}`
   )
 ).data;
 
-evenements.value = projet.value.Evenements ?? [];
+
+console.log("--->" + mission.value.codeMission);
+
+
+
+if(mission.value.Evenements!=null){
+evenements.value = mission.value.Evenements ?? [];
+}
+
+
 
 const numberNotReaded = ref(0);
 
@@ -303,12 +310,10 @@ async function handleConfirmEvent(event) {
   numberNotReaded.value++;
   showEvenementModal.value = false;
 
-  console.log(event.date);
-
-  console.log("--->" + req.date);
+  console.log("--->" + mission.value.codeMission);
 
   await axios.post(
-    `http://localhost:3000/evenement/insertEvenement/${projet.value.idProjet}`,
+    `http://localhost:3000/evenement/insertEvenement/${mission.value.codeMission}`,
     req
   );
 }
@@ -319,7 +324,7 @@ async function readAllNotifications() {
   });
   numberNotReaded.value = 0;
   await axios.put(
-    `http://localhost:3000/evenement/setTrue/${projet.value.idProjet}`
+    `http://localhost:3000/evenement/setTrue/${mission.value.codeMission}`
   );
 }
 

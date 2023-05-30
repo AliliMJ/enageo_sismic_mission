@@ -17,22 +17,11 @@ const message = useMessage();
 
 const showModal = ref(false);
 
-const employe = ref();
-const projet = ref();
 const materiels = ref([]);
-
-employe.value = (
-  await axios.get(`http://localhost:3000/employes/${auth.user.employeId}`)
-).data;
-projet.value = (
-  await axios.get(
-    `http://localhost:3000/projets/projetByMission/${employe.value.codeMission}`
-  )
-).data;
 
  materiels.value = (
   await axios.get(
-    `http://localhost:3000/material/materielByProject/${projet.value.idProjet}`
+    `http://localhost:3000/material/materielByMission/${auth.employe.codeMission}`
   )
 ).data;
 
@@ -80,7 +69,7 @@ async function confirmAdd(codeMatricule) {
 
   const materiel = (
     await axios.put(
-      `http://localhost:3000/material/ajouterMaterielWithProject/${projet.value.idProjet}`,req
+      `http://localhost:3000/material/ajouterMaterielWithMission/${auth.employe.codeMission}`,req
     )
   ).data;
  materiels.value.push(materiel);
@@ -93,13 +82,13 @@ const searchFilter = () => {
     if (searchDesignation.value.length > 0) {
       materiels.value = (
         await axios.get(
-          `http://localhost:3000/material/allMateriel/designation/${projet.value.idProjet}?like=${searchDesignation.value}`
+          `http://localhost:3000/material/allMateriel/designation/${auth.employe.codeMission}?like=${searchDesignation.value}`
         )
       ).data;
     } else {
       materiels.value = (
         await axios.get(
-          `http://localhost:3000/material/materielByProject/${projet.value.idProjet}`
+          `http://localhost:3000/material/materielByMission/${auth.employe.codeMission}`
         )
       ).data;
     }
@@ -108,7 +97,7 @@ const searchFilter = () => {
 </script>
 
 <template>
-  <NH1>La liste des matériels du {{ projet.codeMission }}</NH1>
+  <NH1>La liste des matériels du {{ auth.employe.codeMission }}</NH1>
   <NSpace justify="space-between">
     <NSpace> </NSpace>
     <NSpace>
@@ -145,6 +134,6 @@ const searchFilter = () => {
     :showModal="showModal"
     @cancel="showModal = false"
     @confirm="confirmAdd"
-    :idProjet="projet.idProjet"
+    :codeMission="auth.employe.codeMission"
   />
 </template>

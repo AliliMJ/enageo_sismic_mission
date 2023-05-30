@@ -7,4 +7,4 @@ import {
 export const statistiquesRouter = express.Router();
 
 statistiquesRouter.get('/getGestionnaireStatistiques/:codeMission', getGestionnaireStatistiques);
-statistiquesRouter.get('/atelierstatistiques/:idProjet', atelierStatistiques);
+statistiquesRouter.get('/atelierstatistiques/:codeMission', atelierStatistiques);

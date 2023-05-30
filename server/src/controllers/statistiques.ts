@@ -64,37 +64,31 @@ export const getGestionnaireStatistiques = async (
       numberEmpByYears: {},
     };
 
-    const codeMission = req.params.codeMission;
+    const codeMission = String(req.params.codeMission);
 
-    const projet = await prisma.projet.findFirst({
+    stat.NbTotalMateriel = await prisma.materiel.count({
       where: {
         codeMission: codeMission,
       },
     });
 
-    stat.NbTotalMateriel = await prisma.materiel.count({
-      where: {
-        idProjet: projet?.idProjet,
-      },
-    });
-
     stat.nbMaterielBonEtat = await prisma.materiel.count({
       where: {
-        idProjet: projet?.idProjet,
+        codeMission: codeMission,
         status: 2,
       },
     });
 
     stat.nbMaterielEnReparation = await prisma.materiel.count({
       where: {
-        idProjet: projet?.idProjet,
+        codeMission: codeMission,
         status: 1,
       },
     });
 
     stat.nbMaterielEnPanne = await prisma.materiel.count({
       where: {
-        idProjet: projet?.idProjet,
+        codeMission: codeMission,
         status: 0,
       },
     });
@@ -219,14 +213,14 @@ export const getGestionnaireStatistiques = async (
     });
 
     const rawNumberByMarque: Array<MaterielMarqueType> =
-      await prisma.$queryRaw`SELECT marque , count(*) as nbr FROM materiel WHERE idProjet=${projet?.idProjet} group by marque`;
+      await prisma.$queryRaw`SELECT marque , count(*) as nbr FROM materiel WHERE codeMission=${codeMission} group by marque`;
 
     stat.nbMatMarque = rawNumberByMarque.map(({ marque, nbr }) => {
       return { marque, nbr: Number(nbr) };
     });
 
     const rawNumberByModele: Array<MaterielModeleType> =
-      await prisma.$queryRaw`SELECT modele , count(*) as nbr FROM materiel WHERE idProjet=${projet?.idProjet} group by modele`;
+      await prisma.$queryRaw`SELECT modele , count(*) as nbr FROM materiel WHERE codeMission=${codeMission} group by modele`;
 
     stat.nbMatModele = rawNumberByModele.map(({ modele, nbr }) => {
       return { modele, nbr: Number(nbr) };
@@ -236,7 +230,7 @@ export const getGestionnaireStatistiques = async (
       await prisma.$queryRaw`select t.libelle as typeM , count(*) as nbr FROM 
       materiel m , typemateriel t
       where m.idTypeMat = t.idTypeMat AND
-      m.idProjet = ${projet?.idProjet} GROUP BY t.idTypeMat`;
+      m.codeMission = ${codeMission} GROUP BY t.idTypeMat`;
 
     stat.nbMatType = rawNumberByType.map(({ typeM, nbr }) => {
       return { typeM, nbr: Number(nbr) };
@@ -278,7 +272,8 @@ type MaterielPannesMarque = {
 
 export const atelierStatistiques = async (req: Request, res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+
+    const codeMission = String(req.params.codeMission);
 
     const stat = {
       nbPannesByMonth: {},
@@ -286,11 +281,12 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     };
 
     await prisma.$queryRaw`SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))`;
+    
     const rawNumberByYears: Array<MaterielPannesType> =
       await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
     FROM reparation r , materiel m 
     WHERE r.codeMat = m.codeMat AND
-          m.idProjet = ${idProjet}
+          m.codeMission = ${codeMission}
     GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
     ORDER BY dates`;
 
@@ -302,7 +298,7 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
       await prisma.$queryRaw`SELECT m.marque , count(*) as nbr FROM 
     sismicvision.reparation r , sismicvision.materiel m 
     WHERE r.codeMat = m.codeMat AND
-        m.idProjet = ${idProjet}
+        m.codeMission = ${codeMission}
     GROUP BY m.marque`;
 
     stat.nbPannesByMarque = rqwNumberByMarque.map(({ marque, nbr }) => {

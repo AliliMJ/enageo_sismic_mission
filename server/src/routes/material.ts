@@ -9,39 +9,41 @@ import {
   getMaterialByCode,
   mettreEnPanne,
   MettreEnReparation,
-  getMaterialByproject,
-  getMaterialEnPanneByproject,
+  getMaterialByMission,
+  getMaterialEnPanneByMission,
   getEnPanneMaterielByDesignation,
-  getMaterialGoodByproject,
+  getMaterialGoodByMission,
   getMaterialGoodByDesignation,
   getMaterialEnPanneWithReparations,
   mettreBonEtat,
   getMaterialByDesignation,
-  getMaterialByWithoutProjet,
-  getMaterialByWithoutProjetDesignation,
-  ajouterMaterielToProjet,
-  updateMateriel
+  getMaterialByWithoutMission,
+  getMaterialByWithoutMissionDesignation,
+  ajouterMaterielToMission,
+  updateMateriel,
+  MettreEnReparationExterne
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
 
 materialRouter.get('/', paginate, getMaterial);
-materialRouter.get('/materielWithoutProjet', paginate, getMaterialByWithoutProjet);
-materialRouter.get('/EnPanneMateriel/designation/:idProjet',enPanneMaterielFilter,paginate,getEnPanneMaterielByDesignation);
-materialRouter.get('/goodMateriel/designation/:idProjet', goodMaterielFilter,paginate, getMaterialGoodByDesignation);
-materialRouter.get('/allMateriel/designation/:idProjet', goodMaterielFilter,paginate, getMaterialByDesignation);
-materialRouter.get('/allMaterielWithoutProjet/designation/:idProjet', goodMaterielFilter,paginate, getMaterialByWithoutProjetDesignation);
-materialRouter.put('/ajouterMaterielWithProject/:idProjet', goodMaterielFilter,paginate, ajouterMaterielToProjet);
+materialRouter.get('/materielWithoutMission', paginate, getMaterialByWithoutMission);
+materialRouter.get('/EnPanneMateriel/designation/:codeMission',enPanneMaterielFilter,paginate,getEnPanneMaterielByDesignation);
+materialRouter.get('/goodMateriel/designation/:codeMission', goodMaterielFilter,paginate, getMaterialGoodByDesignation);
+materialRouter.get('/allMateriel/designation/:codeMission', goodMaterielFilter,paginate, getMaterialByDesignation);
+materialRouter.get('/allMaterielWithoutMission/designation/:codeMission', goodMaterielFilter,paginate, getMaterialByWithoutMissionDesignation);
+materialRouter.put('/ajouterMaterielWithMission/:codeMission', goodMaterielFilter,paginate, ajouterMaterielToMission);
 
 materialRouter.get('/types', getMaterialTypes);
 
-materialRouter.get('/materielByProject/:idProjet', getMaterialByproject);
-materialRouter.get('/materielEnPanneByProject/:idProjet', getMaterialEnPanneByproject);
-materialRouter.get('/materielGoodByProject/:idProjet',  getMaterialGoodByproject);
+materialRouter.get('/materielByMission/:codeMission', getMaterialByMission);
+materialRouter.get('/materielEnPanneByMission/:codeMission', getMaterialEnPanneByMission);
+materialRouter.get('/materielGoodByMission/:codeMission', getMaterialGoodByMission);
 
 materialRouter.get('/getMaterielWithReparations/:codeMat',getMaterialEnPanneWithReparations);
 
 materialRouter.put('/mettreEnReparation/:codeMat',MettreEnReparation);
+materialRouter.put('/mettreEnReparationExterne/:codeMat',MettreEnReparationExterne);
 materialRouter.put('/mettreBonEtat/:codeMat', mettreBonEtat);
 materialRouter.get('/:codeMat', getMaterialByCode);
 
