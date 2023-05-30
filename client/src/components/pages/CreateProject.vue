@@ -34,13 +34,16 @@ function addCoordinates(data) {
   const co = data.map((c) => {
     return { longitude: c[0], latitude: c[1] };
   });
+
+  co.pop();
   coordinates.value = co;
+  showMapEditor.value = false;
 }
 
 async function createProject() {
   try {
     await axios.post('http://localhost:3000/projets/create', {
-      userid: auth.user.id,
+      idEmploye: auth.employe.id,
       nom: model.value.name,
       description: model.value.description,
       budget: model.value.budget,
@@ -89,7 +92,11 @@ const model = ref({
         <NButton type="success" @click="createProject">Créer le projet</NButton>
       </NCard>
       <NCard title="Les coordonnées">
-        <n-data-table :columns="colCoordinates" :data="coordinates">
+        <n-data-table
+          :columns="colCoordinates"
+          :data="coordinates"
+          ref="projectsTable"
+        >
           <template #empty>
             <n-empty description="Aucune coordonnée">
               <template #extra>

@@ -29,7 +29,7 @@ function showProjectDetails(project) {
 onMounted(() => {
   mapboxgl.accessToken =
     'pk.eyJ1IjoiYWxpbGltaiIsImEiOiJjbGhiMDBkZXIwMWs4M3JuNDdxMjNyMHhyIn0.q2o6eXdUQxZ8RHMsW5LKOA';
-
+  console.log(projects);
   const geojson = {
     type: 'FeatureCollection',
     features: projects.map((p) => {

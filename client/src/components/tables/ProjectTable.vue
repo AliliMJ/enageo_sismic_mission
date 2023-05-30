@@ -3,9 +3,10 @@ import axios from 'axios';
 
 import STable from '../common/STable.vue';
 
-import { NH1, NSpace, NButton, NIcon } from 'naive-ui';
+import { NH1, NSpace, NButton, NIcon, NSelect } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
-import { h } from 'vue';
+import { FilterDismiss16Filled as DismissFilter } from '@vicons/fluent';
+import { h, ref } from 'vue';
 import EtatProjet from '../common/EtatProjet.vue';
 
 import { useAuth } from '../../stores/authentication.js';
@@ -14,12 +15,28 @@ import { Role } from '../../enums';
 
 const auth = useAuth();
 const router = useRouter();
-
+const projectFilter = ref(null);
+const filterOptions = [
+  {
+    label: 'Production',
+    value: 'EN_PRODUCTION',
+  },
+  {
+    label: 'Planification',
+    value: 'PLANIFICATION',
+  },
+  {
+    label: 'Terminé',
+    value: 'Termine',
+  },
+  {
+    label: 'Annulé',
+    value: 'ANNULE',
+  },
+];
 const projects = (
   await axios.post('http://localhost:3000/projets', { userid: auth.user?.id })
 ).data;
-
-console.log(projects);
 
 const cols = [
   { title: 'Id', key: 'idProjet' },
@@ -44,7 +61,24 @@ function handleClick(row) {
 <template>
   <NSpace vertical>
     <NH1>La liste des projets</NH1>
-    <NSpace justify="end">
+
+    <NSpace justify="space-between">
+      <n-space>
+        <n-select
+          id="filter"
+          v-model:value="projectFilter"
+          placeholder="Filter par état"
+          :options="filterOptions"
+        />
+
+        <n-button>
+          <template #icon>
+            <n-icon>
+              <DismissFilter />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-space>
       <NButton
         v-if="auth.user?.role === Role.ChefMision"
         @click="addProject"
@@ -62,3 +96,9 @@ function handleClick(row) {
     <STable @onRowClicked="handleClick" :data="projects" :columns="cols" />
   </NSpace>
 </template>
+
+<style scoped>
+#filter {
+  width: 200px;
+}
+</style>

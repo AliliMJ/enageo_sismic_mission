@@ -178,9 +178,9 @@ model Mission {
   methodologie TypeMission
   description  String
 
-  Equipes Equipe[]
-  Projets Projet[]
-  Chefs   Employe[]
+  Equipes  Equipe[]
+  Projets  Projet[]
+  Employes Employe[]
 }
 
 enum TypeMission {

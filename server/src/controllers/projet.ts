@@ -44,26 +44,26 @@ export const getProjetById = async (req: Request, res: Response) => {
 export const insertProjet = async (req: Request, res: Response) => {
   const {
     coordinates, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
-    userid,
+    idEmploye,
     nom = '',
     description = '',
     budget = 100,
   } = req.body;
 
   try {
-    const mission = await prisma.mission.findFirst({
-      where: {
-        Chefs: { some: { id: userid } },
-      },
+    const employe = await prisma.employe.findUnique({
+      where: { id: idEmploye },
     });
-    if (mission == null)
-      return res
-        .status(401)
-        .json({ err: `Cet utilisateur n'a pas accès à cette mission` });
+
+    if (!employe?.codeMission) {
+      return res.status(401).json({
+        err: `Cet utilisateur n'est pas autorisé à la creation des projets`,
+      });
+    }
     const projet = await prisma.projet.create({
       data: {
         Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
-        codeMission: mission.codeMission,
+        codeMission: employe.codeMission,
         nom,
         description,
         budget,
@@ -118,13 +118,14 @@ export const getProjetsEnCours = async (req: Request, res: Response) => {
       WHERE ep2.idProjet = p.idProjet
     )
 
-LIMIT 1;
+
 `;
 
-    console.log(projects);
     res.json(projects);
   } catch (e) {
-    res.send(e);
+    res.send({
+      err: 'Problème lors de la collection des projets en productions',
+    });
   }
 };
 export const getProjetByMissionWithEvenements = async (

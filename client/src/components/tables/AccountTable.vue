@@ -2,7 +2,15 @@
 import axios from 'axios';
 
 import STable from '../common/STable.vue';
-import { NH1, NButton, NIcon, NSpace, useDialog, NInput } from 'naive-ui';
+import {
+  NH1,
+  NButton,
+  NIcon,
+  NSpace,
+  useDialog,
+  NInput,
+  useMessage,
+} from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { useRouter } from 'vue-router';
 import { ref, onMounted, watch } from 'vue';
@@ -10,6 +18,7 @@ import Modal from '../common/AddUserModal.vue';
 import { SearchOutline as search } from '@vicons/ionicons5';
 const router = useRouter();
 const dialog = useDialog();
+const message = useMessage();
 
 function deleteUser(id) {
   dialog.warning({
@@ -52,8 +61,8 @@ async function confirmAdd(event) {
         await axios.post('http://localhost:3000/comptes', event.data)
       ).data; // adds the user sent from the user modal (event.data)
       users.value.push(user);
-    } catch {
-      console.log('Erreur');
+    } catch (e) {
+      message.error(e?.response?.data?.err);
     }
   }
 }

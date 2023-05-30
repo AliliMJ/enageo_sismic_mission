@@ -9,23 +9,21 @@
       aria-modal="true"
     >
       <n-scrollbar style="max-height: 400px">
-        <slot>
-          <NGrid :span="24" :x-gap="5">
-            <NFormItemGi :span="12" label="username">
-              <NInput v-model:value="username" />
-            </NFormItemGi>
-            <NFormItemGi :span="12" label="Role">
-              <NSelect
-                placeholder="selectionner un role"
-                :options="RoleOptions"
-                v-model:value="selectedRole"
-              />
-            </NFormItemGi>
-            <NFormItemGi :span="12" label="Employe">
-              <SearchEmploye @sendId="getId" />
-            </NFormItemGi>
-          </NGrid>
-        </slot>
+        <NGrid :span="24" :x-gap="5">
+          <NFormItemGi :span="12" label="username">
+            <NInput v-model:value="username" />
+          </NFormItemGi>
+          <NFormItemGi :span="12" label="Role">
+            <NSelect
+              placeholder="selectionner un role"
+              :options="RoleOptions"
+              v-model:value="selectedRole"
+            />
+          </NFormItemGi>
+          <NFormItemGi :span="12" label="Employe">
+            <SearchEmploye @sendId="getId" />
+          </NFormItemGi>
+        </NGrid>
       </n-scrollbar>
       <template #footer>
         <n-space justify="end">

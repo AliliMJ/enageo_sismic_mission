@@ -62,14 +62,14 @@ function onFinish() {
 
 <template>
   <n-card
-    style="width: 600px"
+    style="width: 80%; height: 80vh"
     title="Préciser les coordonnées du terrain"
     :bordered="false"
     size="huge"
     role="dialog"
     aria-modal="true"
   >
-    <div style="height: 50vh; width: 100%" id="map"></div>
+    <div id="map"></div>
     <div class="calculation-box">
       <p>Cliquez sur la carte pour dessiner un polygone.</p>
       <div id="calculated-area"></div>
@@ -101,5 +101,9 @@ p {
   font-family: 'Open Sans';
   margin: 0;
   font-size: 13px;
+}
+
+#map {
+  height: 100%;
 }
 </style>

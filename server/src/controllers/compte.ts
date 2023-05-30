@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, Role } from '@prisma/client';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
@@ -49,6 +49,20 @@ export const insertUser = async (req: Request, res: Response) => {
 
   const hashPassword = await bcrypt.hash('123', 10);
   try {
+    if (
+      role == Role.CHEF_MISSION ||
+      role == Role.CHEF_TERRAIN ||
+      role == Role.GESTIONNAIRE
+    ) {
+      // verifier que mission != null
+      const employe = await prisma.employe.findFirst({
+        where: { id: employeId },
+      });
+      if (employe?.codeMission == null)
+        return res
+          .status(400)
+          .json({ err: 'Cet employe ne possède pas de mission.' });
+    }
     const user = await prisma.compte.create({
       data: {
         username,
@@ -187,7 +201,6 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
     const rawNumberByYears: Array<AccountGroup> =
       await prisma.$queryRaw`SELECT YEAR(dateCreationCompte) as year , count(*) as nbr
                              FROM compte group by YEAR(dateCreationCompte) ORDER BY year ASC`;
-
 
     const numberByYears = rawNumberByYears.map(({ year, nbr }) => {
       return { year, nbr: Number(nbr) };
