@@ -56,7 +56,35 @@ onMounted(() => {
 });
 function onFinish() {
   const coordinates = draw.getAll().features[0]?.geometry?.coordinates[0] ?? [];
-  emit('finish', coordinates);
+  if (coordinates.length > 0) {
+    const firstCoordinate = coordinates[0];
+
+    fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${firstCoordinate[0]},${firstCoordinate[1]}.json?access_token=${mapboxgl.accessToken}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Extract the state information from the API response
+        const features = data.features;
+        if (features.length > 0) {
+          const state = features[0].context.find((c) =>
+            c.id.startsWith('region')
+          );
+          if (state) {
+            emit('finish', { coordinates, wilaya: state.text });
+          } else {
+            emit('finish', { coordinates, wilaya: '' });
+          }
+        } else {
+          emit('finish', { coordinates, wilaya: '' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        console.log('choose wilaya manually');
+        emit('finish', { coordinates, wilaya: '' });
+      });
+  }
 }
 </script>
 

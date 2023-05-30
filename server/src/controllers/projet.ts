@@ -43,11 +43,12 @@ export const getProjetById = async (req: Request, res: Response) => {
 
 export const insertProjet = async (req: Request, res: Response) => {
   const {
-    coordinates, //plan [{objectifId:Int, valeur: String, debut:Date, duree:Int}]
+    coordinates,
     idEmploye,
     nom = '',
     description = '',
     budget = 100,
+    wilaya,
   } = req.body;
 
   try {
@@ -60,6 +61,9 @@ export const insertProjet = async (req: Request, res: Response) => {
         err: `Cet utilisateur n'est pas autorisé à la creation des projets`,
       });
     }
+    const numWilaya = (
+      await prisma.wilaya.findFirst({ where: { nom: wilaya } })
+    )?.numWilaya;
     const projet = await prisma.projet.create({
       data: {
         Etats: { create: { etat: TypeEtatProjet.PLANIFICATION } },
@@ -72,7 +76,7 @@ export const insertProjet = async (req: Request, res: Response) => {
     await prisma.terrain.create({
       data: {
         Coordonnes: { create: coordinates },
-        numWilaya: 1,
+        numWilaya: numWilaya ?? 1, // adrar by default
         Projet: { connect: { idProjet: projet.idProjet } },
       },
     });
