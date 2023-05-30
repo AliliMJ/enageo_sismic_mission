@@ -90,12 +90,12 @@ export const getProjetByMission = async (req: Request, res: Response) => {
   const codeMission = req.params.missionCode;
 
   try {
-    const projet = await prisma.projet.findFirst({
-      where: { codeMission: codeMission },
+    const projets = await prisma.projet.findMany({
+      where: { codeMission },
       include: { Etats: true },
     });
 
-    return res.status(200).json(projet);
+    return res.status(200).json(projets);
   } catch {
     res.status(500).json({
       err: 'Problème lors de la collection de ce projet',

@@ -11,6 +11,7 @@ import {
   NButtonGroup,
   NIcon,
   NCard,
+  useMessage,
 } from 'naive-ui';
 import StatProjet from '../dashboard/StatProjet.vue';
 import { computed, ref } from 'vue';
@@ -18,6 +19,7 @@ import { etatProjet } from '../../enums';
 import { ArrowForward, Close, SaveOutline as Save } from '@vicons/ionicons5';
 import { useAuth } from '../../stores/authentication';
 import { Role } from '../../enums';
+const message = useMessage();
 const auth = useAuth();
 const router = useRouter();
 const route = useRoute();
@@ -81,12 +83,16 @@ function cancel() {
   }
 }
 async function save() {
-  axios.put(`http://localhost:3000/projets/${idProjet}`, {
-    createdStates: createdStates.value,
-    annule: project.value.annule,
-  });
-  createdStates.value = [];
-  showSave.value = false;
+  try {
+    await axios.put(`http://localhost:3000/projets/${idProjet}`, {
+      createdStates: createdStates.value,
+      annule: project.value.annule,
+    });
+    createdStates.value = [];
+    showSave.value = false;
+  } catch (e) {
+    message.error(e?.response?.data?.err);
+  }
 }
 const status = computed(() => {
   if (project.value?.annule) return 'error';

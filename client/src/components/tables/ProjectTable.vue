@@ -34,8 +34,13 @@ const filterOptions = [
     value: 'ANNULE',
   },
 ];
+
+console.log(auth?.employe?.id);
 const projects = (
-  await axios.post('http://localhost:3000/projets', { userid: auth.user?.id })
+  await axios.get(
+    'http://localhost:3000/projets/projetByMission/' +
+      auth?.employe?.codeMission
+  )
 ).data;
 
 const cols = [

@@ -15,7 +15,10 @@ export const getMissions = async (req: Request, res: Response) => {
 export const getMissionByCode = async (req: Request, res: Response) => {
   try {
     const { codeMission } = req.params;
-    const mission = await prisma.mission.findFirst({ where: { codeMission } , include : {Chefs : true}});
+    const mission = await prisma.mission.findFirst({
+      where: { codeMission },
+      include: { Employes: true },
+    });
 
     return res.status(200).json(mission);
   } catch {
@@ -25,10 +28,7 @@ export const getMissionByCode = async (req: Request, res: Response) => {
   }
 };
 
-export const getMissionWithEvenements = async (
-  req: Request,
-  res: Response
-) => {
+export const getMissionWithEvenements = async (req: Request, res: Response) => {
   const codeMission = req.params.codeMission;
 
   try {
