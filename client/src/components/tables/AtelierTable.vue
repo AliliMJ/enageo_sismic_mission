@@ -32,26 +32,14 @@ const router = useRouter();
 
 const auth = useAuth();
 
-const employe = ref();
-const projet = ref();
 const materielEnPanne = ref([]);
 
 const showModal = ref(false);
 
-employe.value = (
-  await axios.get(`http://localhost:3000/employes/${auth.user.employeId}`)
-).data;
-
-projet.value = (
-  await axios.get(
-    `http://localhost:3000/projets/projetByMission/${employe.value.codeMission}`
-  )
-).data;
-
 materielEnPanne.value = (
   await axios.get(
-    `http://localhost:3000/material/materielEnPanneByProject/${Number(
-      projet.value.idProjet
+    `http://localhost:3000/material/materielEnPanneByMission/${String(
+      auth.employe.codeMission
     )}`
   )
 ).data;
@@ -70,8 +58,8 @@ ChartJS.register(
 
 const stat = (
   await axios.get(
-    `http://localhost:3000/statistiques/atelierstatistiques/${Number(
-      projet.value.idProjet
+    `http://localhost:3000/statistiques/atelierstatistiques/${String(
+      auth.employe.codeMission
     )}`
   )
 ).data;
@@ -154,7 +142,11 @@ const cols = [
 ];
 
 const handleClick = (materielEnPanne) => {
-  router.push(`/atelier/${materielEnPanne.codeMat}`);
+  if((materielEnPanne.status===0)||(materielEnPanne.status===1)){
+    router.push(`/atelier/${materielEnPanne.codeMat}`);
+  }else if(materielEnPanne.status===3){
+    router.push(`/suiviMateriel/${materielEnPanne.codeMat}`);
+  }
 };
 
 const searchDesignation = ref('');
@@ -163,17 +155,17 @@ const searchFilter = () => {
     if (searchDesignation.value.length > 0) {
       materielEnPanne.value = (
         await axios.get(
-          `http://localhost:3000/material/EnPanneMateriel/designation/${Number(
-            projet.value.idProjet
-          )}/?like=${searchDesignation.value}`
+          `http://localhost:3000/material/EnPanneMateriel/designation/${String(
+      auth.employe.codeMission
+    )}/?like=${searchDesignation.value}`
         )
       ).data;
     } else {
       materielEnPanne.value = (
         await axios.get(
-          `http://localhost:3000/material/materielEnPanneByProject/${Number(
-            projet.value.idProjet
-          )}`
+          `http://localhost:3000/material/materielEnPanneByMission/${String(
+      auth.employe.codeMission
+    )}`
         )
       ).data;
     }
@@ -247,7 +239,7 @@ const props = defineProps(['Number(projet.value.idProjet)']);
     :showModal="showModal"
     @cancel="showModal = false"
     @confirm="confirmAdd"
-    :idProjet="projet.idProjet"
+    :codeMission="auth.employe.codeMission"
   />
 </template>
 

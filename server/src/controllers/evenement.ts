@@ -1,11 +1,11 @@
 import { Response, Request } from "express";
 
-export const getEvenementByProject = async (req: Request, res: Response) => {
+export const getEvenementByMission = async (req: Request, res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
 
     const evenements = await prisma.evenement.findMany({
-      where: { idProjet: idProjet },
+      where: { codeMission : codeMission },
       orderBy: {
         id: "desc",
       },
@@ -23,10 +23,10 @@ export const getEvenementByProject = async (req: Request, res: Response) => {
 
 export const setAllevenemtnsReaded = async (req: Request, res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
 
     const evenements = await prisma.evenement.updateMany({
-      where: { idProjet: idProjet, readed: false },
+      where: { codeMission: codeMission, readed: false },
       data: { readed: true },
     });
 
@@ -41,7 +41,7 @@ export const setAllevenemtnsReaded = async (req: Request, res: Response) => {
 
 export const insertnewEvenement = async (req: Request, res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
     const { titre, type, date, Heure, description } = req.body;
 
     const evenements = await prisma.evenement.create({
@@ -52,7 +52,7 @@ export const insertnewEvenement = async (req: Request, res: Response) => {
         Heure : Heure,
         description : description,
         readed: false,
-        idProjet : idProjet
+        codeMission : codeMission
       },
     });
 

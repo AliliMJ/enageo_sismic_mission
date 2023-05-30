@@ -23,7 +23,7 @@
         <NSpace vertical class="child1">
           <NSpace justify="end">
             <!-- <searchGoodMateriel
-              :idProjet="props.idProjet"
+              :codeMission="props.codeMission"
               @sendGoodMateriel="getGoodMateriel"
               style="width: 230px"
             /> -->
@@ -86,10 +86,10 @@ const dialog = useDialog();
 const props = defineProps({
   title: String,
   showModal: Boolean,
-  idProjet: Number,
+  codeMission : String,
 });
 
-const idProjet = ref(props.idProjet);
+const codeMission = ref(props.codeMission);
 const checkedRowKeysRef = ref([]);
 
 const rowKey = (row) => {
@@ -100,7 +100,7 @@ const goodMateriel = ref([]);
 
 goodMateriel.value = (
   await axios.get(
-    `http://localhost:3000/material/materielGoodByProject/${idProjet.value}`
+    `http://localhost:3000/material/materielGoodByMission/${codeMission.value}`
   )
 ).data;
 
@@ -149,13 +149,13 @@ const searchFilter = () => {
     if (searchDesignation.value.length > 0) {
       goodMateriel.value = (
         await axios.get(
-          `http://localhost:3000/material/goodMateriel/designation/${idProjet.value}?like=${searchDesignation.value}`
+          `http://localhost:3000/material/goodMateriel/designation/${codeMission.value}?like=${searchDesignation.value}`
         )
       ).data;
     } else {
       goodMateriel.value = (
         await axios.get(
-          `http://localhost:3000/material/materielGoodByProject/${idProjet.value}`
+          `http://localhost:3000/material/materielGoodByMission/${codeMission.value}`
         )
       ).data;
     }

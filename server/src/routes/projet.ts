@@ -5,18 +5,15 @@ import {
   insertProjet,
   getProjetByMission,
   getProjetsEnCours,
-  getProjetByMissionWithEvenements,
   updateProjet,
+  getProjetEnCoursByMission
 } from '../controllers/projet';
 
 export const projetRouter = express.Router();
 
 projetRouter.get('/prod', getProjetsEnCours);
+projetRouter.get('/prodByMission/:codeMission', getProjetEnCoursByMission);
 
-projetRouter.get(
-  '/projetByMissionWithEvenements/:missionCode',
-  getProjetByMissionWithEvenements
-);
 
 projetRouter.get('/projetByMission/:missionCode', getProjetByMission);
 projetRouter.post('/create', insertProjet);

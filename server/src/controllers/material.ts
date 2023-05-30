@@ -122,6 +122,32 @@ export const MettreEnReparation = async (req: Request, res: Response) => {
   }
 };
 
+export const MettreEnReparationExterne = async (req: Request, res: Response) => {
+  try {
+
+    const  codeMat  = req.params.codeMat;
+    const idRep = Number(req.body.idRep);
+
+   const demande = await prisma.demadeReparation.create({
+    data : {
+      idRep : idRep
+    }
+   });
+
+    const materiel = await prisma.materiel.update({
+      where : {codeMat : codeMat},
+      data : {
+        status : 3
+      }
+    });
+
+    return res.status(200).send(`Matériel ${codeMat} est mis en reparation externe`);
+  } catch(e){
+    console.log(e);
+    res.status(500).json({ err: "Problème lors de la collection ce matériel" });
+  }
+};
+
 export const mettreBonEtat = async (req: Request, res: Response) => {
   try {
 
@@ -184,12 +210,12 @@ export const mettreReparer = async (req: Request, res: Response) => {
   }
 };
 
-export const getMaterialByproject = async (req: Request, res: Response) => {
-  const idProjet = Number(req.params.idProjet);
+export const getMaterialByMission = async (req: Request, res: Response) => {
+  const codeMission = String(req.params.codeMission);
   try {
     const materials = await prisma.materiel.findMany({
       where: {
-        idProjet: idProjet,
+        codeMission : codeMission
       },
     });
 
@@ -197,7 +223,7 @@ export const getMaterialByproject = async (req: Request, res: Response) => {
   } catch {
     res
       .status(500)
-      .json({ err: "Problème lors de la collection de matériel par projet" });
+      .json({ err: "Problème lors de la collection de matériel par mission" });
   }
 };
 
@@ -206,13 +232,13 @@ export const getEnPanneMaterielByDesignation = async (
   res: Response
 ) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
 
     const materielEnPanne = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
       where: { ...req.body.filter, 
         OR :[{status : 0 } , {status : 1}], 
-        idProjet: idProjet },
+       codeMission : codeMission },
     });
 
     res.status(200).json(materielEnPanne);
@@ -224,21 +250,24 @@ export const getEnPanneMaterielByDesignation = async (
   }
 };
 
-export const getMaterialEnPanneByproject = async (
+export const getMaterialEnPanneByMission = async (
   req: Request,
   res: Response
 ) => {
-  const idProjet = Number(req.params.idProjet);
+  const codeMission = String(req.params.codeMission);
   try {
     const materials = await prisma.materiel.findMany({
       where: {
-        idProjet: idProjet,
+        codeMission : codeMission,
         OR : [
           {
             status: 0,
           },
           {
             status: 1,
+          },
+          {
+            status: 3,
           }
         ]
         
@@ -249,16 +278,16 @@ export const getMaterialEnPanneByproject = async (
   } catch {
     res
       .status(500)
-      .json({ err: "Problème lors de la collection de matériel par projet" });
+      .json({ err: "Problème lors de la collection de matériel par mission" });
   }
 };
 
-export const getMaterialGoodByproject = async (req: Request, res: Response) => {
-  const idProjet = Number(req.params.idProjet);
+export const getMaterialGoodByMission = async (req: Request, res: Response) => {
+  const codeMission = String(req.params.codeMission);
   try {
     const materials = await prisma.materiel.findMany({
       where: {
-        idProjet: idProjet,
+        codeMission : codeMission,
         status: 2,
       },
     });
@@ -267,20 +296,18 @@ export const getMaterialGoodByproject = async (req: Request, res: Response) => {
   } catch {
     res
       .status(500)
-      .json({ err: "Problème lors de la collection de matériel par projet" });
+      .json({ err: "Problème lors de la collection de matériel par mission" });
   }
 };
 
 export const getMaterialGoodByDesignation = async (req: Request,res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
-
-    console.log("--> "+idProjet);
+    const codeMission = Number(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
       where: { ...req.body.filter, status : 2 ,
-      idProjet: idProjet,}
+     codeMission : codeMission,}
     });
 
     return res.status(200).json(materiels);
@@ -320,12 +347,12 @@ export const getMaterialEnPanneWithReparations = async (req: Request,res: Respon
 
 export const getMaterialByDesignation = async (req: Request,res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
       where: { ...req.body.filter ,
-      idProjet: idProjet,}
+      codeMission : codeMission,}
     });
 
     return res.status(200).json(materiels);
@@ -339,14 +366,14 @@ export const getMaterialByDesignation = async (req: Request,res: Response) => {
   }
 };
 
-export const getMaterialByWithoutProjet = async (req: Request,res: Response) => {
+export const getMaterialByWithoutMission = async (req: Request,res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
       where: { ...req.body.filter ,
-      idProjet: null,}
+      codeMission: null,}
     });
 
     return res.status(200).json(materiels);
@@ -355,19 +382,19 @@ export const getMaterialByWithoutProjet = async (req: Request,res: Response) => 
     res
       .status(500)
       .json({
-        err: "Problème lors de la collection des matériels non affecter au projet",
+        err: "Problème lors de la collection des matériels non affecter au mission",
       });
   }
 };
 
-export const getMaterialByWithoutProjetDesignation = async (req: Request,res: Response) => {
+export const getMaterialByWithoutMissionDesignation = async (req: Request,res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
       where: { ...req.body.filter ,
-      idProjet: null,}
+        codeMission: null,}
     });
 
     return res.status(200).json(materiels);
@@ -376,21 +403,21 @@ export const getMaterialByWithoutProjetDesignation = async (req: Request,res: Re
     res
       .status(500)
       .json({
-        err: "Problème lors de la collection des matériels non affecter au projet",
+        err: "Problème lors de la collection des matériels non affecter au mission",
       });
   }
 };
 
-export const ajouterMaterielToProjet = async (req: Request,res: Response) => {
+export const ajouterMaterielToMission = async (req: Request,res: Response) => {
   try {
-    const idProjet = Number(req.params.idProjet);
+    const codeMission = String(req.params.codeMission);
 
     const codeMat = req.body.codeMat;
 
     console.log(codeMat);
 
     const materiel = await prisma.materiel.update({
-      data : {idProjet : idProjet},
+      data : {codeMission : codeMission},
       where : {codeMat : codeMat}
     });
 
@@ -400,7 +427,7 @@ export const ajouterMaterielToProjet = async (req: Request,res: Response) => {
     res
       .status(500)
       .json({
-        err: "Problème lors de la collection des matériels non affecter au projet",
+        err: "Problème lors de la collection des matériels non affecter au mission",
       });
   }
 };
@@ -423,7 +450,7 @@ export const updateMateriel = async (req: Request,res: Response) => {
     res
       .status(500)
       .json({
-        err: "Problème lors de la collection des matériels non affecter au projet",
+        err: "Problème lors de la collection des matériels non affecter au mission",
       });
   }
 };

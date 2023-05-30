@@ -96,7 +96,7 @@
   const props = defineProps({
     title: String,
     showModal: Boolean,
-    idProjet: Number,
+    codeMission: String,
     nb : Number
   });
   
@@ -108,6 +108,10 @@
     {
         label : "vol",
         value : "VOL"
+    },
+    {
+        label : "autre",
+        value : "AUTRE"
     }
 ];
 

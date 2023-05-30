@@ -81,11 +81,8 @@ model Projet {
 
   Etats EtatProjet[]
 
-  Materiel Materiel[]
-
   Terrain          Terrain?    @relation(fields: [terrainIdTerrain], references: [idTerrain])
   Rapports         Rapport[]
-  Evenements       Evenement[]
   terrainIdTerrain Int?
   Tache            Tache[]
   annule           Boolean     @default(false)
@@ -178,9 +175,11 @@ model Mission {
   methodologie TypeMission
   description  String
 
-  Equipes Equipe[]
-  Projets Projet[]
-  Chefs   Employe[]
+  Equipes   Equipe[]
+  Projets   Projet[]
+  Chefs     Employe[]
+  materiels Materiel[]
+  Evenements       Evenement[]
 }
 
 enum TypeMission {
@@ -242,8 +241,8 @@ model Materiel {
   dateService  DateTime
   designation  String
   matricule    String
-  Projet       Projet?      @relation(fields: [idProjet], references: [idProjet])
-  idProjet     Int?
+  mission      Mission?     @relation(fields: [codeMission], references: [codeMission])
+  codeMission  String?
   status       Int
   Reparations  Reparation[]
   TypeMateriel TypeMateriel @relation(fields: [idTypeMat], references: [idTypeMat])
@@ -251,14 +250,25 @@ model Materiel {
 }
 
 model Reparation {
-  idRep          Int       @id @default(autoincrement())
-  dPanne         DateTime?
-  dDebRep        DateTime?
-  dFinRep        DateTime?
-  detailProbleme String?
-  Materiel       Materiel  @relation(fields: [codeMat], references: [codeMat])
-  cout           Float
-  codeMat        String
+  idRep            Int                @id @default(autoincrement())
+  dPanne           DateTime?
+  dDebRep          DateTime?
+  dFinRep          DateTime?
+  detailProbleme   String?
+  Materiel         Materiel           @relation(fields: [codeMat], references: [codeMat])
+  cout             Float
+  codeMat          String
+  DemadeReparation DemadeReparation?
+}
+
+model DemadeReparation {
+  idDemRep   Int        @id @default(autoincrement())
+  dSortie    DateTime?
+  dArrive    DateTime?
+  dRetour    DateTime?
+  dEntree    DateTime?
+  Reparation Reparation @relation(fields: [idRep], references: [idRep])
+  idRep      Int @unique
 }
 
 model TypeMateriel {
@@ -277,6 +287,7 @@ model Requisition {
 enum TypeEvenement {
   VOL
   ACCIDENT
+  AUTRE
 }
 
 enum EtatEmploye {
@@ -295,6 +306,6 @@ model Evenement {
   type        TypeEvenement
   description String
   readed      Boolean       @default(false)
-  Projet      Projet        @relation(fields: [idProjet], references: [idProjet])
-  idProjet    Int
+  Mission      Mission        @relation(fields: [codeMission], references: [codeMission])
+  codeMission    String
 }
