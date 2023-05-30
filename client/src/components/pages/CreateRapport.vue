@@ -69,7 +69,7 @@ function openModal(activity) {
   <n-card title="Création d'un rapport de production" style="min-height: 500px">
     <n-tabs type="line" animated>
       <n-tab-pane name="enregistrement" tab="Enregistrement">
-        <n-space id="rendments-cards">
+        <n-space class="rendments-cards">
           <ProductionCard
             v-for="rendement of rendements"
             :rendement="rendement"
@@ -78,7 +78,7 @@ function openModal(activity) {
           />
 
           <n-button
-            id="add-rendement-button"
+            class="add-rendement-button"
             ghost
             type="success"
             @click="() => openModal(Activites.Enregistrement)"
@@ -90,7 +90,30 @@ function openModal(activity) {
           </n-button>
         </n-space>
       </n-tab-pane>
-      <n-tab-pane name="topo" tab="Topographie"> Topographie </n-tab-pane>
+      <n-tab-pane name="topo" tab="Topographie">
+        <n-space class="rendments-cards">
+          <ProductionCard
+            v-for="rendement of rendements.filter(
+              (r) => r.activite === Activites.Enregistrement
+            )"
+            :rendement="rendement"
+            valueUnit="Points vibrés"
+            @remove="removeCard"
+          />
+
+          <n-button
+            class="add-rendement-button"
+            ghost
+            type="success"
+            @click="() => openModal(Activites.Enregistrement)"
+          >
+            Ajouter
+            <template #icon
+              ><NIcon :size="30"><AddCard /></NIcon
+            ></template>
+          </n-button>
+        </n-space>
+      </n-tab-pane>
       <n-tab-pane name="pose" tab="Pose"> Pose </n-tab-pane>
       <n-tab-pane name="ramasse" tab="Ramasse"> Pose </n-tab-pane>
     </n-tabs>
@@ -123,7 +146,7 @@ function openModal(activity) {
   />
 </template>
 <style scoped>
-#add-rendement-button {
+.add-rendement-button {
   height: 100%;
 }
 </style>
