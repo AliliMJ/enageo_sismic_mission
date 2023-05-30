@@ -38,7 +38,6 @@ onMounted(async () => {
   etats.value = projetData.Etats;
   current.value = etats.value.length > 2 ? 4 : etats.value.length;
   rapports.value = projetData.Rapports;
-  console.log(projetData);
 });
 
 const createdStates = ref([]);

@@ -72,7 +72,7 @@ export const etatEmployeEnum = Object.freeze({
 export const etatProjet = Object.freeze([
   'PLANIFICATION',
   'EN_PRODUCTION',
-  'Termine',
+  'TERMINE',
 ]);
 export const etatProjetText = Object.freeze([
   'Planification',
