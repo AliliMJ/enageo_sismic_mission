@@ -134,6 +134,11 @@ export const MettreEnReparationExterne = async (req: Request, res: Response) => 
     }
    });
 
+   const reparation = await prisma.reparation.update({
+     where : {idRep : idRep},
+     data : {externe : 2} 
+   });
+
     const materiel = await prisma.materiel.update({
       where : {codeMat : codeMat},
       data : {
@@ -451,6 +456,26 @@ export const updateMateriel = async (req: Request,res: Response) => {
       .status(500)
       .json({
         err: "Problème lors de la collection des matériels non affecter au mission",
+      });
+  }
+};
+
+export const getMaterielReparationExterne = async (req: Request,res: Response) => {
+  try {
+    
+    const codeMission = req.params.codeMission;
+
+    const materiel = await prisma.materiel.findMany({
+      where : {status : 3 , codeMission : codeMission}
+    });
+
+    return res.status(200).json(materiel);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels en reparation externe au mission",
       });
   }
 };

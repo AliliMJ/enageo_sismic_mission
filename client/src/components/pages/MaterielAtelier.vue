@@ -293,6 +293,7 @@ async function mettreEnReparationExterne(){
         req
       )
     ).data;
+    router.push('/atelier');
 }
 
 const showHistoryModalAction = () => {

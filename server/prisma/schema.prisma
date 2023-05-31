@@ -255,6 +255,7 @@ model Reparation {
   dDebRep          DateTime?
   dFinRep          DateTime?
   detailProbleme   String?
+  externe          Int @default(0)
   Materiel         Materiel          @relation(fields: [codeMat], references: [codeMat])
   cout             Float
   codeMat          String
