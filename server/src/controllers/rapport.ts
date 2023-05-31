@@ -68,7 +68,7 @@ export const insertRapport = async (req: Request, res: Response) => {
               console.log(equipe);
               return {
                 idEquipe: equipe[0].idEquipe,
-                hDebut: r.hDeb,
+                hDebut: r.hDebut,
                 hFin: r.hFin,
                 valeur: r.valeur,
               };

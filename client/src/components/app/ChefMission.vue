@@ -15,14 +15,12 @@ import ChefMissionMenu from '../menu/ChefMissionMenu.vue';
       <ChefMissionMenu />
     </NLayoutSider>
 
-    <NLayoutContent>
-      <NCard :bordered="false">
-        <Suspense>
-          <NScrollbar style="height: 85vh">
-            <RouterView />
-          </NScrollbar>
-        </Suspense>
-      </NCard>
+    <NLayoutContent embedded>
+      <Suspense>
+        <NScrollbar style="height: 85vh">
+          <RouterView />
+        </NScrollbar>
+      </Suspense>
     </NLayoutContent>
   </NLayout>
 </template>
@@ -30,5 +28,9 @@ import ChefMissionMenu from '../menu/ChefMissionMenu.vue';
 <style scoped>
 .n-layout-sider {
   height: 100vh;
+}
+.n-layout-content {
+  padding-left: 10px;
+  padding-top: 10px;
 }
 </style>

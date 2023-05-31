@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import STable from '../common/STable.vue';
 
-import { NH1, NSpace, NButton, NIcon, NSelect } from 'naive-ui';
+import { NH1, NSpace, NButton, NIcon, NSelect, NCard } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 import { FilterDismiss16Filled as DismissFilter } from '@vicons/fluent';
 import { h, ref } from 'vue';
@@ -62,26 +62,27 @@ function handleClick(row) {
 </script>
 
 <template>
-  <NSpace vertical>
-    <NH1>La liste des projets</NH1>
-
-    <NSpace justify="end">
-      <NButton
-        v-if="auth.user?.role === Role.ChefMision"
-        @click="addProject"
-        type="success"
-        icon-placement="right"
-      >
-        Créer un projet
-        <template #icon>
-          <NIcon>
-            <Add />
-          </NIcon>
-        </template>
-      </NButton>
+  <NH1>La liste des projets</NH1>
+  <n-card>
+    <NSpace vertical>
+      <NSpace justify="end">
+        <NButton
+          v-if="auth.user?.role === Role.ChefMision"
+          @click="addProject"
+          type="success"
+          icon-placement="right"
+        >
+          Créer un projet
+          <template #icon>
+            <NIcon>
+              <Add />
+            </NIcon>
+          </template>
+        </NButton>
+      </NSpace>
+      <STable @onRowClicked="handleClick" :data="projects" :columns="cols" />
     </NSpace>
-    <STable @onRowClicked="handleClick" :data="projects" :columns="cols" />
-  </NSpace>
+  </n-card>
 </template>
 
 <style scoped>

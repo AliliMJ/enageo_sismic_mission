@@ -14,6 +14,7 @@ import {
   NEllipsis,
   NSpace,
   NH1,
+  NBadge,
 } from 'naive-ui';
 import mapboxgl from 'mapbox-gl';
 
@@ -51,6 +52,7 @@ onMounted(() => {
             title: p.nom,
             description: p.description,
             chantier: p.codeMission,
+            budget: Math.round(p.budget / 1000),
           },
         };
       }),
@@ -173,7 +175,7 @@ onMounted(() => {
   <div style="height: 85vh; width: 100%" id="map">
     <n-card id="info" v-if="selectedProject">
       <template #header>
-        <n-h1>Sol d'or</n-h1>
+        <n-h1>{{ selectedProject.title }}</n-h1>
       </template>
       <template #action>
         <n-space>
@@ -183,14 +185,11 @@ onMounted(() => {
       </template>
 
       <template #header-extra>
-        <n-tag type="info">EGS210</n-tag>
+        <n-tag type="info">{{ selectedProject.chantier }}</n-tag>
       </template>
       <n-h2>Description</n-h2>
       <n-ellipsis :line-clamp="2">
-        <n-text
-          >Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio itaque
-          q</n-text
-        >
+        <n-text>{{ selectedProject.description }}</n-text>
       </n-ellipsis>
 
       <n-h2>Statistiques</n-h2>
@@ -205,7 +204,7 @@ onMounted(() => {
         </n-col>
         <n-col :span="12">
           <n-statistic label="Budget">
-            12k
+            {{ selectedProject.budget }}k
             <template #suffix>
               <n-text strong depth="3">Dinars</n-text>
             </template>

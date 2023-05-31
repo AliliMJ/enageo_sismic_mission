@@ -41,7 +41,7 @@ const menuOptions = [
   },
   {
     label: renderMenuItem('Ressource', Route.Ressource),
-    key: Route.Employe,
+    key: Route.Ressource,
     icon: renderIcon(Water),
   },
 

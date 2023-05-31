@@ -71,13 +71,16 @@ model Fonction {
 }
 
 model Projet {
-  idProjet    Int      @id @default(autoincrement())
-  nom         String
-  description String?
-  budget      Float
-  Contrat     Contrat?
-  Mission     Mission  @relation(fields: [codeMission], references: [codeMission])
-  codeMission String
+  idProjet     Int      @id @default(autoincrement())
+  nom          String
+  description  String?
+  budget       Float
+  objVP        Int
+  objDateDebut DateTime @db.Date
+  objDateFin   DateTime @db.Date
+  Contrat      Contrat?
+  Mission      Mission  @relation(fields: [codeMission], references: [codeMission])
+  codeMission  String
 
   Etats EtatProjet[]
 
@@ -255,7 +258,7 @@ model Reparation {
   dDebRep          DateTime?
   dFinRep          DateTime?
   detailProbleme   String?
-  externe          Int @default(0)
+  externe          Int               @default(0)
   Materiel         Materiel          @relation(fields: [codeMat], references: [codeMat])
   cout             Float
   codeMat          String

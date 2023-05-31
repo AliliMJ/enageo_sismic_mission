@@ -13,9 +13,7 @@ import {
   AnalyticsOutline as Analytics,
   HammerOutline as Project,
 } from '@vicons/ionicons5';
-import {
-  DocumentTableTruck24Regular as Truck
-} from '@vicons/fluent';
+import { DocumentTableTruck24Regular as Truck } from '@vicons/fluent';
 
 const route = useRoute();
 const selectedKey = ref(route.name);
@@ -36,7 +34,10 @@ const menuOptions = [
     icon: renderIcon(Analytics),
   },
   {
-    title: renderMenuItem('les demandes de trvail', Route.DemandeReparation),
+    title: renderMenuItem(
+      'les demandes de réparation',
+      Route.DemandeReparation
+    ),
     key: Route.DemandeReparation,
     icon: renderIcon(Truck),
   },
