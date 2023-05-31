@@ -119,7 +119,7 @@ model EtatProjet {
 enum TypeEtatProjet {
   PLANIFICATION
   EN_PRODUCTION
-  Termine
+  TERMINE
 }
 
 model Objectif {

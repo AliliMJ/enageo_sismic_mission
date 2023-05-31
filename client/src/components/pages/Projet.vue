@@ -38,7 +38,6 @@ onMounted(async () => {
   etats.value = projetData.Etats;
   current.value = etats.value.length > 2 ? 4 : etats.value.length;
   rapports.value = projetData.Rapports;
-  console.log(projetData);
 });
 
 const createdStates = ref([]);
@@ -182,7 +181,7 @@ const status = computed(() => {
     </div>
     <n-h1>Rapports journaliers</n-h1>
     <n-card>
-      <RapportTable :rapports="rapports" />
+      <RapportTable :rapports="rapports" :idProject="idProjet" />
 
       <template #footer>
         <n-button

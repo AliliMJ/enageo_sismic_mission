@@ -25,6 +25,13 @@ export const Activites = Object.freeze({
   Layonnage: 'LAY',
 });
 
+export const ActiviteUnit = Object.freeze({
+  Enregistrement: 'Points vibrés',
+  Topographie: 'Piquets',
+  Pose: 'Grappe',
+  Ramasse: 'Grappe',
+});
+
 export const Route = Object.freeze({
   Admin: 'admin',
   Gestionnaire: 'gestionnaire',
@@ -66,7 +73,7 @@ export const etatEmployeEnum = Object.freeze({
 export const etatProjet = Object.freeze([
   'PLANIFICATION',
   'EN_PRODUCTION',
-  'Termine',
+  'TERMINE',
 ]);
 export const etatProjetText = Object.freeze([
   'Planification',

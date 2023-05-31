@@ -10,7 +10,10 @@ import { optionsCompte, optionDashboard } from './menuOptions.js';
 import { renderIcon, renderMenuItem } from '../../utils/render.js';
 import { Route } from '../../enums';
 
-import { HammerOutline as Project } from '@vicons/ionicons5';
+import {
+  HammerOutline as Project,
+  PeopleOutline as Equipe,
+} from '@vicons/ionicons5';
 
 const route = useRoute();
 const selectedKey = ref(route.name);
@@ -23,7 +26,7 @@ const menuOptions = [
   {
     title: renderMenuItem('Equipe', Route.Equipe),
     key: 'equipe',
-    icon: renderIcon(Project),
+    icon: renderIcon(Equipe),
   },
 
   {

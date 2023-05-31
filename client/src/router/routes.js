@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { Role, Route } from "../enums";
+import { createRouter, createWebHistory } from 'vue-router';
+import { Role, Route } from '../enums';
 
 //import Users from 'components/users/Users.vue';
 //import UserInfo from 'components/users/UserInfo.vue';
@@ -9,22 +9,23 @@ import { Role, Route } from "../enums";
 
 //import Dashboard from 'components/dashboard/Dashboard.vue';
 
-import Login from "../components/authentication/Login.vue";
-import MaterialTable from "../components/tables/MaterialTable.vue";
-import EmployesTable from "../components/tables/EmployesTable.vue";
-import AccountTable from "../components/tables/AccountTable.vue";
-import Home from "../components/app/Home.vue";
-import Employe from "../components/pages/Employe.vue";
-import Account from "../components/pages/Account.vue";
-import Dashboard from "../components/dashboard/Dashboard.vue";
-import Map from "../components/app/Map.vue";
-import CreateRapport from "../components/pages/CreateRapport.vue";
-import PivotTable from "../components/analysis/PivotTable.vue";
-import AtelierTable from "../components/tables/AtelierTable.vue";
-import MaterielAtelier from "../components/pages/MaterielAtelier.vue";
-import Materiel from "../components/pages/Materiel.vue";
-import AtelierExterne from "../components/pages/MaterielAtelierExterne.vue";
+import Login from '../components/authentication/Login.vue';
+import MaterialTable from '../components/tables/MaterialTable.vue';
+import EmployesTable from '../components/tables/EmployesTable.vue';
+import AccountTable from '../components/tables/AccountTable.vue';
+import Home from '../components/app/Home.vue';
+import Employe from '../components/pages/Employe.vue';
+import Account from '../components/pages/Account.vue';
+import Dashboard from '../components/dashboard/Dashboard.vue';
+import Map from '../components/app/Map.vue';
+import CreateRapport from '../components/pages/CreateRapport.vue';
+import PivotTable from '../components/analysis/PivotTable.vue';
+import AtelierTable from '../components/tables/AtelierTable.vue';
+import MaterielAtelier from '../components/pages/MaterielAtelier.vue';
+import Materiel from '../components/pages/Materiel.vue';
+import AtelierExterne from '../components/pages/MaterielAtelierExterne.vue';
 import DemandeReparation from "../components/tables/DemandeReparationTable.vue";
+import Rapport from '../components/pages/Rapport.vue';
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -36,137 +37,144 @@ import DemandeReparation from "../components/tables/DemandeReparationTable.vue";
 
 const routes = [
   {
-    path: "/login",
+    path: '/login',
     component: Login,
-    meta: { title: "s'authentifier", icon: "src/assets/lock.png" },
+    meta: { title: "s'authentifier", icon: 'src/assets/lock.png' },
   },
-  { path: "/denied" },
+  { path: '/denied' },
   {
-    path: "/",
+    path: '/',
     component: Home,
     meta: {
       requireAuth: true,
-      title: "Tableau de board",
-      icon: "src/assets/ENA_GEO.png",
+      title: 'Tableau de board',
+      icon: 'src/assets/ENA_GEO.png',
     },
     children: [
-      { path: "", name: Route.Dashboard, component: Dashboard },
+      { path: '', name: Route.Dashboard, component: Dashboard },
       {
-        path: "/comptes",
+        path: '/comptes',
         name: Route.Compte,
         component: AccountTable,
         meta: {
           role: Role.Administrateur,
-          title: "les comptes des utilisateurs",
+          title: 'les comptes des utilisateurs',
         },
       },
       {
-        path: "/compte/:id",
+        path: '/compte/:id',
         component: Account,
-        meta: { role: Role.Administrateur, title: "details sur compte" },
+        meta: { role: Role.Administrateur, title: 'details sur compte' },
       },
       {
-        path: "/employe",
+        path: '/employe',
         name: Route.Employe,
         component: EmployesTable,
         meta: {
           role: Role.Gestionnaire,
-          title: "les employés",
+          title: 'les employés',
         },
       },
       {
-        path: "/employe/:id",
+        path: '/employe/:id',
         component: Employe,
         meta: { role: Role.Gestionnaire },
       },
       {
-        path: "/materiel",
+        path: '/materiel',
         name: Route.Material,
         component: MaterialTable,
-        meta: { role: Role.Gestionnaire, title: "les matériels" },
+        meta: { role: Role.Gestionnaire, title: 'les matériels' },
       },
       {
-        path: "/materiel/:codeMat",
+        path: '/materiel/:codeMat',
         component: Materiel,
-        meta: { role: Role.Gestionnaire, title: "details sur le materiel" },
+        meta: { role: Role.Gestionnaire, title: 'details sur le materiel' },
       },
       {
-        path: "/atelier",
+        path: '/atelier',
         name: Route.Atelier,
         component: AtelierTable,
-        meta: { role: Role.Gestionnaire, title: "l'atelier mécanique" },
+        meta: { role: Role.Gestionnaire, title: 'l\'atelier mécanique' },
       },
       {
-        path: "/DemandesReparation",
+        path: '/DemandesReparation',
         name: Route.DemandeReparation,
         component: DemandeReparation,
-        meta: { role: Role.ChefMission, title: "les demandes des reparations" },
+        meta: { role: Role.ChefMission, title: 'les demandes des reparations' },
       },
       {
-        path: "/atelier/:codeMat",
+        path: '/atelier/:codeMat',
         component: MaterielAtelier,
-        meta: { role: Role.Gestionnaire, title: "details sur le materiel" },
+        meta: { role: Role.Gestionnaire, title: 'details sur le materiel' },
       },
       {
-        path: "/suiviMateriel/:codeMat",
+        path: '/suiviMateriel/:codeMat',
         component: AtelierExterne,
-        meta: { title: "suivi du  le materiel" },
+        meta: { title: 'suivi du  le materiel' },
+      },
+
+      {
+        path: '/projet/:idProjet/rapport/:idRapport',
+        component: Rapport,
       },
       {
-        path: "/projet",
-        name: Route.Projet,
-        component: () => import("../components/tables/ProjectTable.vue"),
-        mata: { role: Role.ChefMision },
-      },
-      {
-        path: "/projet/:idProjet",
-        component: () => import("../components/pages/Projet.vue"),
-      },
-      {
-        path: "projet/:idProjet/creerRapport",
+        path: '/projet/:idProjet/creerRapport',
         component: CreateRapport,
       },
+
       {
-        path: "/equipe",
+        path: '/projet/:idProjet',
+        component: () => import('../components/pages/Projet.vue'),
+      },
+      {
+        path: '/projet',
+        name: Route.Projet,
+        component: () => import('../components/tables/ProjectTable.vue'),
+        mata: { role: Role.ChefMision },
+      },
+
+      {
+        path: '/equipe',
         name: Route.Equipe,
-        component: () => import("../components/tables/EquipesTable.vue"),
+        component: () => import('../components/tables/EquipesTable.vue'),
       },
       {
-        path: "/profile",
+        path: '/profile',
         name: Route.Profile,
-        component: () => import("../components/app/Profile.vue"),
+        component: () => import('../components/app/Profile.vue'),
         meta: {
-          title: "Mon profile",
+          title: 'Mon profile',
         },
       },
       {
-        path: "/preference",
+        path: '/preference',
         name: Route.Preference,
-        component: () => import("../components/app/Preference.vue"),
+        component: () => import('../components/app/Preference.vue'),
         meta: {
-          title: "Préférences",
+          title: 'Préférences',
         },
       },
       {
-        path: "/analyse",
+        path: '/analyse',
         name: Route.Analyse,
         component: PivotTable,
       },
       {
-        path: "/projet/creation",
-        name: "creationProjet",
-        component: () => import("../components/pages/CreateProject.vue"),
+        path: '/projet/creation',
+        name: 'creationProjet',
+        component: () => import('../components/pages/CreateProject.vue'),
       },
-      { path: "/carte", name: "carte", component: Map },
-      { path: "/terrain", name: Route.Terrain },
+      { path: '/carte', name: 'carte', component: Map },
+      { path: '/terrain', name: Route.Terrain },
       {
-        path: "/demandeRessource",
-        name: "demandeRessource",
-        component: () => import("../components/pages/DemandeRessource.vue"),
+        path: '/demandeRessource',
+        name: 'demandeRessource',
+        component: () => import('../components/pages/DemandeRessource.vue'),
       },
       {
-        path: "/creerRessource",
-        component: () => import("../components/pages/CreateResource.vue"),
+        path: '/creerRessource',
+        component: () => import('../components/pages/CreateResource.vue'),
       },
     ],
   },
@@ -236,16 +244,16 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title}`;
   const link = document.querySelector("[rel='icon']");
-  link.setAttribute("href", to.meta.icon);
+  link.setAttribute('href', to.meta.icon);
   const authentication = JSON.parse(
-    window.localStorage.getItem("authentication")
+    window.localStorage.getItem('authentication')
   );
   if (to.meta.requireAuth) {
-    if (!authentication?.isAuthenticated) return next("/login");
+    if (!authentication?.isAuthenticated) return next('/login');
     else {
       if (to.meta.role) {
         if (to.meta.role === authentication?.user.role) return next();
-        else return next("/denied");
+        else return next('/denied');
       } else {
         return next();
       }

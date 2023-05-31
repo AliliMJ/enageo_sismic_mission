@@ -15,27 +15,7 @@ import { Role } from '../../enums';
 
 const auth = useAuth();
 const router = useRouter();
-const projectFilter = ref(null);
-const filterOptions = [
-  {
-    label: 'Production',
-    value: 'EN_PRODUCTION',
-  },
-  {
-    label: 'Planification',
-    value: 'PLANIFICATION',
-  },
-  {
-    label: 'Terminé',
-    value: 'Termine',
-  },
-  {
-    label: 'Annulé',
-    value: 'ANNULE',
-  },
-];
 
-console.log(auth?.employe?.id);
 const projects = (
   await axios.get(
     'http://localhost:3000/projets/projetByMission/' +
@@ -52,6 +32,24 @@ const cols = [
     render(row) {
       return h(EtatProjet, { projectStates: row.Etats, annule: row.annule });
     },
+    filterMultiple: false,
+    filterOptions: [
+      {
+        label: 'Production',
+        value: 'EN_PRODUCTION',
+      },
+      {
+        label: 'Planification',
+        value: 'PLANIFICATION',
+      },
+      {
+        label: 'Terminé',
+        value: 'TERMINE',
+      },
+    ],
+    filter(value, row) {
+      return row.Etats[row.Etats.length - 1].etat == value;
+    },
   },
 ];
 
@@ -67,23 +65,7 @@ function handleClick(row) {
   <NSpace vertical>
     <NH1>La liste des projets</NH1>
 
-    <NSpace justify="space-between">
-      <n-space>
-        <n-select
-          id="filter"
-          v-model:value="projectFilter"
-          placeholder="Filter par état"
-          :options="filterOptions"
-        />
-
-        <n-button>
-          <template #icon>
-            <n-icon>
-              <DismissFilter />
-            </n-icon>
-          </template>
-        </n-button>
-      </n-space>
+    <NSpace justify="end">
       <NButton
         v-if="auth.user?.role === Role.ChefMision"
         @click="addProject"

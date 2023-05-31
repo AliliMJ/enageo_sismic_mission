@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import { center, points } from '@turf/turf';
 import axios from 'axios';
 import {
   NCard,
@@ -18,6 +19,7 @@ import mapboxgl from 'mapbox-gl';
 
 const projects = (await axios.get('http://localhost:3000/projets/prod')).data;
 
+//console.log('test', center(points([])));
 const showPanel = ref(false);
 const selectedProject = ref(null);
 
@@ -29,24 +31,29 @@ function showProjectDetails(project) {
 onMounted(() => {
   mapboxgl.accessToken =
     'pk.eyJ1IjoiYWxpbGltaiIsImEiOiJjbGhiMDBkZXIwMWs4M3JuNDdxMjNyMHhyIn0.q2o6eXdUQxZ8RHMsW5LKOA';
-  console.log(projects);
+
   const geojson = {
     type: 'FeatureCollection',
-    features: projects.map((p) => {
-      return {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [p.longitude, p.latitude],
-        },
-        properties: {
-          title: p.nom,
-          description: p.description,
-          chantier: p.codeMission,
-          icon: 'bar',
-        },
-      };
-    }),
+    features: projects
+      .filter((p) => {
+        return p.Terrain.Coordonnes?.length > 0;
+      })
+      .map((p) => {
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: center(
+              points(p.Terrain.Coordonnes.map((c) => [c.longitude, c.latitude]))
+            ).geometry.coordinates,
+          },
+          properties: {
+            title: p.nom,
+            description: p.description,
+            chantier: p.codeMission,
+          },
+        };
+      }),
   };
 
   const map = new mapboxgl.Map({

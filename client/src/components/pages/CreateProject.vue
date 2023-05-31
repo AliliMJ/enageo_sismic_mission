@@ -29,14 +29,16 @@ const auth = useAuth();
 const router = useRouter();
 const showMapEditor = ref(false);
 const coordinates = ref([]);
+const wilaya = ref(null);
 
 function addCoordinates(data) {
-  const co = data.map((c) => {
+  console.log(data);
+  const co = data.coordinates.map((c) => {
     return { longitude: c[0], latitude: c[1] };
   });
-
   co.pop();
   coordinates.value = co;
+  wilaya.value = data.wilaya;
   showMapEditor.value = false;
 }
 
@@ -48,6 +50,7 @@ async function createProject() {
       description: model.value.description,
       budget: model.value.budget,
       coordinates: coordinates.value,
+      wilaya: wilaya.value,
     });
     router.back();
   } catch (e) {

@@ -18,7 +18,10 @@ export const getAllRapports = async (req: Request, res: Response) => {
 export const getRapportById = async (req: Request, res: Response) => {
   try {
     const idRapport = Number(req.params.idRapport);
-    const rapport = await prisma.rapport.findUnique({ where: { idRapport } });
+    const rapport = await prisma.rapport.findUnique({
+      where: { idRapport },
+      include: { Rendements: true },
+    });
     res.status(200).json(rapport);
   } catch {
     res.status(500).json({
@@ -40,19 +43,19 @@ export const getRapportsByProjet = async (req: Request, res: Response) => {
 };
 
 export const insertRapport = async (req: Request, res: Response) => {
-  const { rendements, idProjet, resume } = req.body;
+  const { rendements, idProjet, resume, titre } = req.body;
 
   try {
     const projet = await prisma.projet.findUnique({
       where: { idProjet: Number(idProjet) },
       select: { Mission: { select: { Equipes: true } } },
     });
-    console.log('ddd');
+
     if (projet) {
       const rapport = await prisma.rapport.create({
         data: {
           date: new Date(),
-          titre: '',
+          titre,
           resume,
           Projet: {
             connect: { idProjet: Number(idProjet) },
@@ -72,11 +75,11 @@ export const insertRapport = async (req: Request, res: Response) => {
           },
         },
       });
-      console.log('created');
-
       return res.status(201).json(rapport);
     } else {
-      return res.status(400).json({ err: 'Failed to create report' });
+      return res
+        .status(400)
+        .json({ err: 'Prolème lors de la création du rapport' });
     }
   } catch (e) {
     console.log(e);
