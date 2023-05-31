@@ -1,14 +1,20 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { darkTheme } from 'naive-ui';
 
 export const useAuth = defineStore('authentication', {
   state: () => ({
     user: null,
     isAuthenticated: false,
-    employe : null
+    employe: null,
+    theme: null,
   }),
   persist: true,
   actions: {
+    toggleTheme() {
+      if (this.theme == null) this.theme = darkTheme;
+      else this.theme = null;
+    },
     async login(username, password) {
       try {
         const response = await axios.post('http://localhost:3000/login', {
@@ -16,14 +22,16 @@ export const useAuth = defineStore('authentication', {
           password,
         });
         const user = response.data;
-        
-        const employe = (await axios.get("http://localhost:3000/employes/" + user.employeId)).data;
+
+        const employe = (
+          await axios.get('http://localhost:3000/employes/' + user.employeId)
+        ).data;
 
         //const user = { role: Role.Administrateur };
         this.$patch({
           user,
           isAuthenticated: true,
-          employe
+          employe,
         });
 
         return Promise.resolve('Successful');
@@ -61,7 +69,7 @@ export const useAuth = defineStore('authentication', {
 //           username,
 //           password,
 //         });
-        
+
 //         const user = response.data;
 
 //         const employe = (await axios.get("http://localhost:3000/employes/" + user.employeId)).data;
