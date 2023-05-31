@@ -38,6 +38,7 @@ function handleConfirmAdd(rendement) {
     ...rendement,
     activite: selectedActivity.value,
   });
+
   showModal.value = false;
 }
 function removeCard(key) {

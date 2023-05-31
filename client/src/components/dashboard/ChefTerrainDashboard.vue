@@ -7,11 +7,11 @@ const auth = useAuth();
 
 const projet = (
   await axios.get(
-    `http://localhost:3000/projets/prodByMission/${auth.employe?.codeMission}'`
+    `http://localhost:3000/projets/prodByMission/${auth.employe?.codeMission}`
   )
 ).data;
 
-console.log(auth.employe?.codeMission);
+console.log(projet);
 </script>
 
 <template>

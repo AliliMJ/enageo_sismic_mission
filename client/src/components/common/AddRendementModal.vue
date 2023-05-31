@@ -18,7 +18,7 @@ const props = defineProps({
 });
 const formRef = ref(null);
 const model = ref({
-  hDeb: 0,
+  hDebut: 0,
   hFin: 0,
   valeur: null,
 });
@@ -26,7 +26,7 @@ const emit = defineEmits(['confirm', 'cancel']);
 
 const onConfirm = () => {
   const data = {
-    hDeb: model.value.hDeb / 60000,
+    hDebut: model.value.hDebut / 60000,
     hFin: model.value.hFin / 60000,
     valeur: model.value.valeur,
   };
@@ -49,9 +49,9 @@ const onCancel = () => {
     >
       <n-form ref="formRef" :model="model">
         <n-grid :span="24" :x-gap="20">
-          <n-form-item-gi :span="12" label="Heure de début" path="hDeb">
+          <n-form-item-gi :span="12" label="Heure de début" path="hDebut">
             <n-time-picker
-              v-model:value="model.hDeb"
+              v-model:value="model.hDebut"
               format="HH:mm"
               placeholder="Début"
             />

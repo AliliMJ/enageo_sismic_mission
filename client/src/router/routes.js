@@ -161,12 +161,14 @@ const routes = [
       { path: '/carte', name: 'carte', component: Map },
       { path: '/terrain', name: Route.Terrain },
       {
-        path: '/demandeRessource',
-        name: 'demandeRessource',
+        path: '/ressource',
+        name: Route.Ressource,
         component: () => import('../components/pages/DemandeRessource.vue'),
       },
+
       {
-        path: '/creerRessource',
+        path: '/ressource/creation',
+        name: 'creationRessource',
         component: () => import('../components/pages/CreateResource.vue'),
       },
     ],

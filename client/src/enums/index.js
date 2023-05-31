@@ -18,7 +18,7 @@ export const Fonctions = Object.freeze({
 });
 
 export const Activites = Object.freeze({
-  Enregistrement: 'ENRG',
+  Enregistrement: 'ENR',
   Topographie: 'TOPO',
   Pose: 'POSE',
   Ramasse: 'RAM',
@@ -49,6 +49,7 @@ export const Route = Object.freeze({
   Atelier: 'atelier',
   Carte: 'carte',
   Analyse: 'analyse',
+  Ressource: 'ressource',
 });
 
 export const groupeSanguin = Object.freeze({
@@ -79,3 +80,11 @@ export const etatProjetText = Object.freeze([
   'Production',
   'Terminé',
 ]);
+
+export const Mesure = Object.freeze({
+  Volume: 'V',
+  Longeur: 'L',
+  Surface: 'S',
+  Poids: 'P',
+  Quantite: 'Q',
+});

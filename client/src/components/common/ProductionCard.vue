@@ -31,7 +31,7 @@ function formatMinutes(timeInMinutes) {
   const minutes = (timeInMinutes % 60).toString().padStart(2, '0');
   return `${hour}:${minutes} ${timeInMinutes >= 720 ? 'PM' : 'AM'}`;
 }
-const startTime = formatMinutes(rendement.hDeb);
+const startTime = formatMinutes(rendement.hDebut);
 const finishTime = formatMinutes(rendement.hFin);
 </script>
 

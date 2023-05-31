@@ -17,7 +17,7 @@ import { evenementRouter } from './routes/evenement.ts';
 import { statistiquesRouter } from './routes/statistiques.ts';
 import { Datacraft } from './database/datacraft.ts';
 
-import { consommationRoute } from './routes/consommation.ts';
+import { resourceRouter } from './routes/resource.ts';
 import cron from 'node-cron';
 import { createClient } from '@clickhouse/client';
 const warehouse = createClient();
@@ -54,7 +54,7 @@ app.use('/rapports', rapportRouter);
 app.use('/fonction', fonctionRouter);
 app.use('/equipes', equipeRouter);
 app.use('/wilaya', wilayaRouter);
-app.use('/consommation', consommationRoute);
+app.use('/resource', resourceRouter);
 app.use('/evenement', evenementRouter);
 app.use('/statistiques', statistiquesRouter);
 

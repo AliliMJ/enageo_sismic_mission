@@ -140,7 +140,7 @@ export const getProjetEnCoursByMission = async (
   try {
     const codeMission = req.params.codeMission;
 
-    const idsProjets: number[] = await prisma.$queryRaw`
+    const projet: Array<any> = await prisma.$queryRaw`
   SELECT  p.*
   FROM Projet p
   JOIN EtatProjet ep ON p.idProjet = ep.idProjet
@@ -154,13 +154,9 @@ export const getProjetEnCoursByMission = async (
     )
 `;
 
-    const projects = await prisma.projet.findMany({
-      where: { idProjet: { in: idsProjets } },
-      include: { Terrain: { include: { Coordonnes: true } } },
-    });
-
-    res.status(200).json(projects);
+    res.status(200).json(projet[0]);
   } catch (e) {
+    console.log(e);
     res.status(500).send({ err: 'Internal error' });
   }
 };

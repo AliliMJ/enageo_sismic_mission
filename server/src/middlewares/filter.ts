@@ -14,6 +14,17 @@ export const employeNameFilter = (
   next();
 };
 
+export const resourceFilter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const title = req.query.like;
+  req.body.query = { titre: { $regex: title } };
+
+  next();
+};
+
 export const usernameFilter = (
   req: Request,
   res: Response,

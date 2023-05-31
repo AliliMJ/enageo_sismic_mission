@@ -309,3 +309,25 @@ model Evenement {
   Mission     Mission       @relation(fields: [codeMission], references: [codeMission])
   codeMission String
 }
+
+model Consommable {
+  id       Int    @id @default(autoincrement())
+  titre    String
+  mesure   Mesure @relation(fields: [mesureId], references: [id])
+  mesureId Int
+}
+
+model Mesure {
+  id          Int           @id @default(autoincrement())
+  type        TypeMesure
+  unite       String
+  Consommable Consommable[]
+}
+
+enum TypeMesure {
+  VOLUME
+  POIDS
+  QUANTITE
+  SURFACE
+  LONGEUR
+}

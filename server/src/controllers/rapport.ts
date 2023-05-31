@@ -20,7 +20,7 @@ export const getRapportById = async (req: Request, res: Response) => {
     const idRapport = Number(req.params.idRapport);
     const rapport = await prisma.rapport.findUnique({
       where: { idRapport },
-      include: { Rendements: true },
+      include: { Rendements: { include: { Equipe: true } } },
     });
     res.status(200).json(rapport);
   } catch {
@@ -63,8 +63,9 @@ export const insertRapport = async (req: Request, res: Response) => {
           Rendements: {
             create: rendements.map((r: any) => {
               const equipe = projet.Mission.Equipes.filter(
-                (e) => (e.codeActivite = r.activite)
+                (e) => e.codeActivite === r.activite
               );
+              console.log(equipe);
               return {
                 idEquipe: equipe[0].idEquipe,
                 hDebut: r.hDeb,
