@@ -164,16 +164,9 @@ mission.value = (
   )
 ).data;
 
+console.log( mission.value.Evenements.length);
 
-console.log("--->" + mission.value.codeMission);
-
-
-
-if(mission.value.Evenements!=null){
 evenements.value = mission.value.Evenements ?? [];
-}
-
-
 
 const numberNotReaded = ref(0);
 

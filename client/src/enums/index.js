@@ -42,6 +42,7 @@ export const Route = Object.freeze({
   Atelier: 'atelier',
   Carte: 'carte',
   Analyse: 'analyse',
+  DemandeReparation: 'demandeReparation' 
 });
 
 export const groupeSanguin = Object.freeze({

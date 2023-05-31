@@ -4,9 +4,16 @@ import {
   getReparations,
   getReparationsByMaterialCode,
   getLastReparationsByMaterialCode,
-  getLastReparationsByMaterialCode1,
+  getLastReparationByMaterialCode,
   getAtelierMecanique,
-  getReparationsById
+  getReparationsById,
+  updateDemandeReparationdSortie,
+  updateDemandeReparationdArrive,
+  updateDemandeReparationdRetour,
+  updateDemandeReparationdEntree,
+  getLastReparationByMaterialCodeWithDemande,
+  EndReparationExterne,
+  updateReparation
 } from '../controllers/atelier';
 
 export const atelierRouter = express.Router();
@@ -17,5 +24,15 @@ atelierRouter.get('/getAtelier', getAtelierMecanique);
 atelierRouter.get('/getReparationsById/:idRep',getReparationsById);
 
 atelierRouter.get('/lastReparation/:codeMat', getLastReparationsByMaterialCode);
-atelierRouter.get('/lastReparation1/:codeMat', getLastReparationsByMaterialCode1);
-atelierRouter.get('/allReparationsByMateriel/:codeMat', getReparationsByMaterialCode);
+atelierRouter.get('/lastReparation1/:codeMat', getLastReparationByMaterialCode);
+atelierRouter.get('/lastReparation1/:codeMat', getLastReparationByMaterialCode);
+atelierRouter.get('/getLastReparationByMaterialCodeWithDemande/:codeMat', getLastReparationByMaterialCodeWithDemande);
+
+atelierRouter.put('/updateDemandeReparationdSortie/:idRep', updateDemandeReparationdSortie);
+atelierRouter.put('/updateDemandeReparationdArrive/:idRep', updateDemandeReparationdArrive);
+atelierRouter.put('/updateDemandeReparationdRetour/:idRep',  updateDemandeReparationdRetour);
+atelierRouter.put('/updateDemandeReparationdEntree/:idRep', updateDemandeReparationdEntree);
+
+atelierRouter.put('/updateReparation/:idRep', updateReparation);
+
+atelierRouter.put('/EndReparationExterne/:idRep', EndReparationExterne);

@@ -21,7 +21,8 @@ import {
   getMaterialByWithoutMissionDesignation,
   ajouterMaterielToMission,
   updateMateriel,
-  MettreEnReparationExterne
+  MettreEnReparationExterne,
+  getMaterielReparationExterne
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
@@ -39,6 +40,7 @@ materialRouter.get('/types', getMaterialTypes);
 materialRouter.get('/materielByMission/:codeMission', getMaterialByMission);
 materialRouter.get('/materielEnPanneByMission/:codeMission', getMaterialEnPanneByMission);
 materialRouter.get('/materielGoodByMission/:codeMission', getMaterialGoodByMission);
+materialRouter.get('/materielEnReparationExterne/:codeMission', getMaterielReparationExterne);
 
 materialRouter.get('/getMaterielWithReparations/:codeMat',getMaterialEnPanneWithReparations);
 

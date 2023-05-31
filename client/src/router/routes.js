@@ -24,6 +24,7 @@ import AtelierTable from "../components/tables/AtelierTable.vue";
 import MaterielAtelier from "../components/pages/MaterielAtelier.vue";
 import Materiel from "../components/pages/Materiel.vue";
 import AtelierExterne from "../components/pages/MaterielAtelierExterne.vue";
+import DemandeReparation from "../components/tables/DemandeReparationTable.vue";
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
 //   { path: '/users/:key', component: UserInfo },
@@ -94,6 +95,12 @@ const routes = [
         name: Route.Atelier,
         component: AtelierTable,
         meta: { role: Role.Gestionnaire, title: "l'atelier mécanique" },
+      },
+      {
+        path: "/DemandesReparation",
+        name: Route.DemandeReparation,
+        component: DemandeReparation,
+        meta: { role: Role.ChefMission, title: "les demandes des reparations" },
       },
       {
         path: "/atelier/:codeMat",
