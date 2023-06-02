@@ -1,6 +1,6 @@
 <script setup>
-import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router';
+import axios from "axios";
+import { useRouter, useRoute } from "vue-router";
 import {
   NCard,
   NTabs,
@@ -17,7 +17,7 @@ import {
   useDialog,
   useMessage,
   NText,
-} from 'naive-ui';
+} from "naive-ui";
 import {
   Edit32Filled as Pen,
   ContactCard20Regular as contact,
@@ -26,15 +26,15 @@ import {
   BookContacts20Regular as personelInfo,
   VehicleTruckProfile20Regular as truck,
   History20Regular as history,
-} from '@vicons/fluent';
+} from "@vicons/fluent";
 import {
   TrashOutline as trash,
   FolderOpenOutline as folder,
-} from '@vicons/ionicons5';
-import MaterielTag from '../components/MaterielTag.vue';
-import { ref, onMounted } from 'vue';
-import { useAuth } from '../stores/authentication';
-import HistoryModal from '../components/ReparationHisotryNoEdit.vue';
+} from "@vicons/ionicons5";
+import MaterielTag from "../components/MaterielTag.vue";
+import { ref, onMounted } from "vue";
+import { useAuth } from "../stores/authentication";
+import HistoryModal from "../components/ReparationHisotryNoEdit.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -70,8 +70,29 @@ async function updateMateriel() {
   const req = {
     materiel: materiel.value,
   };
+}
 
-  (await axios.put(`http://localhost:3000/material/updateMateriel`, req)).data;
+async function deleteMateriel() {
+  dialog.warning({
+    title: "Confirmation",
+    content: "êtes-vous sûr de supprimer ce matériel ?",
+    positiveText: "Supprimer",
+    negativeText: "Annuler",
+    onPositiveClick: () => {
+      message.success("matériel supprimée");
+      deleteMaterielFunction();
+      router.push("/materiel");
+    },
+    onNegativeClick: () => {
+      message.error("Suppression annulée");
+    },
+  });
+}
+
+async function deleteMaterielFunction() {
+  await axios.put(
+    `http://localhost:3000/material/deleteMateriel/${route.params.codeMat}`
+  );
 }
 </script>
 
@@ -109,6 +130,16 @@ async function updateMateriel() {
         </template>
         <NSpace justify="end" style="margin-bottom: 20px">
           <NSpace>
+            <n-button
+              text
+              style="font-size: 30px"
+              class="trash"
+              @click="deleteMateriel"
+            >
+              <n-icon>
+                <trash />
+              </n-icon>
+            </n-button>
             <n-button
               text
               style="font-size: 30px"

@@ -50,8 +50,6 @@ const handleClick = (materielEnPanne) => {
     <NSpace> </NSpace>
     <NSpace>
       <n-input
-        v-model:value="searchDesignation"
-        @update:value="searchFilter"
         placeholder="Rechercher par designation"
         style="width: 255px"
       >
@@ -59,19 +57,6 @@ const handleClick = (materielEnPanne) => {
           <n-icon :component="search" />
         </template>
       </n-input>
-      <NButton
-        @click="showInsertMaterielModal"
-        class="button"
-        type="success"
-        icon-placement="right"
-      >
-        Ajouter un matériel à l'atelier
-        <template #icon>
-          <NIcon>
-            <Add />
-          </NIcon>
-        </template>
-      </NButton>
     </NSpace>
     <NSpace>
       <STable @onRowClicked="handleClick" :data="materiel" :columns="cols" />

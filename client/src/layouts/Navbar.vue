@@ -86,7 +86,7 @@
         >
           <n-button text style="font-size: 30px">
             <n-icon>
-              <Persone />
+              <menuIcon />
             </n-icon>
           </n-button>
         </n-dropdown>
@@ -131,6 +131,7 @@ import {
   PersonOutline as Person,
   AlertCircleOutline as alert,
   CheckboxOutline as check,
+  MenuOutline as menuIcon
 } from '@vicons/ionicons5';
 import { h } from 'vue';
 import { useRouter } from 'vue-router';
@@ -162,8 +163,6 @@ mission.value = (
     `http://localhost:3000/missions/MissionWithEvents/${auth.employe.codeMission}`
   )
 ).data;
-
-console.log(mission.value.Evenements.length);
 
 evenements.value = mission.value.Evenements ?? [];
 

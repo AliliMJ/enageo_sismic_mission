@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme="auth.theme" :theme-overrides="themeOverrides">
+  <n-config-provider :theme="auth.theme">
     <n-notification-provider>
       <n-message-provider>
         <n-dialog-provider>
@@ -20,9 +20,12 @@ import {
 import { useAuth } from './stores/authentication';
 const auth = useAuth();
 
-const themeOverrides = {
-  common: {
-    primaryColor: '#FFD93D',
-  },
-};
+
+//:theme-overrides="themeOverrides"
+
+// const themeOverrides = {
+//   common: {
+//     primaryColor: '#f0e130',
+//   },
+// };
 </script>

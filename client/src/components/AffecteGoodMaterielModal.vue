@@ -10,6 +10,15 @@
       header-style="padding:15px 30px"
       content-style="padding:15px 30px"
     >
+    <NDataTable
+              :data="materiels"
+              :columns="cols"
+              style="font-size: 13px; width: 620px"
+              :row-key="rowKey"
+              :checked-row-keys="checkedRowKeysRef"
+              @update:checked-row-keys="handleCheck"
+              :max-height="300"
+            />
       <template #footer>
         <n-space justify="end">
           <NButton @click="onConfirm" type="success">Confirmer</NButton>
@@ -31,6 +40,7 @@ import {
   NText,
   NIcon,
   NDivider,
+  NDataTable,
 } from 'naive-ui';
 
 import { ref } from 'vue';
@@ -38,15 +48,8 @@ import axios from 'axios';
 
 const emit = defineEmits(['confirm', 'cancel']);
 
-const idRef = ref();
-const nomRef = ref();
-const prenomRef = ref();
-const dateRejointRef = ref();
-const fonctionRef = ref();
-const regimTravail = ref();
-
 const onConfirm = () => {
-  emit('confirm', idRef.value);
+  emit('confirm',);
 };
 const onCancel = () => {
   emit('cancel');
@@ -56,16 +59,6 @@ const props = defineProps({
   showModal: Boolean,
 });
 
-async function getId(value) {
-  idRef.value = value;
-  const employe = (
-    await axios.get('http://localhost:3000/employes/' + idRef.value)
-  ).data;
-  console.log(employe);
-  nomRef.value = employe.nom;
-  prenomRef.value = employe.prenom;
-  fonctionRef.value = employe.fonction.nom;
-}
 </script>
 
 <style scoped>

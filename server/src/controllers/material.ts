@@ -24,6 +24,24 @@ export const getMaterialTypes = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteMateriel = async (req: Request, res: Response) => {
+  try {
+
+    const codeMat = req.params.codeMat;
+
+    const materialTypes = await prisma.materiel.update({
+      where : {codeMat : codeMat},
+      data : {codeMission : null}
+    });
+
+    return res.status(200).json(materialTypes);
+  } catch {
+    res
+      .status(500)
+      .json({ err: "Problème lors de la suppression du materiel" });
+  }
+};
+
 export const getMaterialByCode = async (req: Request, res: Response) => {
   try {
     const { codeMat } = req.params;
@@ -307,7 +325,7 @@ export const getMaterialGoodByMission = async (req: Request, res: Response) => {
 
 export const getMaterialGoodByDesignation = async (req: Request,res: Response) => {
   try {
-    const codeMission = Number(req.params.codeMission);
+    const codeMission = req.params.codeMission;
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
@@ -373,7 +391,6 @@ export const getMaterialByDesignation = async (req: Request,res: Response) => {
 
 export const getMaterialByWithoutMission = async (req: Request,res: Response) => {
   try {
-    const codeMission = String(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
@@ -394,6 +411,27 @@ export const getMaterialByWithoutMission = async (req: Request,res: Response) =>
 
 export const getMaterialByWithoutMissionDesignation = async (req: Request,res: Response) => {
   try {
+
+    const materiels = await prisma.materiel.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter ,
+        codeMission: null,}
+    });
+
+    return res.status(200).json(materiels);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels non affecter au mission",
+      });
+  }
+};
+
+export const getMaterialWithoutMission = async (req: Request,res: Response) => {
+  try {
+    
     const codeMission = String(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
