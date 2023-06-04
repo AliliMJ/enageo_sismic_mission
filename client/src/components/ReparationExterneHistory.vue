@@ -12,11 +12,13 @@ import {
   NText,
   NDatePicker,
   NFormItemGi,
+  NSteps,
+  NStep
 } from 'naive-ui';
 import { ref, watch } from 'vue';
 
 const props = defineProps({
-  showHistoryModal: Boolean,
+  showExterneModal: Boolean,
   codeMat: String,
 });
 
@@ -27,8 +29,6 @@ const materielWithReparations = (
     `http://localhost:3000/material/getMaterielWithReparations/${props.codeMat}`
   )
 ).data;
-
-console.log(materielWithReparations);
 
 const materielRef = ref({
   codeMat: materielWithReparations.codeMat,
@@ -42,10 +42,12 @@ const materielRef = ref({
   reparationsExterne: materielWithReparations.ReparationsExterne
 });
 
-const reparationsInterne = materielRef.value.reparationsInterne;
 const reparationsExterne = materielRef.value.reparationsExterne;
 
 const emit = defineEmits(['confirm', 'cancel']);
+
+const currentRef = ref(1);
+const currentStatus = ref("process");
 
 const idRepRef = ref();
 const dPanneRef = ref();
@@ -53,6 +55,14 @@ const dDebRepRef = ref();
 const dFinRepRef = ref();
 const detailRef = ref();
 const coutRef = ref();
+
+const dSortieRef = ref();
+const dArriveRef = ref();
+const dRetourRef = ref();
+const dEntreeRef = ref();
+
+const reparationExterneRef = ref();
+
 
 const cols = [
   { title: 'code', key: 'idRep' },
@@ -96,6 +106,8 @@ const handleClick = async (reparationRow) => {
     )
   ).data;
 
+  console.log('-->'+reparationRow.dSortie);
+
   idRepRef.value = String(reparation.idRep);
   dPanneRef.value = new Date(reparation.dPanne).valueOf();
 
@@ -113,6 +125,21 @@ const handleClick = async (reparationRow) => {
 
   coutRef.value = String(reparation.cout);
   detailRef.value = reparation.detailProbleme;
+
+if (reparationRow.dSortie != null) {
+  currentRef.value++;
+}
+if (reparationRow.dArrive != null) {
+  currentRef.value++;
+}
+if (reparationRow.dRetour != null) {
+  currentRef.value++;
+}
+if (reparationRow.dEntree != null) {
+  currentRef.value++;
+  currentStatus.value='finish'
+}
+
 };
 
 const onCancel = () => {
@@ -122,12 +149,12 @@ const onCancel = () => {
 
 <template>
   <n-modal
-    v-model:show="props.showHistoryModal"
+    v-model:show="props.showExterneModal"
     :mask-closable="false"
     size="huge"
   >
     <n-card
-      style="width: 1150px; height: 520px"
+      style="width: 1150px; height: 620px"
       :bordered="false"
       size="huge"
       role="dialog"
@@ -184,13 +211,79 @@ const onCancel = () => {
             >
             <STable
               @onRowClicked="handleClick"
-              :data="reparationsInterne"
+              :data="reparationsExterne"
               :columns="cols"
               :border="true"
               style="margin-top: 15px"
             />
           </n-grid-item>
         </NGrid>
+        <n-steps :current="currentRef" :status="currentStatus" style="margin-top:20px;">
+          <!-- <n-step
+            title="à l'atelier mécanique"
+            description="Le véhicule se situe au niveau de l'atelier mécanique"
+          /> -->
+          <n-step title="à l'atelier mécanique">
+            <div class="n-step-description">
+              <div v-if="reparationsExterne.dSortie != null">
+                {{
+                  new Date(reparationsExterne.dSortie).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              Le véhicule se situe au niveau de l'atelier mécanique
+            </div>
+          </n-step>
+          <n-step title="sur route">
+            <div class="n-step-description">
+              <div v-if="reparationsExterne.dArrive != null">
+                {{
+                  new Date(reparationsExterne.dArrive).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              sur la route vers la direction générale
+            </div>
+          </n-step>
+          <n-step title="arrivé à la direction">
+            <div class="n-step-description">
+              <div v-if="reparationsExterne.dRetour != null">
+                {{
+                  new Date(reparationsExterne.dRetour).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              à l'atelier de la direction générale
+            </div>
+          </n-step>
+          <n-step title="sur route">
+            <div class="n-step-description">
+              <div v-if="reparationsExterne.dEntree != null">
+                {{
+                  new Date(reparationsExterne.dEtnree).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              la véhicule est sur route vers la mission
+            </div>
+          </n-step>
+          <n-step title="arrivée">
+            <div class="n-step-description">
+              <div v-if="reparationsExterne.dArrive != null">
+                {{
+                  new Date(reparationsExterne.dArrive).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              la véhicule est arrivée à la mission
+            </div>
+          </n-step>
+        </n-steps>
       </NSpace>
       <template #footer>
         <NSpace justify="end">
