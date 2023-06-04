@@ -82,7 +82,7 @@
       <n-space vertical style="margin-top: 65px; margin-bottom: 10px">
         <n-steps :current="currentRef" :status="currentStatus">
           <n-step
-            title="l'atelier mécanique"
+            title="à l'atelier mécanique"
             description="Le véhicule se situe au niveau de l'atelier mécanique"
           />
           <n-step
@@ -106,16 +106,12 @@
         <n-space>
           <n-button-group>
             <n-button
-              type="success"
+              round
               @click="next"
               icon-placement="right"
-              v-if="
-                ((auth.user.role === Role.Gestionnaire &&
-                  (currentRef === 1 || currentRef === 4)) ||
-                  (auth.user.role === Role.ChefMision &&
-                    (currentRef === 2 || currentRef === 3))) &&
-                !showSaveRef
-              "
+              v-if="auth.user.role === Role.Gestionnaire && currentRef!=5"
+              :disabled="currentRef==2||currentRef==3"
+              style="background-color: white;"
             >
               suivant
               <template #icon>
@@ -124,19 +120,38 @@
                 </NIcon>
               </template>
             </n-button>
+
             <n-button
-              type="success"
-              @click="EndDemandeReparation"
+              round
+              @click="next"
               icon-placement="right"
-              v-if="auth.user.role === Role.Gestionnaire && currentRef === 5"
+              v-if="auth.user.role === Role.ChefMision && currentRef!=5"
+              :disabled="currentRef==1||currentRef==4||currentRef==5"
+              style="background-color: white;"
             >
-              finaliser la demande de reparation
+              suivant
               <template #icon>
                 <NIcon>
                   <arrow />
                 </NIcon>
               </template>
             </n-button>
+
+            <NSpace justify="end">
+            <n-button
+              type="success"
+              @click="EndDemandeReparation"
+              icon-placement="right"
+              v-if="auth.user.role === Role.Gestionnaire && currentRef === 5"
+            >
+              mettre le vehicule en bonne etat
+              <template #icon>
+                <NIcon>
+                  <arrow />
+                </NIcon>
+              </template>
+            </n-button>
+          </NSpace>
           </n-button-group>
           <NButton type="success" @click="save" v-if="showSaveRef"
             >Sauvegarder

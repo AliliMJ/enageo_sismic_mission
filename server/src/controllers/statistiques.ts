@@ -25,6 +25,11 @@ type EmployeGroup = {
   nbr: number;
 };
 
+type CoutMonth = {
+  years: String;
+  cout: number;
+};
+
 export const getGestionnaireStatistiques = async (
   req: Request,
   res: Response
@@ -33,9 +38,11 @@ export const getGestionnaireStatistiques = async (
     const stat = {
       nbMaterielEnPanne: 0,
       nbMaterielEnReparation: 0,
+      nbMaterielEnReparationExterne:0,
       nbMaterielBonEtat: 0,
       NbTotalMateriel: 0,
       pourcentageMateriel: 0,
+      pourcentageMaterielWithExterne: 0,
 
       nbEmployes: 0,
       pourcentageEmployes: 0,
@@ -62,6 +69,7 @@ export const getGestionnaireStatistiques = async (
       nbMatModele: {},
       nbMatType: {},
       numberEmpByYears: {},
+      coutReparationByMonth : {}
     };
 
     const codeMission = String(req.params.codeMission);
@@ -85,6 +93,13 @@ export const getGestionnaireStatistiques = async (
         status: 1,
       },
     });
+
+    stat.nbMaterielEnReparationExterne = await prisma.materiel.count({
+      where: {
+        codeMission: codeMission,
+        status: 3,
+      },
+    })
 
     stat.nbMaterielEnPanne = await prisma.materiel.count({
       where: {
@@ -248,6 +263,32 @@ export const getGestionnaireStatistiques = async (
 
     stat.pourcentageMateriel = Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation)/stat.NbTotalMateriel)*100);
     stat.pourcentageEmployes = Number(((stat.nombreEmpEtat[1].nb+stat.nombreEmpEtat[2].nb)/stat.nbEmployes)*100);
+    stat.pourcentageMaterielWithExterne = Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation+stat.nbMaterielEnReparationExterne)/stat.NbTotalMateriel)*100);
+
+
+    // const price = await prisma.$queryRaw`SELECT DATE_FORMAT(CURRENT_DATE - INTERVAL 1 MONTH, '%Y-%m-01') as months , sum(cout) as sum FROM sismicvision.reparation r , sismicvision.materiel m 
+    // WHERE r.codeMat=m.codeMat AND
+    //       m.codeMission='EGS120' AND
+    //  DATE(dFinRep) >= DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY)
+    //    AND DATE(dFinRep) <= LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))`;
+
+    //   // if(===null){
+    //   //   console.log('null');
+    //   // }else{
+    //   //   console.log(price);
+    //   // }
+
+    const rawCoutByYears: Array<CoutMonth> =
+      await prisma.$queryRaw`SELECT  DATE_FORMAT(dFinRep,'%Y-%m') as years , sum(cout) as cout 
+      FROM sismicvision.reparation r , sismicvision.materiel m
+      WHERE r.codeMat=m.codeMat AND
+            m.codeMission=${codeMission}
+      GROUP BY  DATE_FORMAT(dFinRep,'%Y-%m')
+      ORDER BY years `;
+
+    stat.coutReparationByMonth = rawCoutByYears.map(({ years, cout }) => {
+      return { years, cout: Number(cout) };
+    });
 
     res.status(200).json(stat);
   } catch (e) {

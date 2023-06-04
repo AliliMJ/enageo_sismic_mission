@@ -29,4 +29,12 @@ const { EtatEmploye } = defineProps({
     :bordered="false"
     >En maladie</n-tag
   >
+
+  <n-tag
+    v-if="EtatEmploye === etatEmployeEnum.Travail"
+    type="info"
+    round
+    :bordered="false"
+    >En travail</n-tag
+  >
 </template>
