@@ -8,7 +8,7 @@ import MaterielTag from '../components/MaterielTag.vue';
 import { useAuth } from '../stores/authentication';
 import { useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
-import Modal from '../components/AffecteGoodMaterielModal.vue';
+import Modal from '../components/AffecteMaterielModal.vue';
 import { SearchOutline as search, Add } from '@vicons/ionicons5';
 
 const auth = useAuth();
@@ -44,13 +44,6 @@ const cols = [
       return h(MaterielTag, { statuMateriel: row.status });
     },
   },
-  // {
-  //   title: 'Occupation',
-  //   key: 'occupation',
-  //   render(row) {
-  //     return row.projetId ?? 'Disponible';
-  //   },
-  // },
 ];
 
 const handleClick = (materiel) => {
@@ -134,6 +127,5 @@ const searchFilter = () => {
     :showModal="showModal"
     @cancel="showModal = false"
     @confirm="confirmAdd"
-    :codeMission="auth.employe.codeMission"
   />
 </template>

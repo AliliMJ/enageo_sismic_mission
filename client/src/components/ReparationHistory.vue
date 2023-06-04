@@ -26,9 +26,6 @@ const materielWithReparations = (
   )
 ).data;
 
-console.log('////////////////////' + props.codeMat);
-console.log('////////////////////' + materielWithReparations.codeMat);
-
 const materielRef = ref({
   codeMat: materielWithReparations.codeMat,
   designation: materielWithReparations.designation,
@@ -40,8 +37,6 @@ const materielRef = ref({
 });
 
 const reparations = materielRef.value.reparations;
-
-console.log('---->' + materielRef.value.codeMat);
 
 const emit = defineEmits(['confirm', 'cancel']);
 
@@ -211,13 +206,15 @@ const mettreEnReparation = async () => {
             />
           </n-grid-item>
         </NGrid>
-        <n-space justify="end" style="margin-top: 20px">
+      </NSpace>
+      <template #footer>
+          <n-space justify="end" style="margin-top: 20px">
           <NButton @click="onConfirm" value="success" type="success"
             >Confirmer</NButton
           >
           <NButton @click="onCancel">Annuler</NButton>
         </n-space>
-      </NSpace>
+      </template>
     </n-card>
   </n-modal>
 </template>

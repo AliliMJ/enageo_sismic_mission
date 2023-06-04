@@ -385,6 +385,15 @@ async function main() {
     ],
   });
 
+  // await prisma.projet.create({
+  //   data: {
+  //     nom: "projet1",
+  //     description: "description du projet 1",
+  //     budget: 15000000,
+  //     codeMission: "EGS210",
+  //   },
+  // });
+
   await prisma.materiel.createMany({
     data: [
       {

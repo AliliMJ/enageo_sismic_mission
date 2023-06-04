@@ -24,6 +24,10 @@ import Projects from '../pages/Projects.vue';
 import Stock from '../pages/Stock.vue';
 import DynamicResource from '../pages/DynamicResource.vue';
 
+import EmployesAdmin from '../pages/EmployesAdmin.vue';
+import EmployeAdmin from '../pages/EmployeAdmin.vue';
+import MaterielsAdmin from '../pages/MaterielsAdmin.vue';
+
 import CreateProject from '../pages/CreateProject.vue';
 import Equipes from '../pages/Equipes.vue';
 import Preference from '../pages/Preference.vue';
@@ -70,11 +74,20 @@ const routes = [
         meta: { role: Role.Administrateur, title: 'details sur compte' },
       },
       {
-        path: '/employe',
+        path: '/employes',
         name: Route.Employe,
         component: Employes,
         meta: {
           role: Role.Gestionnaire,
+          title: 'les employés',
+        },
+      },
+      {
+        path: '/employesList',
+        name: Route.EmployesAdmin,
+        component: EmployesAdmin,
+        meta: {
+          role: Role.Administrateur,
           title: 'les employés',
         },
       },
@@ -84,10 +97,21 @@ const routes = [
         meta: { role: Role.Gestionnaire },
       },
       {
-        path: '/materiel',
+        path: '/detailEmploye/:id',
+        component: EmployeAdmin,
+        meta: { role: Role.Administrateur },
+      },
+      {
+        path: '/materiels',
         name: Route.Material,
         component: Materials,
         meta: { role: Role.Gestionnaire, title: 'les matériels' },
+      },
+      {
+        path: '/materielsList',
+        name: Route.MaterielsAdmin,
+        component: MaterielsAdmin,
+        meta: { role: Role.Administrateur},
       },
       {
         path: '/materiel/:codeMat',

@@ -307,7 +307,7 @@ const showHistoryModalAction = () => {
 }
 
 .div1 {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 15px;

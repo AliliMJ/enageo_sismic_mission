@@ -10,8 +10,8 @@
     style="width: 99%; padding-left: 5px"
   >
     <n-grid-item span="0:2 1000:1">
-      <NGrid x-gap="10" y-gap="10" :cols="4" class="grid1">
-        <n-grid-item :span="2">
+      <NGrid x-gap="10" y-gap="10" :cols="2" class="grid1">
+        <n-grid-item :span="1">
           <div class="testCard">
             <div class="row1">
               <div class="card-title">Les employés</div>
@@ -30,19 +30,19 @@
           </div>
         </n-grid-item>
 
-        <n-grid-item :span="2">
+        <n-grid-item :span="1">
           <div class="testCard">
             <div class="row1">
               <div class="card-title">
-                Les employés ({{ employesDates[employesDates.length - 1] }})
+                coût réparation mois passée
               </div>
               <div class="card-number">
-                {{ employesDatesData[employesDatesData.length - 1] }}
+                {{ coutReparation[0].cout/1000 }}k (DA)
               </div>
             </div>
             <div class="row2">
               <n-icon class="card-icon">
-                <clock />
+                <cash />
               </n-icon>
               <n-icon>
                 <chart style="color: orange" />
@@ -50,16 +50,12 @@
             </div>
           </div>
         </n-grid-item>
+        
         <n-grid-item :span="4">
           <NSpace vertical class="type-pie">
             <Pie :data="pieData1" :options="pieOptions1" />
           </NSpace>
         </n-grid-item>
-        <!-- <n-grid-item :span="2">
-        <NSpace vertical class="bar">
-          <Bar :data="barData1" :options="barOptions1" style="height: 180px" />
-        </NSpace>
-      </n-grid-item> -->
         <n-grid-item :span="4">
           <NSpace vertical class="bar">
             <Bar :data="barData1" :options="barOptions" />
@@ -209,6 +205,9 @@ import {
   Close as close,
   HourglassOutline as clock,
 } from '@vicons/ionicons5';
+import {
+  Money20Regular as cash
+} from '@vicons/fluent';
 
 import { ref, onMounted, h } from 'vue';
 import { useAuth } from '../../stores/authentication';
@@ -308,6 +307,15 @@ gestStat.nombreEmpEtat.forEach((element) => {
 // });
 
 /* end employes par annee */
+
+
+/* start cout reparation par mois */
+const coutReparation = ref(gestStat.coutReparationByMonth);
+console.log(coutReparation.value);
+// gestStat.coutReparationByMonth.forEach((element) => {
+//   employesetat.value.push(element.etat);
+// });
+/* end cout reparation par mois */
 
 const pieOptions = {
   responsive: true,

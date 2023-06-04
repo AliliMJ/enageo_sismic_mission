@@ -81,10 +81,23 @@
     <n-grid-item :span="10">
       <n-space vertical style="margin-top: 65px; margin-bottom: 10px">
         <n-steps :current="currentRef" :status="currentStatus">
-          <n-step
-            title="l'atelier mécanique"
+          <!-- <n-step
+            title="à l'atelier mécanique"
             description="Le véhicule se situe au niveau de l'atelier mécanique"
-          />
+          /> -->
+          <n-step title="à l'atelier mécanique">
+              <div class="n-step-description">
+               <div v-if="demandeReparation.dSortie!=null">
+                  {{
+                  new Date(demandeReparation.dSortie).toLocaleDateString(
+                    'fr-FR',
+                    dateOptions
+                  )
+                }}</div>Le véhicule se situe au niveau de l'atelier mécanique
+          
+                
+              </div>
+            </n-step>
           <n-step
             title="sur la route"
             description="sur la  route vers la direction générale"
@@ -106,16 +119,12 @@
         <n-space>
           <n-button-group>
             <n-button
-              type="success"
+              round
               @click="next"
               icon-placement="right"
-              v-if="
-                ((auth.user.role === Role.Gestionnaire &&
-                  (currentRef === 1 || currentRef === 4)) ||
-                  (auth.user.role === Role.ChefMision &&
-                    (currentRef === 2 || currentRef === 3))) &&
-                !showSaveRef
-              "
+              v-if="auth.user.role === Role.Gestionnaire && currentRef!=5"
+              :disabled="currentRef==2||currentRef==3"
+              style="background-color: white;"
             >
               suivant
               <template #icon>
@@ -124,19 +133,38 @@
                 </NIcon>
               </template>
             </n-button>
+
             <n-button
-              type="success"
-              @click="EndDemandeReparation"
+              round
+              @click="next"
               icon-placement="right"
-              v-if="auth.user.role === Role.Gestionnaire && currentRef === 5"
+              v-if="auth.user.role === Role.ChefMision && currentRef!=5"
+              :disabled="currentRef==1||currentRef==4||currentRef==5"
+              style="background-color: white;"
             >
-              finaliser la demande de reparation
+              suivant
               <template #icon>
                 <NIcon>
                   <arrow />
                 </NIcon>
               </template>
             </n-button>
+
+            <NSpace justify="end">
+            <n-button
+              type="success"
+              @click="EndDemandeReparation"
+              icon-placement="right"
+              v-if="auth.user.role === Role.Gestionnaire && currentRef === 5"
+            >
+              mettre le vehicule en bonne etat
+              <template #icon>
+                <NIcon>
+                  <arrow />
+                </NIcon>
+              </template>
+            </n-button>
+          </NSpace>
           </n-button-group>
           <NButton type="success" @click="save" v-if="showSaveRef"
             >Sauvegarder
@@ -491,31 +519,32 @@ const showHistoryModalAction = () => {
 }
 
 .div1 {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 15px;
 }
 
 .div2 {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 15px;
 }
 
 .div3 {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 10px;
 }
 
 .div4 {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 10px;
+  margin-bottom:20px;
 }
 
 .historyButton {

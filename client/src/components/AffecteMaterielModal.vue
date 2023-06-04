@@ -113,7 +113,7 @@ const props = defineProps({
 
 const materiels = ref([]);
 materiels.value = (
-  await axios.get('http://localhost:3000/material/materielWithoutProjet')
+  await axios.get('http://localhost:3000/material/materielWithoutMission')
 ).data;
 
 const cols = [
@@ -153,12 +153,12 @@ const searchFilter = () => {
     if (searchDesignation.value.length > 0) {
       materiels.value = (
         await axios.get(
-          `http://localhost:3000/material/allMaterielWithoutProjet/designation?like=${searchDesignation.value}`
+          `http://localhost:3000/material/allMaterielWithoutMission/designation?like=${searchDesignation.value}`
         )
       ).data;
     } else {
       materiels.value = (
-        await axios.get(`http://localhost:3000/material/materielWithoutProjet`)
+        await axios.get(`http://localhost:3000/material/materielWithoutMission`)
       ).data;
     }
   });

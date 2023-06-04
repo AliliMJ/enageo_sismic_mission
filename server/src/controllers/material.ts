@@ -24,6 +24,24 @@ export const getMaterialTypes = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteMateriel = async (req: Request, res: Response) => {
+  try {
+
+    const codeMat = req.params.codeMat;
+
+    const materialTypes = await prisma.materiel.update({
+      where : {codeMat : codeMat},
+      data : {codeMission : null}
+    });
+
+    return res.status(200).json(materialTypes);
+  } catch {
+    res
+      .status(500)
+      .json({ err: "Problème lors de la suppression du materiel" });
+  }
+};
+
 export const getMaterialByCode = async (req: Request, res: Response) => {
   try {
     const { codeMat } = req.params;
@@ -52,7 +70,7 @@ export const mettreEnPanne = async (req: Request, res: Response) => {
       data: { status : 0 },
     });
 
-    const reparation = await prisma.reparation.create({
+    const reparation = await prisma.reparationInterne.create({
         data : {
           codeMat : codeMat,
           dPanne : new Date(),
@@ -98,7 +116,7 @@ export const MettreEnReparation = async (req: Request, res: Response) => {
     const idRep = Number(req.body.idRep);
     const dDebrep = req.body.dDebRep;
 
-    const reparation = await prisma.reparation.update({
+    const reparation = await prisma.reparationInterne.update({
       data: {
         codeMat : codeMat,
         dDebRep : dDebrep ,
@@ -122,36 +140,36 @@ export const MettreEnReparation = async (req: Request, res: Response) => {
   }
 };
 
-export const MettreEnReparationExterne = async (req: Request, res: Response) => {
-  try {
+// export const MettreEnReparationExterne = async (req: Request, res: Response) => {
+//   try {
 
-    const  codeMat  = req.params.codeMat;
-    const idRep = Number(req.body.idRep);
+//     const  codeMat  = req.params.codeMat;
+//     const idRep = Number(req.body.idRep);
 
-   const demande = await prisma.demadeReparation.create({
-    data : {
-      idRep : idRep
-    }
-   });
+//    const demande = await prisma.demadeReparation.create({
+//     data : {
+//       idRep : idRep
+//     }
+//    });
 
-   const reparation = await prisma.reparation.update({
-     where : {idRep : idRep},
-     data : {externe : 2} 
-   });
+//    const reparation = await prisma.reparation.update({
+//      where : {idRep : idRep},
+//      data : {externe : 2} 
+//    });
 
-    const materiel = await prisma.materiel.update({
-      where : {codeMat : codeMat},
-      data : {
-        status : 3
-      }
-    });
+//     const materiel = await prisma.materiel.update({
+//       where : {codeMat : codeMat},
+//       data : {
+//         status : 3
+//       }
+//     });
 
-    return res.status(200).send(`Matériel ${codeMat} est mis en reparation externe`);
-  } catch(e){
-    console.log(e);
-    res.status(500).json({ err: "Problème lors de la collection ce matériel" });
-  }
-};
+//     return res.status(200).send(`Matériel ${codeMat} est mis en reparation externe`);
+//   } catch(e){
+//     console.log(e);
+//     res.status(500).json({ err: "Problème lors de la collection ce matériel" });
+//   }
+// };
 
 export const mettreBonEtat = async (req: Request, res: Response) => {
   try {
@@ -162,7 +180,7 @@ export const mettreBonEtat = async (req: Request, res: Response) => {
     const cout = Number(req.body.cout);
     const detailProbleme = req.body.detailProbleme;
 
-    const reparation = await prisma.reparation.update({
+    const reparation = await prisma.reparationInterne.update({
       data: {
         codeMat : codeMat,
         dFinRep : dFinRep,
@@ -199,7 +217,7 @@ export const mettreReparer = async (req: Request, res: Response) => {
 
     //selectionner la réparation la plus récente.
 
-    await prisma.reparation.updateMany({
+    await prisma.reparationInterne.updateMany({
       where: { dDebRep: null , codeMat : codeMat },
       data: { dFinRep: new Date() },
     });
@@ -307,7 +325,7 @@ export const getMaterialGoodByMission = async (req: Request, res: Response) => {
 
 export const getMaterialGoodByDesignation = async (req: Request,res: Response) => {
   try {
-    const codeMission = Number(req.params.codeMission);
+    const codeMission = req.params.codeMission;
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
@@ -335,7 +353,8 @@ export const getMaterialEnPanneWithReparations = async (req: Request,res: Respon
         codeMat : codeMat
       },
       include : {
-        Reparations : true 
+        ReparationsInterne : true,
+        ReparationsExterne : true 
       },
     });
 
@@ -373,7 +392,6 @@ export const getMaterialByDesignation = async (req: Request,res: Response) => {
 
 export const getMaterialByWithoutMission = async (req: Request,res: Response) => {
   try {
-    const codeMission = String(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
@@ -394,6 +412,27 @@ export const getMaterialByWithoutMission = async (req: Request,res: Response) =>
 
 export const getMaterialByWithoutMissionDesignation = async (req: Request,res: Response) => {
   try {
+
+    const materiels = await prisma.materiel.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter ,
+        codeMission: null,}
+    });
+
+    return res.status(200).json(materiels);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({
+        err: "Problème lors de la collection des matériels non affecter au mission",
+      });
+  }
+};
+
+export const getMaterialWithoutMission = async (req: Request,res: Response) => {
+  try {
+    
     const codeMission = String(req.params.codeMission);
 
     const materiels = await prisma.materiel.findMany({
