@@ -21,7 +21,7 @@ import {
   getMaterialByWithoutMissionDesignation,
   ajouterMaterielToMission,
   updateMateriel,
-  MettreEnReparationExterne,
+  // MettreEnReparationExterne,
   getMaterielReparationExterne,
   getMaterialWithoutMission,
   deleteMateriel
@@ -49,7 +49,7 @@ materialRouter.get('/materielEnReparationExterne/:codeMission', getMaterielRepar
 materialRouter.get('/getMaterielWithReparations/:codeMat',getMaterialEnPanneWithReparations);
 
 materialRouter.put('/mettreEnReparation/:codeMat',MettreEnReparation);
-materialRouter.put('/mettreEnReparationExterne/:codeMat',MettreEnReparationExterne);
+//materialRouter.put('/mettreEnReparationExterne/:codeMat',MettreEnReparationExterne);
 materialRouter.put('/mettreBonEtat/:codeMat', mettreBonEtat);
 materialRouter.get('/:codeMat', getMaterialByCode);
 

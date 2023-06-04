@@ -81,10 +81,23 @@
     <n-grid-item :span="10">
       <n-space vertical style="margin-top: 65px; margin-bottom: 10px">
         <n-steps :current="currentRef" :status="currentStatus">
-          <n-step
+          <!-- <n-step
             title="à l'atelier mécanique"
             description="Le véhicule se situe au niveau de l'atelier mécanique"
-          />
+          /> -->
+          <n-step title="à l'atelier mécanique">
+              <div class="n-step-description">
+               <div v-if="demandeReparation.dSortie!=null">
+                  {{
+                  new Date(demandeReparation.dSortie).toLocaleDateString(
+                    'fr-FR',
+                    dateOptions
+                  )
+                }}</div>Le véhicule se situe au niveau de l'atelier mécanique
+          
+                
+              </div>
+            </n-step>
           <n-step
             title="sur la route"
             description="sur la  route vers la direction générale"

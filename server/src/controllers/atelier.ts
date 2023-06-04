@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 
 export const getReparations = async (req: Request, res: Response) => {
   try {
-    const reparations = await prisma.reparation.findMany({
+    const reparations = await prisma.reparationInterne.findMany({
       ...req.body.pagination?.options,
     });
 
@@ -31,7 +31,7 @@ export const getReparationsByMaterialCode = async (
   try {
     const codeMat = req.params.codeMat;
 
-    const reparations = await prisma.reparation.findMany({
+    const reparations = await prisma.reparationInterne.findMany({
       where: { codeMat: codeMat },
       orderBy: {
         dPanne: 'asc',
@@ -53,7 +53,7 @@ export const getLastReparationsByMaterialCode = async (
 ) => {
   try {
     const codeMat = req.params.codeMat;
-    const reparations = await prisma.reparation.findFirst({
+    const reparations = await prisma.reparationInterne.findFirst({
       where: { codeMat: codeMat, dFinRep: null },
     });
 
@@ -71,14 +71,11 @@ export const getLastReparationByMaterialCode = async (
 ) => {
   try {
     const codeMat = req.params.codeMat;
-    const reparations = await prisma.reparation.findMany({
+    const reparations = await prisma.reparationInterne.findMany({
       where: { codeMat: codeMat },
       orderBy: {
         dPanne: 'asc',
       },
-      include : {
-        DemadeReparation : true
-      }
     });
 
     return res.status(200).json(reparations[reparations.length - 1]);
@@ -89,29 +86,26 @@ export const getLastReparationByMaterialCode = async (
   }
 };
 
-export const getLastReparationByMaterialCodeWithDemande = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const codeMat = req.params.codeMat;
-    const reparations = await prisma.reparation.findMany({
-      where: { codeMat: codeMat , externe : 2  },
-      orderBy: {
-        dPanne: 'asc',
-      },
-      include : {
-        DemadeReparation : true
-      }
-    });
+// export const getLastReparationByMaterialCodeWithDemande = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   try {
+//     const codeMat = req.params.codeMat;
+//     const reparations = await prisma.reparationInterne.findMany({
+//       where: { codeMat: codeMat , externe : 2  },
+//       orderBy: {
+//         dPanne: 'asc',
+//       },
+//     });
 
-    return res.status(200).json(reparations[reparations.length - 1]);
-  } catch {
-    res.status(500).json({
-      err: 'Problème lors de la collection des reparations pour ce matériel',
-    });
-  }
-};
+//     return res.status(200).json(reparations[reparations.length - 1]);
+//   } catch {
+//     res.status(500).json({
+//       err: 'Problème lors de la collection des reparations pour ce matériel',
+//     });
+//   }
+// };
 
 export const getAtelierMecanique = async (req: Request, res: Response) => {
   try {
@@ -122,7 +116,7 @@ export const getAtelierMecanique = async (req: Request, res: Response) => {
       },
     });
 
-    const reparations = await prisma.reparation.findMany({
+    const reparations = await prisma.reparationInterne.findMany({
       where: { dDebRep: null },
       orderBy: {
         codeMat: 'asc',
@@ -188,7 +182,7 @@ export const getReparationsById = async (req: Request, res: Response) => {
   try {
     const idRep = Number(req.params.idRep);
 
-    const reparation = await prisma.reparation.findUnique({
+    const reparation = await prisma.reparationInterne.findUnique({
       where: { idRep: idRep },
     });
 
@@ -202,107 +196,107 @@ export const getReparationsById = async (req: Request, res: Response) => {
 
 /* start demande travail */
 
-export const updateDemandeReparationdSortie = async (req: Request, res: Response) => {
-  try {
+// export const updateDemandeReparationdSortie = async (req: Request, res: Response) => {
+//   try {
 
-    const idRep = Number(req.params.idRep);
-    const dSortie = req.body.dSortie;
+//     const idRep = Number(req.params.idRep);
+//     const dSortie = req.body.dSortie;
 
-    const demandereparation = await prisma.demadeReparation.update({
-      data : {dSortie : dSortie},
-      where : {idRep : idRep}
-    })
+//     const demandereparation = await prisma.demadeReparation.update({
+//       data : {dSortie : dSortie},
+//       where : {idRep : idRep}
+//     })
 
-    return res.status(200).json(demandereparation);
-  } catch {
-    res.status(500).json({
-      err: 'Problème lors de la collection des reparations pour ce matériel',
-    });
-  }
-};
+//     return res.status(200).json(demandereparation);
+//   } catch {
+//     res.status(500).json({
+//       err: 'Problème lors de la collection des reparations pour ce matériel',
+//     });
+//   }
+// };
 
-export const updateDemandeReparationdArrive = async (req: Request, res: Response) => {
-  try {
+// export const updateDemandeReparationdArrive = async (req: Request, res: Response) => {
+//   try {
 
-    const idRep = Number(req.params.idRep);
-    const dArrive = req.body.dArrive;
+//     const idRep = Number(req.params.idRep);
+//     const dArrive = req.body.dArrive;
 
-    const demandereparation = await prisma.demadeReparation.update({
-      data : {dArrive : dArrive},
-      where : {idRep : idRep}
-    })
+//     const demandereparation = await prisma.demadeReparation.update({
+//       data : {dArrive : dArrive},
+//       where : {idRep : idRep}
+//     })
 
-    return res.status(200).json(demandereparation);
-  } catch {
-    res.status(500).json({
-      err: 'Problème lors de la collection des reparations pour ce matériel',
-    });
-  }
-};
+//     return res.status(200).json(demandereparation);
+//   } catch {
+//     res.status(500).json({
+//       err: 'Problème lors de la collection des reparations pour ce matériel',
+//     });
+//   }
+// };
 
-export const updateDemandeReparationdRetour = async (req: Request, res: Response) => {
-  try {
+// export const updateDemandeReparationdRetour = async (req: Request, res: Response) => {
+//   try {
 
-    const idRep = Number(req.params.idRep);
-    const dRetour = req.body.dRetour;
+//     const idRep = Number(req.params.idRep);
+//     const dRetour = req.body.dRetour;
 
-    const demandereparation = await prisma.demadeReparation.update({
-      data : {dRetour : dRetour},
-      where : {idRep : idRep}
-    })
+//     const demandereparation = await prisma.demadeReparation.update({
+//       data : {dRetour : dRetour},
+//       where : {idRep : idRep}
+//     })
 
-    return res.status(200).json(demandereparation);
-  } catch {
-    res.status(500).json({
-      err: 'Problème lors de la collection des reparations pour ce matériel',
-    });
-  }
-};
+//     return res.status(200).json(demandereparation);
+//   } catch {
+//     res.status(500).json({
+//       err: 'Problème lors de la collection des reparations pour ce matériel',
+//     });
+//   }
+// };
 
-export const updateDemandeReparationdEntree = async (req: Request, res: Response) => {
-  try {
+// export const updateDemandeReparationdEntree = async (req: Request, res: Response) => {
+//   try {
 
-    const idRep = Number(req.params.idRep);
-    const dEntree  = req.body.dEntree ;
+//     const idRep = Number(req.params.idRep);
+//     const dEntree  = req.body.dEntree ;
 
-    const demandereparation = await prisma.demadeReparation.update({
-      data : {dEntree  : dEntree },
-      where : {idRep : idRep}
-    })
+//     const demandereparation = await prisma.demadeReparation.update({
+//       data : {dEntree  : dEntree },
+//       where : {idRep : idRep}
+//     })
 
-    return res.status(200).json(demandereparation);
-  } catch {
-    res.status(500).json({
-      err: 'Problème lors de la collection des reparations pour ce matériel',
-    });
-  }
-};
+//     return res.status(200).json(demandereparation);
+//   } catch {
+//     res.status(500).json({
+//       err: 'Problème lors de la collection des reparations pour ce matériel',
+//     });
+//   }
+// };
 
-export const EndReparationExterne = async (req: Request, res: Response) => {
-  try {
+// export const EndReparationExterne = async (req: Request, res: Response) => {
+//   try {
 
-    const idRep = Number(req.params.idRep);
-    const codeMat  = req.body.codeMat ;
+//     const idRep = Number(req.params.idRep);
+//     const codeMat  = req.body.codeMat ;
 
-    const materiel = await prisma.materiel.update({
-      data : {status : 2},
-      where : {codeMat : codeMat} 
-    });
+//     const materiel = await prisma.materiel.update({
+//       data : {status : 2},
+//       where : {codeMat : codeMat} 
+//     });
 
-    const reparation = await prisma.reparation.update({
-      data : {externe : 1} , 
-      where : {idRep : idRep}
-    });
+//     const reparation = await prisma.reparation.update({
+//       data : {externe : 1} , 
+//       where : {idRep : idRep}
+//     });
     
 
-    return res.status(200).json({materiel,reparation});
-  } catch(e) {
-    console.log(e);
-    res.status(500).json({
-      err: 'Problème lors de la collection des reparations pour ce matériel',
-    });
-  }
-};
+//     return res.status(200).json({materiel,reparation});
+//   } catch(e) {
+//     console.log(e);
+//     res.status(500).json({
+//       err: 'Problème lors de la collection des reparations pour ce matériel',
+//     });
+//   }
+// };
 
 export const updateReparation = async (req: Request, res: Response) => {
   try {
@@ -313,7 +307,7 @@ export const updateReparation = async (req: Request, res: Response) => {
     const detail = req.body.detail;
     const cout = Number(req.body.cout);
 
-    const reparation = await prisma.reparation.update({
+    const reparation = await prisma.reparationInterne.update({
       data : {
         dDebRep : dDebRep,
         dFinRep : dFinRep,
