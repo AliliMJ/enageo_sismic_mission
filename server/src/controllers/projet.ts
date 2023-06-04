@@ -71,6 +71,9 @@ export const insertProjet = async (req: Request, res: Response) => {
         nom,
         description,
         budget,
+        objVP: 1000,
+        objDateDebut: new Date(),
+        objDateFin: new Date(),
       },
     });
     await prisma.terrain.create({

@@ -58,7 +58,7 @@ app.use('/resource', resourceRouter);
 app.use('/evenement', evenementRouter);
 app.use('/statistiques', statistiquesRouter);
 
-// cron.schedule('0-59 * * * *', async () => {
+// cron.schedule('* 19 * * *', async () => {
 //   const consommationCollection = mongo.db().collection('consommation');
 //   try {
 //     //get recent added data from mongodb

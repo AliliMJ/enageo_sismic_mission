@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, query } from 'express';
 
 export const employeNameFilter = (
   req: Request,
@@ -8,7 +8,7 @@ export const employeNameFilter = (
   const nom = req.query.like;
 
   req.body.filter = {
-    nom: { startsWith: nom },
+    titre: { startsWith: nom },
   };
 
   next();
@@ -19,8 +19,8 @@ export const resourceFilter = (
   res: Response,
   next: NextFunction
 ) => {
-  const title = req.query.like;
-  req.body.query = { titre: { $regex: title } };
+  const title = req.query.title;
+  req.body.query = { title: { $regex: title, $options: 'i' } };
 
   next();
 };

@@ -18,10 +18,11 @@ import Material from '../pages/Material.vue';
 import AtelierExterne from '../pages/MaterielAtelierExterne.vue';
 import DemandeReparation from '../pages/DemandeReparation.vue';
 import Rapport from '../pages/Rapport.vue';
-import CreateResource from '../pages/CreateResource.vue';
+
 import Project from '../pages/Project.vue';
 import Projects from '../pages/Projects.vue';
-import DemandeRessource from '../pages/DemandeRessource.vue';
+import Stock from '../pages/Stock.vue';
+import DynamicResource from '../pages/DynamicResource.vue';
 
 import CreateProject from '../pages/CreateProject.vue';
 import Equipes from '../pages/Equipes.vue';
@@ -41,7 +42,7 @@ const routes = [
   {
     path: '/login',
     component: Login,
-    meta: { title: "s'authentifier", icon: 'src/assets/lock.png' },
+    meta: { title: "s'authentifier", icon: '/src/assets/lock.png' },
   },
   { path: '/denied' },
   {
@@ -50,7 +51,7 @@ const routes = [
     meta: {
       requireAuth: true,
       title: 'Tableau de board',
-      icon: 'src/assets/ENA_GEO.png',
+      icon: '/src/assets/ENA_GEO.png',
     },
     children: [
       { path: '', name: Route.Dashboard, component: Dashboard },
@@ -169,16 +170,19 @@ const routes = [
       },
       { path: '/carte', name: 'carte', component: Map },
       { path: '/terrain', name: Route.Terrain },
-      {
-        path: '/ressource',
-        name: Route.Ressource,
-        component: DemandeRessource,
-      },
-
+      // {
+      //   path: '/ressource',
+      //   name: Route.Ressource,
+      //   component: DemandeRessource,
+      // },
       {
         path: '/ressource/creation',
-        name: 'creationRessource',
-        component: CreateResource,
+        name: Route.Ressource,
+        component: DynamicResource,
+      },
+      {
+        path: '/stock/:idProjet',
+        component: Stock,
       },
     ],
   },

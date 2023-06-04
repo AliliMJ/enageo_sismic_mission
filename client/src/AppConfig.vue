@@ -22,7 +22,7 @@ const auth = useAuth();
 
 const themeOverrides = {
   common: {
-    primaryColor: '#FFD93D',
+    primaryColor: '#27374D',
   },
 };
 </script>
