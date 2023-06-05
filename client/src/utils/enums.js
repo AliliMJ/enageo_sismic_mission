@@ -39,6 +39,7 @@ export const Route = Object.freeze({
   Projet: 'projet',
   Compte: 'compte',
   Mission: 'mission',
+  Activity: 'activity',
   Profile: 'profile',
   Preference: 'preference',
   Employe: 'employe',
@@ -53,6 +54,8 @@ export const Route = Object.freeze({
   DemandeReparation: 'demandeReparation',
   EmployesAdmin: 'EmployesAdmin',
   MaterielsAdmin: 'MaterielsAdmin',
+  CreateResource: 'createResource',
+  Stock: 'stock',
 });
 
 export const groupeSanguin = Object.freeze({
@@ -91,3 +94,4 @@ export const Mesure = Object.freeze({
   Poids: 'P',
   Quantite: 'Q',
 });
+export const MissionType = Object.freeze(['Mission2D', 'Mission3D']);

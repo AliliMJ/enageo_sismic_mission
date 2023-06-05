@@ -21,7 +21,7 @@ const props = defineProps({
   showModal: Boolean,
 });
 
-const emit = defineEmits(['confirm', 'close']);
+const emit = defineEmits(['confirm', 'close', 'error']);
 function onBlur() {
   if (resource.value.title?.length == 0) {
     resource.value = { title: null, data: {} };
@@ -37,6 +37,15 @@ function confirm() {
     else
       data[k] = resource.value.data[k].value ?? resource.value.data[k].default;
   });
+  for (let k in stock) {
+    if (stock[k] == null)
+      return emit('error', 'Veuillez remplir tous les champs de stock');
+    if (stock[k] <= 0)
+      return emit(
+        'error',
+        'Une valeur de stock doit être strictement positive'
+      );
+  }
 
   emit('confirm', {
     title: resource.value.title,
@@ -53,6 +62,9 @@ function confirm() {
 function close() {
   emit('close');
 }
+function handleSelect(value, option) {
+  resource.value = option.resource;
+}
 
 async function handleSearch(query) {
   if (query.length > 0) {
@@ -60,14 +72,19 @@ async function handleSearch(query) {
     const resources = (
       await axios.get('http://localhost:3000/resource?title=' + query)
     ).data;
-    console.log(resources);
 
     options.value = resources.map((r) => ({
       label: r.title,
       value: r.title,
+      resource: r,
     }));
     loading.value = false;
     resource.value = resources[0];
+    if (resource.value == undefined) {
+      options.value = [];
+      resource.value = { title: query, data: {} };
+    }
+
     // let defs = {};
     // Object.keys(resource.value.data).forEach((k) => {
     //   if (resource.value.data[k].default != undefined)
@@ -102,6 +119,7 @@ async function handleSearch(query) {
             remote
             @search="handleSearch"
             @blur="onBlur"
+            @update:value="handleSelect"
           />
         </n-form-item>
         <n-form-item
@@ -131,6 +149,7 @@ async function handleSearch(query) {
             :show-button="false"
             placeholder="Remplir ce champ"
             :default-value="resource.data[key].default"
+            :min="0"
           />
         </n-form-item>
       </n-form>

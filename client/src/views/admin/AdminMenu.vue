@@ -9,9 +9,14 @@ import { useRoute } from 'vue-router';
 import { optionsCompte, optionDashboard } from '../../utils/menuOptions.js';
 import { renderIcon, renderMenuItem } from '../../utils/render.js';
 import { Route } from '../../utils/enums';
-import { PeopleOutline as Users ,
-         BriefcaseOutline as Case,
-         BusOutline as Bus} from '@vicons/ionicons5';
+import {
+  PeopleOutline as Users,
+  BriefcaseOutline as Case,
+  BusOutline as Bus,
+  BuildOutline as ActivityIcon,
+  FlameOutline as Fire,
+  WaterOutline as Water,
+} from '@vicons/ionicons5';
 
 const route = useRoute();
 const selectedKey = ref(route.name);
@@ -31,10 +36,26 @@ const menuOptions = [
     key: Route.EmployesAdmin,
     icon: renderIcon(Case),
   },
+
   {
     label: renderMenuItem('vehicules', Route.MaterielsAdmin),
     key: Route.MaterielsAdmin,
     icon: renderIcon(Bus),
+  },
+  {
+    label: renderMenuItem('Chantier', Route.Mission),
+    key: Route.Mission,
+    icon: renderIcon(Fire),
+  },
+  {
+    label: renderMenuItem('Resource', Route.CreateResource),
+    key: Route.CreateResource,
+    icon: renderIcon(Water),
+  },
+  {
+    label: renderMenuItem('Activités', Route.Activity),
+    key: Route.Activity,
+    icon: renderIcon(ActivityIcon),
   },
 
   ...optionsCompte,

@@ -13,7 +13,7 @@ import {
   ConstructOutline as Atelier,
   PeopleOutline as people,
   BusOutline as bus,
-  WaterOutline as Water,
+  CubeOutline as Cube,
 } from '@vicons/ionicons5';
 
 const route = useRoute();
@@ -40,9 +40,9 @@ const menuOptions = [
     icon: renderIcon(people),
   },
   {
-    label: renderMenuItem('Ressource', Route.Ressource),
-    key: Route.Ressource,
-    icon: renderIcon(Water),
+    label: renderMenuItem('Stock', Route.Stock),
+    key: Route.Stock,
+    icon: renderIcon(Cube),
   },
 
   ...optionsCompte,
