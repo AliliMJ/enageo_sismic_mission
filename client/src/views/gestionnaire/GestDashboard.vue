@@ -113,7 +113,18 @@
             <div class="row1">
               <div class="card-title">En réparation</div>
               <div class="card-number">
-                {{ gestStat.nbMaterielEnReparation }}
+                <n-tooltip trigger="hover">
+                <template #trigger>
+                  {{ gestStat.nbMaterielEnReparation }} 
+                </template>
+                en réparation Interne
+              </n-tooltip>
+                <n-tooltip trigger="hover">
+                <template #trigger>
+                  ({{ gestStat.nbMaterielEnReparationExterne }})
+                </template>
+                en réparation Externe
+              </n-tooltip>
               </div>
             </div>
             <div class="row2">
