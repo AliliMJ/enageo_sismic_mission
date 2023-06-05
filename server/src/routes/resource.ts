@@ -5,6 +5,7 @@ import {
   getResources,
   addResourceToProject,
   getStock,
+  getStockByResource,
 } from '../controllers/resource';
 import { resourceFilter } from '../middlewares/filter';
 
@@ -15,3 +16,4 @@ resourceRouter.post('/addResource', addResourceToProject);
 resourceRouter.post('/', createResource);
 resourceRouter.get('/', resourceFilter, getResources);
 resourceRouter.get('/stock/:idProjet', getStock);
+resourceRouter.get('/stock/:idProjet/:idResource', getStockByResource);

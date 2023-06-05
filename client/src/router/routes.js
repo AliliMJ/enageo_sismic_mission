@@ -32,6 +32,8 @@ import CreateProject from '../pages/CreateProject.vue';
 import Equipes from '../pages/Equipes.vue';
 import Preference from '../pages/Preference.vue';
 import Profile from '../pages/Profile.vue';
+import Missions from '../pages/Missions.vue';
+import Activity from '../pages/Activities.vue';
 
 // const routes = [
 //   { path: '/users', component: Users, name: names.users },
@@ -102,6 +104,16 @@ const routes = [
         meta: { role: Role.Administrateur },
       },
       {
+        path: '/missions',
+        name: Route.Mission,
+        component: Missions,
+      },
+      {
+        path: '/activities',
+        name: Route.Activity,
+        component: Activity,
+      },
+      {
         path: '/materiels',
         name: Route.Material,
         component: Materials,
@@ -111,7 +123,7 @@ const routes = [
         path: '/materielsList',
         name: Route.MaterielsAdmin,
         component: MaterielsAdmin,
-        meta: { role: Role.Administrateur},
+        meta: { role: Role.Administrateur },
       },
       {
         path: '/materiel/:codeMat',
@@ -201,11 +213,16 @@ const routes = [
       // },
       {
         path: '/ressource/creation',
-        name: Route.Ressource,
+        name: Route.CreateResource,
         component: DynamicResource,
       },
       {
-        path: '/stock/:idProjet',
+        path: '/ressource',
+        name: Route.Ressource,
+      },
+      {
+        path: '/stock',
+        name: Route.Stock,
         component: Stock,
       },
     ],

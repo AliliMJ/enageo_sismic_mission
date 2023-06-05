@@ -1,16 +1,20 @@
 import { Response, Request } from 'express';
 import mongo from '../utils/mongodb';
-
+import { ObjectId } from 'mongodb';
+import { Resource, createConsumption } from '../database/resource';
 export const addResourceToProject = async (req: Request, res: Response) => {
   const resource = req.body;
 
   try {
     const stockCollection = mongo.db().collection('stock');
-    const result = await stockCollection.updateOne(
+    await stockCollection.updateOne(
       { resource: resource.resource },
       { $set: resource },
       { upsert: true }
     );
+    const result = await stockCollection.findOne({
+      resource: resource.resource,
+    });
 
     res.status(201).json(result);
   } catch {
@@ -20,13 +24,34 @@ export const addResourceToProject = async (req: Request, res: Response) => {
 
 export const insertConsommation = async (req: Request, res: Response) => {
   const data = req.body;
+  const resource = new Resource(data);
 
   try {
+    const c = createConsumption(resource);
     const consommationCollection = mongo.db().collection('consommation');
-    const consommation = await consommationCollection.insertOne(data);
+    const consommation = await consommationCollection.insertOne(c);
+
+    //update stock
+    const stockCollection = mongo.db().collection('stock');
+    const resourceInStock = await stockCollection.findOne({
+      _id: new ObjectId(data._id),
+    });
+
+    if (resourceInStock != null) {
+      Object.keys(data.stock).forEach((k) => {
+        if (data.stock[k] > 0)
+          resourceInStock.stock[k] = resourceInStock.stock[k] - data.stock[k];
+      });
+      //console.log('after modification', resourceInStock.stock);
+      await stockCollection.updateOne(
+        { _id: new ObjectId(data._id) },
+        { $set: { stock: resourceInStock.stock } }
+      );
+    }
 
     res.status(201).json(consommation);
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.status(500).json({ err: 'Could not insert consommation' });
   }
 };
@@ -72,5 +97,22 @@ export const getStock = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ err: 'Problème lors de la collection des ressources' });
+  }
+};
+
+export const getStockByResource = async (req: Request, res: Response) => {
+  try {
+    const idProjet = Number(req.params.idProjet);
+    const idResource = req.params.idResource;
+    console.log(idProjet, idResource);
+    const resourcesCollection = mongo.db().collection('stock');
+    const resources = await resourcesCollection.findOne({
+      idProjet: idProjet,
+      resource: idResource,
+    });
+
+    return res.status(200).json(resources);
+  } catch {
+    res.status(500).json({ err: 'Problème lors de la collection du stock' });
   }
 };

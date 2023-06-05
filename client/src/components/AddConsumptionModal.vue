@@ -27,9 +27,30 @@ const props = defineProps({
   resource: Object,
 });
 
-const emit = defineEmits(['confirm', 'close']);
+const emit = defineEmits(['confirm', 'close', 'error']);
 
 function confirm() {
+  //verify that stock is sufficent
+  for (let k in props.resource.stock) {
+    if (stock.value[k] == null)
+      return emit('error', 'Veuillez remplir tous les champs');
+    if (stock.value[k] <= 0) {
+      return emit(
+        'error',
+        'La valeur de consommation doit être strictement positive'
+      );
+    }
+    if (props.resource.stock[k] < stock.value[k]) {
+      console.log('qjqjq');
+      return emit('error', 'Stock est insuffisant');
+    }
+    if (stock.value[k] <= 0) {
+      return emit(
+        'error',
+        'La valeur de consommation doit être strictement positive'
+      );
+    }
+  }
   emit('confirm', { ...props.resource, stock: stock.value });
 }
 function close() {
@@ -65,6 +86,7 @@ function close() {
             style="flex-grow: 1"
             :show-button="false"
             placeholder="Remplir ce champ"
+            :min="0"
           />
         </n-form-item>
       </n-form>

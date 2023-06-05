@@ -103,9 +103,11 @@ async function ajouterResource() {
     data,
     rules: {
       transform:
-        'return {titre:this.titre, coutTotal:' +
+        'return {title:this.title, coutTotal:' +
         resourceForm.value.rules.transform.replaceAll('$', 'this.') +
         '}',
+      threshold:
+        'return ' + resourceForm.value.rules.threshold.replaceAll('$', 'this.'),
     },
   };
   await axios.post(`http://localhost:3000/resource`, resource);
