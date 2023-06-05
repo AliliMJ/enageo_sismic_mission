@@ -200,7 +200,7 @@ const statusRef = ref();
 const typeMaterielRef = ref();
 
 const lastReparation = (
-  await axios.get(`http://localhost:3000/atelier/lastReparation/${codeMat}`)
+  await axios.get(`http://localhost:3000/atelier/lastReparationInterne/${codeMat}`)
 ).data;
 
 const materiel = (await axios.get(`http://localhost:3000/material/${codeMat}`))

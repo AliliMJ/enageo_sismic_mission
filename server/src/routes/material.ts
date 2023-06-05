@@ -14,7 +14,7 @@ import {
   getEnPanneMaterielByDesignation,
   getMaterialGoodByMission,
   getMaterialGoodByDesignation,
-  getMaterialEnPanneWithReparations,
+  getMaterialWithReparations,
   mettreBonEtat,
   getMaterialByDesignation,
   getMaterialByWithoutMission,
@@ -24,7 +24,8 @@ import {
   // MettreEnReparationExterne,
   getMaterielReparationExterne,
   getMaterialWithoutMission,
-  deleteMateriel
+  deleteMateriel,
+  mettreEnPanneExterne
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
@@ -46,7 +47,7 @@ materialRouter.get('/materielEnPanneByMission/:codeMission', getMaterialEnPanneB
 materialRouter.get('/materielGoodByMission/:codeMission', getMaterialGoodByMission);
 materialRouter.get('/materielEnReparationExterne/:codeMission', getMaterielReparationExterne);
 
-materialRouter.get('/getMaterielWithReparations/:codeMat',getMaterialEnPanneWithReparations);
+materialRouter.get('/getMaterielWithReparations/:codeMat',getMaterialWithReparations);
 
 materialRouter.put('/mettreEnReparation/:codeMat',MettreEnReparation);
 //materialRouter.put('/mettreEnReparationExterne/:codeMat',MettreEnReparationExterne);
@@ -54,6 +55,7 @@ materialRouter.put('/mettreBonEtat/:codeMat', mettreBonEtat);
 materialRouter.get('/:codeMat', getMaterialByCode);
 
 materialRouter.post('/mettreEnPanne/:codeMat', mettreEnPanne);
+materialRouter.post('/mettreEnPanneExterne/:codeMat', mettreEnPanneExterne);
 
 materialRouter.put('/updateMateriel', updateMateriel);
 

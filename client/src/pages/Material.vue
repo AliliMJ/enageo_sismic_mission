@@ -35,6 +35,7 @@ import MaterielTag from "../components/MaterielTag.vue";
 import { ref, onMounted } from "vue";
 import { useAuth } from "../stores/authentication";
 import HistoryModal from "../components/ReparationHisotryNoEdit.vue";
+import ExterneModal from "../components/ReparationExterneHistory.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -45,6 +46,7 @@ const auth = useAuth();
 
 const isEdit = ref(true);
 const showHistoryModal = ref(false);
+const showExterneModal = ref(false);
 
 const materiel = ref();
 materiel.value = (
@@ -99,6 +101,20 @@ async function deleteMaterielFunction() {
 <template>
   <NSpace vertical>
     <NSpace justify="end">
+      <NButton
+        @click="showExterneModal = true"
+        class="button"
+        icon-placement="left"
+        color="rgb(255,0,0)"
+      >
+        Consulter l'historique des reparations externe
+        <template #icon>
+          <NIcon>
+            <history />
+          </NIcon>
+        </template>
+      </NButton>
+
       <NButton
         @click="showHistoryModal = true"
         class="button"
@@ -198,6 +214,11 @@ async function deleteMaterielFunction() {
     :showHistoryModal="showHistoryModal"
     :codeMat="route.params.codeMat"
     @cancel="showHistoryModal = false"
+  />
+  <ExterneModal
+    :showExterneModal="showExterneModal"
+    :codeMat="route.params.codeMat"
+    @cancel="showExterneModal = false"
   />
 </template>
 

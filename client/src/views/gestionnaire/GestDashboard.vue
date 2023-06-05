@@ -37,7 +37,12 @@
                 coût réparation mois passée
               </div>
               <div class="card-number">
-                {{ coutReparation[0].cout/1000 }}k (DA)
+                <NText v-if="gestStat.coutReparationByMonth.length!=0">
+                  {{ coutReparation[0].cout/1000 }}k (DA)
+                </NText>
+                <NText v-if="gestStat.coutReparationByMonth.length==0">
+                 0k (DA)
+                </NText>
               </div>
             </div>
             <div class="row2">

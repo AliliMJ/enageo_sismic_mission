@@ -1,7 +1,7 @@
 <script setup>
 import STable from '../components/STable.vue';
 import axios from 'axios';
-import { NSpace, NButton, NIcon, NInput, NH1 } from 'naive-ui';
+import { NSpace, NButton, NIcon, NInput, NH1 , useMessage} from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
 
 import { useRouter } from 'vue-router';
@@ -31,6 +31,7 @@ const router = useRouter();
 // const message = useMessage();
 
 const auth = useAuth();
+const message = useMessage();
 
 const materielEnPanne = ref([]);
 
@@ -176,7 +177,7 @@ const showInsertMaterielModal = () => {
   showModal.value = true;
 };
 
-async function confirmAdd(codeMatricule) {
+async function confirmAddInterne(codeMatricule) {
   const materiel = (
     await axios.post(
       `http://localhost:3000/material/mettreEnPanne/${codeMatricule}`
@@ -184,6 +185,18 @@ async function confirmAdd(codeMatricule) {
   ).data;
   materielEnPanne.value.push(materiel.materielEnPanne);
   showModal.value = false;
+  message.success("matriel bien ajoutee a l'atelier");
+}
+
+async function confirmAddExterne(codeMatricule) {
+  const materiel = (
+    await axios.post(
+      `http://localhost:3000/material/mettreEnPanneExterne/${codeMatricule}`
+    )
+  ).data;
+  materielEnPanne.value.push(materiel.materielEnPanne);
+  showModal.value = false;
+  message.success("matriel bien ajoutee a l'atelier");
 }
 
 const props = defineProps(['Number(projet.value.idProjet)']);
@@ -238,7 +251,8 @@ const props = defineProps(['Number(projet.value.idProjet)']);
     v-if="showModal"
     :showModal="showModal"
     @cancel="showModal = false"
-    @confirm="confirmAdd"
+    @confirmAddInterne="confirmAddInterne"
+    @confirmAddExterne="confirmAddExterne"
     :codeMission="auth.employe.codeMission"
   />
 </template>

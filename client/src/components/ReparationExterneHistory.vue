@@ -12,11 +12,13 @@ import {
   NText,
   NDatePicker,
   NFormItemGi,
+  NSteps,
+  NStep
 } from 'naive-ui';
 import { ref, watch } from 'vue';
 
 const props = defineProps({
-  showHistoryModal: Boolean,
+  showExterneModal: Boolean,
   codeMat: String,
 });
 
@@ -27,8 +29,6 @@ const materielWithReparations = (
     `http://localhost:3000/material/getMaterielWithReparations/${props.codeMat}`
   )
 ).data;
-
-console.log(materielWithReparations);
 
 const materielRef = ref({
   codeMat: materielWithReparations.codeMat,
@@ -42,10 +42,12 @@ const materielRef = ref({
   reparationsExterne: materielWithReparations.ReparationsExterne
 });
 
-const reparationsInterne = materielRef.value.reparationsInterne;
 const reparationsExterne = materielRef.value.reparationsExterne;
 
 const emit = defineEmits(['confirm', 'cancel']);
+
+const currentRef = ref(1);
+const currentStatus = ref("process");
 
 const idRepRef = ref();
 const dPanneRef = ref();
@@ -53,6 +55,11 @@ const dDebRepRef = ref();
 const dFinRepRef = ref();
 const detailRef = ref();
 const coutRef = ref();
+
+const dSortieRef = ref(null);
+const dArriveRef = ref();
+const dRetourRef = ref();
+const dEntreeRef = ref();
 
 const cols = [
   { title: 'code', key: 'idRep' },
@@ -88,31 +95,47 @@ const cols = [
 ];
 
 const handleClick = async (reparationRow) => {
-  const reparation = (
-    await axios.get(
-      `http://localhost:3000/atelier/getReparationsById/${Number(
-        reparationRow.idRep
-      )}`
-    )
-  ).data;
 
-  idRepRef.value = String(reparation.idRep);
-  dPanneRef.value = new Date(reparation.dPanne).valueOf();
+    currentRef.value=1;
+    currentStatus.value='process';
 
-  if (reparation.dDebRep === null) {
+
+  idRepRef.value = String(reparationRow.idRep);
+  dPanneRef.value = new Date(reparationRow.dPanne).valueOf();
+
+  if (reparationRow.dDebRep === null) {
     dDebRepRef.value = null;
   } else {
-    dDebRepRef.value = new Date(reparation.dDebRep).valueOf();
+    dDebRepRef.value = new Date(reparationRow.dDebRep).valueOf();
   }
 
-  if (reparation.dFinRep === null) {
+  if (reparationRow.dFinRep === null) {
     dFinRepRef.value = null;
   } else {
-    dFinRepRef.value = new Date(reparation.dFinRep).valueOf();
+    dFinRepRef.value = new Date(reparationRow.dFinRep).valueOf();
   }
 
-  coutRef.value = String(reparation.cout);
-  detailRef.value = reparation.detailProbleme;
+  coutRef.value = String(reparationRow.cout);
+  detailRef.value = reparationRow.detailProbleme;
+
+if (reparationRow.dSortie != null) {
+  currentRef.value++;
+  dSortieRef.value=reparationRow.dSortie;
+}
+if (reparationRow.dArrive != null) {
+  currentRef.value++;
+  dArriveRef.value=reparationRow.dArrive;
+}
+if (reparationRow.dRetour != null) {
+  currentRef.value++;
+  dRetourRef.value=reparationRow.dRetour;
+}
+if (reparationRow.dEntree != null) {
+  currentRef.value++;
+  currentStatus.value='finish'
+  dEntreeRef.value=reparationRow.dEntree;
+}
+
 };
 
 const onCancel = () => {
@@ -122,12 +145,12 @@ const onCancel = () => {
 
 <template>
   <n-modal
-    v-model:show="props.showHistoryModal"
+    v-model:show="props.showExterneModal"
     :mask-closable="false"
     size="huge"
   >
     <n-card
-      style="width: 1150px; height: 520px"
+      style="width: 1150px; height: 620px"
       :bordered="false"
       size="huge"
       role="dialog"
@@ -184,13 +207,81 @@ const onCancel = () => {
             >
             <STable
               @onRowClicked="handleClick"
-              :data="reparationsInterne"
+              :data="reparationsExterne"
               :columns="cols"
               :border="true"
               style="margin-top: 15px"
             />
           </n-grid-item>
         </NGrid>
+        <n-steps :current="currentRef" :status="currentStatus" style="margin-top:20px;">
+
+          <n-step title="à l'atelier mécanique">
+            <div class="n-step-description">
+              <div v-if="dPanneRef != null">
+                {{
+                  new Date(dPanneRef).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              Le véhicule se situe au niveau de l'atelier mécanique
+            </div>
+          </n-step>
+
+          <n-step title="sur route">
+            <div class="n-step-description">
+              <div v-if="dSortieRef != null">
+                {{
+                  new Date(dSortieRef).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              sur la route vers la direction générale
+            </div>
+          </n-step>
+
+          <n-step title="arrivé à la direction">
+            <div class="n-step-description">
+              <div v-if="dArriveRef != null">
+                {{
+                  new Date(dArriveRef).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              à l'atelier de la direction générale
+            </div>
+          </n-step>
+
+          <n-step title="sur route">
+            <div class="n-step-description">
+              <div v-if="dRetourRef != null">
+                {{
+                  new Date(dRetourRef).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              la véhicule est sur route vers la mission
+            </div>
+          </n-step>
+
+          <n-step title="arrivée">
+            <div class="n-step-description">
+              <div v-if="dEntreeRef != null">
+                {{
+                  new Date(dEntreeRef).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              la véhicule est arrivée à la mission
+            </div>
+          </n-step>
+
+        </n-steps>
       </NSpace>
       <template #footer>
         <NSpace justify="end">
@@ -207,6 +298,7 @@ const onCancel = () => {
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 15px;
+  height: 18vw;
 }
 
 .div3 {

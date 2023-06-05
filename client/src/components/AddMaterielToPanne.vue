@@ -22,11 +22,16 @@
       <NSpace vertical justify="space-between" style="height: 440px">
         <NSpace vertical class="child1">
           <NSpace justify="end">
-            <!-- <searchGoodMateriel
-              :codeMission="props.codeMission"
-              @sendGoodMateriel="getGoodMateriel"
-              style="width: 230px"
-            /> -->
+            <n-radio-group v-model:value="value" name="radiogroup">
+              <n-space>
+                <n-radio
+                  v-for="rep in reps"
+                  :key="rep.value"
+                  :value="rep.value"
+                  :label="rep.label"
+                />
+              </n-space>
+            </n-radio-group>
             <n-input
               v-model:value="searchDesignation"
               @update:value="searchFilter"
@@ -62,7 +67,7 @@
 </template>
 
 <script setup>
-import axios from 'axios';
+import axios from "axios";
 import {
   NModal,
   NCard,
@@ -73,21 +78,42 @@ import {
   NDataTable,
   useDialog,
   useMessage,
-} from 'naive-ui';
-import { SearchOutline as search } from '@vicons/ionicons5';
-import MaterielTag from './MaterielTag.vue';
-import { h } from 'vue';
-import { ref, watch } from 'vue';
-const emit = defineEmits(['confirm', 'cancel']);
+  NRadioGroup,
+  NRadio,
+} from "naive-ui";
+import { SearchOutline as search } from "@vicons/ionicons5";
+import MaterielTag from "./MaterielTag.vue";
+import { h } from "vue";
+import { ref, watch } from "vue";
+const emit = defineEmits(["confirmAddInterne","confirmAddExterne","cancel"]);
 
 const message = useMessage();
 const dialog = useDialog();
 
+const value = ref(null);
+const reps = [
+  {
+    value: "interne",
+    label: "Réparation interne",
+  },
+  {
+    value: "externe",
+    label: "Réparation externe",
+  },
+].map((s) => {
+  s.value = s.value.toLowerCase();
+  return s;
+});
+
 const props = defineProps({
   title: String,
   showModal: Boolean,
-  codeMission : String,
+  codeMission: String,
 });
+
+function print(){
+  console.log(value.value);
+}
 
 const codeMission = ref(props.codeMission);
 const checkedRowKeysRef = ref([]);
@@ -106,17 +132,17 @@ goodMateriel.value = (
 
 const cols = [
   {
-    title: 'Status',
-    key: 'statuMateriel',
-    type: 'selection',
+    title: "Status",
+    key: "statuMateriel",
+    type: "selection",
     multiple: false,
   },
-  { title: 'code materiel', key: 'codeMat' },
-  { title: 'designation', key: 'designation' },
-  { title: 'matricule', key: 'matricule' },
+  { title: "code materiel", key: "codeMat" },
+  { title: "designation", key: "designation" },
+  { title: "matricule", key: "matricule" },
   {
-    title: 'Status',
-    key: 'statuMateriel',
+    title: "Status",
+    key: "statuMateriel",
     render(row) {
       return h(MaterielTag, { statuMateriel: row.status });
     },
@@ -125,26 +151,35 @@ const cols = [
 
 const handleCheck = (rowKeys) => {
   checkedRowKeysRef.value = rowKeys;
-  console.log("--->"+checkedRowKeysRef.value);
+  console.log("--->" + checkedRowKeysRef.value);
 };
 
 const onConfirm = async () => {
-  if(checkedRowKeysRef.value === undefined){
-    message.warning("il faut choisir un materiel!!!",{ duration: 5e3 });
-  }else{
-    //( await axios.get(`http://localhost:3000/material/mettreEnPanne/${checkedRowKeysRef.value[0].codeMat}`));
-      message.success("matriel bien ajoutee a l'atelier");
-      emit('confirm',checkedRowKeysRef.value);
+  if (checkedRowKeysRef.value === undefined) {
+    message.warning("il faut choisir un materiel!!!", { duration: 5e3 });
+  } else {
+    if(value.value===null){
+      message.warning("il faut choisir le type de réparation!!!", { duration: 5e3 });
+    }else{
+      if(value.value==='interne'){
+        console.log('interne');
+        emit("confirmAddInterne", checkedRowKeysRef.value);
+      }else if(value.value==='externe'){
+        console.log('externe');
+        emit("confirmAddExterne", checkedRowKeysRef.value);
+      }
+      //( await axios.get(`http://localhost:3000/material/mettreEnPanne/${checkedRowKeysRef.value[0].codeMat}`));
+    }
   }
 };
 
 const onCancel = () => {
-  emit('cancel');
+  emit("cancel");
 };
 
-const searchDesignation = ref('');
+const searchDesignation = ref("");
 const searchFilter = () => {
-  console.log('=======>' + searchDesignation.value);
+  console.log("=======>" + searchDesignation.value);
   watch(searchDesignation, async () => {
     if (searchDesignation.value.length > 0) {
       goodMateriel.value = (

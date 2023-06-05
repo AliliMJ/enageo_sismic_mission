@@ -280,7 +280,7 @@ export const getGestionnaireStatistiques = async (
 
     const rawCoutByYears: Array<CoutMonth> =
       await prisma.$queryRaw`SELECT  DATE_FORMAT(dFinRep,'%Y-%m') as years , sum(cout) as cout 
-      FROM sismicvision.reparation r , sismicvision.materiel m
+      FROM sismicvision.reparationInterne r , sismicvision.materiel m
       WHERE r.codeMat=m.codeMat AND
             m.codeMission=${codeMission}
       GROUP BY  DATE_FORMAT(dFinRep,'%Y-%m')
@@ -325,7 +325,7 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     
     const rawNumberByYears: Array<MaterielPannesType> =
       await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
-    FROM reparation r , materiel m 
+    FROM reparationInterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
           m.codeMission = ${codeMission}
     GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
@@ -335,14 +335,14 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
       return { dates, nbr: Number(nbr) };
     });
 
-    const rqwNumberByMarque: Array<MaterielPannesMarque> =
+    const rawNumberByMarque: Array<MaterielPannesMarque> =
       await prisma.$queryRaw`SELECT m.marque , count(*) as nbr FROM 
-    sismicvision.reparation r , sismicvision.materiel m 
+    sismicvision.reparationInterne r , sismicvision.materiel m 
     WHERE r.codeMat = m.codeMat AND
         m.codeMission = ${codeMission}
     GROUP BY m.marque`;
 
-    stat.nbPannesByMarque = rqwNumberByMarque.map(({ marque, nbr }) => {
+    stat.nbPannesByMarque = rawNumberByMarque.map(({ marque, nbr }) => {
       return { marque, nbr: Number(nbr) };
     });
 

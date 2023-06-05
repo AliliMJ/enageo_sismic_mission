@@ -85,35 +85,72 @@
             title="à l'atelier mécanique"
             description="Le véhicule se situe au niveau de l'atelier mécanique"
           /> -->
+
           <n-step title="à l'atelier mécanique">
-              <div class="n-step-description">
-               <div v-if="demandeReparation.dSortie!=null">
-                  {{
-                  new Date(demandeReparation.dSortie).toLocaleDateString(
-                    'fr-FR',
-                    dateOptions
+            <div class="n-step-description">
+              <div v-if="lastReparation.dPanne != null">
+                {{
+                  new Date(lastReparation.dPanne).toLocaleDateString(
+                    "fr-FR"
                   )
-                }}</div>Le véhicule se situe au niveau de l'atelier mécanique
-          
-                
+                }}
               </div>
-            </n-step>
-          <n-step
-            title="sur la route"
-            description="sur la  route vers la direction générale"
-          />
-          <n-step
-            title="arrivé à la direction"
-            description="à l'atelier de la direction générale"
-          />
-          <n-step
-            title="sur la route"
-            description="la véhicule est sur route vers la mission"
-          />
-          <n-step
-            title="arrivée"
-            description="la véhicule est arrivée à la mission"
-          />
+              Le véhicule se situe au niveau de l'atelier mécanique
+            </div>
+          </n-step>
+
+          <n-step title="sur route">
+            <div class="n-step-description">
+              <div v-if="lastReparation.dSortie != null">
+                {{
+                  new Date(lastReparation.dSortie).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              sur la route vers la direction générale
+            </div>
+          </n-step>
+
+          <n-step title="arrivé à la direction">
+            <div class="n-step-description">
+              <div v-if="lastReparation.dArrive != null">
+                {{
+                  new Date(lastReparation.dArrive).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              à l'atelier de la direction générale
+            </div>
+          </n-step>
+
+          <n-step title="sur route">
+            <div class="n-step-description">
+              <div v-if="lastReparation.dRetour != null">
+                {{
+                  new Date(lastReparation.dRetour).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              la véhicule est sur route vers la mission
+            </div>
+          </n-step>
+
+          <n-step title="arrivée">
+            <div class="n-step-description">
+              <div v-if="lastReparation.dEntree != null">
+                {{
+                  new Date(lastReparation.dEntree).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              la véhicule est arrivée à la mission
+            </div>
+          </n-step>
+
         </n-steps>
 
         <n-space>
@@ -122,9 +159,9 @@
               round
               @click="next"
               icon-placement="right"
-              v-if="auth.user.role === Role.Gestionnaire && currentRef!=5"
-              :disabled="currentRef==2||currentRef==3"
-              style="background-color: white;"
+              v-if="auth.user.role === Role.Gestionnaire && currentRef != 5"
+              :disabled="currentRef == 2 || currentRef == 3"
+              style="background-color: white"
             >
               suivant
               <template #icon>
@@ -138,9 +175,9 @@
               round
               @click="next"
               icon-placement="right"
-              v-if="auth.user.role === Role.ChefMision && currentRef!=5"
-              :disabled="currentRef==1||currentRef==4||currentRef==5"
-              style="background-color: white;"
+              v-if="auth.user.role === Role.ChefMision && currentRef != 5"
+              :disabled="currentRef == 1 || currentRef == 4 || currentRef == 5"
+              style="background-color: white"
             >
               suivant
               <template #icon>
@@ -151,20 +188,7 @@
             </n-button>
 
             <NSpace justify="end">
-            <n-button
-              type="success"
-              @click="EndDemandeReparation"
-              icon-placement="right"
-              v-if="auth.user.role === Role.Gestionnaire && currentRef === 5"
-            >
-              mettre le vehicule en bonne etat
-              <template #icon>
-                <NIcon>
-                  <arrow />
-                </NIcon>
-              </template>
-            </n-button>
-          </NSpace>
+            </NSpace>
           </n-button-group>
           <NButton type="success" @click="save" v-if="showSaveRef"
             >Sauvegarder
@@ -178,7 +202,7 @@
       </n-space>
     </n-grid-item>
     <n-grid-item :span="10" class="div4">
-      <NForm :disabled="auth.user.role != Role.ChefMission && currentRef != 3">
+      <NForm :disabled=" ((auth.user.role != Role.ChefMision) || (currentRef != 3 ))">
         <NGrid :span="10" :x-gap="30">
           <NFormItemGi :span="2" label="id">
             <NInput v-model:value="idRepRef" />
@@ -219,28 +243,6 @@
           </NFormItemGi>
         </NGrid>
       </NForm>
-      <NSpace justify="space-between">
-        <NSpace>
-          <NButton
-            class="button"
-            type="info"
-            @click="mettreEnReparationExterne"
-            v-if="materiel.status === 0"
-          >
-            creer une demande de reparation
-          </NButton>
-        </NSpace>
-        <NSpace>
-          <NButton
-            class="button"
-            type="success"
-            @click="mettreEnBonEtat"
-            v-if="currentRef === 5 && auth.user.role === Role.ChefMission"
-          >
-            confirmer
-          </NButton>
-        </NSpace>
-      </NSpace>
     </n-grid-item>
   </NGrid>
 
@@ -252,10 +254,10 @@
 </template>
 
 <script setup>
-import axios from 'axios';
+import axios from "axios";
 
-import { History20Regular as history } from '@vicons/fluent';
-import HistoryModal from '../components/ReparationHistory.vue';
+import { History20Regular as history } from "@vicons/fluent";
+import HistoryModal from "../components/ReparationHistory.vue";
 import {
   NSpace,
   NButton,
@@ -271,15 +273,15 @@ import {
   NStep,
   NButtonGroup,
   NForm,
-} from 'naive-ui';
-import { ArrowForward as arrow, SaveOutline as Save } from '@vicons/ionicons5';
-import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { useAuth } from '../stores/authentication';
-import { Role } from '../utils/enums';
+} from "naive-ui";
+import { ArrowForward as arrow, SaveOutline as Save } from "@vicons/ionicons5";
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useAuth } from "../stores/authentication";
+import { Role } from "../utils/enums";
 
 const currentRef = ref(1);
-const currentStatus = ref('process');
+const currentStatus = ref("process");
 const showSaveRef = ref(false);
 
 const router = useRouter();
@@ -307,22 +309,20 @@ const typeMaterielRef = ref();
 
 const lastReparation = (
   await axios.get(
-    `http://localhost:3000/atelier/getLastReparationByMaterialCodeWithDemande/${codeMat}`
+    `http://localhost:3000/atelier/lastReparationExterne/${codeMat}`
   )
 ).data;
 
-const demandeReparation = lastReparation.DemadeReparation;
-
-if (demandeReparation.dSortie != null) {
+if (lastReparation.dSortie != null) {
   currentRef.value++;
 }
-if (demandeReparation.dArrive != null) {
+if (lastReparation.dArrive != null) {
   currentRef.value++;
 }
-if (demandeReparation.dRetour != null) {
+if (lastReparation.dRetour != null) {
   currentRef.value++;
 }
-if (demandeReparation.dEntree != null) {
+if (lastReparation.dEntree != null) {
   currentRef.value++;
 }
 
@@ -341,13 +341,13 @@ typeMaterielRef.value = typeMateriel.libelle;
 designationRef.value = materiel.designation;
 matriculeRef.value = materiel.matricule;
 if (Number(materiel.status) === 1) {
-  statusRef.value = 'en reparation';
+  statusRef.value = "en reparation";
 } else {
-  statusRef.value = 'en panne';
+  statusRef.value = "en panne";
 }
 marqueRef.value = materiel.marque;
 modeleRef.value = materiel.modele;
-dateServiceRef.value = new Date(materiel.dateService).toLocaleDateString('fr');
+dateServiceRef.value = new Date(materiel.dateService).toLocaleDateString("fr");
 
 //typeMaterielRef.value = materiel.typemateriel.libelle
 
@@ -364,19 +364,6 @@ if (lastReparation.dFinRep != null) {
 
 detailRef.value = lastReparation.detailProbleme;
 
-async function mettreEnReparationExterne() {
-  const req = {
-    idRep: Number(idRepRef.value),
-  };
-
-  const reparationExterne = (
-    await axios.put(
-      ` http://localhost:3000/material/mettreEnReparationExterne/${codeMat}`,
-      req
-    )
-  ).data;
-}
-
 function next() {
   if (currentRef.value === null) {
     currentRef.value = 1;
@@ -389,24 +376,27 @@ function next() {
 }
 
 async function save() {
+  console.log(currentRef.value);
   if (currentRef.value === 2) {
     const demandeReparation = (
       await axios.put(
-        ` http://localhost:3000/atelier/updateDemandeReparationdSortie/${lastReparation.idRep}`,
+        ` http://localhost:3000/atelier/updateReparationExternedSortie/${lastReparation.idRep}`,
         { dSortie: new Date() }
       )
     ).data;
     showSaveRef.value = false;
+    message.success('état changé avec succès');
   }
 
   if (currentRef.value === 3) {
     const demandeReparation = (
       await axios.put(
-        ` http://localhost:3000/atelier/updateDemandeReparationdArrive/${lastReparation.idRep}`,
+        ` http://localhost:3000/atelier/updateReparationExternedArrive/${lastReparation.idRep}`,
         { dArrive: new Date() }
       )
     ).data;
     showSaveRef.value = false;
+    message.success('état changé avec succès');
   }
 
   if (currentRef.value === 4) {
@@ -418,7 +408,7 @@ async function save() {
     ) {
       const demandeReparation = (
         await axios.put(
-          ` http://localhost:3000/atelier/updateDemandeReparationdRetour/${lastReparation.idRep}`,
+          ` http://localhost:3000/atelier/updateReparationExternedRetour/${lastReparation.idRep}`,
           { dRetour: new Date() }
         )
       ).data;
@@ -433,27 +423,32 @@ async function save() {
 
       (
         await axios.put(
-          ` http://localhost:3000/atelier/updateReparation/${lastReparation.idRep}`,
+          ` http://localhost:3000/atelier/updateReparationExterne/${lastReparation.idRep}`,
           req
         )
       ).data;
     } else {
       currentRef.value--;
-      message.error('il faut remplir tout les champs sur la reparation', {
+      message.error("il faut remplir tout les champs sur la reparation", {
         duration: 10000,
       });
+      message.success('état changé avec succès');
     }
   }
 
   if (currentRef.value === 5) {
     const demandeReparation = (
       await axios.put(
-        ` http://localhost:3000/atelier/updateDemandeReparationdEntree/${lastReparation.idRep}`,
+        ` http://localhost:3000/atelier/updateReparationExternedEntree/${lastReparation.idRep}`,
         { dEntree: new Date() }
       )
     ).data;
+    EndDemandeReparation();
+    router.push('/atelier');
+    message.success('état changé avec succès');
+    message.success('véhicule bien réparée');
+    showSaveRef.value = false;
   }
-  showSaveRef.value = false;
 }
 
 async function EndDemandeReparation() {
@@ -464,48 +459,6 @@ async function EndDemandeReparation() {
     )
   ).data;
 }
-
-const mettreEnReparation = async () => {
-  const req = {
-    idRep: Number(idRepRef.value),
-    dDebRep: new Date(dDebRepRef.value + 4000000),
-  };
-
-  console.log(req.dDebRep);
-  if (dDebRepRef.value != null) {
-    const reparation = (
-      await axios.put(
-        ` http://localhost:3000/material/mettreEnReparation/${codeMat}`,
-        req
-      )
-    ).data;
-    message.success('materiel ajoutee a la reparation');
-    router.push('/atelier');
-  } else {
-    message.error('il faut remplit toutes les champs necissaires');
-  }
-};
-
-const mettreEnBonEtat = async () => {
-  const req = {
-    idRep: Number(idRepRef.value),
-    dFinRep: new Date(dFinRepRef.value + 4000000),
-    detailProbleme: detailRef.value,
-    cout: coutRef.value,
-  };
-  if (dFinRepRef.value != null && detailRef.value != null) {
-    const reparation = (
-      await axios.put(
-        ` http://localhost:3000/material/mettreBonEtat/${codeMat}`,
-        req
-      )
-    ).data;
-    message.success('materiel ajoutee a bon etat');
-    router.push('/atelier');
-  } else {
-    message.error('il faut remplit toutes les champs necissaires');
-  }
-};
 
 const showHistoryModalAction = () => {
   showHistoryModal.value = true;
@@ -544,7 +497,7 @@ const showHistoryModalAction = () => {
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 10px;
-  margin-bottom:20px;
+  margin-bottom: 20px;
 }
 
 .historyButton {
