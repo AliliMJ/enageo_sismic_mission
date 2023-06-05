@@ -122,7 +122,10 @@ function handleRowClick(row) {
 
 async function onStockConsumed(data) {
   showAddConsumptionModal.value = false;
-  await axios.post('http://localhost:3000/resource/consommation', data);
+  await axios.post('http://localhost:3000/resource/consommation', {
+    data,
+    project,
+  });
   const r = await (
     await axios.get(
       `http://localhost:3000/resource/stock/${project.idProjet}/${data.resource}`

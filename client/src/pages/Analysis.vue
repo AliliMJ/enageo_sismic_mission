@@ -1,58 +1,45 @@
 <script setup>
-const data = [
-  { chantier: 'EGS60', mois: 'janvier', production: 100, année: 2018 },
-  { chantier: 'EGS60', mois: 'févirier', production: 90, année: 2018 },
-  { chantier: 'EGS60', mois: 'mars', production: 120, année: 2018 },
-  { chantier: 'EGS60', mois: 'avril', production: 70, année: 2018 },
-  { chantier: 'EGS60', mois: 'mai', production: 30, année: 2018 },
-  { chantier: 'EGS60', mois: 'juin', production: 111, année: 2018 },
-  { chantier: 'EGS60', mois: 'juillet', production: 96, année: 2018 },
-  { chantier: 'EGS60', mois: 'aout', production: 77, année: 2018 },
-  { chantier: 'EGS60', mois: 'spectembre', production: 49, année: 2018 },
-  { chantier: 'EGS60', mois: 'octobre', production: 130, année: 2018 },
-  { chantier: 'EGS60', mois: 'novembre', production: 102, année: 2018 },
-  { chantier: 'EGS60', mois: 'decembre', production: 99, année: 2018 },
+import { NSpace, NCard, NH1 } from 'naive-ui';
 
-  { chantier: 'EGS60', mois: 'janvier', production: 100, année: 2019 },
-  { chantier: 'EGS60', mois: 'févirier', production: 90, année: 2019 },
-  { chantier: 'EGS60', mois: 'mars', production: 120, année: 2019 },
-  { chantier: 'EGS60', mois: 'avril', production: 70, année: 2019 },
-  { chantier: 'EGS60', mois: 'mai', production: 30, année: 2019 },
-  { chantier: 'EGS60', mois: 'juin', production: 111, année: 2019 },
-  { chantier: 'EGS60', mois: 'juillet', production: 96, année: 2019 },
-  { chantier: 'EGS60', mois: 'aout', production: 77, année: 2019 },
-  { chantier: 'EGS60', mois: 'spectembre', production: 49, année: 2019 },
-  { chantier: 'EGS60', mois: 'octobre', production: 130, année: 2019 },
-  { chantier: 'EGS60', mois: 'novembre', production: 102, année: 2019 },
-  { chantier: 'EGS60', mois: 'decembre', production: 99, année: 2019 },
+import axios from 'axios';
+import { Activites } from '../utils/enums';
+const consumptions = (
+  await axios.get('http://localhost:3000/resource/consommation')
+).data;
+console.log(consumptions);
 
-  { chantier: 'EGS170', mois: 'janvier', production: 100, année: 2019 },
-  { chantier: 'EGS170', mois: 'févirier', production: 90, année: 2019 },
-  { chantier: 'EGS170', mois: 'mars', production: 120, année: 2019 },
-  { chantier: 'EGS170', mois: 'avril', production: 70, année: 2019 },
-  { chantier: 'EGS170', mois: 'mai', production: 30, année: 2019 },
-  { chantier: 'EGS170', mois: 'juin', production: 111, année: 2019 },
-  { chantier: 'EGS170', mois: 'juillet', production: 96, année: 2019 },
-  { chantier: 'EGS170', mois: 'aout', production: 77, année: 2019 },
-  { chantier: 'EGS170', mois: 'spectembre', production: 49, année: 2019 },
-  { chantier: 'EGS170', mois: 'octobre', production: 130, année: 2019 },
-  { chantier: 'EGS170', mois: 'novembre', production: 102, année: 2019 },
-  { chantier: 'EGS170', mois: 'decembre', production: 99, année: 2019 },
-];
+const production = (
+  await axios.get(
+    'http://localhost:3000/rapports/production/' + Activites.Enregistrement
+  )
+).data;
+console.log(production);
 
 $(function () {
-  $('#output').pivotUI(data, {
-    rows: ['chantier'],
-    cols: ['mois'],
-  });
+  $('#charges').pivotUI(consumptions, {});
+});
+$(function () {
+  $('#production').pivotUI(production, {});
 });
 </script>
 <template>
-  <div id="output"></div>
+  <n-space vertical>
+    <n-h1>Analyse</n-h1>
+    <n-card title="Charges">
+      <div id="charges"></div>
+    </n-card>
+    <n-card title="Production">
+      <div id="production"></div>
+    </n-card>
+  </n-space>
 </template>
 
 <style scoped>
-#output {
+#charges {
+  font-family: Verdana;
+  word-break: keep-all;
+}
+#production {
   font-family: Verdana;
   word-break: keep-all;
 }
