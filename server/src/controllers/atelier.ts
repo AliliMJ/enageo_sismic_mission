@@ -242,7 +242,7 @@ export const getReparationInterneById = async (req: Request, res: Response) => {
 
 /* start demande travail */
 
-export const updateDemandeReparationExternedSortie = async (req: Request, res: Response) => {
+export const updateReparationExternedSortie = async (req: Request, res: Response) => {
   try {
 
     const idRep = Number(req.params.idRep);
@@ -261,7 +261,7 @@ export const updateDemandeReparationExternedSortie = async (req: Request, res: R
   }
 };
 
-export const updateDemandeReparationExternedArrive = async (req: Request, res: Response) => {
+export const updateReparationExternedArrive = async (req: Request, res: Response) => {
   try {
 
     const idRep = Number(req.params.idRep);
@@ -280,7 +280,7 @@ export const updateDemandeReparationExternedArrive = async (req: Request, res: R
   }
 };
 
-export const updateDemandeReparationExternedRetour = async (req: Request, res: Response) => {
+export const updateReparationExternedRetour = async (req: Request, res: Response) => {
   try {
 
     const idRep = Number(req.params.idRep);
@@ -299,7 +299,7 @@ export const updateDemandeReparationExternedRetour = async (req: Request, res: R
   }
 };
 
-export const updateDemandeReparationExternedEntree = async (req: Request, res: Response) => {
+export const updateReparationExternedEntree = async (req: Request, res: Response) => {
   try {
 
     const idRep = Number(req.params.idRep);
@@ -311,7 +311,8 @@ export const updateDemandeReparationExternedEntree = async (req: Request, res: R
     })
 
     return res.status(200).json(demandereparation);
-  } catch {
+  } catch(e) {
+    console.log(e);
     res.status(500).json({
       err: 'Problème lors de la collection des reparations pour ce matériel',
     });

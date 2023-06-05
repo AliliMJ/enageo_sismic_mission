@@ -56,13 +56,10 @@ const dFinRepRef = ref();
 const detailRef = ref();
 const coutRef = ref();
 
-const dSortieRef = ref();
+const dSortieRef = ref(null);
 const dArriveRef = ref();
 const dRetourRef = ref();
 const dEntreeRef = ref();
-
-const reparationExterneRef = ref();
-
 
 const cols = [
   { title: 'code', key: 'idRep' },
@@ -98,46 +95,45 @@ const cols = [
 ];
 
 const handleClick = async (reparationRow) => {
-  const reparation = (
-    await axios.get(
-      `http://localhost:3000/atelier/getReparationsById/${Number(
-        reparationRow.idRep
-      )}`
-    )
-  ).data;
 
-  console.log('-->'+reparationRow.dSortie);
+    currentRef.value=1;
+    currentStatus.value='process';
 
-  idRepRef.value = String(reparation.idRep);
-  dPanneRef.value = new Date(reparation.dPanne).valueOf();
 
-  if (reparation.dDebRep === null) {
+  idRepRef.value = String(reparationRow.idRep);
+  dPanneRef.value = new Date(reparationRow.dPanne).valueOf();
+
+  if (reparationRow.dDebRep === null) {
     dDebRepRef.value = null;
   } else {
-    dDebRepRef.value = new Date(reparation.dDebRep).valueOf();
+    dDebRepRef.value = new Date(reparationRow.dDebRep).valueOf();
   }
 
-  if (reparation.dFinRep === null) {
+  if (reparationRow.dFinRep === null) {
     dFinRepRef.value = null;
   } else {
-    dFinRepRef.value = new Date(reparation.dFinRep).valueOf();
+    dFinRepRef.value = new Date(reparationRow.dFinRep).valueOf();
   }
 
-  coutRef.value = String(reparation.cout);
-  detailRef.value = reparation.detailProbleme;
+  coutRef.value = String(reparationRow.cout);
+  detailRef.value = reparationRow.detailProbleme;
 
 if (reparationRow.dSortie != null) {
   currentRef.value++;
+  dSortieRef.value=reparationRow.dSortie;
 }
 if (reparationRow.dArrive != null) {
   currentRef.value++;
+  dArriveRef.value=reparationRow.dArrive;
 }
 if (reparationRow.dRetour != null) {
   currentRef.value++;
+  dRetourRef.value=reparationRow.dRetour;
 }
 if (reparationRow.dEntree != null) {
   currentRef.value++;
   currentStatus.value='finish'
+  dEntreeRef.value=reparationRow.dEntree;
 }
 
 };
@@ -219,15 +215,12 @@ const onCancel = () => {
           </n-grid-item>
         </NGrid>
         <n-steps :current="currentRef" :status="currentStatus" style="margin-top:20px;">
-          <!-- <n-step
-            title="à l'atelier mécanique"
-            description="Le véhicule se situe au niveau de l'atelier mécanique"
-          /> -->
+
           <n-step title="à l'atelier mécanique">
             <div class="n-step-description">
-              <div v-if="reparationsExterne.dSortie != null">
+              <div v-if="dPanneRef != null">
                 {{
-                  new Date(reparationsExterne.dSortie).toLocaleDateString(
+                  new Date(dPanneRef).toLocaleDateString(
                     "fr-FR"
                   )
                 }}
@@ -235,11 +228,12 @@ const onCancel = () => {
               Le véhicule se situe au niveau de l'atelier mécanique
             </div>
           </n-step>
+
           <n-step title="sur route">
             <div class="n-step-description">
-              <div v-if="reparationsExterne.dArrive != null">
+              <div v-if="dSortieRef != null">
                 {{
-                  new Date(reparationsExterne.dArrive).toLocaleDateString(
+                  new Date(dSortieRef).toLocaleDateString(
                     "fr-FR"
                   )
                 }}
@@ -247,11 +241,12 @@ const onCancel = () => {
               sur la route vers la direction générale
             </div>
           </n-step>
+
           <n-step title="arrivé à la direction">
             <div class="n-step-description">
-              <div v-if="reparationsExterne.dRetour != null">
+              <div v-if="dArriveRef != null">
                 {{
-                  new Date(reparationsExterne.dRetour).toLocaleDateString(
+                  new Date(dArriveRef).toLocaleDateString(
                     "fr-FR"
                   )
                 }}
@@ -259,11 +254,12 @@ const onCancel = () => {
               à l'atelier de la direction générale
             </div>
           </n-step>
+
           <n-step title="sur route">
             <div class="n-step-description">
-              <div v-if="reparationsExterne.dEntree != null">
+              <div v-if="dRetourRef != null">
                 {{
-                  new Date(reparationsExterne.dEtnree).toLocaleDateString(
+                  new Date(dRetourRef).toLocaleDateString(
                     "fr-FR"
                   )
                 }}
@@ -271,11 +267,12 @@ const onCancel = () => {
               la véhicule est sur route vers la mission
             </div>
           </n-step>
+
           <n-step title="arrivée">
             <div class="n-step-description">
-              <div v-if="reparationsExterne.dArrive != null">
+              <div v-if="dEntreeRef != null">
                 {{
-                  new Date(reparationsExterne.dArrive).toLocaleDateString(
+                  new Date(dEntreeRef).toLocaleDateString(
                     "fr-FR"
                   )
                 }}
@@ -283,6 +280,7 @@ const onCancel = () => {
               la véhicule est arrivée à la mission
             </div>
           </n-step>
+
         </n-steps>
       </NSpace>
       <template #footer>
@@ -300,6 +298,7 @@ const onCancel = () => {
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
     rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   padding: 15px;
+  height: 18vw;
 }
 
 .div3 {

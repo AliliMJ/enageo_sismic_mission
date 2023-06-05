@@ -85,7 +85,21 @@
             title="à l'atelier mécanique"
             description="Le véhicule se situe au niveau de l'atelier mécanique"
           /> -->
+
           <n-step title="à l'atelier mécanique">
+            <div class="n-step-description">
+              <div v-if="lastReparation.dPanne != null">
+                {{
+                  new Date(lastReparation.dPanne).toLocaleDateString(
+                    "fr-FR"
+                  )
+                }}
+              </div>
+              Le véhicule se situe au niveau de l'atelier mécanique
+            </div>
+          </n-step>
+
+          <n-step title="sur route">
             <div class="n-step-description">
               <div v-if="lastReparation.dSortie != null">
                 {{
@@ -94,10 +108,11 @@
                   )
                 }}
               </div>
-              Le véhicule se situe au niveau de l'atelier mécanique
+              sur la route vers la direction générale
             </div>
           </n-step>
-          <n-step title="sur route">
+
+          <n-step title="arrivé à la direction">
             <div class="n-step-description">
               <div v-if="lastReparation.dArrive != null">
                 {{
@@ -106,10 +121,11 @@
                   )
                 }}
               </div>
-              sur la route vers la direction générale
+              à l'atelier de la direction générale
             </div>
           </n-step>
-          <n-step title="arrivé à la direction">
+
+          <n-step title="sur route">
             <div class="n-step-description">
               <div v-if="lastReparation.dRetour != null">
                 {{
@@ -118,26 +134,15 @@
                   )
                 }}
               </div>
-              à l'atelier de la direction générale
-            </div>
-          </n-step>
-          <n-step title="sur route">
-            <div class="n-step-description">
-              <div v-if="lastReparation.dEntree != null">
-                {{
-                  new Date(lastReparation.dEtnree).toLocaleDateString(
-                    "fr-FR"
-                  )
-                }}
-              </div>
               la véhicule est sur route vers la mission
             </div>
           </n-step>
+
           <n-step title="arrivée">
             <div class="n-step-description">
-              <div v-if="lastReparation.dSortie != null">
+              <div v-if="lastReparation.dEntree != null">
                 {{
-                  new Date(lastReparation.dSortie).toLocaleDateString(
+                  new Date(lastReparation.dEntree).toLocaleDateString(
                     "fr-FR"
                   )
                 }}
@@ -145,6 +150,7 @@
               la véhicule est arrivée à la mission
             </div>
           </n-step>
+
         </n-steps>
 
         <n-space>
@@ -196,7 +202,7 @@
       </n-space>
     </n-grid-item>
     <n-grid-item :span="10" class="div4">
-      <NForm :disabled="auth.user.role != Role.ChefMission && currentRef != 3">
+      <NForm :disabled=" ((auth.user.role != Role.ChefMision) || (currentRef != 3 ))">
         <NGrid :span="10" :x-gap="30">
           <NFormItemGi :span="2" label="id">
             <NInput v-model:value="idRepRef" />
@@ -370,24 +376,27 @@ function next() {
 }
 
 async function save() {
+  console.log(currentRef.value);
   if (currentRef.value === 2) {
     const demandeReparation = (
       await axios.put(
-        ` http://localhost:3000/atelier/updateDemandeReparationExternedSortie/${lastReparation.idRep}`,
+        ` http://localhost:3000/atelier/updateReparationExternedSortie/${lastReparation.idRep}`,
         { dSortie: new Date() }
       )
     ).data;
     showSaveRef.value = false;
+    message.success('état changé avec succès');
   }
 
   if (currentRef.value === 3) {
     const demandeReparation = (
       await axios.put(
-        ` http://localhost:3000/atelier/updateDemandeReparationdArrive/${lastReparation.idRep}`,
+        ` http://localhost:3000/atelier/updateReparationExternedArrive/${lastReparation.idRep}`,
         { dArrive: new Date() }
       )
     ).data;
     showSaveRef.value = false;
+    message.success('état changé avec succès');
   }
 
   if (currentRef.value === 4) {
@@ -399,7 +408,7 @@ async function save() {
     ) {
       const demandeReparation = (
         await axios.put(
-          ` http://localhost:3000/atelier/updateDemandeReparationdRetour/${lastReparation.idRep}`,
+          ` http://localhost:3000/atelier/updateReparationExternedRetour/${lastReparation.idRep}`,
           { dRetour: new Date() }
         )
       ).data;
@@ -423,21 +432,23 @@ async function save() {
       message.error("il faut remplir tout les champs sur la reparation", {
         duration: 10000,
       });
+      message.success('état changé avec succès');
     }
   }
 
   if (currentRef.value === 5) {
     const demandeReparation = (
       await axios.put(
-        ` http://localhost:3000/atelier/updateDemandeReparationdEntree/${lastReparation.idRep}`,
+        ` http://localhost:3000/atelier/updateReparationExternedEntree/${lastReparation.idRep}`,
         { dEntree: new Date() }
       )
     ).data;
+    EndDemandeReparation();
+    router.push('/atelier');
+    message.success('état changé avec succès');
+    message.success('véhicule bien réparée');
+    showSaveRef.value = false;
   }
-  showSaveRef.value = false;
-  EndDemandeReparation();
-  message.success('véhicule bien réparée');
-  router.push('/atelier');
 }
 
 async function EndDemandeReparation() {

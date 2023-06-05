@@ -7,10 +7,10 @@ import {
   getLastReparationInterneByMaterialCode1,
   getAtelierMecanique,
   getReparationInterneById,
-  updateDemandeReparationExternedSortie,
-  updateDemandeReparationExternedArrive,
-  updateDemandeReparationExternedRetour,
-  updateDemandeReparationExternedEntree,
+  updateReparationExternedSortie,
+  updateReparationExternedArrive,
+  updateReparationExternedRetour,
+  updateReparationExternedEntree,
   // getLastReparationByMaterialCodeWithDemande,
   EndReparationExterne,
   updateReparationInterne,
@@ -32,10 +32,10 @@ atelierRouter.get('/lastReparation1/:codeMat', getLastReparationInterneByMateria
 // atelierRouter.get('/getLastReparationByMaterialCodeWithDemande/:codeMat', getLastReparationByMaterialCodeWithDemande);
 
 
-atelierRouter.put('/updateDemandeReparationExternedSortie/:idRep', updateDemandeReparationExternedSortie);
-atelierRouter.put('/updateDemandeReparationdArrive/:idRep', updateDemandeReparationExternedArrive);
-atelierRouter.put('/updateDemandeReparationdRetour/:idRep',  updateDemandeReparationExternedRetour);
-atelierRouter.put('/updateDemandeReparationdEntree/:idRep', updateDemandeReparationExternedEntree);
+atelierRouter.put('/updateReparationExternedSortie/:idRep', updateReparationExternedSortie);
+atelierRouter.put('/updateReparationExternedArrive/:idRep', updateReparationExternedArrive);
+atelierRouter.put('/updateReparationExternedRetour/:idRep',  updateReparationExternedRetour);
+atelierRouter.put('/updateReparationExternedEntree/:idRep', updateReparationExternedEntree);
 
 atelierRouter.put('/updateReparation/:idRep', updateReparationInterne);
 atelierRouter.put('/updateReparationExterne/:idRep', updateReparationExterne);
