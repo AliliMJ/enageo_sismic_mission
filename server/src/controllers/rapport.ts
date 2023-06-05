@@ -87,3 +87,58 @@ export const insertRapport = async (req: Request, res: Response) => {
     res.status(500).json({ err: 'Internal error while creating report' });
   }
 };
+const nomsDesMois = [
+  'Janvier',
+  'Février',
+  'Mars',
+  'Avril',
+  'Mai',
+  'Juin',
+  'Juillet',
+  'Août',
+  'Septembre',
+  'Octobre',
+  'Novembre',
+  'Décembre',
+];
+
+export const getProduction = async (req: Request, res: Response) => {
+  try {
+    const codeActivite = req.params.codeActivite;
+    const rendements = await prisma.rendement.findMany({
+      where: {
+        Equipe: { codeActivite },
+      },
+      include: {
+        Rapport: {
+          include: {
+            Projet: { include: { Terrain: { include: { Wilaya: true } } } },
+          },
+        },
+      },
+    });
+
+    const production = rendements.map((r) => {
+      const date = new Date(r.Rapport.date);
+      const numMois = date.getMonth();
+
+      const mois = nomsDesMois[numMois];
+      const annee = date.getFullYear();
+      return {
+        chantier: r.Rapport.Projet.codeMission,
+        wilaya: r.Rapport.Projet.Terrain?.Wilaya.nom,
+        mois,
+        annee,
+        vp: r.valeur,
+        gain: r.valeur * 30000, // à remplacer avec le prix de 1 vp dans le projet
+      };
+    });
+    console.log(production);
+
+    res.status(200).json(production);
+  } catch {
+    res
+      .status(500)
+      .json({ err: 'Problème lors de la collection des rapports' });
+  }
+};

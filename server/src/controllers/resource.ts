@@ -21,15 +21,40 @@ export const addResourceToProject = async (req: Request, res: Response) => {
     res.status(500).json({ err: 'Could not insert resource to stock' });
   }
 };
+const nomsDesMois = [
+  'Janvier',
+  'Février',
+  'Mars',
+  'Avril',
+  'Mai',
+  'Juin',
+  'Juillet',
+  'Août',
+  'Septembre',
+  'Octobre',
+  'Novembre',
+  'Décembre',
+];
 
 export const insertConsommation = async (req: Request, res: Response) => {
-  const data = req.body;
+  const { data, project } = req.body;
+  const date = new Date();
+  const numMois = date.getMonth();
+
+  const mois = nomsDesMois[numMois];
+  const annee = date.getFullYear();
   const resource = new Resource(data);
 
   try {
     const c = createConsumption(resource);
     const consommationCollection = mongo.db().collection('consommation');
-    const consommation = await consommationCollection.insertOne(c);
+    const consommation = await consommationCollection.insertOne({
+      ...c,
+      chantier: project.codeMission,
+      projet: project.nom,
+      mois,
+      annee,
+    });
 
     //update stock
     const stockCollection = mongo.db().collection('stock');
@@ -114,5 +139,18 @@ export const getStockByResource = async (req: Request, res: Response) => {
     return res.status(200).json(resources);
   } catch {
     res.status(500).json({ err: 'Problème lors de la collection du stock' });
+  }
+};
+
+export const getConsumption = async (req: Request, res: Response) => {
+  try {
+    const consumptionCollection = mongo.db().collection('consommation');
+    const consommations = await consumptionCollection.find().toArray();
+
+    return res.status(200).json(consommations);
+  } catch {
+    res
+      .status(500)
+      .json({ err: 'Problème lors de la collection des consommations' });
   }
 };
