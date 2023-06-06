@@ -8,7 +8,7 @@ export const employeNameFilter = (
   const nom = req.query.like;
 
   req.body.filter = {
-    titre: { startsWith: nom },
+    nom: { startsWith: nom },
   };
 
   next();

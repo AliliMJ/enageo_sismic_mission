@@ -54,6 +54,7 @@ export const Route = Object.freeze({
   DemandeReparation: 'demandeReparation',
   EmployesAdmin: 'EmployesAdmin',
   MaterielsAdmin: 'MaterielsAdmin',
+  MaterielAdmin: 'MaterielAdmin',
   CreateResource: 'createResource',
   Stock: 'stock',
 });

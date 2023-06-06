@@ -13,7 +13,8 @@ import {
   getEmployesBymissionByName,
   getEmployesWithOutMission,
   insertEmployeWithMission,
-  updateEmployeEquipe
+  updateEmployeEquipe,
+  deleteEmployeDB
 } from '../controllers/employe';
 import { employeNameFilter } from '../middlewares/filter';
 
@@ -34,5 +35,7 @@ employeRouter.get('/:id', getEmployeById);
 employeRouter.post('/', insertEmploye);
 
 employeRouter.put('/:id', updateEmploye);
+
 employeRouter.delete('/:id', deleteEmploye);
+employeRouter.delete('/deletedb/:id', deleteEmployeDB);
 // employeRouter.put('/:id', updateEmploye);
