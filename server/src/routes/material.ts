@@ -1,7 +1,7 @@
 import express from 'express';
 import paginate from '../middlewares/pagination';
 
-import { enPanneMaterielFilter ,goodMaterielFilter } from '../middlewares/filter';
+import { enPanneMaterielFilter ,goodMaterielFilter , MaterielFilter } from '../middlewares/filter';
 
 import {
   getMaterial,
@@ -21,16 +21,19 @@ import {
   getMaterialByWithoutMissionDesignation,
   ajouterMaterielToMission,
   updateMateriel,
-  // MettreEnReparationExterne,
+  MettreEnReparationExterne,
   getMaterielReparationExterne,
   getMaterialWithoutMission,
   deleteMateriel,
-  mettreEnPanneExterne
+  mettreEnPanneExterne,
+  getMaterialDesignation,
+  insertMaterial
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
 
-materialRouter.get('/', paginate, getMaterial);
+materialRouter.get('/', MaterielFilter , paginate, getMaterial);
+materialRouter.get('/designation', MaterielFilter , paginate, getMaterialDesignation);
 materialRouter.get('/materielWithoutMission', paginate, getMaterialByWithoutMission);
 materialRouter.get('/EnPanneMateriel/designation/:codeMission',enPanneMaterielFilter,paginate,getEnPanneMaterielByDesignation);
 materialRouter.get('/goodMateriel/designation/:codeMission', goodMaterielFilter,paginate, getMaterialGoodByDesignation);
@@ -50,7 +53,7 @@ materialRouter.get('/materielEnReparationExterne/:codeMission', getMaterielRepar
 materialRouter.get('/getMaterielWithReparations/:codeMat',getMaterialWithReparations);
 
 materialRouter.put('/mettreEnReparation/:codeMat',MettreEnReparation);
-//materialRouter.put('/mettreEnReparationExterne/:codeMat',MettreEnReparationExterne);
+materialRouter.put('/mettreEnReparationExterne/:codeMat',MettreEnReparationExterne);
 materialRouter.put('/mettreBonEtat/:codeMat', mettreBonEtat);
 materialRouter.get('/:codeMat', getMaterialByCode);
 
@@ -58,6 +61,6 @@ materialRouter.post('/mettreEnPanne/:codeMat', mettreEnPanne);
 materialRouter.post('/mettreEnPanneExterne/:codeMat', mettreEnPanneExterne);
 
 materialRouter.put('/updateMateriel', updateMateriel);
-
+materialRouter.put('/insert', insertMaterial);
 materialRouter.put('/deleteMateriel/:codeMat', deleteMateriel);
 

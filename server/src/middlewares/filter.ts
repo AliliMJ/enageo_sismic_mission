@@ -66,3 +66,17 @@ export const goodMaterielFilter = (
 
   next();
 };
+
+export const MaterielFilter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const designation = req.query.like;
+
+  req.body.filter = {
+    designation: { startsWith: designation },
+  };
+
+  next();
+};

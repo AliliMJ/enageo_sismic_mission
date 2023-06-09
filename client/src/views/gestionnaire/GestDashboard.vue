@@ -38,7 +38,7 @@
               </div>
               <div class="card-number">
                 <NText v-if="gestStat.coutReparationByMonth.length!=0">
-                  {{ coutReparation[0].cout/1000 }}k (DA)
+                  {{ (coutReparationInterne[0].cout+coutReparationExterne[0].cout)/1000 }}k (DA)
                 </NText>
                 <NText v-if="gestStat.coutReparationByMonth.length==0">
                  0k (DA)
@@ -326,8 +326,11 @@ gestStat.nombreEmpEtat.forEach((element) => {
 
 
 /* start cout reparation par mois */
-const coutReparation = ref(gestStat.coutReparationByMonth);
-console.log(coutReparation.value);
+const coutReparationInterne = ref(gestStat.coutReparationByMonth);
+const coutReparationExterne = ref(gestStat.coutReparationExterneByMonth);
+
+console.log(coutReparationExterne);
+
 // gestStat.coutReparationByMonth.forEach((element) => {
 //   employesetat.value.push(element.etat);
 // });

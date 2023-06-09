@@ -7,7 +7,57 @@ export const getMaterial = async (req: Request, res: Response) => {
     });
 
     return res.status(200).json(materials);
-  } catch {
+  } catch(e) {
+    console.log(e);
+    res.status(500).json({ err: "Problème lors de la collection de matériel" });
+  }
+};
+
+export const insertMaterial = async (req: Request, res: Response) => {
+  try {
+    
+    const {
+      codeMat,
+      marque,
+      modele ,
+      matricule,
+      designation,
+      dateService,
+      status,
+      type
+    } = req.body
+
+    const materiel = await prisma.materiel.create({
+      data : {
+        codeMat : codeMat,
+        marque : marque,
+        modele : modele,
+        matricule : matricule,
+        designation : designation,
+        dateService : dateService,
+        status : status,
+        idTypeMat  : type
+      }
+    });
+
+    return res.status(200).json(materiel);
+  } catch(e) {
+    console.log(e);
+    res.status(500).json({ err: "Problème lors de la collection de matériel" });
+  }
+};
+
+
+export const getMaterialDesignation = async (req: Request, res: Response) => {
+  try {
+    const materials = await prisma.materiel.findMany({
+      ...req.body.pagination?.options,
+      where: { ...req.body.filter },
+    });
+
+    return res.status(200).json(materials);
+  } catch(e) {
+    console.log(e);
     res.status(500).json({ err: "Problème lors de la collection de matériel" });
   }
 };
@@ -169,18 +219,67 @@ export const MettreEnReparation = async (req: Request, res: Response) => {
   }
 };
 
+// export const MettreEnReparationExterne = async (req: Request, res: Response) => {
+//   try {
+
+//     const  codeMat  = req.params.codeMat;
+
+//    const reparationExterne = await prisma.reparationExterne.create({
+//      data : {
+//       codeMat : codeMat,
+//       dPanne : new Date(),
+//       cout : 0
+//      },
+//    });
+
+//     const materiel = await prisma.materiel.update({
+//       where : {codeMat : codeMat},
+//       data : {
+//         status : 3
+//       }
+//     });
+
+//     return res.status(200).send(`Matériel ${codeMat} est mis en reparation externe`);
+//   } catch(e){
+//     console.log(e);
+//     res.status(500).json({ err: "Problème lors de la collection ce matériel" });
+//   }
+// };
+
 export const MettreEnReparationExterne = async (req: Request, res: Response) => {
   try {
 
-    const  codeMat  = req.params.codeMat;
+   const  codeMat  = req.params.codeMat;
+   const  idRep = req.body.idRep;
+   const detailProbleme = req.body.detailProbleme;
+   const dPanne = req.body.dPanne;
+   const vide = req.body.vide;
 
-   const reparationExterne = await prisma.reparationExterne.create({
-     data : {
-      codeMat : codeMat,
-      dPanne : new Date(),
-      cout : 0
-     },
+   const reparationInterne = await prisma.reparationInterne.delete({
+    where : {
+      idRep : idRep
+    }
    });
+
+   if(vide===1){
+    const reparationExterne = await prisma.reparationExterne.create({
+      data : {
+       codeMat : codeMat,
+       dPanne : dPanne,
+       cout : 0
+      },
+    });
+   }else {
+    const reparationExterne = await prisma.reparationExterne.create({
+      data : {
+       codeMat : codeMat,
+       dPanne : dPanne,
+       detailProbleme : detailProbleme,
+       cout : 0
+      },
+    });
+   }
+
 
     const materiel = await prisma.materiel.update({
       where : {codeMat : codeMat},

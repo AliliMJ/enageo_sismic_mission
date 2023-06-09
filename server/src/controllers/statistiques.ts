@@ -287,11 +287,11 @@ export const getGestionnaireStatistiques = async (
     //   // }
 
     const rawCoutByYears: Array<CoutMonth> =
-      await prisma.$queryRaw`SELECT  DATE_FORMAT(dFinRep,'%Y-%m') as years , sum(cout) as cout 
-      FROM sismicvision.reparationInterne r , sismicvision.materiel m
+      await prisma.$queryRaw`SELECT  DATE_FORMAT(r.dFinRep,'%Y-%m') as years , sum(r.cout) as cout 
+      FROM reparationInterne r , materiel m
       WHERE r.codeMat=m.codeMat AND
             m.codeMission=${codeMission}
-      GROUP BY  DATE_FORMAT(dFinRep,'%Y-%m')
+      GROUP BY  DATE_FORMAT(r.dFinRep,'%Y-%m')
       ORDER BY years `;
 
     stat.coutReparationByMonth = rawCoutByYears.map(({ years, cout }) => {
@@ -300,7 +300,7 @@ export const getGestionnaireStatistiques = async (
 
     const rawCoutExterneByYears: Array<CoutMonth> =
       await prisma.$queryRaw`SELECT  DATE_FORMAT(dFinRep,'%Y-%m') as years , sum(cout) as cout 
-      FROM sismicvision.reparationExterne r , sismicvision.materiel m
+      FROM reparationExterne r , materiel m
       WHERE r.codeMat=m.codeMat AND
             m.codeMission=${codeMission}
       GROUP BY  DATE_FORMAT(dFinRep,'%Y-%m')
@@ -381,7 +381,7 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
 
     const rawNumberInterneByMarque: Array<MaterielPannesMarque> =
       await prisma.$queryRaw`SELECT m.marque , count(r.idRep) as nbr FROM 
-    reparationInterne r , sismicvision.materiel m 
+    reparationInterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
         m.codeMission = ${codeMission}
     GROUP BY m.marque`;
@@ -392,7 +392,7 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
 
     const rawNumberExterneByMarque: Array<MaterielPannesMarque> =
       await prisma.$queryRaw`SELECT m.marque , count(r.idRep) as nbr FROM 
-    reparationExterne r , sismicvision.materiel m 
+    reparationExterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
         m.codeMission = ${codeMission}
     GROUP BY m.marque`;

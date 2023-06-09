@@ -8,7 +8,7 @@ import MaterielTag from '../components/MaterielTag.vue';
 import { useAuth } from '../stores/authentication';
 import { useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
-import Modal from '../components/AffecteMaterielModal.vue';
+import Modal from '../components/AddMaterielModal.vue';
 import { SearchOutline as search, Add } from '@vicons/ionicons5';
 
 const auth = useAuth();
@@ -54,18 +54,14 @@ const showInsertMaterielModal = () => {
   showModal.value = true;
 };
 
-async function confirmAdd(codeMatricule) {
-  const req = {
-    codeMat: String(codeMatricule),
-  };
+async function confirmAdd(materielReq) {
 
   const materiel = (
     await axios.put(
-      `http://localhost:3000/material/ajouterMaterielWithMission/${auth.employe.codeMission}`,
-      req
+      `http://localhost:3000/material/insert`,materielReq
     )
   ).data;
-  materiels.value.push(materiel);
+  materiels.value.push(materielReq);
   showModal.value = false;
 }
 
@@ -75,13 +71,13 @@ const searchFilter = () => {
     if (searchDesignation.value.length > 0) {
       materiels.value = (
         await axios.get(
-          `http://localhost:3000/material/allMateriel/designation/${auth.employe.codeMission}?like=${searchDesignation.value}`
+          `http://localhost:3000/material/designation?like=${searchDesignation.value}`
         )
       ).data;
     } else {
       materiels.value = (
         await axios.get(
-          `http://localhost:3000/material/materielByMission/${auth.employe.codeMission}`
+          `http://localhost:3000/material`
         )
       ).data;
     }
@@ -90,7 +86,7 @@ const searchFilter = () => {
 </script>
 
 <template>
-  <NH1>La liste des matériels du {{ auth.employe.codeMission }}</NH1>
+  <NH1>La liste des matériels</NH1>
   <NSpace justify="space-between">
     <NSpace> </NSpace>
     <NSpace>
@@ -110,7 +106,7 @@ const searchFilter = () => {
         type="success"
         icon-placement="right"
       >
-        Affecter un matériel à la mission
+        ajouter un matériel
         <template #icon>
           <NIcon>
             <Add />
