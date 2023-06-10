@@ -86,12 +86,11 @@ const cols = [
 // });
 
 async function onResourceAdded(resource) {
-  const d = {
-    ...resource,
-    idProjet: Number(project.idProjet),
-  };
   const res = (
-    await axios.post('http://localhost:3000/resource/addResource', d)
+    await axios.post('http://localhost:3000/resource/addResource', {
+      data: resource,
+      project,
+    })
   ).data;
 
   const resourceInStock = stock.value.filter((s) => {

@@ -13,7 +13,8 @@ import {
   getEmployesBymissionByName,
   getEmployesWithOutMission,
   insertEmployeWithMission,
-  updateEmployeEquipe
+  updateEmployeEquipe,
+  getEmployesByEquipe,
 } from '../controllers/employe';
 import { employeNameFilter } from '../middlewares/filter';
 
@@ -23,11 +24,25 @@ employeRouter.get('/', employeNameFilter, paginate, getEmployes);
 employeRouter.get('/fonctions', getFonctions);
 employeRouter.get('/stats', getEmployesNumberOfYear);
 employeRouter.get('/employeByMission/:codeMission', getEmployeByMission);
-employeRouter.get('/getEmployesBymissionByName/:codeMission',employeNameFilter, paginate, getEmployesBymissionByName);
-employeRouter.get('/getEmployesWithoutMissionByName',employeNameFilter, paginate, getEmployesWithOutMission);
-employeRouter.put('/deleteEmployeWithMission/:id', deleteEmployeWithRemoveMission);
-employeRouter.put('/insertEmployeWithMission/:id',insertEmployeWithMission);
-employeRouter.put('/updateEmployeEquipe/:id',updateEmployeEquipe);
+employeRouter.get('/employeByEquipe/:idEquipe', getEmployesByEquipe);
+employeRouter.get(
+  '/getEmployesBymissionByName/:codeMission',
+  employeNameFilter,
+  paginate,
+  getEmployesBymissionByName
+);
+employeRouter.get(
+  '/getEmployesWithoutMissionByName',
+  employeNameFilter,
+  paginate,
+  getEmployesWithOutMission
+);
+employeRouter.put(
+  '/deleteEmployeWithMission/:id',
+  deleteEmployeWithRemoveMission
+);
+employeRouter.put('/insertEmployeWithMission/:id', insertEmployeWithMission);
+employeRouter.put('/updateEmployeEquipe/:id', updateEmployeEquipe);
 
 employeRouter.get('/:id', getEmployeById);
 

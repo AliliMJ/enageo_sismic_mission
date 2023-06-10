@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios';
 
-import TableEmploye from '../components/TableEmploye.vue';
+import STable from '../components/STable.vue';
 import {
   NH1,
   NTag,
@@ -13,58 +13,20 @@ import {
   useMessage,
 } from 'naive-ui';
 import { h, ref, watch } from 'vue';
-import AffecteEmployeModal from '../components/AffecteEmployeModal.vue';
-import { Add } from '@vicons/ionicons5';
-import Fonction from '../components/Fonction.vue';
-
 import { useRouter } from 'vue-router';
+
+import Fonction from './Fonction.vue';
+
 import { SearchOutline as search } from '@vicons/ionicons5';
-import { useAuth } from '../stores/authentication';
+
 import { Fonctions } from '../utils/enums';
-import EtatEmployeTag from '../components/EtatEmployeTag.vue';
+import EtatEmployeTag from './EtatEmployeTag.vue';
 
-const auth = useAuth();
-const dialog = useDialog();
-const message = useMessage();
-
-function deleteEmploye(id) {
-  dialog.warning({
-    title: 'Confimer la supprission',
-    content: 'Êtes-vous sur de supprimer cet employé?',
-    positiveText: 'Confirmer',
-    negativeText: 'Annuler',
-    onPositiveClick: () => console.log('Employé supprimer', id),
-    onNegativeClick: () => console.log('Suppression annulée'),
-  });
-}
-
-async function confirmAdd(id) {
-  const req = {
-    codeMission: employe.codeMission,
-  };
-  const emp = (
-    await axios.put(
-      `http://localhost:3000/employes/insertEmployeWithMission/${id}`,
-      req
-    )
-  ).data;
-  employes.value.push(emp);
-  message.success('employé ajoutée à la mission', { duration: 5e3 });
-  showModal.value = false;
-}
-
-const employe = (
-  await axios.get(`http://localhost:3000/employes/${auth.user.id}`)
-).data;
-
-const employes = ref([]);
-employes.value = (
-  await axios.get(
-    `http://localhost:3000/employes/employeByMission/${employe.codeMission}`
-  )
-).data;
-
+const props = defineProps({
+  employes: Array,
+});
 const router = useRouter();
+
 const cols = [
   { title: 'id', key: 'id' },
 
@@ -116,10 +78,6 @@ const cols = [
 const handleClick = (employe) => {
   router.push(`/employe/${employe.id}`);
 };
-const showModal = ref(false);
-const showInsertEmployeModal = () => {
-  showModal.value = true;
-};
 
 const searchName = ref('');
 const searchFilter = () => {
@@ -143,28 +101,24 @@ const searchFilter = () => {
 
 <template>
   <NSpace vertical>
-    <AffecteEmployeModal
-      :title="`affecter un employé au mission ${employe.codeMission}`"
-      :showModal="showModal"
-      @cancel="showModal = false"
-      @confirm="confirmAdd"
-    />
-    <NH1>La liste des employés</NH1>
     <NSpace justify="end">
-      <NButton
-        @click="showInsertEmployeModal"
-        type="success"
-        icon-placement="right"
+      <n-input
+        v-model:value="searchName"
+        @update:value="searchFilter"
+        placeholder="Rechercher par nom"
+        style="width: 255px"
       >
-        Affecter nouvel employé
-        <template #icon>
-          <NIcon>
-            <Add />
-          </NIcon>
+        <template #suffix>
+          <n-icon :component="search" />
         </template>
-      </NButton>
+      </n-input>
     </NSpace>
-    <TableEmploye @onRowClicked="handleClick" :employes="employes" />
+    <STable
+      @onRowClicked="handleClick"
+      :data="props.employes"
+      :columns="cols"
+      pagination-behavior-on-filter="first"
+    />
   </NSpace>
 </template>
 

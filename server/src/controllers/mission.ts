@@ -1,5 +1,24 @@
 import { Response, Request } from 'express';
 
+export const insertMission = async (req: Request, res: Response) => {
+  const { codeMission, methodologie, description } = req.body;
+
+  try {
+    console.log(req.body);
+    const mission = await prisma.mission.create({
+      data: {
+        codeMission,
+        methodologie,
+        description,
+      },
+    });
+    return res.status(200).json(mission);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ err: 'Problème lors de la creation de la mission' });
+  }
+};
+
 export const getMissions = async (req: Request, res: Response) => {
   try {
     const missions = await prisma.mission.findMany();
