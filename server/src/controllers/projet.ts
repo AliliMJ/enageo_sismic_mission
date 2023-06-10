@@ -49,6 +49,9 @@ export const insertProjet = async (req: Request, res: Response) => {
     description = '',
     budget = 100,
     wilaya,
+    objVP,
+    objDateDebut,
+    objDateFin,
   } = req.body;
 
   try {
@@ -71,9 +74,9 @@ export const insertProjet = async (req: Request, res: Response) => {
         nom,
         description,
         budget,
-        objVP: 1000,
-        objDateDebut: new Date(),
-        objDateFin: new Date(),
+        objVP,
+        objDateDebut,
+        objDateFin,
       },
     });
     await prisma.terrain.create({
@@ -156,10 +159,10 @@ export const getProjetEnCoursByMission = async (
       WHERE ep2.idProjet = p.idProjet
     )
 `;
+    if (projet.length == 0) return res.status(200).json(null);
 
     res.status(200).json(projet[0]);
   } catch (e) {
-    console.log(e);
     res.status(500).send({ err: 'Internal error' });
   }
 };

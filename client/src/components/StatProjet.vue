@@ -1,37 +1,76 @@
 <script setup>
 import Chart from 'chart.js/auto';
-import {
-  NRow,
-  NCol,
-  NCard,
-  NSpace,
-  NGrid,
-  NGi,
-  NStatistic,
-  NText,
-  NH1,
-  NTag,
-  NProgress,
-  NIcon,
-} from 'naive-ui';
+import { NCard, NSpace, NGrid, NGi, NText, NProgress, NIcon } from 'naive-ui';
 
 import { onMounted, ref } from 'vue';
+import axios from 'axios';
 import {
   AlertCircleOutline as Info,
   HelpCircleOutline as Hint,
 } from '@vicons/ionicons5';
 
+const props = defineProps({
+  projet: Object,
+});
+
 const myChart = ref(null);
+function dateDiff(prodData) {
+  const firstData = prodData[0];
+  const lastData = prodData[prodData.length - 1];
+  const { jour: firstDay, mois: firstMonth, annee: firstYear } = firstData;
+  const { jour: lastDay, mois: lastMonth, annee: lastYear } = lastData;
+
+  const startDate = new Date(firstYear, firstMonth, firstDay);
+  const endDate = new Date(lastYear, lastMonth, lastDay);
+  const differenceInDays = Math.floor(
+    (endDate - startDate) / (1000 * 3600 * 24)
+  );
+  return differenceInDays;
+}
+
+function groupVP(prodData) {
+  let labels = [];
+  let data = [];
+
+  const differenceInDays = dateDiff(prodData);
+  prodData.forEach((e) => {
+    labels.push(
+      `${e.jour} ${e.libMois} ${differenceInDays > 14 ? `${e.annee}` : ''}`
+    );
+    data.push(e.vp);
+  });
+
+  return { labels, data };
+}
+const production = (
+  await axios.get(
+    'http://localhost:3000/rapports/productionByProject/' +
+      props.projet.idProjet
+  )
+).data;
+const timePassed = Math.floor(
+  (new Date() -
+    new Date(production[0].jour, production[0].mois, production[0].annee)) /
+    (1000 * 3600 * 24)
+);
+const remainingTime = Math.floor(
+  (new Date(props.projet.objDateFin) -
+    new Date(props.projet.objDateDebut) -
+    new Date()) /
+    (1000 * 3600 * 24)
+);
+
+const groupedData = groupVP(production);
 
 onMounted(() => {
   new Chart(myChart.value, {
     type: 'line',
     data: {
-      labels: ['jan', 'fev', 'march', 'avril', 'mai'],
+      labels: groupedData.labels,
       datasets: [
         {
-          label: 'My First Dataset',
-          data: [65, 80, 50, 50, 110],
+          label: 'Les points vibrés',
+          data: groupedData.data,
           fill: false,
           borderColor: 'rgb(75, 192, 192)',
           tension: 0.1,
@@ -48,6 +87,17 @@ onMounted(() => {
     },
   });
 });
+const { totalVp, totalGain } = production.reduce(
+  (acc, current) => {
+    return {
+      totalVp: acc.totalVp + current.vp,
+      totalGain: acc.totalGain + current.gain,
+    };
+  },
+  { totalVp: 0, totalGain: 0 }
+);
+
+const pourcentage = Math.round((totalVp / props.projet.objVP) * 100);
 </script>
 
 <template>
@@ -58,35 +108,39 @@ onMounted(() => {
           <n-progress
             type="dashboard"
             gap-position="bottom"
-            :percentage="80" /></n-space></n-card
+            :percentage="pourcentage" /></n-space></n-card
     ></n-gi>
     <n-gi
-      ><n-card class="stat-card" title="Coût des charges">
+      ><n-card class="stat-card" title="Gain">
         <template #header-extra>
           <n-icon class="hint" depth="3" size="30"> <Hint /> </n-icon>
         </template>
         <n-space align="center">
-          <n-text class="stat-val">12k</n-text>
+          <n-text class="stat-val">{{ Math.round(totalGain / 1000) }} k</n-text>
           <n-text class="unit" depth="3" strong>Dinars</n-text>
         </n-space>
         <template #footer>
-          <n-text depth="2"> Le coût des ressources </n-text>
+          <n-text depth="2"> Le gain </n-text>
         </template>
       </n-card></n-gi
     >
     <n-gi
-      ><n-card class="stat-card" title="Taux de prodution"
+      ><n-card class="stat-card" title="Production"
         ><template #header-extra>
           <n-icon class="hint" depth="3" size="30">
             <Hint />
           </n-icon>
         </template>
-        <n-space align="center" justify="space-between">
-          <n-text class="stat-val">90%</n-text>
-          <n-tag size="small" type="success">+ 10%</n-tag>
+        <n-space align="center">
+          <n-text class="stat-val">{{ totalVp }}</n-text>
+          <n-text class="unit" depth="3" strong>Vp tirés</n-text>
+        </n-space>
+        <n-space align="center">
+          <n-text class="stat-val">{{ props.projet.objVP - totalVp }}</n-text>
+          <n-text class="unit" depth="3" strong>Vp restants</n-text>
         </n-space>
         <template #footer>
-          <n-text depth="2"> Taux de point vibrés tirés </n-text>
+          <n-text depth="2"> le nombre de points vibrés tirés </n-text>
         </template>
       </n-card></n-gi
     >
@@ -96,39 +150,19 @@ onMounted(() => {
           <n-icon class="hint" depth="3" size="30"> <Hint /> </n-icon>
         </template>
         <n-space align="center">
-          <n-text class="stat-delai">12</n-text>
+          <n-text class="stat-delai">{{ timePassed }}</n-text>
           <n-text class="unit" depth="3" strong>Jours passés</n-text>
         </n-space>
         <n-space align="center">
-          <n-text class="stat-delai">100</n-text>
+          <n-text class="stat-delai">{{ remainingTime }}</n-text>
           <n-text class="unit" depth="3" strong>Jours restant</n-text>
         </n-space>
       </n-card></n-gi
     >
-    <n-gi :span="3">
+    <n-gi :span="4">
       <n-card>
         <canvas id="ctx" ref="myChart"></canvas>
       </n-card>
-    </n-gi>
-    <n-gi>
-      <div style="display: flex; flex-direction: column; height: 100%">
-        <n-card style="flex: 1" title="Production">
-          <n-space align="center">
-            <n-text class="stat-val">123</n-text>
-            <n-text class="unit" depth="3" strong>Points vibrés</n-text>
-          </n-space>
-        </n-card>
-        <div style="height: 12px"></div>
-        <n-card style="flex: 1" title="Gain">
-          <template #header-extra>
-            <n-icon class="hint" depth="3" size="30"> <Hint /> </n-icon>
-          </template>
-          <n-space align="center">
-            <n-text class="stat-val">800k</n-text>
-            <n-text class="unit" depth="3" strong>Dinars</n-text>
-          </n-space>
-        </n-card>
-      </div>
     </n-gi>
   </n-grid>
 </template>

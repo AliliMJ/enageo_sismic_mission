@@ -18,7 +18,7 @@ const equipes = (
 ).data;
 
 function itemClicked(item) {
-  router.push('/equipe/' / item.idEquipe);
+  router.push('/equipe/' + item.idEquipe);
 }
 </script>
 

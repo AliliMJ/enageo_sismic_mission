@@ -13,7 +13,7 @@ import {
   NCard,
   useMessage,
 } from 'naive-ui';
-import StatProjet from '../components/StatProjet.vue';
+
 import { computed, ref } from 'vue';
 import { etatProjet, Role } from '../utils/enums';
 import { ArrowForward, Close, SaveOutline as Save } from '@vicons/ionicons5';
@@ -100,8 +100,6 @@ const status = computed(() => {
 
 <template>
   <NSpace vertical>
-    <n-h1>Statistiques</n-h1>
-    <StatProjet />
     <div>
       <n-h1>Etat du projet</n-h1>
       <n-card title="Les phases du projet">

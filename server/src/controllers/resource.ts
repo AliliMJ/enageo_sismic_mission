@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb';
 import { Resource, createConsumption } from '../database/resource';
 export const addResourceToProject = async (req: Request, res: Response) => {
   const { data, project } = req.body;
+  console.log(project);
 
   try {
     const incFields: any = {};
@@ -18,7 +19,11 @@ export const addResourceToProject = async (req: Request, res: Response) => {
         { upsert: true }
       );
     } else {
-      await stockCollection.insertOne({ ...data, idProjet: project.idProjet });
+      const p = await stockCollection.insertOne({
+        ...data,
+        idProjet: project.idProjet,
+      });
+      console.log(p);
     }
 
     const addedResource = await stockCollection.findOne({
@@ -87,7 +92,6 @@ export const insertConsommation = async (req: Request, res: Response) => {
 
     res.status(201).send();
   } catch (e) {
-    console.log(e);
     res.status(500).json({ err: 'Could not insert consommation' });
   }
 };
@@ -108,7 +112,7 @@ export const createResource = async (req: Request, res: Response) => {
 export const getResources = async (req: Request, res: Response) => {
   try {
     const query = req.body.query;
-    console.log(query);
+
     const resourcesCollection = mongo.db().collection('resources');
     const resources = await resourcesCollection.find(query).toArray();
 
