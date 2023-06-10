@@ -299,11 +299,11 @@ export const getGestionnaireStatistiques = async (
     });
 
     const rawCoutExterneByYears: Array<CoutMonth> =
-      await prisma.$queryRaw`SELECT  DATE_FORMAT(dFinRep,'%Y-%m') as years , sum(cout) as cout 
+      await prisma.$queryRaw`SELECT  DATE_FORMAT(dFinRep,'%Y/%m') as years , sum(cout) as cout 
       FROM reparationExterne r , materiel m
       WHERE r.codeMat=m.codeMat AND
             m.codeMission=${codeMission}
-      GROUP BY  DATE_FORMAT(dFinRep,'%Y-%m')
+      GROUP BY  DATE_FORMAT(dFinRep,'%Y/%m')
       ORDER BY years `;
 
     stat.coutReparationExterneByMonth = rawCoutExterneByYears.map(({ years, cout }) => {
@@ -350,14 +350,14 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
 
     };
 
-    await prisma.$queryRaw`SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))`;
+   // await prisma.$queryRaw`SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))`;
     
     const rawNumberByYears: Array<MaterielPannesType> =
       await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
     FROM reparationInterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
           m.codeMission = ${codeMission}
-    GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
+    GROUP BY dates
     ORDER BY dates`;
 
     stat.nbPannesByMonth = rawNumberByYears.map(({ dates, nbr }) => {
@@ -365,12 +365,13 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     });
 
     //************************************* */
+
     const rawNumberExterneByYears: Array<MaterielPannesType> =
       await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
     FROM reparationExterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
           m.codeMission = ${codeMission}
-    GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
+    GROUP BY dates
     ORDER BY dates`;
 
     stat.nbPannesExterneByMonth = rawNumberExterneByYears.map(({ dates, nbr }) => {
@@ -410,7 +411,7 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     FROM reparationInterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
           m.codeMission = ${codeMission}
-    GROUP BY MONTH(r.dFinRep), YEAR(r.dFinRep)
+    GROUP BY dates
     ORDER BY dates`;
 
     stat.nbReparationInterneByMonth = rawNumberInerneByMonths.map(({ dates, nbr }) => {
@@ -424,7 +425,7 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     FROM reparationExterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
           m.codeMission = ${codeMission}
-    GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
+    GROUP BY dates
     ORDER BY dates`;
 
     stat.nbReparationExterneByMonth = rawNumberExterneByMonths.map(({ dates, nbr }) => {

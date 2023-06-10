@@ -34,13 +34,19 @@
           <div class="testCard">
             <div class="row1">
               <div class="card-title">
-                coût réparation mois passée
+                coût réparation ce mois
               </div>
               <div class="card-number">
                 <NText v-if="gestStat.coutReparationByMonth.length!=0">
-                  {{ (coutReparationInterne[0].cout+coutReparationExterne[0].cout)/1000 }}k (DA)
+                  {{ (coutReparationInterne[coutReparationInterne.length-1].cout)/1000 }}k (DA)
                 </NText>
-                <NText v-if="gestStat.coutReparationByMonth.length==0">
+                <NText v-if="gestStat.coutReparationExterneByMonth.length!=0">
+                  {{ (coutReparationExterne[coutReparationExterne.length-1].cout)/1000 }}k (DA)
+                </NText>
+                <NText v-if="gestStat.coutReparationByMonth.length!=0&&gestStat.coutReparationExterneByMonth.length!=0">
+                  {{ (coutReparationInterne[coutReparationInterne.length-1].cout+coutReparationExterne[coutReparationExterne.length-1].cout)/1000 }}k (DA)
+                </NText>
+                <NText v-if="gestStat.coutReparationByMonth.length==0&&gestStat.coutReparationExterneByMonth.length==0">
                  0k (DA)
                 </NText>
               </div>

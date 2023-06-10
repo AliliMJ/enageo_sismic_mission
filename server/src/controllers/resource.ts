@@ -2,6 +2,7 @@ import { Response, Request } from 'express';
 import mongo from '../utils/mongodb';
 import { ObjectId } from 'mongodb';
 import { Resource, createConsumption } from '../database/resource';
+
 export const addResourceToProject = async (req: Request, res: Response) => {
   const { data, project } = req.body;
   console.log(project);
@@ -104,7 +105,8 @@ export const createResource = async (req: Request, res: Response) => {
     const resource = await resourcesCollection.insertOne(data);
 
     res.status(201).json(resource);
-  } catch {
+  } catch(e) {
+    console.log(e);
     res.status(500).json({ err: 'Could not insert consommation' });
   }
 };
