@@ -24,8 +24,13 @@ export const employeRouter = express.Router();
 employeRouter.get('/', employeNameFilter, paginate, getEmployes);
 employeRouter.get('/fonctions', getFonctions);
 employeRouter.get('/stats', getEmployesNumberOfYear);
-employeRouter.get('/employeByMission/:codeMission', getEmployeByMission);
+employeRouter.get(
+  '/employeByMission/:codeMission',
+  employeNameFilter,
+  getEmployeByMission
+);
 employeRouter.get('/employeByEquipe/:idEquipe', getEmployesByEquipe);
+
 employeRouter.get(
   '/getEmployesBymissionByName/:codeMission',
   employeNameFilter,

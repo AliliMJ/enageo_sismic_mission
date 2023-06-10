@@ -112,7 +112,7 @@ async function handleSearch(query) {
           <n-select
             v-model:value="resource.title"
             filterable
-            placeholder="Search Songs"
+            placeholder="Chercher un consommable"
             :options="options"
             :loading="loading"
             clearable
