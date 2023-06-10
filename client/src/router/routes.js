@@ -28,6 +28,7 @@ import DynamicResource from '../pages/DynamicResource.vue';
 import EmployesAdmin from '../pages/EmployesAdmin.vue';
 import EmployeAdmin from '../pages/EmployeAdmin.vue';
 import MaterielsAdmin from '../pages/MaterielsAdmin.vue';
+import MaterielAdmin from '../pages/MaterielAdmin.vue';
 
 import CreateProject from '../pages/CreateProject.vue';
 import Equipes from '../pages/Equipes.vue';
@@ -124,6 +125,12 @@ const routes = [
         path: '/materielsList',
         name: Route.MaterielsAdmin,
         component: MaterielsAdmin,
+        meta: { role: Role.Administrateur },
+      },
+      {
+        path: '/materielDetail/:codeMat',
+        name: Route.MaterielAdmin,
+        component: MaterielAdmin,
         meta: { role: Role.Administrateur },
       },
       {

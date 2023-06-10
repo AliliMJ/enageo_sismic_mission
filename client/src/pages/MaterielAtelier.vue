@@ -123,9 +123,9 @@
             class="button"
             type="info"
             @click="mettreEnReparationExterne"
-            v-if="materiel.status === 0"
+            v-if="materiel.status === 1"
           >
-            creer une demande de reparation
+            creer une demande de reparation externe
           </NButton>
         </NSpace>
         <NSpace>
@@ -172,6 +172,7 @@ import {
   NDatePicker,
   useMessage,
   NText,
+  useDialog
 } from 'naive-ui';
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -180,6 +181,7 @@ const router = useRouter();
 const route = useRoute();
 
 const message = useMessage();
+const dialog = useDialog();
 
 const codeMat = route.params.codeMat;
 const showHistoryModal = ref(false);
@@ -238,6 +240,7 @@ if (lastReparation.dFinRep != null) {
 }
 
 detailRef.value = lastReparation.detailProbleme;
+coutRef.value = lastReparation.cout;
 
 const mettreEnReparation = async () => {
   const req = {
@@ -281,18 +284,52 @@ const mettreEnBonEtat = async () => {
   }
 };
 
-async function mettreEnReparationExterne() {
-  const req = {
-    idRep: Number(idRepRef.value),
-  };
+console.log(detailRef.value+' + '+coutRef.value);
 
-  const reparationExterne = (
+async function mettreEnReparationExterne() {
+  if(detailRef.value===null&&coutRef.value===0){
+      dialog.warning({
+    title: "Confirmation",
+    content: "êtes-vous sûr de créer une réparation externe avec une description vide et coût null?",
+    positiveText: "Confirmer",
+    negativeText: "Annuler",
+    onPositiveClick: async () => {
+      const req = {
+    idRep: Number(idRepRef.value),
+    detailProbleme: detailRef.value,
+    dPanne : new Date(dPanneRef.value),
+    vide : 1
+  };
+      const reparationExterne = (
     await axios.put(
       ` http://localhost:3000/material/mettreEnReparationExterne/${codeMat}`,
       req
     )
   ).data;
   router.push('/atelier');
+  message.success('la réparation externe est bien créé');
+    },
+    onNegativeClick: () => {
+      message.error("création annulée");
+    },
+  });
+}else {
+  const req = {
+    idRep: Number(idRepRef.value),
+    detailProbleme: detailRef.value,
+    dPanne : new Date(dPanneRef.value),
+    vide : 0
+  };
+      const reparationExterne = (
+    await axios.put(
+      ` http://localhost:3000/material/mettreEnReparationExterne/${codeMat}`,
+      req
+    )
+  ).data;
+  router.push('/atelier');
+  message.success('la réparation externe est bien créé');
+}
+
 }
 
 const showHistoryModalAction = () => {

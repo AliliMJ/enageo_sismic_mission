@@ -69,7 +69,8 @@ export const getGestionnaireStatistiques = async (
       nbMatModele: {},
       nbMatType: {},
       numberEmpByYears: {},
-      coutReparationByMonth : {}
+      coutReparationByMonth : {},
+      coutReparationExterneByMonth : {}
     };
 
     const codeMission = String(req.params.codeMission);
@@ -104,7 +105,14 @@ export const getGestionnaireStatistiques = async (
     stat.nbMaterielEnPanne = await prisma.materiel.count({
       where: {
         codeMission: codeMission,
-        status: 0,
+        OR : [
+          {
+            status : 0
+          },
+          {
+            status : 3
+          }
+        ]
       },
     });
 
@@ -279,14 +287,26 @@ export const getGestionnaireStatistiques = async (
     //   // }
 
     const rawCoutByYears: Array<CoutMonth> =
+      await prisma.$queryRaw`SELECT  DATE_FORMAT(r.dFinRep,'%Y-%m') as years , sum(r.cout) as cout 
+      FROM reparationInterne r , materiel m
+      WHERE r.codeMat=m.codeMat AND
+            m.codeMission=${codeMission}
+      GROUP BY  DATE_FORMAT(r.dFinRep,'%Y-%m')
+      ORDER BY years `;
+
+    stat.coutReparationByMonth = rawCoutByYears.map(({ years, cout }) => {
+      return { years, cout: Number(cout) };
+    });
+
+    const rawCoutExterneByYears: Array<CoutMonth> =
       await prisma.$queryRaw`SELECT  DATE_FORMAT(dFinRep,'%Y-%m') as years , sum(cout) as cout 
-      FROM sismicvision.reparationInterne r , sismicvision.materiel m
+      FROM reparationExterne r , materiel m
       WHERE r.codeMat=m.codeMat AND
             m.codeMission=${codeMission}
       GROUP BY  DATE_FORMAT(dFinRep,'%Y-%m')
       ORDER BY years `;
 
-    stat.coutReparationByMonth = rawCoutByYears.map(({ years, cout }) => {
+    stat.coutReparationExterneByMonth = rawCoutExterneByYears.map(({ years, cout }) => {
       return { years, cout: Number(cout) };
     });
 
@@ -311,6 +331,10 @@ type MaterielPannesMarque = {
   nbr: number;
 };
 
+type MaterielPannesType1 = {
+  dPanne: String;
+};
+
 export const atelierStatistiques = async (req: Request, res: Response) => {
   try {
 
@@ -318,7 +342,12 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
 
     const stat = {
       nbPannesByMonth: {},
-      nbPannesByMarque: {},
+      nbPannesExterneByMonth: {},
+      nbReparationInterneByMarque: {},
+      nbReparationExterneByMarque: {},
+      nbReparationInterneByMonth:{},
+      nbReparationExterneByMonth:{},
+
     };
 
     await prisma.$queryRaw`SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))`;
@@ -335,19 +364,76 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
       return { dates, nbr: Number(nbr) };
     });
 
-    const rawNumberByMarque: Array<MaterielPannesMarque> =
-      await prisma.$queryRaw`SELECT m.marque , count(*) as nbr FROM 
-    sismicvision.reparationInterne r , sismicvision.materiel m 
+    //************************************* */
+    const rawNumberExterneByYears: Array<MaterielPannesType> =
+      await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
+    FROM reparationExterne r , materiel m 
+    WHERE r.codeMat = m.codeMat AND
+          m.codeMission = ${codeMission}
+    GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
+    ORDER BY dates`;
+
+    stat.nbPannesExterneByMonth = rawNumberExterneByYears.map(({ dates, nbr }) => {
+      return { dates, nbr: Number(nbr) };
+    });
+
+    /* *************************************************** */
+
+    const rawNumberInterneByMarque: Array<MaterielPannesMarque> =
+      await prisma.$queryRaw`SELECT m.marque , count(r.idRep) as nbr FROM 
+    reparationInterne r , materiel m 
     WHERE r.codeMat = m.codeMat AND
         m.codeMission = ${codeMission}
     GROUP BY m.marque`;
 
-    stat.nbPannesByMarque = rawNumberByMarque.map(({ marque, nbr }) => {
+    stat.nbReparationInterneByMarque = rawNumberInterneByMarque.map(({ marque, nbr }) => {
       return { marque, nbr: Number(nbr) };
     });
 
+    const rawNumberExterneByMarque: Array<MaterielPannesMarque> =
+      await prisma.$queryRaw`SELECT m.marque , count(r.idRep) as nbr FROM 
+    reparationExterne r , materiel m 
+    WHERE r.codeMat = m.codeMat AND
+        m.codeMission = ${codeMission}
+    GROUP BY m.marque`;
+
+    stat.nbReparationExterneByMarque = rawNumberExterneByMarque.map(({ marque, nbr }) => {
+      return { marque, nbr: Number(nbr) };
+    });
+
+
+
+    /* ****************************************************** */
+
+    const rawNumberInerneByMonths: Array<MaterielPannesType> =
+      await prisma.$queryRaw`SELECT DATE_FORMAT(r.dFinRep, '%m / %Y') AS dates , count(*) as nbr
+    FROM reparationInterne r , materiel m 
+    WHERE r.codeMat = m.codeMat AND
+          m.codeMission = ${codeMission}
+    GROUP BY MONTH(r.dFinRep), YEAR(r.dFinRep)
+    ORDER BY dates`;
+
+    stat.nbReparationInterneByMonth = rawNumberInerneByMonths.map(({ dates, nbr }) => {
+      return { dates, nbr: Number(nbr) };
+    });
+
+    /* ********************************************************* */
+
+    const rawNumberExterneByMonths: Array<MaterielPannesType> =
+      await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
+    FROM reparationExterne r , materiel m 
+    WHERE r.codeMat = m.codeMat AND
+          m.codeMission = ${codeMission}
+    GROUP BY MONTH(r.dPanne), YEAR(r.dPanne)
+    ORDER BY dates`;
+
+    stat.nbReparationExterneByMonth = rawNumberExterneByMonths.map(({ dates, nbr }) => {
+      return { dates, nbr: Number(nbr) };
+    });
+
     res.status(200).json(stat);
-  } catch {
+  } catch(e) {
+    console.log(e);
     res
       .status(500)
       .json({ err: "Problème lors de la collection des atelier statistiques" });

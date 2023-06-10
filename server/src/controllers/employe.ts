@@ -11,7 +11,8 @@ export const getEmployes = async (req: Request, res: Response) => {
     });
 
     res.status(200).json(employes);
-  } catch {
+  } catch(e) {
+    console.log(e);
     res
       .status(500)
       .json({ err: 'Problème lors de la collection des employés' });
@@ -30,6 +31,25 @@ export const getEmployesByEquipe = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ err: 'Problème lors de la collection des employés' });
+  }
+};
+
+export const deleteEmployeDB = async (req: Request, res: Response) => {
+  // const value = req.query.like;
+  // console.log(value);
+  try {
+    const id = Number(req.params.id);
+
+    const employes = await prisma.employe.delete({
+      where: { id : id },
+    });
+
+    res.status(200).json(employes);
+  } catch(e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ err: "Problème lors de la suppression  d'employé" });
   }
 };
 

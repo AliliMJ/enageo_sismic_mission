@@ -1,7 +1,7 @@
 import express from 'express';
 import {
     getGestionnaireStatistiques,
-    atelierStatistiques
+    atelierStatistiques,
 } from '../controllers/statistiques';
 
 export const statistiquesRouter = express.Router();

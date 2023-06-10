@@ -8,7 +8,7 @@ export const employeNameFilter = (
   const nom = req.query.like;
 
   req.body.filter = {
-    titre: { startsWith: nom },
+    nom: { startsWith: nom },
   };
 
   next();
@@ -54,6 +54,20 @@ export const enPanneMaterielFilter = (
 };
 
 export const goodMaterielFilter = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const designation = req.query.like;
+
+  req.body.filter = {
+    designation: { startsWith: designation },
+  };
+
+  next();
+};
+
+export const MaterielFilter = (
   req: Request,
   res: Response,
   next: NextFunction

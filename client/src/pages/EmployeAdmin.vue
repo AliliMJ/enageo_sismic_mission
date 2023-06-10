@@ -76,12 +76,24 @@ if (employe.Mission != null) {
   missionRef = ref();
 }
 
-/* employe operations */
+let equipeRef;
+if (employeRef.value.equipe != null) {
+  equipeRef = ref({
+    idEquipe: String(employeRef.value.equipe.idEquipe),
+    codeActivite: employeRef.value.equipe.codeActivite,
+    nom: employeRef.value.equipe.nom,
+    performance: String(employeRef.value.equipe.performance),
+    codeMission: employeRef.value.equipe.codeMission,
+  });
+} else {
+  equipeRef = ref();
+}
 
-const deleteEmployeWithMission = async () => {
+/* employe operations */
+const deleteEmployeDB = async () => {
   try {
-    await axios.put(
-      `http://localhost:3000/employes/deleteEmployeWithMission/${id}`
+    await axios.delete(
+      `http://localhost:3000/employes/deleteDB/${id}`
     );
   } catch (error) {}
 };
@@ -94,8 +106,8 @@ function handleConfirmDeleteEmploye() {
     negativeText: 'Annuler',
     onPositiveClick: () => {
       message.success('employe supprimer');
-      deleteEmployeWithMission();
-      router.push('/employe');
+      deleteEmployeDB();
+      router.push('/employesList');
     },
     onNegativeClick: () => {
       message.error('Suppression annulée');

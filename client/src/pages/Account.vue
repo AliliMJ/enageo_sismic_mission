@@ -22,7 +22,6 @@ import {
   Edit32Filled as Pen,
   ContactCard20Regular as contact,
   Info20Regular as detail,
-  BookContacts20Regular as personelInfo,
 } from "@vicons/fluent";
 import {
   TrashOutline as trash,
@@ -37,14 +36,11 @@ const message = useMessage();
 const id = route.params.id;
 
 const isEditUser = ref(true);
-const isEditEmploye = ref(true);
 
 const user = (await axios.get(`http://localhost:3000/comptes/${id}`)).data;
 const employe = (
   await axios.get("http://localhost:3000/employes/" + user.employeId)
 ).data;
-const wilaya = (await axios.get("http://localhost:3000/wilaya")).data;
-const fonction = (await axios.get("http://localhost:3000/fonction")).data;
 
 const userRef = ref({
   id: user.id,
@@ -72,18 +68,6 @@ const employeRef = ref({
   mission: employe.Mission,
   regimTravail: employe.regimTravail,
 });
-
-const fonctionRef = ref(employe.fonction.idFonction);
-
-let missionRef;
-if (employe.Mission != null) {
-  missionRef = ref({
-    code: employe.Mission.codeMission,
-    methodologie: employe.Mission.methodologie,
-  });
-} else {
-  missionRef = ref();
-}
 
 /* user operations */
 
@@ -117,63 +101,6 @@ const updateUser = async () => {
   message.success("utilisateur modifiee");
 };
 
-/* end user operations */
-
-/* ------------------------------------------------------- */
-
-/* employe operations */
-
-const deleteEmploye = async () => {
-  const req = {
-    id: Number(employeRef.value.id),
-  };
-  try {
-    await axios.delete(`http://localhost:3000/comptes/${user.id}`);
-    await axios.delete(`http://localhost:3000/employes/${employeRef.value.id}`);
-  } catch (error) {}
-};
-
-function handleConfirmDeleteEmploye() {
-  dialog.warning({
-    title: "Confirmation",
-    content: "êtes-vous sûr de supprimer cette employe?",
-    positiveText: "Supprimer",
-    negativeText: "Annuler",
-    onPositiveClick: () => {
-      message.success("employe supprimer");
-      deleteEmploye();
-      router.push("/comptes");
-    },
-    onNegativeClick: () => {
-      message.error("Suppression annulée");
-    },
-  });
-}
-
-const updateEmploye = async () => {
-  const req = {
-    id: Number(employeRef.value.id),
-    nom: employeRef.value.nom,
-    prenom: employeRef.value.prenom,
-    dateRejoint: new Date(employeRef.value.dateRejoint + 4000000),
-    dateNaissance: new Date(employeRef.value.dateNaiss + 4000000),
-    lieuNaissance: Number(employeRef.value.lieuNaiss),
-    email: employeRef.value.email,
-    numTel: employeRef.value.numTel,
-    adresse: employeRef.value.adresse,
-    sexe: employeRef.value.sexe,
-    numIdentite: employeRef.value.numId,
-    groupeSanguin: employeRef.value.groupeSanguin,
-    regimTravail: employeRef.value.regimTravail,
-    codeMission: employeRef.value.missionCode,
-    etat: employeRef.value.etat,
-    fonctionId: Number(fonctionRef.value),
-  };
-  await axios.put(`http://localhost:3000/employes/${user.employeId}`, req);
-  message.success("employe modifiee");
-};
-
-/* end employe operations */
 
 const roleOptions = [
   {
@@ -193,41 +120,6 @@ const roleOptions = [
     value: "ADMINISTRATEUR",
   },
 ];
-
-const groupeSanguinOptions = [
-  { label: "A+", value: "A+" },
-  { label: "A-", value: "A-" },
-  { label: "B+", value: "B+" },
-  { label: "B-", value: "B-" },
-  { label: "AB+", value: "AB+" },
-  { label: "AB-", value: "AB-" },
-  { label: "O+", value: "O+" },
-  { label: "O-", value: "O-" },
-];
-
-const lieuOptions = [];
-wilaya.forEach((element) => {
-  lieuOptions.push({
-    label: element.numWilaya + " " + element.nom,
-    value: element.numWilaya,
-  });
-});
-
-const etatEmployeOptions = [
-  { label: "En mission", value: "mission" },
-  { label: "En congé", value: "conge" },
-  { label: "en maladie", value: "maladie" },
-  { label: "en sanctionné", value: "sanctionne" },
-  { label: "en travail", value: "travail" },
-];
-
-const fonctionOptions = [];
-fonction.forEach((element) => {
-  fonctionOptions.push({
-    label: element.idFonction + " " + element.nom,
-    value: element.idFonction,
-  });
-});
 </script>
 
 <template>
@@ -242,132 +134,6 @@ fonction.forEach((element) => {
         </NSpace>
       </template>
       <n-tabs type="line" animated>
-        <n-tab-pane name="data" tab="Données">
-          <NSpace justify="end" style="margin-bottom: 10px">
-            <n-button
-              text
-              style="font-size: 30px"
-              class="trash"
-              @click="handleConfirmDeleteEmploye"
-            >
-              <n-icon>
-                <trash />
-              </n-icon>
-            </n-button>
-            <n-button
-              text
-              style="font-size: 30px"
-              class="pen"
-              @click="isEditEmploye = !isEditEmploye"
-            >
-              <n-icon>
-                <pen />
-              </n-icon>
-            </n-button>
-          </NSpace>
-          <NSpace vertical>
-            <NSpace>
-              <NCard style="width: 700px">
-                <template #header>
-                  <NSpace justify="start">
-                    <n-icon :size="30">
-                      <personelInfo />
-                    </n-icon>
-                    <NText> informations personnel </NText>
-                  </NSpace>
-                </template>
-                <!--nom, prénom, date de naissance, sexe-->
-                <NForm :disabled="isEditEmploye">
-                  <NGrid :span="24" :x-gap="24">
-                    <NFormItemGi :span="12" label="id">
-                      <NInput v-model:value="employeRef.id" disabled />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="Nom">
-                      <NInput v-model:value="employeRef.nom" />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="Prénom">
-                      <NInput v-model:value="employeRef.prenom" />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="Date de naissance">
-                      <NDatePicker
-                        format="dd/MM/yyyy"
-                        v-model:value="employeRef.dateNaiss"
-                        type="date"
-                      />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="lieu de naissance">
-                      <NSelect
-                        placeholder="wilaya"
-                        :options="lieuOptions"
-                        v-model:value="employeRef.lieuNaiss"
-                      />
-                    </NFormItemGi>
-
-                    <NFormItemGi :span="12" label="Date de rejoint">
-                      <NDatePicker
-                        format="dd/MM/yyyy"
-                        v-model:value="employeRef.dateRejoint"
-                        type="date"
-                        disabled
-                      />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="l'adresse">
-                      <NInput v-model:value="employeRef.adresse" />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="Sexe">
-                      <NSelect v-model:value="employeRef.sexe" />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="numero identite">
-                      <NInput v-model:value="employeRef.numIdentite" />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="Groupe Sanguin">
-                      <NSelect
-                        placeholder="GroupeSanguin"
-                        :options="groupeSanguinOptions"
-                        v-model:value="employeRef.groupeSanguin"
-                      />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="Regime de travail">
-                      <NInput v-model:value="employeRef.regimTravail" />
-                    </NFormItemGi>
-                    <NFormItemGi
-                      :span="12"
-                      label="mission"
-                      v-if="employeRef.mission"
-                    >
-                      <NInput
-                        v-model:value="missionRef.code"
-                        placeholder="non mission"
-                      />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="etat de l'employe">
-                      <NSelect
-                        placeholder="etat"
-                        :options="etatEmployeOptions"
-                        v-model:value="employeRef.etat"
-                      />
-                    </NFormItemGi>
-                    <NFormItemGi :span="12" label="fonction de l'employe">
-                      <NSelect
-                        :options="fonctionOptions"
-                        v-model:value="fonctionRef"
-                      />
-                    </NFormItemGi>
-                  </NGrid>
-                  <NSpace justify="end">
-                    <n-button
-                      type="success"
-                      :disabled="isEditEmploye"
-                      @click="updateEmploye"
-                    >
-                      Confirmer
-                    </n-button>
-                  </NSpace>
-                </NForm>
-              </NCard>
-            </NSpace>
-          </NSpace>
-        </n-tab-pane>
         <n-tab-pane name="compte" tab="Compte">
           <NSpace justify="end" style="margin-bottom: 10px">
             <n-button
