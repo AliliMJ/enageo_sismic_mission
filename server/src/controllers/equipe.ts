@@ -22,10 +22,6 @@ export const affecterEmployer = async (req: Request, res: Response) => {
     });
     if (employe == null)
       return res.status(401).json({ err: 'Employe introuvable' });
-    if (employe?.idEquipe != null)
-      return res
-        .status(400)
-        .json({ err: 'Cet employe est déja affecté dans une équipe' });
     const equipe = await prisma.employe.update({
       where: { id: idEmploye },
       data: {

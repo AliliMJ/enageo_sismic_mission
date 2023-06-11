@@ -386,7 +386,7 @@ missions.forEach((element) => {
                   style="text-decoration: underline; cursor: pointer"
                   @click="affecteEquipeModal = true"
                 >
-                  vous voulez lui affecter un équipe ?
+                  Voulez-vous lui affecter une équipe ?
                 </NText>
               </NSpace>
             </n-alert>

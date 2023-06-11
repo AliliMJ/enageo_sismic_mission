@@ -36,9 +36,10 @@ function confirm() {
         return emit('confirm', selectedEmploye.value);
       },
     });
+  } else {
+    emit('confirm', selectedEmploye.value);
+    showModal.value = false;
   }
-  emit('confirm', selectedEmploye.value);
-  showModal.value = false;
 }
 
 function close() {

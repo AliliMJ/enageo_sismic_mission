@@ -98,7 +98,6 @@ const routes = [
       {
         path: '/employe/:id',
         component: Employe,
-        meta: { role: Role.Gestionnaire },
       },
       {
         path: '/detailEmploye/:id',

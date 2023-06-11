@@ -15,6 +15,7 @@ const props = defineProps({
 
 const myChart = ref(null);
 function dateDiff(prodData) {
+  if (prodData.length == 0 || prodData.length == 1) return 0;
   const firstData = prodData[0];
   const lastData = prodData[prodData.length - 1];
   const { jour: firstDay, mois: firstMonth, annee: firstYear } = firstData;
@@ -48,17 +49,34 @@ const production = (
       props.projet.idProjet
   )
 ).data;
-const timePassed = Math.floor(
-  (new Date() -
-    new Date(production[0].jour, production[0].mois, production[0].annee)) /
-    (1000 * 3600 * 24)
-);
-const remainingTime = Math.floor(
-  (new Date(props.projet.objDateFin) -
-    new Date(props.projet.objDateDebut) -
-    new Date()) /
-    (1000 * 3600 * 24)
-);
+const timePassed = () => {
+  if (production.length > 0) {
+    new Date();
+    const firstProdDay = new Date(
+      production[0].annee,
+      production[0].mois,
+      production[0].jour
+    );
+    const now = new Date();
+    console.log(production[0].jour, production[0].mois, production[0].annee);
+    return Math.floor((now - firstProdDay) / (1000 * 3600 * 24));
+  }
+
+  return 0;
+};
+
+const remainingTime = () => {
+  const now = new Date();
+  const fin = new Date(props.projet.objDateFin);
+  const debut = new Date(props.projet.objDateDebut);
+  if (now >= fin) {
+    return 0;
+  } else if (now <= debut) {
+    return Math.floor((fin - debut) / (1000 * 3600 * 24));
+  } else {
+    return Math.floor((fin - now) / (1000 * 3600 * 24));
+  }
+};
 
 const groupedData = groupVP(production);
 
@@ -150,11 +168,11 @@ const pourcentage = Math.round((totalVp / props.projet.objVP) * 100);
           <n-icon class="hint" depth="3" size="30"> <Hint /> </n-icon>
         </template>
         <n-space align="center">
-          <n-text class="stat-delai">{{ timePassed }}</n-text>
+          <n-text class="stat-delai">{{ timePassed() }}</n-text>
           <n-text class="unit" depth="3" strong>Jours passés</n-text>
         </n-space>
         <n-space align="center">
-          <n-text class="stat-delai">{{ remainingTime }}</n-text>
+          <n-text class="stat-delai">{{ remainingTime() }}</n-text>
           <n-text class="unit" depth="3" strong>Jours restant</n-text>
         </n-space>
       </n-card></n-gi
