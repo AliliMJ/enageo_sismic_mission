@@ -13,7 +13,7 @@ import StockDropdown from '../components/StockDropdown.vue';
 
 import { NH1, NSpace, NButton, NIcon, NCard, useMessage } from 'naive-ui';
 import { Add } from '@vicons/ionicons5';
-import { h, onMounted, watch } from 'vue';
+import { h, onMounted } from 'vue';
 const auth = useAuth();
 
 const project = (
@@ -21,12 +21,11 @@ const project = (
     `http://localhost:3000/projets/prodByMission/${auth.employe?.codeMission}`
   )
 ).data;
+console.log(project);
 
 const message = useMessage();
 
 const showAddResourceModal = ref(false);
-
-const route = useRoute();
 
 const selectedRow = ref(null);
 const showAddConsumptionModal = ref(false);
@@ -86,12 +85,11 @@ const cols = [
 // });
 
 async function onResourceAdded(resource) {
-  const d = {
-    ...resource,
-    idProjet: Number(project.idProjet),
-  };
   const res = (
-    await axios.post('http://localhost:3000/resource/addResource', d)
+    await axios.post('http://localhost:3000/resource/addResource', {
+      data: resource,
+      project,
+    })
   ).data;
 
   const resourceInStock = stock.value.filter((s) => {
@@ -145,7 +143,7 @@ async function onStockConsumed(data) {
     );
   }
 
-  message.success('Une consommation a été ajoutée');
+  message.success('Un ressource a été consommée');
 }
 function handleError(msg) {
   message.error(msg);
@@ -159,6 +157,7 @@ function handleError(msg) {
     <NSpace vertical>
       <NSpace justify="end">
         <NButton
+          :disabled="project == null"
           @click="showAddResourceModal = true"
           type="success"
           icon-placement="right"

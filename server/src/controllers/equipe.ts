@@ -13,10 +13,35 @@ export const getAllEquipes = async (req: Request, res: Response) => {
   }
 };
 
+export const affecterEmployer = async (req: Request, res: Response) => {
+  const { idEmploye, idEquipe } = req.body;
+  try {
+    const employe = await prisma.employe.findUnique({
+      where: { id: idEmploye },
+      select: { idEquipe: true },
+    });
+    if (employe == null)
+      return res.status(401).json({ err: 'Employe introuvable' });
+    const equipe = await prisma.employe.update({
+      where: { id: idEmploye },
+      data: {
+        idEquipe,
+      },
+    });
+
+    res.status(200).json(equipe);
+  } catch {
+    res.status(500).json({ err: 'Problème lors de la collection des equipes' });
+  }
+};
+
 export const getEquipeById = async (req: Request, res: Response) => {
   try {
     const idEquipe = Number(req.params.idEquipe);
-    const equipe = await prisma.equipe.findUnique({ where: { idEquipe } });
+    const equipe = await prisma.equipe.findUnique({
+      where: { idEquipe },
+      include: { activite: true, Membres: true },
+    });
     res.status(200).json(equipe);
   } catch {
     res.status(500).json({
@@ -34,7 +59,7 @@ export const getEquipesByMission = async (req: Request, res: Response) => {
     if (employe && employe.codeMission) {
       const equipes = await prisma.equipe.findMany({
         where: { Mission: { codeMission: employe.codeMission } },
-        include: { activite: true },
+        include: { activite: true, Membres: true },
       });
       res.status(200).json(equipes);
     } else {
@@ -47,15 +72,14 @@ export const getEquipesByMission = async (req: Request, res: Response) => {
 
 export const getEquipesByMission1 = async (req: Request, res: Response) => {
   try {
-
     const codeMission = req.params.codeMission;
 
     const equipes = await prisma.equipe.findMany({
-      where : {
-        codeMission : codeMission
-      }
+      where: {
+        codeMission: codeMission,
+      },
     });
-      res.status(200).json(equipes);
+    res.status(200).json(equipes);
   } catch {
     res.status(500).json({ err: 'Problème lors de la collection des equipes' });
   }

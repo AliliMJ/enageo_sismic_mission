@@ -20,8 +20,10 @@ import {
   NDataTable,
   NGi,
   NDatePicker,
+  useMessage,
 } from 'naive-ui';
 import { ref } from 'vue';
+
 import { useAuth } from '../stores/authentication';
 const colCoordinates = [
   { title: 'longitude', key: 'longitude' },
@@ -33,6 +35,7 @@ const router = useRouter();
 const showMapEditor = ref(false);
 const coordinates = ref([]);
 const wilaya = ref(null);
+const message = useMessage();
 
 function addCoordinates(data) {
   console.log(data);
@@ -47,6 +50,11 @@ function addCoordinates(data) {
 
 async function createProject() {
   try {
+    if (coordinates.value.length == 0) {
+      return message.error(
+        'Vous avez oblier de préciser des coordonnées pour le site du projet'
+      );
+    }
     await axios.post('http://localhost:3000/projets/create', {
       idEmploye: auth.employe.id,
       nom: model.value.name,
@@ -54,9 +62,9 @@ async function createProject() {
       budget: model.value.budget,
       coordinates: coordinates.value,
       wilaya: wilaya.value,
-      objVP: model.value.objectif,
-      objDateDebut: model.value.dateDebut,
-      objDateFin: model.value.dateFin,
+      objVP: model.value.objVP,
+      objDateDebut: new Date(model.value.objDateDebut),
+      objDateFin: new Date(model.value.objDateFin),
     });
     router.back();
   } catch (e) {
@@ -67,8 +75,9 @@ const model = ref({
   name: null,
   budget: null,
   description: null,
-  objectif: null,
-  dateDebut: null,
+  objVP: null,
+  objDateDebut: null,
+  objDateFin: null,
 });
 </script>
 
@@ -109,15 +118,15 @@ const model = ref({
           <n-form-item-gi :span="24" label="Points vibrés" path="objectif">
             <n-input-number
               placeholder="Saisissez le nombre de VP"
-              v-model:value="model.objectif"
+              v-model:value="model.objVP"
               :show-button="false"
             />
           </n-form-item-gi>
           <n-form-item-gi :span="12" label="Date début" path="dateDebut">
-            <n-date-picker v-model:value="model.dateDebut" type="date" />
+            <n-date-picker v-model:value="model.objDateDebut" type="date" />
           </n-form-item-gi>
           <n-form-item-gi :span="12" label="Date fin" path="dateFin">
-            <n-date-picker v-model:value="model.dateFin" type="date" />
+            <n-date-picker v-model:value="model.objDateFin" type="date" />
           </n-form-item-gi>
           <n-gi :span="24">
             <n-h2>Coordonnées</n-h2>

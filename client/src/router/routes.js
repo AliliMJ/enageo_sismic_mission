@@ -18,6 +18,7 @@ import Material from '../pages/Material.vue';
 import AtelierExterne from '../pages/MaterielAtelierExterne.vue';
 import DemandeReparation from '../pages/DemandeReparation.vue';
 import Rapport from '../pages/Rapport.vue';
+import Equipe from '../pages/Equipe.vue';
 
 import Project from '../pages/Project.vue';
 import Projects from '../pages/Projects.vue';
@@ -97,7 +98,6 @@ const routes = [
       {
         path: '/employe/:id',
         component: Employe,
-        meta: { role: Role.Gestionnaire },
       },
       {
         path: '/detailEmploye/:id',
@@ -184,6 +184,10 @@ const routes = [
         path: '/equipe',
         name: Route.Equipe,
         component: Equipes,
+      },
+      {
+        path: '/equipe/:idEquipe',
+        component: Equipe,
       },
       {
         path: '/profile',

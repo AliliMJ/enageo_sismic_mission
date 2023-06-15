@@ -52,11 +52,6 @@ const menuOptions = [
     key: Route.CreateResource,
     icon: renderIcon(Water),
   },
-  {
-    label: renderMenuItem('Activités', Route.Activity),
-    key: Route.Activity,
-    icon: renderIcon(ActivityIcon),
-  },
 
   ...optionsCompte,
 ];

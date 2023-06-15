@@ -3,6 +3,7 @@ import AdminDashboard from '../views/admin/AdminDashboard.vue';
 import GestDashboard from '../views/gestionnaire/GestDashboard.vue';
 import DirecteurDashboard from '../views/directeur/DirecteurDashboard.vue';
 import ChefTerrainDashboard from '../views/chefterrain/ChefTerrainDashboard.vue';
+import ChefMissionDashboard from '../views/chefmission/ChefMissionDashboard.vue';
 import { useAuth } from '../stores/authentication';
 import { Role } from '../utils/enums';
 const auth = useAuth();
@@ -13,4 +14,5 @@ const auth = useAuth();
   <GestDashboard v-else-if="auth.user.role === Role.Gestionnaire" />
   <DirecteurDashboard v-else-if="auth.user.role === Role.Directeur" />
   <ChefTerrainDashboard v-else-if="auth.user.role === Role.ChefTerrain" />
+  <ChefMissionDashboard v-else-if="auth.user.role === Role.ChefMision" />
 </template>

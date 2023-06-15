@@ -133,10 +133,68 @@ export const getProduction = async (req: Request, res: Response) => {
         gain: r.valeur * 30000, // à remplacer avec le prix de 1 vp dans le projet
       };
     });
-    console.log(production);
 
     res.status(200).json(production);
   } catch {
+    res
+      .status(500)
+      .json({ err: 'Problème lors de la collection des rapports' });
+  }
+};
+
+export const getProductionByProject = async (req: Request, res: Response) => {
+  try {
+    const idProjet = Number(req.params.idProjet);
+
+    const rendements = await prisma.rendement.findMany({
+      where: {
+        Equipe: { codeActivite: 'ENR' },
+        Rapport: {
+          idProjet,
+        },
+      },
+      include: {
+        Rapport: true,
+      },
+    });
+
+    const production = rendements.map((r) => {
+      const date = new Date(r.Rapport.date);
+      const mois = date.getMonth();
+      const jour = date.getDate();
+      const annee = date.getFullYear();
+
+      return {
+        jour,
+        mois,
+        libMois: nomsDesMois[mois],
+        annee,
+        vp: r.valeur,
+        gain: r.valeur * 30000, // à remplacer avec le prix de 1 vp dans le projet
+      };
+    });
+    let groups = [];
+    let lastGroup: any = null;
+    for (let p of production) {
+      if (lastGroup == null) {
+        lastGroup = p;
+        groups.push(lastGroup);
+      } else if (
+        p.jour == lastGroup.jour &&
+        p.mois == lastGroup.mois &&
+        p.annee == lastGroup.annee
+      ) {
+        lastGroup.vp += p.vp;
+        lastGroup.gain += p.gain;
+      } else {
+        lastGroup = p;
+        groups.push(lastGroup);
+      }
+    }
+    console.log(groups);
+
+    res.status(200).json(groups);
+  } catch (e) {
     res
       .status(500)
       .json({ err: 'Problème lors de la collection des rapports' });
