@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 
 let mongo: MongoClient;
 
-const url = 'mongodb://localhost:27017/sismicvision';
+const url = 'mongodb://127.0.0.1:27017/sismicvision';
 
 declare global {
   var mongo: MongoClient;
