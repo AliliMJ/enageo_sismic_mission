@@ -167,8 +167,6 @@ const onConfirm = async () => {
 
   let employe = await axios.post(`http://localhost:3000/employes/`, req).data;
   message.success('Employé ajouté');
-  employe.dateRejoint = new Date(employe.dateRejoint);
-  employe.dateNaissance = new Date(employe.dateNaissance);
   emit('confirm',employe);
 };
 
