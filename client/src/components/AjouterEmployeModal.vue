@@ -141,7 +141,7 @@ const employeRef = ref({
   fonction: 0,
   equipe: '',
   groupeSanguin: '',
-  codeMission: '',
+  codeMission: null,
   regimTravail: '',
 });
 
