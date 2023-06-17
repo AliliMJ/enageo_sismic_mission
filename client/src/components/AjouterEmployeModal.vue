@@ -146,6 +146,7 @@ const employeRef = ref({
 });
 
 const emit = defineEmits(['confirm', 'cancel']);
+
 const onConfirm = async () => {
   const req = {
     nom: employeRef.value.nom,
@@ -165,8 +166,8 @@ const onConfirm = async () => {
     codeMission: employeRef.value.codeMission,
   };
 
-  let employe = await axios.post(`http://localhost:3000/employes/`, req).data;
-  message.success('Employé ajouté');
+  const employe = await axios.post(`http://localhost:3000/employes/`, req).data;
+
   emit('confirm',employe);
 };
 

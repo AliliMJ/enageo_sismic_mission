@@ -27,10 +27,11 @@ const auth = useAuth();
 const dialog = useDialog();
 const message = useMessage();
 
-async function confirmAdd(employe) {
+function confirmAdd(employe) {
   console.log(employe);
   employes.value.push(employe);
   showModal.value = false;
+  message.success('Employé ajouté');
 }
 
 const employes = ref([]);
