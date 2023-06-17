@@ -64,3 +64,47 @@ export const insertnewEvenement = async (req: Request, res: Response) => {
       .json({ err: "Problème lors de l'insertion de l'evenement" });
   }
 };
+
+export const deleteEvenement = async (req: Request, res: Response) => {
+  try {
+
+    const id = Number(req.params.id);
+
+    const evenement = await prisma.evenement.delete({
+      where : {
+        id : id
+      }
+    })
+
+    res.status(200).json(evenement);
+  } catch(e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ err: "Problème lors de la suppression de l'evenement" });
+  }
+};
+
+export const specialDelete = async (req: Request, res: Response) => {
+  try {
+
+    const titre = req.body.titre;
+    const date = req.body.date;
+    const heure = req.body.heure;
+
+    const evenement = await prisma.evenement.deleteMany({
+      where : {
+        titre : titre,
+        date : date,
+        Heure : heure
+      }
+    })
+
+    res.status(200).json(evenement);
+  } catch(e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ err: "Problème lors de la suppression de l'evenement" });
+  }
+};

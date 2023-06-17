@@ -56,11 +56,14 @@
                     {{ evenement.date }} à {{ evenement.Heure }}</NText
                   >
                   <NText v-if="evenement.readed === false" class="dot">•</NText>
-                  <NSpace justify="end">
+                  <div justify="end" class="notification-container">
+                    <n-icon class="notification-trash" @click="deleteNotification(evenement)">
+                  <trash />
+                </n-icon>
                     <NText @click="seeDetails(evenement)" class="see-text"
                       >voir plus...</NText
                     >
-                  </NSpace>
+              </div>
                   <n-divider style="width: 20vw; margin: 0px" />
                 </NSpace>
               </NSpace>
@@ -123,6 +126,7 @@ import {
   useNotification,
   NEmpty,
 } from 'naive-ui';
+
 import {
   PersonCircleOutline as Persone,
   NotificationsOutline as notification,
@@ -131,8 +135,10 @@ import {
   PersonOutline as Person,
   AlertCircleOutline as alert,
   CheckboxOutline as check,
-  MenuOutline as menuIcon
+  MenuOutline as menuIcon,
+  TrashOutline as trash
 } from '@vicons/ionicons5';
+
 import { h } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '../stores/authentication';
@@ -195,7 +201,7 @@ onMounted(async () => {
             },
           },
           {
-            default: () => 'marquer comme lu',
+            default: () => 'Ok',
           }
         ),
       onClose: () => {
@@ -297,16 +303,24 @@ async function handleConfirmEvent(event) {
     description: event.description,
   };
   event.date = new Date(event.date).toLocaleDateString('fr');
-  evenements.value.unshift(event);
-  numberNotReaded.value++;
-  showEvenementModal.value = false;
 
-  console.log('--->' + mission.value.codeMission);
+  //  evenements.value=null;
+  //  evenements.value= await axios.get(
+    //     `http://localhost:3000/evenement/${mission.value.codeMission}`,
+    //     req
+    //   );
 
-  await axios.post(
+    const newEvent = await axios.post(
     `http://localhost:3000/evenement/insertEvenement/${mission.value.codeMission}`,
     req
   );
+
+  console.log(newEvent.data);
+
+ evenements.value.unshift(newEvent.data);
+ numberNotReaded.value++;
+ showEvenementModal.value = false;
+
 }
 
 async function readAllNotifications() {
@@ -322,6 +336,37 @@ async function readAllNotifications() {
 function imageClick() {
   router.push('/');
 }
+
+function deleteNotification(evenement){
+  dialog.warning({
+    title: 'Confirmation',
+    content: 'êtes-vous sûr de supprimer l\'événement?',
+    positiveText: 'Supprimer',
+    negativeText: 'Annuler',
+    onPositiveClick: () => {
+      message.success('Suppression effectué avec success');
+      console.log('------------->'+evenement.id);
+ 
+        deleteEvenement(evenement);      
+    },
+    onNegativeClick: () => {
+      message.error('suppression annulée');
+    },
+  });
+}
+
+async function deleteEvenement(evenement){
+  const deletedEvenement = await axios.delete(
+    `http://localhost:3000/evenement/delete/${evenement.id}`
+  );
+
+  const index = evenements.value.indexOf(evenement);
+  evenements.value.splice(index, 1);
+  numberNotReaded.value--;
+
+}
+
+
 </script>
 
 <style scoped>
@@ -374,4 +419,17 @@ function imageClick() {
   /* text-decoration:underline; */
   font-size: 10px;
 }
+
+.notification-trash {
+  color:red;
+  cursor:pointer;
+  margin-right: 5px;
+}
+
+.notification-container {
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 </style>
