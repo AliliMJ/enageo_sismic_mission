@@ -15,7 +15,7 @@ model Compte {
   username           String   @unique
   hashPassword       String
   role               Role
-  employe            Employe  @relation(fields: [employeId], references: [id], onDelete: Cascade) 
+  employe            Employe  @relation(fields: [employeId], references: [id], onDelete: Cascade)
   employeId          Int      @unique
   dateCreationCompte DateTime @db.Date
 }
@@ -57,7 +57,7 @@ model Employe {
   fonction   Fonction @relation(fields: [fonctionId], references: [idFonction])
   fonctionId Int
 
-  compte Compte? 
+  compte Compte?
 
   Equipe   Equipe? @relation(fields: [idEquipe], references: [idEquipe])
   idEquipe Int?
@@ -115,7 +115,7 @@ model EtatProjet {
   id           Int            @id @default(autoincrement())
   dPassageEtat DateTime       @default(now())
   etat         TypeEtatProjet
-  Projet       Projet         @relation(fields: [idProjet], references: [idProjet])
+  Projet       Projet         @relation(fields: [idProjet], references: [idProjet], onDelete: Cascade)
   idProjet     Int
 }
 

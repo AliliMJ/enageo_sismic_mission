@@ -130,7 +130,7 @@ onMounted(() => {
 
       layout: {
         'icon-image': 'pulsing-dot',
-        'text-field': ['get', 'chantier'],
+        'text-field': ['get', 'codeMission'],
         'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
         'text-offset': [0, 1.25],
         'text-anchor': 'top',

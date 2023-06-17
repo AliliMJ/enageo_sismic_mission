@@ -50,7 +50,11 @@
               <NInput v-model:value="employeRef.adresse" />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Sexe">
-              <NSelect v-model:value="employeRef.sexe" :options="sexeOptions" placeholder="sexe"/>
+              <NSelect
+                v-model:value="employeRef.sexe"
+                :options="sexeOptions"
+                placeholder="sexe"
+              />
             </NFormItemGi>
             <NFormItemGi :span="12" label="numero identite">
               <NInput v-model:value="employeRef.numIdentite" />
@@ -66,7 +70,16 @@
               <NInput v-model:value="employeRef.regimTravail" />
             </NFormItemGi>
             <NFormItemGi :span="12" label="fonction de l'employe">
-              <NSelect :options="fonctionOptions" v-model:value="employeRef.fonction" />
+              <NSelect
+                :options="fonctionOptions"
+                v-model:value="employeRef.fonction"
+              />
+            </NFormItemGi>
+            <NFormItemGi :span="12" label="Mission">
+              <NSelect
+                :options="missionOptions"
+                v-model:value="employeRef.codeMission"
+              />
             </NFormItemGi>
           </NGrid>
         </NForm>
@@ -99,41 +112,42 @@ import {
   NForm,
   NGrid,
   NDatePicker,
-} from "naive-ui";
-import { SearchCircleOutline as search } from "@vicons/ionicons5";
+} from 'naive-ui';
+import { SearchCircleOutline as search } from '@vicons/ionicons5';
 
-import { ref, h, watch } from "vue";
-import MaterielTag from "./MaterielTag.vue";
-import axios from "axios";
+import { ref, h, watch } from 'vue';
+import MaterielTag from './MaterielTag.vue';
+import axios from 'axios';
 
 const message = useMessage();
 
 const wilaya = (await axios.get('http://localhost:3000/wilaya')).data;
 const fonction = (await axios.get('http://localhost:3000/fonction')).data;
+const missions = (await axios.get('http://localhost:3000/missions')).data;
 
 const employeRef = ref({
   id: 0,
-  nom: "",
-  prenom: "",
+  nom: '',
+  prenom: '',
   dateRejoint: new Date().valueOf(),
   dateNaiss: new Date().valueOf(),
   lieuNaiss: 43,
-  email: "",
-  numTel: "",
-  adresse: "",
-  sexe: "",
-  numIdentite: "",
-  etat: "conge",
+  email: '',
+  numTel: '',
+  adresse: '',
+  sexe: '',
+  numIdentite: '',
+  etat: 'conge',
   fonction: 0,
-  equipe: "",
-  groupeSanguin: "",
-  mission: "",
-  regimTravail: "",
+  equipe: '',
+  groupeSanguin: '',
+  codeMission: '',
+  regimTravail: '',
 });
 
-const emit = defineEmits(["confirm", "cancel"]);
+const emit = defineEmits(['confirm', 'cancel']);
 const onConfirm = async () => {
-    const req = {
+  const req = {
     nom: employeRef.value.nom,
     prenom: employeRef.value.prenom,
     dateRejoint: new Date(employeRef.value.dateRejoint + 4000000),
@@ -148,18 +162,26 @@ const onConfirm = async () => {
     regimTravail: employeRef.value.regimTravail,
     etat: employeRef.value.etat,
     fonctionId: employeRef.value.fonction,
+    codeMission: employeRef.value.codeMission,
   };
-    console.log(employeRef);
-    await axios.post(`http://localhost:3000/employes/`,req);
+
+  await axios.post(`http://localhost:3000/employes/`, req);
+  message.success('Employé ajouté');
+  emit('confirm');
 };
 
 const onCancel = () => {
-  emit("cancel");
+  emit('cancel');
 };
 const props = defineProps({
   title: String,
   showModal: Boolean,
 });
+
+const missionOptions = missions.map((m) => ({
+  label: m.codeMission,
+  value: m.codeMission,
+}));
 
 const groupeSanguinOptions = [
   { label: 'A+', value: 'A+' },
@@ -174,7 +196,7 @@ const groupeSanguinOptions = [
 
 const sexeOptions = [
   { label: 'Femme', value: 'Femme' },
-  { label: 'Homme', value: 'Homme' }
+  { label: 'Homme', value: 'Homme' },
 ];
 
 const lieuOptions = [];
@@ -192,7 +214,6 @@ fonction.forEach((element) => {
     value: element.idFonction,
   });
 });
-
 </script>
 
 <style scoped>

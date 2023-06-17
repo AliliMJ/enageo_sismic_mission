@@ -58,11 +58,13 @@ export const insertUser = async (req: Request, res: Response) => {
       const employe = await prisma.employe.findFirst({
         where: { id: employeId },
       });
+      console.log(employe);
       if (employe?.codeMission == null)
         return res
           .status(400)
           .json({ err: 'Cet employe ne possède pas de mission.' });
     }
+
     const user = await prisma.compte.create({
       data: {
         username,

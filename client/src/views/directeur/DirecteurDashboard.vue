@@ -13,45 +13,77 @@ import {
   NTag,
   NProgress,
   NIcon,
+  NSelect,
+  NEmpty,
 } from 'naive-ui';
 
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import axios from 'axios';
 import {
   AlertCircleOutline as Info,
   HelpCircleOutline as Hint,
 } from '@vicons/ionicons5';
+import StatProjet from '../../components/StatProjet.vue';
+
+const selectedMission = ref(null);
+
+const missions = (await axios.get('http://localhost:3000/missions')).data;
+
+const options = missions.map((m) => ({
+  label: m.codeMission,
+  value: m.codeMission,
+}));
 
 const myChart = ref(null);
 
-onMounted(() => {
-  new Chart(myChart.value, {
-    type: 'line',
-    data: {
-      labels: ['jan', 'fev', 'march', 'avril', 'mai'],
-      datasets: [
-        {
-          label: 'My First Dataset',
-          data: [65, 80, 50, 50, 110],
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          min: 0,
-        },
-      },
-    },
-  });
+// onMounted(() => {
+//   new Chart(myChart.value, {
+//     type: 'line',
+//     data: {
+//       labels: ['jan', 'fev', 'march', 'avril', 'mai'],
+//       datasets: [
+//         {
+//           label: 'My First Dataset',
+//           data: [65, 80, 50, 50, 110],
+//           fill: false,
+//           borderColor: 'rgb(75, 192, 192)',
+//           tension: 0.1,
+//         },
+//       ],
+//     },
+//     options: {
+//       responsive: true,
+//       scales: {
+//         y: {
+//           min: 0,
+//         },
+//       },
+//     },
+//   });
+// });
+const selectedProject = ref(null);
+watch(selectedMission, async () => {
+  selectedProject.value =
+    selectedMission.value != null
+      ? (
+          await axios.get(
+            'http://localhost:3000/projets/prodByMission/' +
+              selectedMission.value
+          )
+        ).data
+      : null;
+
+  console.log(selectedProject.value);
 });
 </script>
 
 <template>
-  <n-h1>Statistiques</n-h1>
+  <n-select v-model:value="selectedMission" :options="options" />
+  <n-h1> Projet en production </n-h1>
+  <StatProjet v-if="selectedProject" :projet="selectedProject" />
+  <n-empty v-else description="Aucun projet en production"> </n-empty>
+
+  <!-- <n-h1>Statistiques</n-h1>
   <n-grid :cols="4" x-gap="12" y-gap="12">
     <n-gi
       ><n-card class="stat-card" title="État d'avancement">
@@ -131,7 +163,7 @@ onMounted(() => {
         </n-card>
       </div>
     </n-gi>
-  </n-grid>
+  </n-grid> -->
 </template>
 
 <style scoped>
