@@ -166,8 +166,9 @@ const onConfirm = async () => {
     codeMission: employeRef.value.codeMission,
   };
 
-  const employe = await axios.post(`http://localhost:3000/employes/`, req).data;
+  const employe = (await axios.post(`http://localhost:3000/employes/`, req)).data;
 
+  console.log('--->'+employe);
   emit('confirm',employe);
 };
 
