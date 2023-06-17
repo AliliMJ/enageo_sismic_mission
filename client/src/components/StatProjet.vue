@@ -43,6 +43,7 @@ function groupVP(prodData) {
 
   return { labels, data };
 }
+
 const production = (
   await axios.get(
     'http://localhost:3000/rapports/productionByProject/' +

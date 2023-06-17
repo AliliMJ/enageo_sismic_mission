@@ -176,7 +176,7 @@ const routes = [
       {
         path: '/projet',
         name: Route.Projet,
-        component: () => Projects,
+        component: Projects,
         mata: { role: Role.ChefMision },
       },
 

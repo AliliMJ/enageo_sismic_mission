@@ -21,7 +21,7 @@ import { employeNameFilter } from '../middlewares/filter';
 
 export const employeRouter = express.Router();
 
-employeRouter.get('/', employeNameFilter, paginate, getEmployes);
+employeRouter.get('/', employeNameFilter, getEmployes);
 employeRouter.get('/fonctions', getFonctions);
 employeRouter.get('/stats', getEmployesNumberOfYear);
 employeRouter.get(

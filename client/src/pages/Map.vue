@@ -17,10 +17,10 @@ import {
   NBadge,
 } from 'naive-ui';
 import mapboxgl from 'mapbox-gl';
+import MapProject from '../components/MapProject.vue';
 
 const projects = (await axios.get('http://localhost:3000/projets/prod')).data;
 
-//console.log('test', center(points([])));
 const showPanel = ref(false);
 const selectedProject = ref(null);
 
@@ -48,12 +48,7 @@ onMounted(() => {
               points(p.Terrain.Coordonnes.map((c) => [c.longitude, c.latitude]))
             ).geometry.coordinates,
           },
-          properties: {
-            title: p.nom,
-            description: p.description,
-            chantier: p.codeMission,
-            budget: Math.round(p.budget / 1000),
-          },
+          properties: p,
         };
       }),
   };
@@ -135,7 +130,7 @@ onMounted(() => {
 
       layout: {
         'icon-image': 'pulsing-dot',
-        'text-field': ['get', 'chantier'],
+        'text-field': ['get', 'codeMission'],
         'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
         'text-offset': [0, 1.25],
         'text-anchor': 'top',
@@ -173,54 +168,7 @@ onMounted(() => {
 
 <template>
   <div style="height: 85vh; width: 100%" id="map">
-    <n-card id="info" v-if="selectedProject">
-      <template #header>
-        <n-h1>{{ selectedProject.title }}</n-h1>
-      </template>
-      <template #action>
-        <n-space>
-          <n-button type="info"> Visiter le terrain </n-button>
-          <n-button> Fermer </n-button>
-        </n-space>
-      </template>
-
-      <template #header-extra>
-        <n-tag type="info">{{ selectedProject.chantier }}</n-tag>
-      </template>
-      <n-h2>Description</n-h2>
-      <n-ellipsis :line-clamp="2">
-        <n-text>{{ selectedProject.description }}</n-text>
-      </n-ellipsis>
-
-      <n-h2>Statistiques</n-h2>
-
-      <n-row>
-        <n-col :span="12">
-          <n-statistic label="Production">
-            12
-
-            <template #suffix> % </template></n-statistic
-          >
-        </n-col>
-        <n-col :span="12">
-          <n-statistic label="Budget">
-            {{ selectedProject.budget }}k
-            <template #suffix>
-              <n-text strong depth="3">Dinars</n-text>
-            </template>
-          </n-statistic>
-        </n-col>
-      </n-row>
-      <n-row>
-        <n-statistic label="Temps passé">
-          29
-
-          <template #suffix>
-            <n-text strong depth="3">Jours</n-text>
-          </template>
-        </n-statistic>
-      </n-row>
-    </n-card>
+    <MapProject v-if="selectedProject" :project="selectedProject" />
   </div>
 </template>
 
