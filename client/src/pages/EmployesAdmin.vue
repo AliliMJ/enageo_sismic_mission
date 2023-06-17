@@ -27,14 +27,11 @@ const auth = useAuth();
 const dialog = useDialog();
 const message = useMessage();
 
-function deleteEmploye() {
-}
-
-async function confirmAdd() {
+async function confirmAdd(employe) {
+  console.log(employe);
+  employes.value.push(employe);
   showModal.value = false;
 }
-
-
 
 const employes = ref([]);
 employes.value = (
