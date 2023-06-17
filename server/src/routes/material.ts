@@ -27,7 +27,8 @@ import {
   deleteMateriel,
   mettreEnPanneExterne,
   getMaterialDesignation,
-  insertMaterial
+  insertMaterial,
+  deleteMaterielFromDB
 } from '../controllers/material';
 
 export const materialRouter = express.Router();
@@ -63,4 +64,6 @@ materialRouter.post('/mettreEnPanneExterne/:codeMat', mettreEnPanneExterne);
 materialRouter.put('/updateMateriel', updateMateriel);
 materialRouter.put('/insert', insertMaterial);
 materialRouter.put('/deleteMateriel/:codeMat', deleteMateriel);
+
+materialRouter.delete('/deleteMaterielFromDB/:codeMat', deleteMaterielFromDB);
 

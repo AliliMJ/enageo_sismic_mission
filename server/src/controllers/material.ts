@@ -92,6 +92,23 @@ export const deleteMateriel = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteMaterielFromDB = async (req: Request, res: Response) => {
+  try {
+
+    const codeMat = req.params.codeMat;
+
+    const materialTypes = await prisma.materiel.delete({
+      where : {codeMat : codeMat},
+    });
+
+    return res.status(200).json(materialTypes);
+  } catch {
+    res
+      .status(500)
+      .json({ err: "Problème lors de la suppression du materiel" });
+  }
+};
+
 export const getMaterialByCode = async (req: Request, res: Response) => {
   try {
     const { codeMat } = req.params;
