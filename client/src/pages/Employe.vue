@@ -91,6 +91,17 @@ if (employeRef.value.equipe != null) {
   equipeRef = ref();
 }
 
+const sexeOptions = [
+  {
+    label : 'Homme',
+    value : 'Homme'
+  },
+  {
+    label : 'Femme',
+    value : 'Femme'
+  }
+]
+
 /* employe operations */
 
 const deleteEmployeWithMission = async () => {
@@ -271,10 +282,9 @@ missions.forEach((element) => {
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="l'adresse">
                       <NInput v-model:value="employeRef.adresse" />
-                      F
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="Sexe">
-                      <NSelect v-model:value="employeRef.sexe" />
+                      <NSelect v-model:value="employeRef.sexe" :options="sexeOptions"/>
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="numero identite">
                       <NInput v-model:value="employeRef.numIdentite" />
@@ -298,6 +308,7 @@ missions.forEach((element) => {
                         v-model:value="missionRef.code"
                         placeholder="non mission"
                         :options="missionOptions"
+                        disabled
                       />
                     </NFormItemGi>
                     <NFormItemGi :span="12" label="etat de l'employe">

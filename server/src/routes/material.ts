@@ -33,7 +33,7 @@ import {
 
 export const materialRouter = express.Router();
 
-materialRouter.get('/', MaterielFilter , paginate, getMaterial);
+materialRouter.get('/', MaterielFilter , getMaterial);
 materialRouter.get('/designation', MaterielFilter , paginate, getMaterialDesignation);
 materialRouter.get('/materielWithoutMission', paginate, getMaterialByWithoutMission);
 materialRouter.get('/EnPanneMateriel/designation/:codeMission',enPanneMaterielFilter,paginate,getEnPanneMaterielByDesignation);

@@ -4,6 +4,7 @@ export const getMaterial = async (req: Request, res: Response) => {
   try {
     const materials = await prisma.materiel.findMany({
       ...req.body.pagination?.options,
+      where: { ...req.body.filter },
     });
 
     return res.status(200).json(materials);

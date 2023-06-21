@@ -2,7 +2,7 @@
   <NSpace class="space">
     <NGrid x-gap="20" y-gap="20" :cols="4">
       <n-grid-item :span="4" class="pageHeader">
-        Tableau de board de l'administrateur
+        Tableau de bord de l'administrateur
       </n-grid-item>
       <n-grid-item :span="1">
         <NSpace class="testCard1" vertical>

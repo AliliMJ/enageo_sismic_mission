@@ -170,6 +170,7 @@
               <n-tooltip trigger="hover">
                 <template #trigger>
                   <n-progress
+                  
                     type="circle"
                     :percentage="gestStat.pourcentageEmployes"
                     class="progress1"
@@ -242,6 +243,8 @@ const gestStat = (
     `http://localhost:3000/statistiques/getGestionnaireStatistiques/${auth.employe.codeMission}`
   )
 ).data;
+
+console.log(''+gestStat)
 
 ChartJS.register(
   ArcElement,
@@ -334,8 +337,6 @@ gestStat.nombreEmpEtat.forEach((element) => {
 /* start cout reparation par mois */
 const coutReparationInterne = ref(gestStat.coutReparationByMonth);
 const coutReparationExterne = ref(gestStat.coutReparationExterneByMonth);
-
-console.log(coutReparationExterne);
 
 // gestStat.coutReparationByMonth.forEach((element) => {
 //   employesetat.value.push(element.etat);
