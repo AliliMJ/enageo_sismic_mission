@@ -160,6 +160,7 @@ export const getProjetEnCoursByMission = async (
     )
 `;
     if (projet.length == 0) return res.status(200).json(null);
+    if (projet[0].annule) return res.status(200).json(null);
 
     res.status(200).json(projet[0]);
   } catch (e) {

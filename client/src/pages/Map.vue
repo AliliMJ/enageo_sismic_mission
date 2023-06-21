@@ -2,20 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { center, points } from '@turf/turf';
 import axios from 'axios';
-import {
-  NCard,
-  NTag,
-  NH2,
-  NText,
-  NRow,
-  NCol,
-  NStatistic,
-  NButton,
-  NEllipsis,
-  NSpace,
-  NH1,
-  NBadge,
-} from 'naive-ui';
+
 import mapboxgl from 'mapbox-gl';
 import MapProject from '../components/MapProject.vue';
 

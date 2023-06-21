@@ -12,6 +12,7 @@ import {
   NEllipsis,
 } from 'naive-ui';
 import axios from 'axios';
+import { watch } from 'vue';
 const props = defineProps({
   project: Object,
 });
