@@ -70,8 +70,19 @@ typeMateriel.forEach((element) => {
 
 async function updateMateriel() {
   const req = {
-    materiel: materiel.value,
+        codeMat: materiel.value.codeMat,
+        marque:  materiel.value.marque,
+        modele:  materiel.value.modele,
+        dateService: new Date(materiel.value.dateService),
+        designation: materiel.value.designation,
+        matricule: materiel.value.matricule,
+        codeMission: materiel.value.codeMission,
+        status: materiel.value.status,
+        idTypeMat: materiel.value.idTypeMat 
   };
+  (
+  await axios.put(`http://localhost:3000/material/updateMateriel/${materiel.value.codeMat}`,req)
+);
 }
 
 async function deleteMateriel() {

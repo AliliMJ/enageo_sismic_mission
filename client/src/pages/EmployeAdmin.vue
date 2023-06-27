@@ -130,7 +130,7 @@ const updateEmploye = async () => {
     numIdentite: employeRef.value.numId,
     groupeSanguin: employeRef.value.groupeSanguin,
     regimTravail: employeRef.value.regimTravail,
-    codeMission: employeRef.value.missionCode,
+    codeMission: missionRef.value.code,
     etat: employeRef.value.etat,
     fonctionId: Number(fonctionRef.value),
   };

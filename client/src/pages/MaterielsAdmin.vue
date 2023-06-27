@@ -86,7 +86,7 @@ const searchFilter = () => {
 </script>
 
 <template>
-  <NH1>La liste des matériels</NH1>
+  <NH1>La liste des véhicule</NH1>
   <NSpace justify="space-between">
     <NSpace> </NSpace>
     <NSpace>
@@ -106,7 +106,7 @@ const searchFilter = () => {
         type="success"
         icon-placement="right"
       >
-        ajouter un matériel
+        ajouter un véhicule
         <template #icon>
           <NIcon>
             <Add />

@@ -274,19 +274,19 @@ export const getGestionnaireStatistiques = async (
     if(stat.NbTotalMateriel===0){
       stat.pourcentageMateriel=0
     }else{
-      stat.pourcentageMateriel = Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation)/stat.NbTotalMateriel)*100);
+      stat.pourcentageMateriel = Math.round(Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation)/stat.NbTotalMateriel)*100));
     }
 
     if(stat.nbEmployes===0){
       stat.pourcentageEmployes=0
     }else{
-      stat.pourcentageEmployes = Number(((stat.nombreEmpEtat[1].nb+stat.nombreEmpEtat[2].nb)/stat.nbEmployes)*100);
+      stat.pourcentageEmployes = Math.round(Number(((stat.nombreEmpEtat[1].nb+stat.nombreEmpEtat[2].nb)/stat.nbEmployes)*100));
     }
 
     if(stat.NbTotalMateriel===0){
       stat.pourcentageMaterielWithExterne=0;
     }else{
-      stat.pourcentageMaterielWithExterne = Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation+stat.nbMaterielEnReparationExterne)/stat.NbTotalMateriel)*100);
+      stat.pourcentageMaterielWithExterne = Math.round(Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation+stat.nbMaterielEnReparationExterne)/stat.NbTotalMateriel)*100));
     }
 
 

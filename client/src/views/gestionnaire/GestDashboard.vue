@@ -1,6 +1,6 @@
 <template>
   <NSpace style="margin-bottom: 15px; margin-left: 40px">
-    <NText class="page-header">Tableau de board de gestionnaire</NText>
+    <NText class="page-header">Tableau de bord de gestionnaire</NText>
   </NSpace>
   <NGrid
     :cols="2"

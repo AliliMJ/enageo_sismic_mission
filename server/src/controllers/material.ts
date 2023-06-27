@@ -646,16 +646,33 @@ export const ajouterMaterielToMission = async (req: Request,res: Response) => {
 export const updateMateriel = async (req: Request,res: Response) => {
   try {
     
-    const material = req.body.materiel;
+        const codeMat = req.params.codeMat;
+        const marque =  req.body.marque;
+        const modele =  req.body.modele;
+        const dateService = req.body.dateService;
+        const designation = req.body.designation;
+        const matricule = req.body.matricule;
+        const codeMission = req.body.codeMission;
+        const status = req.body.status;
+        const idTypeMat = req.body.idTypeMat;
 
-    console.log(material);
 
-    // const materiel = await prisma.materiel.update({
-    //   data : {material},
-    //   where : {material.codeMat}
-    // });
+    const materiel = await prisma.materiel.update({
+      data : {
+        codeMat: codeMat,
+        marque:  marque,
+        modele:  modele,
+        dateService: dateService,
+        designation: designation,
+        matricule: matricule,
+        codeMission: codeMission,
+        status: status,
+        idTypeMat: idTypeMat
+      },
+      where : {codeMat : codeMat}
+    });
 
-    return res.status(200).json(1);
+    return res.status(200).json(materiel);
   } catch (e) {
     console.log(e);
     res
@@ -685,3 +702,5 @@ export const getMaterielReparationExterne = async (req: Request,res: Response) =
       });
   }
 };
+
+

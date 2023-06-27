@@ -61,7 +61,7 @@ materialRouter.get('/:codeMat', getMaterialByCode);
 materialRouter.post('/mettreEnPanne/:codeMat', mettreEnPanne);
 materialRouter.post('/mettreEnPanneExterne/:codeMat', mettreEnPanneExterne);
 
-materialRouter.put('/updateMateriel', updateMateriel);
+materialRouter.put('/updateMateriel/:codeMat', updateMateriel);
 materialRouter.put('/insert', insertMaterial);
 materialRouter.put('/deleteMateriel/:codeMat', deleteMateriel);
 

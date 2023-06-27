@@ -288,7 +288,7 @@ const props = defineProps(["Number(projet.value.idProjet)"]);
 </script>
 
 <template>
-  <NH1>L'atelier mecanique de la mission</NH1>
+  <NH1>les réparation de la mission</NH1>
   <NSpace justify="space-between">
     <NSpace> </NSpace>
     <NSpace>
@@ -308,7 +308,7 @@ const props = defineProps(["Number(projet.value.idProjet)"]);
         type="success"
         icon-placement="right"
       >
-        Ajouter un matériel à l'atelier
+        Ajouter une réparation
         <template #icon>
           <NIcon>
             <Add />

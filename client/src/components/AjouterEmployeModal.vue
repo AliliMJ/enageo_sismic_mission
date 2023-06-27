@@ -14,16 +14,17 @@
         <NForm>
           <NGrid :span="24" :x-gap="24">
             <NFormItemGi :span="12" label="Nom">
-              <NInput v-model:value="employeRef.nom" />
+              <NInput v-model:value="employeRef.nom" placeholder='Nom' />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Prénom">
-              <NInput v-model:value="employeRef.prenom" />
+              <NInput v-model:value="employeRef.prenom" placeholder='Prénom'/>
             </NFormItemGi>
             <NFormItemGi :span="12" label="Date de naissance">
               <NDatePicker
                 format="dd/MM/yyyy"
                 v-model:value="employeRef.dateNaiss"
                 type="date"
+                placeholder='Date de naissance'
               />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Date de rejoint">
@@ -31,23 +32,25 @@
                 format="dd/MM/yyyy"
                 v-model:value="employeRef.dateRejoint"
                 type="date"
+                placeholder='Date de rejoint'
               />
             </NFormItemGi>
             <NFormItemGi :span="12" label="lieu de naissance">
               <NSelect
-                placeholder="wilaya"
+                placeholder="lieu de naissance"
                 :options="lieuOptions"
                 v-model:value="employeRef.lieuNaiss"
+
               />
             </NFormItemGi>
             <NFormItemGi :span="12" label="l'adresse mail">
-              <NInput v-model:value="employeRef.email" />
+              <NInput v-model:value="employeRef.email"   placeholder="l'adresse mail" />
             </NFormItemGi>
             <NFormItemGi :span="12" label="numéro du téléphone">
-              <NInput v-model:value="employeRef.numTel" />
+              <NInput v-model:value="employeRef.numTel"  placeholder="numéro du téléphone"/>
             </NFormItemGi>
             <NFormItemGi :span="12" label="l'adresse">
-              <NInput v-model:value="employeRef.adresse" />
+              <NInput v-model:value="employeRef.adresse" placeholder="l'adresse"/>
             </NFormItemGi>
             <NFormItemGi :span="12" label="Sexe">
               <NSelect
@@ -56,23 +59,24 @@
                 placeholder="sexe"
               />
             </NFormItemGi>
-            <NFormItemGi :span="12" label="numero identite">
-              <NInput v-model:value="employeRef.numIdentite" />
+            <NFormItemGi :span="12" label="numero d'identite">
+              <NInput v-model:value="employeRef.numIdentite" placeholder="numero d'identite"/>
             </NFormItemGi>
-            <NFormItemGi :span="12" label="Groupe Sanguin">
+            <NFormItemGi :span="12" label="Groupe Sanguin" >
               <NSelect
-                placeholder="GroupeSanguin"
+                placeholder="Groupe Sanguin"
                 :options="groupeSanguinOptions"
                 v-model:value="employeRef.groupeSanguin"
               />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Regime de travail">
-              <NInput v-model:value="employeRef.regimTravail" />
+              <NInput v-model:value="employeRef.regimTravail" placeholder="Regime de travail"/>
             </NFormItemGi>
-            <NFormItemGi :span="12" label="fonction de l'employe">
+            <NFormItemGi :span="12" label="fonction de l'employé">
               <NSelect
                 :options="fonctionOptions"
                 v-model:value="employeRef.fonction"
+                placeholder="fonction de l'employé"
               />
             </NFormItemGi>
             <NFormItemGi :span="12" label="Mission">
