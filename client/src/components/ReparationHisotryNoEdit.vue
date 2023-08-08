@@ -20,15 +20,11 @@ const props = defineProps({
   codeMat: String,
 });
 
-console.log(props.codeMat);
-
 const materielWithReparations = (
   await axios.get(
     `http://localhost:3000/material/getMaterielWithReparations/${props.codeMat}`
   )
 ).data;
-
-console.log(materielWithReparations);
 
 const materielRef = ref({
   codeMat: materielWithReparations.codeMat,
@@ -36,10 +32,10 @@ const materielRef = ref({
   matricule: materielWithReparations.matricule,
   idProjet: materielWithReparations.idProjet,
   status: materielWithReparations.status,
-  cout:materielWithReparations.cout,
+  cout: materielWithReparations.cout,
   idTypeMat: materielWithReparations.idTypeMat,
   reparationsInterne: materielWithReparations.ReparationsInterne,
-  reparationsExterne: materielWithReparations.ReparationsExterne
+  reparationsExterne: materielWithReparations.ReparationsExterne,
 });
 
 const reparationsInterne = materielRef.value.reparationsInterne;

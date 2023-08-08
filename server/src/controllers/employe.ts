@@ -2,8 +2,6 @@ import { Response, Request } from 'express';
 import { Prisma, PrismaClient } from '@prisma/client';
 
 export const getEmployes = async (req: Request, res: Response) => {
-  // const value = req.query.like;
-  // console.log(value);
   try {
     const employes = await prisma.employe.findMany({
       ...req.body.pagination?.options,
@@ -11,8 +9,7 @@ export const getEmployes = async (req: Request, res: Response) => {
     });
 
     res.status(200).json(employes);
-  } catch(e) {
-    console.log(e);
+  } catch (e) {
     res
       .status(500)
       .json({ err: 'Problème lors de la collection des employés' });
@@ -35,27 +32,20 @@ export const getEmployesByEquipe = async (req: Request, res: Response) => {
 };
 
 export const deleteEmployeDB = async (req: Request, res: Response) => {
-  // const value = req.query.like;
-  // console.log(value);
   try {
     const id = Number(req.params.id);
 
     const employes = await prisma.employe.delete({
-      where: { id : id },
+      where: { id: id },
     });
 
     res.status(200).json(employes);
-  } catch(e) {
-    console.log(e);
-    res
-      .status(500)
-      .json({ err: "Problème lors de la suppression  d'employé" });
+  } catch (e) {
+    res.status(500).json({ err: "Problème lors de la suppression  d'employé" });
   }
 };
 
 export const getAccountedEmployes = async (req: Request, res: Response) => {
-  // const value = req.query.like;
-  // console.log(value);
   try {
     const employes = await prisma.employe.findMany({
       ...req.body.pagination?.options,
@@ -113,7 +103,6 @@ export const insertEmploye = async (req: Request, res: Response) => {
 
     res.status(201).json(employe);
   } catch (e) {
-    console.log(e);
     res.status(500).json({ err: `Èchec lors de la creation de l'employe` });
   }
 };
@@ -190,7 +179,6 @@ export const getEmployesNumberOfYear = async (req: Request, res: Response) => {
 
     return res.status(200).json(numberByYears);
   } catch (e) {
-    console.log(e);
     res.status(500).json({
       err: 'Problème lors de la collection des statistiques des employes',
     });
@@ -293,7 +281,6 @@ export const insertEmployeWithMission = async (req: Request, res: Response) => {
 
     return res.status(200).json(employe);
   } catch (e) {
-    console.log(e);
     res
       .status(500)
       .json({ err: 'Problème lors de la affecte du employe a une mission' });
@@ -316,7 +303,6 @@ export const updateEmployeEquipe = async (req: Request, res: Response) => {
 
     return res.status(200).json(employe);
   } catch (e) {
-    console.log(e);
     res
       .status(500)
       .json({ err: 'Problème lors de la affecte du employe a une mission' });

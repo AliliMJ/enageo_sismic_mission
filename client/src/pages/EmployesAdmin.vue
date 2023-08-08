@@ -28,18 +28,13 @@ const dialog = useDialog();
 const message = useMessage();
 
 function confirmAdd(employe) {
-  console.log(employe);
   employes.value.push(employe);
   showModal.value = false;
   message.success('Employé ajouté');
 }
 
 const employes = ref([]);
-employes.value = (
-  await axios.get(
-    `http://localhost:3000/employes`
-  )
-).data;
+employes.value = (await axios.get(`http://localhost:3000/employes`)).data;
 
 const router = useRouter();
 const cols = [
@@ -112,24 +107,20 @@ const searchFilter = () => {
         )
       ).data;
     } else {
-      employes.value = (
-        await axios.get(
-          `http://localhost:3000/employes`
-        )
-      ).data;
+      employes.value = (await axios.get(`http://localhost:3000/employes`)).data;
     }
   });
 };
 </script>
 
 <template>
-    <Modal
-      :title="`ajouter un employé à la base des données`"
-      :showModal="showModal"
-      v-if="showModal"
-      @cancel="showModal = false"
-      @confirm="confirmAdd"
-    />
+  <Modal
+    :title="`ajouter un employé à la base des données`"
+    :showModal="showModal"
+    v-if="showModal"
+    @cancel="showModal = false"
+    @confirm="confirmAdd"
+  />
   <NSpace vertical>
     <NH1>La liste des employés</NH1>
     <NSpace justify="end">

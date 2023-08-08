@@ -15,7 +15,6 @@ onMounted(async () => {
   equipe.value = (
     await axios.get('http://localhost:3000/equipes/' + idEquipe)
   ).data;
-  console.log(equipe.value);
 });
 
 async function affecter(employe) {

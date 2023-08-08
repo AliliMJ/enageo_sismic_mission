@@ -4,7 +4,6 @@ export const insertMission = async (req: Request, res: Response) => {
   const { codeMission, methodologie, description } = req.body;
 
   try {
-    console.log(req.body);
     const mission = await prisma.mission.create({
       data: {
         codeMission,
@@ -14,7 +13,6 @@ export const insertMission = async (req: Request, res: Response) => {
     });
     return res.status(200).json(mission);
   } catch (e) {
-    console.log(e);
     res.status(500).json({ err: 'Problème lors de la creation de la mission' });
   }
 };

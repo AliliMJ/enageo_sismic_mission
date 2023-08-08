@@ -30,9 +30,6 @@ const materielWithReparations = (
   )
 ).data;
 
-console.log('////////////////////' + props.codeMat);
-console.log('////////////////////' + materielWithReparations.codeMat);
-
 const materielRef = ref({
   codeMat: materielWithReparations.codeMat,
   designation: materielWithReparations.designation,
@@ -44,8 +41,6 @@ const materielRef = ref({
 });
 
 const reparations = materielRef.value.reparations;
-
-console.log('---->' + materielRef.value.codeMat);
 
 const emit = defineEmits(['confirm', 'cancel']);
 
@@ -137,9 +132,6 @@ const mettreEnReparation = async () => {
         req
       )
     ).data;
-    console.log('success');
-  } else {
-    console.log('failed');
   }
 };
 </script>

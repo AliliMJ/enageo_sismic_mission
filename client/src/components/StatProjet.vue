@@ -59,7 +59,7 @@ const timePassed = () => {
       production[0].jour
     );
     const now = new Date();
-    console.log(production[0].jour, production[0].mois, production[0].annee);
+
     return Math.floor((now - firstProdDay) / (1000 * 3600 * 24));
   }
 

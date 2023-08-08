@@ -65,7 +65,7 @@ export const insertRapport = async (req: Request, res: Response) => {
               const equipe = projet.Mission.Equipes.filter(
                 (e) => e.codeActivite === r.activite
               );
-              console.log(equipe);
+
               return {
                 idEquipe: equipe[0].idEquipe,
                 hDebut: r.hDebut,
@@ -83,7 +83,6 @@ export const insertRapport = async (req: Request, res: Response) => {
         .json({ err: 'Prolème lors de la création du rapport' });
     }
   } catch (e) {
-    console.log(e);
     res.status(500).json({ err: 'Internal error while creating report' });
   }
 };
@@ -191,7 +190,6 @@ export const getProductionByProject = async (req: Request, res: Response) => {
         groups.push(lastGroup);
       }
     }
-    console.log(groups);
 
     res.status(200).json(groups);
   } catch (e) {

@@ -13,7 +13,6 @@ const route = useRoute();
 const rapport = (
   await axios.get(`http://localhost:3000/rapports/${route.params.idRapport}`)
 ).data;
-console.log(rapport.Rendements);
 
 let tabs = Object.keys(Activites).map((a) => {
   return { name: Activites[a], title: a, unit: ActiviteUnit[a] };

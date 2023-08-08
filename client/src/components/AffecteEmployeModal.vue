@@ -90,7 +90,7 @@ async function getId(value) {
   const employe = (
     await axios.get('http://localhost:3000/employes/' + idRef.value)
   ).data;
-  console.log(employe);
+
   nomRef.value = employe.nom;
   prenomRef.value = employe.prenom;
   fonctionRef.value = employe.fonction.nom;

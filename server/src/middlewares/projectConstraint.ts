@@ -32,7 +32,7 @@ export const NotExistProdProjectInMission = async (
         WHERE ep2.idProjet = p.idProjet
       )
 `;
-    console.log(projectsInProd);
+
     if (projectsInProd?.length === 0) return next();
     else
       return res.status(400).json({

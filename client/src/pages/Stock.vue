@@ -21,7 +21,6 @@ const project = (
     `http://localhost:3000/projets/prodByMission/${auth.employe?.codeMission}`
   )
 ).data;
-console.log(project);
 
 const message = useMessage();
 

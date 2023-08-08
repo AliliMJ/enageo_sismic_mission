@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import axios from "axios";
+import axios from 'axios';
 import {
   NModal,
   NCard,
@@ -80,12 +80,12 @@ import {
   useMessage,
   NRadioGroup,
   NRadio,
-} from "naive-ui";
-import { SearchOutline as search } from "@vicons/ionicons5";
-import MaterielTag from "./MaterielTag.vue";
-import { h } from "vue";
-import { ref, watch } from "vue";
-const emit = defineEmits(["confirmAddInterne","confirmAddExterne","cancel"]);
+} from 'naive-ui';
+import { SearchOutline as search } from '@vicons/ionicons5';
+import MaterielTag from './MaterielTag.vue';
+import { h } from 'vue';
+import { ref, watch } from 'vue';
+const emit = defineEmits(['confirmAddInterne', 'confirmAddExterne', 'cancel']);
 
 const message = useMessage();
 const dialog = useDialog();
@@ -93,12 +93,12 @@ const dialog = useDialog();
 const value = ref(null);
 const reps = [
   {
-    value: "interne",
-    label: "Réparation interne",
+    value: 'interne',
+    label: 'Réparation interne',
   },
   {
-    value: "externe",
-    label: "Réparation externe",
+    value: 'externe',
+    label: 'Réparation externe',
   },
 ].map((s) => {
   s.value = s.value.toLowerCase();
@@ -111,7 +111,7 @@ const props = defineProps({
   codeMission: String,
 });
 
-function print(){
+function print() {
   console.log(value.value);
 }
 
@@ -132,17 +132,17 @@ goodMateriel.value = (
 
 const cols = [
   {
-    title: "Status",
-    key: "statuMateriel",
-    type: "selection",
+    title: 'Status',
+    key: 'statuMateriel',
+    type: 'selection',
     multiple: false,
   },
-  { title: "code materiel", key: "codeMat" },
-  { title: "designation", key: "designation" },
-  { title: "matricule", key: "matricule" },
+  { title: 'code materiel', key: 'codeMat' },
+  { title: 'designation', key: 'designation' },
+  { title: 'matricule', key: 'matricule' },
   {
-    title: "Status",
-    key: "statuMateriel",
+    title: 'Status',
+    key: 'statuMateriel',
     render(row) {
       return h(MaterielTag, { statuMateriel: row.status });
     },
@@ -151,22 +151,21 @@ const cols = [
 
 const handleCheck = (rowKeys) => {
   checkedRowKeysRef.value = rowKeys;
-  console.log("--->" + checkedRowKeysRef.value);
 };
 
 const onConfirm = async () => {
   if (checkedRowKeysRef.value === undefined) {
-    message.warning("il faut choisir un materiel!!!", { duration: 5e3 });
+    message.warning('il faut choisir un materiel!!!', { duration: 5e3 });
   } else {
-    if(value.value===null){
-      message.warning("il faut choisir le type de réparation!!!", { duration: 5e3 });
-    }else{
-      if(value.value==='interne'){
-        console.log('interne');
-        emit("confirmAddInterne", checkedRowKeysRef.value);
-      }else if(value.value==='externe'){
-        console.log('externe');
-        emit("confirmAddExterne", checkedRowKeysRef.value);
+    if (value.value === null) {
+      message.warning('il faut choisir le type de réparation!!!', {
+        duration: 5e3,
+      });
+    } else {
+      if (value.value === 'interne') {
+        emit('confirmAddInterne', checkedRowKeysRef.value);
+      } else if (value.value === 'externe') {
+        emit('confirmAddExterne', checkedRowKeysRef.value);
       }
       //( await axios.get(`http://localhost:3000/material/mettreEnPanne/${checkedRowKeysRef.value[0].codeMat}`));
     }
@@ -174,12 +173,11 @@ const onConfirm = async () => {
 };
 
 const onCancel = () => {
-  emit("cancel");
+  emit('cancel');
 };
 
-const searchDesignation = ref("");
+const searchDesignation = ref('');
 const searchFilter = () => {
-  console.log("=======>" + searchDesignation.value);
   watch(searchDesignation, async () => {
     if (searchDesignation.value.length > 0) {
       goodMateriel.value = (

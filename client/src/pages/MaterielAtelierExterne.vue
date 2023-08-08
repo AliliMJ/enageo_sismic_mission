@@ -90,9 +90,7 @@
             <div class="n-step-description">
               <div v-if="lastReparation.dPanne != null">
                 {{
-                  new Date(lastReparation.dPanne).toLocaleDateString(
-                    "fr-FR"
-                  )
+                  new Date(lastReparation.dPanne).toLocaleDateString('fr-FR')
                 }}
               </div>
               Le véhicule se situe au niveau de l'atelier mécanique
@@ -103,9 +101,7 @@
             <div class="n-step-description">
               <div v-if="lastReparation.dSortie != null">
                 {{
-                  new Date(lastReparation.dSortie).toLocaleDateString(
-                    "fr-FR"
-                  )
+                  new Date(lastReparation.dSortie).toLocaleDateString('fr-FR')
                 }}
               </div>
               sur la route vers la direction générale
@@ -116,9 +112,7 @@
             <div class="n-step-description">
               <div v-if="lastReparation.dArrive != null">
                 {{
-                  new Date(lastReparation.dArrive).toLocaleDateString(
-                    "fr-FR"
-                  )
+                  new Date(lastReparation.dArrive).toLocaleDateString('fr-FR')
                 }}
               </div>
               à l'atelier de la direction générale
@@ -129,9 +123,7 @@
             <div class="n-step-description">
               <div v-if="lastReparation.dRetour != null">
                 {{
-                  new Date(lastReparation.dRetour).toLocaleDateString(
-                    "fr-FR"
-                  )
+                  new Date(lastReparation.dRetour).toLocaleDateString('fr-FR')
                 }}
               </div>
               la véhicule est sur route vers la mission
@@ -142,15 +134,12 @@
             <div class="n-step-description">
               <div v-if="lastReparation.dEntree != null">
                 {{
-                  new Date(lastReparation.dEntree).toLocaleDateString(
-                    "fr-FR"
-                  )
+                  new Date(lastReparation.dEntree).toLocaleDateString('fr-FR')
                 }}
               </div>
               la véhicule est arrivée à la mission
             </div>
           </n-step>
-
         </n-steps>
 
         <n-space>
@@ -187,8 +176,7 @@
               </template>
             </n-button>
 
-            <NSpace justify="end">
-            </NSpace>
+            <NSpace justify="end"> </NSpace>
           </n-button-group>
           <NButton type="success" @click="save" v-if="showSaveRef"
             >Sauvegarder
@@ -202,7 +190,7 @@
       </n-space>
     </n-grid-item>
     <n-grid-item :span="10" class="div4">
-      <NForm :disabled=" ((auth.user.role != Role.ChefMision) || (currentRef != 3 ))">
+      <NForm :disabled="auth.user.role != Role.ChefMision || currentRef != 3">
         <NGrid :span="10" :x-gap="30">
           <NFormItemGi :span="2" label="id">
             <NInput v-model:value="idRepRef" />
@@ -254,10 +242,10 @@
 </template>
 
 <script setup>
-import axios from "axios";
+import axios from 'axios';
 
-import { History20Regular as history } from "@vicons/fluent";
-import HistoryModal from "../components/ReparationHistory.vue";
+import { History20Regular as history } from '@vicons/fluent';
+import HistoryModal from '../components/ReparationHistory.vue';
 import {
   NSpace,
   NButton,
@@ -273,15 +261,15 @@ import {
   NStep,
   NButtonGroup,
   NForm,
-} from "naive-ui";
-import { ArrowForward as arrow, SaveOutline as Save } from "@vicons/ionicons5";
-import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useAuth } from "../stores/authentication";
-import { Role } from "../utils/enums";
+} from 'naive-ui';
+import { ArrowForward as arrow, SaveOutline as Save } from '@vicons/ionicons5';
+import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useAuth } from '../stores/authentication';
+import { Role } from '../utils/enums';
 
 const currentRef = ref(1);
-const currentStatus = ref("process");
+const currentStatus = ref('process');
 const showSaveRef = ref(false);
 
 const router = useRouter();
@@ -326,8 +314,6 @@ if (lastReparation.dEntree != null) {
   currentRef.value++;
 }
 
-console.log(currentRef.value);
-
 const materiel = (await axios.get(`http://localhost:3000/material/${codeMat}`))
   .data;
 
@@ -341,13 +327,13 @@ typeMaterielRef.value = typeMateriel.libelle;
 designationRef.value = materiel.designation;
 matriculeRef.value = materiel.matricule;
 if (Number(materiel.status) === 1) {
-  statusRef.value = "en reparation";
+  statusRef.value = 'en reparation';
 } else {
-  statusRef.value = "en panne";
+  statusRef.value = 'en panne';
 }
 marqueRef.value = materiel.marque;
 modeleRef.value = materiel.modele;
-dateServiceRef.value = new Date(materiel.dateService).toLocaleDateString("fr");
+dateServiceRef.value = new Date(materiel.dateService).toLocaleDateString('fr');
 
 //typeMaterielRef.value = materiel.typemateriel.libelle
 
@@ -376,7 +362,6 @@ function next() {
 }
 
 async function save() {
-  console.log(currentRef.value);
   if (currentRef.value === 2) {
     const demandeReparation = (
       await axios.put(
@@ -429,7 +414,7 @@ async function save() {
       ).data;
     } else {
       currentRef.value--;
-      message.error("il faut remplir tout les champs sur la reparation", {
+      message.error('il faut remplir tout les champs sur la reparation', {
         duration: 10000,
       });
       message.success('état changé avec succès');

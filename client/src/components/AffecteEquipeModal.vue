@@ -10,28 +10,28 @@
       header-style="padding:15px 30px"
       content-style="padding:15px 30px"
     >
-        <NSpace vertical justify="space-between" style="margin-top:15px">
-              <NSelect
-                        placeholder="les equipes"
-                        :options="equipesOptions"
-                        v-model:value="equipeRef"
-                        @update:value="showInformations"
-                      />
-               </NSpace>
-              <NSpace justify="space-between" style="margin-top:25px">
-            <NSpace>
-              <NText class="header" > id : </NText>
-              <NText> {{ idRef }} </NText>
-            </NSpace>
-            <NSpace>
-              <NText class="header"> code activite : </NText>
-              <NText>  {{ codeActiviteRef }} </NText>
-            </NSpace>
-            <NSpace>
-              <NText class="header"> nom : </NText>
-              <NText> {{ nomRef }} </NText>
-            </NSpace>
-          </NSpace>
+      <NSpace vertical justify="space-between" style="margin-top: 15px">
+        <NSelect
+          placeholder="les equipes"
+          :options="equipesOptions"
+          v-model:value="equipeRef"
+          @update:value="showInformations"
+        />
+      </NSpace>
+      <NSpace justify="space-between" style="margin-top: 25px">
+        <NSpace>
+          <NText class="header"> id : </NText>
+          <NText> {{ idRef }} </NText>
+        </NSpace>
+        <NSpace>
+          <NText class="header"> code activite : </NText>
+          <NText> {{ codeActiviteRef }} </NText>
+        </NSpace>
+        <NSpace>
+          <NText class="header"> nom : </NText>
+          <NText> {{ nomRef }} </NText>
+        </NSpace>
+      </NSpace>
       <template #footer>
         <n-space justify="end">
           <NButton @click="onConfirm" type="warning">Confirmer</NButton>
@@ -51,11 +51,11 @@ import {
   NSelect,
   NText,
   useMessage,
-} from "naive-ui";
-import { ref } from "vue";
-import axios from "axios";
+} from 'naive-ui';
+import { ref } from 'vue';
+import axios from 'axios';
 
-const emit = defineEmits(["confirm", "cancel"]);
+const emit = defineEmits(['confirm', 'cancel']);
 const message = useMessage();
 
 const equipeRef = ref();
@@ -64,51 +64,54 @@ const idRef = ref();
 const nomRef = ref();
 const codeActiviteRef = ref();
 
-const equipes = (await axios.get(
-  `http://localhost:3000/equipes/getEquipesbyMission/${props.codeMission}`
-)).data;
+const equipes = (
+  await axios.get(
+    `http://localhost:3000/equipes/getEquipesbyMission/${props.codeMission}`
+  )
+).data;
 
 const equipesOptions = [];
 equipes.forEach((element) => {
   equipesOptions.push({
-    label: element.idEquipe + " - " + element.nom,
-    value: element.idEquipe
+    label: element.idEquipe + ' - ' + element.nom,
+    value: element.idEquipe,
   });
 });
 
 const onConfirm = async () => {
   const req = {
-    idEquipe : idRef.value
-  }
-  console.log(props.idEmploye);
-  const equipes = (await axios.put(
-  `http://localhost:3000/employes/updateEmployeEquipe/${props.idEmploye}`,req
-)).data;
-message.success("l'employé a bien affecté à l'équipe",{ duration: 5e3 })
-  emit("confirm");
+    idEquipe: idRef.value,
+  };
+
+  const equipes = (
+    await axios.put(
+      `http://localhost:3000/employes/updateEmployeEquipe/${props.idEmploye}`,
+      req
+    )
+  ).data;
+  message.success("l'employé a bien affecté à l'équipe", { duration: 5e3 });
+  emit('confirm');
 };
 const onCancel = () => {
-  emit("cancel");
+  emit('cancel');
 };
 
 const props = defineProps({
   showModal: Boolean,
   codeMission: String,
-  idEmploye : String
+  idEmploye: String,
 });
 
- 
 async function showInformations() {
+  const searchIndex = equipes.findIndex(
+    (equipe) => equipe.idEquipe == Number(equipeRef.value)
+  );
+  equipeRef1.value = equipes[searchIndex];
 
-const searchIndex = equipes.findIndex((equipe) => equipe.idEquipe==Number(equipeRef.value));
-equipeRef1.value = equipes[searchIndex];
-
-idRef.value=equipeRef1.value.idEquipe;
-nomRef.value = equipeRef1.value.nom;
-codeActiviteRef.value = equipeRef1.value.codeActivite;
-
+  idRef.value = equipeRef1.value.idEquipe;
+  nomRef.value = equipeRef1.value.nom;
+  codeActiviteRef.value = equipeRef1.value.codeActivite;
 }
-
 </script>
 
 <style scoped>

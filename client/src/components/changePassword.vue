@@ -105,7 +105,6 @@ async function onConfirm() {
       message.error('les deux mot de passe sont differents');
     }
   } catch (e) {
-    console.log(e.response.data);
     message.error("l'ancient mot de passe est incorrect");
   }
 

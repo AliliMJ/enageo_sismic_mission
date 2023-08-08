@@ -16,7 +16,6 @@ const login = async (e) => {
     await auth.login(username.value, password.value);
     return router.push('/');
   } catch (m) {
-    console.log('not welcome');
     message.error(m);
   }
 };

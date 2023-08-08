@@ -58,7 +58,7 @@ export const insertUser = async (req: Request, res: Response) => {
       const employe = await prisma.employe.findFirst({
         where: { id: employeId },
       });
-      console.log(employe);
+
       if (employe?.codeMission == null)
         return res
           .status(400)
@@ -77,7 +77,6 @@ export const insertUser = async (req: Request, res: Response) => {
 
     res.status(201).json(user);
   } catch (e) {
-    console.log(e);
     res.status(500).json({ err: `Èchec lors de la creation de utilisateur` });
   }
 };
@@ -182,11 +181,8 @@ export const getUsersNumber = async (req: Request, res: Response) => {
 
     stat.nbEmployesEmail = nbEmployesEmail.email;
 
-    console.log(stat.nbEmployesEmail);
-
     return res.status(200).json(stat);
   } catch (e) {
-    console.log(e);
     res
       .status(500)
       .json({ err: 'Problème lors de la collection des statistiques' });
@@ -210,7 +206,6 @@ export const getUsersNumberOfYear = async (req: Request, res: Response) => {
 
     return res.status(200).json(numberByYears);
   } catch (e) {
-    console.log(e);
     res
       .status(500)
       .json({ err: 'Problème lors de la collection des statistiques' });

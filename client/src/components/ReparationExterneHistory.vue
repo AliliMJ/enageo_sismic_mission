@@ -13,7 +13,7 @@ import {
   NDatePicker,
   NFormItemGi,
   NSteps,
-  NStep
+  NStep,
 } from 'naive-ui';
 import { ref, watch } from 'vue';
 
@@ -21,8 +21,6 @@ const props = defineProps({
   showExterneModal: Boolean,
   codeMat: String,
 });
-
-console.log(props.codeMat);
 
 const materielWithReparations = (
   await axios.get(
@@ -36,10 +34,10 @@ const materielRef = ref({
   matricule: materielWithReparations.matricule,
   idProjet: materielWithReparations.idProjet,
   status: materielWithReparations.status,
-  cout:materielWithReparations.cout,
+  cout: materielWithReparations.cout,
   idTypeMat: materielWithReparations.idTypeMat,
   reparationsInterne: materielWithReparations.ReparationsInterne,
-  reparationsExterne: materielWithReparations.ReparationsExterne
+  reparationsExterne: materielWithReparations.ReparationsExterne,
 });
 
 const reparationsExterne = materielRef.value.reparationsExterne;
@@ -47,7 +45,7 @@ const reparationsExterne = materielRef.value.reparationsExterne;
 const emit = defineEmits(['confirm', 'cancel']);
 
 const currentRef = ref(1);
-const currentStatus = ref("process");
+const currentStatus = ref('process');
 
 const idRepRef = ref();
 const dPanneRef = ref();
@@ -95,10 +93,8 @@ const cols = [
 ];
 
 const handleClick = async (reparationRow) => {
-
-    currentRef.value=1;
-    currentStatus.value='process';
-
+  currentRef.value = 1;
+  currentStatus.value = 'process';
 
   idRepRef.value = String(reparationRow.idRep);
   dPanneRef.value = new Date(reparationRow.dPanne).valueOf();
@@ -118,24 +114,23 @@ const handleClick = async (reparationRow) => {
   coutRef.value = String(reparationRow.cout);
   detailRef.value = reparationRow.detailProbleme;
 
-if (reparationRow.dSortie != null) {
-  currentRef.value++;
-  dSortieRef.value=reparationRow.dSortie;
-}
-if (reparationRow.dArrive != null) {
-  currentRef.value++;
-  dArriveRef.value=reparationRow.dArrive;
-}
-if (reparationRow.dRetour != null) {
-  currentRef.value++;
-  dRetourRef.value=reparationRow.dRetour;
-}
-if (reparationRow.dEntree != null) {
-  currentRef.value++;
-  currentStatus.value='finish'
-  dEntreeRef.value=reparationRow.dEntree;
-}
-
+  if (reparationRow.dSortie != null) {
+    currentRef.value++;
+    dSortieRef.value = reparationRow.dSortie;
+  }
+  if (reparationRow.dArrive != null) {
+    currentRef.value++;
+    dArriveRef.value = reparationRow.dArrive;
+  }
+  if (reparationRow.dRetour != null) {
+    currentRef.value++;
+    dRetourRef.value = reparationRow.dRetour;
+  }
+  if (reparationRow.dEntree != null) {
+    currentRef.value++;
+    currentStatus.value = 'finish';
+    dEntreeRef.value = reparationRow.dEntree;
+  }
 };
 
 const onCancel = () => {
@@ -214,16 +209,15 @@ const onCancel = () => {
             />
           </n-grid-item>
         </NGrid>
-        <n-steps :current="currentRef" :status="currentStatus" style="margin-top:20px;">
-
+        <n-steps
+          :current="currentRef"
+          :status="currentStatus"
+          style="margin-top: 20px"
+        >
           <n-step title="à l'atelier mécanique">
             <div class="n-step-description">
               <div v-if="dPanneRef != null">
-                {{
-                  new Date(dPanneRef).toLocaleDateString(
-                    "fr-FR"
-                  )
-                }}
+                {{ new Date(dPanneRef).toLocaleDateString('fr-FR') }}
               </div>
               Le véhicule se situe au niveau de l'atelier mécanique
             </div>
@@ -232,11 +226,7 @@ const onCancel = () => {
           <n-step title="sur route">
             <div class="n-step-description">
               <div v-if="dSortieRef != null">
-                {{
-                  new Date(dSortieRef).toLocaleDateString(
-                    "fr-FR"
-                  )
-                }}
+                {{ new Date(dSortieRef).toLocaleDateString('fr-FR') }}
               </div>
               sur la route vers la direction générale
             </div>
@@ -245,11 +235,7 @@ const onCancel = () => {
           <n-step title="arrivé à la direction">
             <div class="n-step-description">
               <div v-if="dArriveRef != null">
-                {{
-                  new Date(dArriveRef).toLocaleDateString(
-                    "fr-FR"
-                  )
-                }}
+                {{ new Date(dArriveRef).toLocaleDateString('fr-FR') }}
               </div>
               à l'atelier de la direction générale
             </div>
@@ -258,11 +244,7 @@ const onCancel = () => {
           <n-step title="sur route">
             <div class="n-step-description">
               <div v-if="dRetourRef != null">
-                {{
-                  new Date(dRetourRef).toLocaleDateString(
-                    "fr-FR"
-                  )
-                }}
+                {{ new Date(dRetourRef).toLocaleDateString('fr-FR') }}
               </div>
               la véhicule est sur route vers la mission
             </div>
@@ -271,16 +253,11 @@ const onCancel = () => {
           <n-step title="arrivée">
             <div class="n-step-description">
               <div v-if="dEntreeRef != null">
-                {{
-                  new Date(dEntreeRef).toLocaleDateString(
-                    "fr-FR"
-                  )
-                }}
+                {{ new Date(dEntreeRef).toLocaleDateString('fr-FR') }}
               </div>
               la véhicule est arrivée à la mission
             </div>
           </n-step>
-
         </n-steps>
       </NSpace>
       <template #footer>

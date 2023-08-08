@@ -41,7 +41,6 @@ function confirm() {
       );
     }
     if (props.resource.stock[k] < stock.value[k]) {
-      console.log('qjqjq');
       return emit('error', 'Stock est insuffisant');
     }
     if (stock.value[k] <= 0) {

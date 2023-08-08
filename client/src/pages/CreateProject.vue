@@ -38,7 +38,6 @@ const wilaya = ref(null);
 const message = useMessage();
 
 function addCoordinates(data) {
-  console.log(data);
   const co = data.coordinates.map((c) => {
     return { longitude: c[0], latitude: c[1] };
   });

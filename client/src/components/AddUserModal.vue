@@ -112,7 +112,6 @@ const onConfirm = () => {
     message.warning('toutes les champs doit etre remplit');
     event.isValid = false;
   } else {
-    console.log('les champs est remplit');
     event.isValid = true;
     event.data = {
       username: username.value,

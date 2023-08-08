@@ -5,7 +5,6 @@ import { Resource, createConsumption } from '../database/resource';
 
 export const addResourceToProject = async (req: Request, res: Response) => {
   const { data, project } = req.body;
-  console.log(project);
 
   try {
     const incFields: any = {};
@@ -24,7 +23,6 @@ export const addResourceToProject = async (req: Request, res: Response) => {
         ...data,
         idProjet: project.idProjet,
       });
-      console.log(p);
     }
 
     const addedResource = await stockCollection.findOne({
@@ -50,7 +48,6 @@ export const addResourceToProject = async (req: Request, res: Response) => {
 
     res.status(201).json(addedResource);
   } catch (e) {
-    console.log(e);
     res.status(500).json({ err: 'Could not insert resource to stock' });
   }
 };
@@ -84,7 +81,7 @@ export const insertConsommation = async (req: Request, res: Response) => {
         if (data.stock[k] > 0)
           resourceInStock.stock[k] = resourceInStock.stock[k] - data.stock[k];
       });
-      //console.log('after modification', resourceInStock.stock);
+
       await stockCollection.updateOne(
         { _id: new ObjectId(data._id) },
         { $set: { stock: resourceInStock.stock } }
@@ -105,8 +102,7 @@ export const createResource = async (req: Request, res: Response) => {
     const resource = await resourcesCollection.insertOne(data);
 
     res.status(201).json(resource);
-  } catch(e) {
-    console.log(e);
+  } catch (e) {
     res.status(500).json({ err: 'Could not insert consommation' });
   }
 };
@@ -146,7 +142,7 @@ export const getStockByResource = async (req: Request, res: Response) => {
   try {
     const idProjet = Number(req.params.idProjet);
     const idResource = req.params.idResource;
-    console.log(idProjet, idResource);
+
     const resourcesCollection = mongo.db().collection('stock');
     const resources = await resourcesCollection.findOne({
       idProjet: idProjet,

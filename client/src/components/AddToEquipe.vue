@@ -75,7 +75,6 @@ async function handleSearch(query) {
 }
 const showModal = ref(false);
 function handleSelect(value, option) {
-  console.log('value');
   selectedEmploye.value = option.employe;
 }
 </script>

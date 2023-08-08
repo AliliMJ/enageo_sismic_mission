@@ -20,17 +20,6 @@ const router = useRouter();
 const dialog = useDialog();
 const message = useMessage();
 
-function deleteUser(id) {
-  dialog.warning({
-    title: 'Confimer la supprission',
-    content: 'Êtes-vous sur de supprimer cet utilisateur?',
-    positiveText: 'Confirmer',
-    negativeText: 'Annuler',
-    onPositiveClick: () => console.log("l'utilisateur a été supprimé", id),
-    onNegativeClick: () => console.log('Suppression annulée'),
-  });
-}
-
 const users = ref([]);
 const searchUsername = ref('');
 

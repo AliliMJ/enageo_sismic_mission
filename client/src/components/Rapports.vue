@@ -9,7 +9,7 @@ const props = defineProps({
   rapports: Array,
   idProject: String,
 });
-console.log(props.rapports);
+
 const cols = [
   { title: 'Id', key: 'idRapport' },
   { title: 'Titre', key: 'titre' },

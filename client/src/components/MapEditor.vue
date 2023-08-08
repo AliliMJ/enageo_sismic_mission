@@ -41,7 +41,7 @@ onMounted(() => {
 
   function updateArea(e) {
     const data = draw.getAll();
-    console.log(data);
+
     const answer = document.getElementById('calculated-area');
     if (data.features.length > 0) {
       // Restrict the area to 2 decimal points.
@@ -80,8 +80,6 @@ function onFinish() {
         }
       })
       .catch((error) => {
-        console.error('Error:', error);
-        console.log('choose wilaya manually');
         emit('finish', { coordinates, wilaya: '' });
       });
   }

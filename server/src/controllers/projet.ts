@@ -88,8 +88,6 @@ export const insertProjet = async (req: Request, res: Response) => {
     });
     res.status(201).json(projet);
   } catch (e) {
-    console.log(e);
-
     res.status(500).json({
       err: 'Problème lors de la creation de ce projet',
     });
@@ -182,7 +180,6 @@ export const updateProjet = async (req: Request, res: Response) => {
     });
     res.json(project);
   } catch (e) {
-    console.log(e);
     res.status(500).json({
       err: 'Problème lors de la mise à jour de ce projet',
     });

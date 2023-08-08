@@ -57,13 +57,16 @@
                   >
                   <NText v-if="evenement.readed === false" class="dot">•</NText>
                   <div justify="end" class="notification-container">
-                    <n-icon class="notification-trash" @click="deleteNotification(evenement)">
-                  <trash />
-                </n-icon>
+                    <n-icon
+                      class="notification-trash"
+                      @click="deleteNotification(evenement)"
+                    >
+                      <trash />
+                    </n-icon>
                     <NText @click="seeDetails(evenement)" class="see-text"
                       >voir plus...</NText
                     >
-              </div>
+                  </div>
                   <n-divider style="width: 20vw; margin: 0px" />
                 </NSpace>
               </NSpace>
@@ -136,7 +139,7 @@ import {
   AlertCircleOutline as alert,
   CheckboxOutline as check,
   MenuOutline as menuIcon,
-  TrashOutline as trash
+  TrashOutline as trash,
 } from '@vicons/ionicons5';
 
 import { h } from 'vue';
@@ -306,21 +309,18 @@ async function handleConfirmEvent(event) {
 
   //  evenements.value=null;
   //  evenements.value= await axios.get(
-    //     `http://localhost:3000/evenement/${mission.value.codeMission}`,
-    //     req
-    //   );
+  //     `http://localhost:3000/evenement/${mission.value.codeMission}`,
+  //     req
+  //   );
 
-    const newEvent = await axios.post(
+  const newEvent = await axios.post(
     `http://localhost:3000/evenement/insertEvenement/${mission.value.codeMission}`,
     req
   );
 
-  console.log(newEvent.data);
-
- evenements.value.unshift(newEvent.data);
- numberNotReaded.value++;
- showEvenementModal.value = false;
-
+  evenements.value.unshift(newEvent.data);
+  numberNotReaded.value++;
+  showEvenementModal.value = false;
 }
 
 async function readAllNotifications() {
@@ -337,17 +337,16 @@ function imageClick() {
   router.push('/');
 }
 
-function deleteNotification(evenement){
+function deleteNotification(evenement) {
   dialog.warning({
     title: 'Confirmation',
-    content: 'êtes-vous sûr de supprimer l\'événement?',
+    content: "êtes-vous sûr de supprimer l'événement?",
     positiveText: 'Supprimer',
     negativeText: 'Annuler',
     onPositiveClick: () => {
       message.success('Suppression effectué avec success');
-      console.log('------------->'+evenement.id);
- 
-        deleteEvenement(evenement);      
+
+      deleteEvenement(evenement);
     },
     onNegativeClick: () => {
       message.error('suppression annulée');
@@ -355,7 +354,7 @@ function deleteNotification(evenement){
   });
 }
 
-async function deleteEvenement(evenement){
+async function deleteEvenement(evenement) {
   const deletedEvenement = await axios.delete(
     `http://localhost:3000/evenement/delete/${evenement.id}`
   );
@@ -363,10 +362,7 @@ async function deleteEvenement(evenement){
   const index = evenements.value.indexOf(evenement);
   evenements.value.splice(index, 1);
   numberNotReaded.value--;
-
 }
-
-
 </script>
 
 <style scoped>
@@ -421,15 +417,14 @@ async function deleteEvenement(evenement){
 }
 
 .notification-trash {
-  color:red;
-  cursor:pointer;
+  color: red;
+  cursor: pointer;
   margin-right: 5px;
 }
 
 .notification-container {
-  display:flex;
+  display: flex;
   justify-content: flex-end;
   align-items: center;
 }
-
 </style>

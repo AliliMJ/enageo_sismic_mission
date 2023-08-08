@@ -128,9 +128,6 @@ const mettreEnReparation = async () => {
         req
       )
     ).data;
-    console.log('success');
-  } else {
-    console.log('failed');
   }
 };
 </script>
@@ -208,7 +205,7 @@ const mettreEnReparation = async () => {
         </NGrid>
       </NSpace>
       <template #footer>
-          <n-space justify="end" style="margin-top: 20px">
+        <n-space justify="end" style="margin-top: 20px">
           <NButton @click="onConfirm" value="success" type="success"
             >Confirmer</NButton
           >

@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response, Request } from 'express';
 
 type emplyeFonctionType = {
   fonction: String;
@@ -38,7 +38,7 @@ export const getGestionnaireStatistiques = async (
     const stat = {
       nbMaterielEnPanne: 0,
       nbMaterielEnReparation: 0,
-      nbMaterielEnReparationExterne:0,
+      nbMaterielEnReparationExterne: 0,
       nbMaterielBonEtat: 0,
       NbTotalMateriel: 0,
       pourcentageMateriel: 0,
@@ -48,19 +48,19 @@ export const getGestionnaireStatistiques = async (
       pourcentageEmployes: 0,
       nombreEmpEtat: [
         {
-          etat: "en mission",
+          etat: 'en mission',
           nb: 0,
         },
         {
-          etat: "en congé",
+          etat: 'en congé',
           nb: 0,
         },
         {
-          etat: "maladie",
+          etat: 'maladie',
           nb: 0,
         },
         {
-          etat: "sanctionné",
+          etat: 'sanctionné',
           nb: 0,
         },
       ],
@@ -69,8 +69,8 @@ export const getGestionnaireStatistiques = async (
       nbMatModele: {},
       nbMatType: {},
       numberEmpByYears: {},
-      coutReparationByMonth : {},
-      coutReparationExterneByMonth : {}
+      coutReparationByMonth: {},
+      coutReparationExterneByMonth: {},
     };
 
     const codeMission = String(req.params.codeMission);
@@ -100,19 +100,19 @@ export const getGestionnaireStatistiques = async (
         codeMission: codeMission,
         status: 3,
       },
-    })
+    });
 
     stat.nbMaterielEnPanne = await prisma.materiel.count({
       where: {
         codeMission: codeMission,
-        OR : [
+        OR: [
           {
-            status : 0
+            status: 0,
           },
           {
-            status : 3
-          }
-        ]
+            status: 3,
+          },
+        ],
       },
     });
 
@@ -127,7 +127,7 @@ export const getGestionnaireStatistiques = async (
 
     stat.nombreEmpEtat[0].nb = await prisma.employe.count({
       where: {
-        etat: "mission",
+        etat: 'mission',
         codeMission: codeMission,
         AND: [
           {
@@ -151,7 +151,7 @@ export const getGestionnaireStatistiques = async (
 
     stat.nombreEmpEtat[1].nb = await prisma.employe.count({
       where: {
-        etat: "conge",
+        etat: 'conge',
         codeMission: codeMission,
         AND: [
           {
@@ -175,7 +175,7 @@ export const getGestionnaireStatistiques = async (
 
     stat.nombreEmpEtat[2].nb = await prisma.employe.count({
       where: {
-        etat: "maladie",
+        etat: 'maladie',
         codeMission: codeMission,
         AND: [
           {
@@ -199,7 +199,7 @@ export const getGestionnaireStatistiques = async (
 
     stat.nombreEmpEtat[3].nb = await prisma.employe.count({
       where: {
-        etat: "sanctionne",
+        etat: 'sanctionne',
         codeMission: codeMission,
         AND: [
           {
@@ -269,28 +269,45 @@ export const getGestionnaireStatistiques = async (
       return { year, nbr: Number(nbr) };
     });
 
-    console.log(stat.nbMaterielEnPanne+stat.nbMaterielEnReparation);
-
-    if(stat.NbTotalMateriel===0){
-      stat.pourcentageMateriel=0
-    }else{
-      stat.pourcentageMateriel = Math.round(Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation)/stat.NbTotalMateriel)*100));
+    if (stat.NbTotalMateriel === 0) {
+      stat.pourcentageMateriel = 0;
+    } else {
+      stat.pourcentageMateriel = Math.round(
+        Number(
+          ((stat.nbMaterielEnPanne + stat.nbMaterielEnReparation) /
+            stat.NbTotalMateriel) *
+            100
+        )
+      );
     }
 
-    if(stat.nbEmployes===0){
-      stat.pourcentageEmployes=0
-    }else{
-      stat.pourcentageEmployes = Math.round(Number(((stat.nombreEmpEtat[1].nb+stat.nombreEmpEtat[2].nb)/stat.nbEmployes)*100));
+    if (stat.nbEmployes === 0) {
+      stat.pourcentageEmployes = 0;
+    } else {
+      stat.pourcentageEmployes = Math.round(
+        Number(
+          ((stat.nombreEmpEtat[1].nb + stat.nombreEmpEtat[2].nb) /
+            stat.nbEmployes) *
+            100
+        )
+      );
     }
 
-    if(stat.NbTotalMateriel===0){
-      stat.pourcentageMaterielWithExterne=0;
-    }else{
-      stat.pourcentageMaterielWithExterne = Math.round(Number(((stat.nbMaterielEnPanne+stat.nbMaterielEnReparation+stat.nbMaterielEnReparationExterne)/stat.NbTotalMateriel)*100));
+    if (stat.NbTotalMateriel === 0) {
+      stat.pourcentageMaterielWithExterne = 0;
+    } else {
+      stat.pourcentageMaterielWithExterne = Math.round(
+        Number(
+          ((stat.nbMaterielEnPanne +
+            stat.nbMaterielEnReparation +
+            stat.nbMaterielEnReparationExterne) /
+            stat.NbTotalMateriel) *
+            100
+        )
+      );
     }
 
-
-    // const price = await prisma.$queryRaw`SELECT DATE_FORMAT(CURRENT_DATE - INTERVAL 1 MONTH, '%Y-%m-01') as months , sum(cout) as sum FROM sismicvision.reparation r , sismicvision.materiel m 
+    // const price = await prisma.$queryRaw`SELECT DATE_FORMAT(CURRENT_DATE - INTERVAL 1 MONTH, '%Y-%m-01') as months , sum(cout) as sum FROM sismicvision.reparation r , sismicvision.materiel m
     // WHERE r.codeMat=m.codeMat AND
     //       m.codeMission='EGS120' AND
     //  DATE(dFinRep) >= DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY)
@@ -322,20 +339,19 @@ export const getGestionnaireStatistiques = async (
       GROUP BY  DATE_FORMAT(dFinRep,'%Y/%m')
       ORDER BY years `;
 
-    stat.coutReparationExterneByMonth = rawCoutExterneByYears.map(({ years, cout }) => {
-      return { years, cout: Number(cout) };
-    });
+    stat.coutReparationExterneByMonth = rawCoutExterneByYears.map(
+      ({ years, cout }) => {
+        return { years, cout: Number(cout) };
+      }
+    );
 
     res.status(200).json(stat);
   } catch (e) {
-    console.log(e);
     res
       .status(500)
-      .json({ err: "Problème lors de la collection des statistiques" });
+      .json({ err: 'Problème lors de la collection des statistiques' });
   }
 };
-
-
 
 type MaterielPannesType = {
   dates: String;
@@ -353,7 +369,6 @@ type MaterielPannesType1 = {
 
 export const atelierStatistiques = async (req: Request, res: Response) => {
   try {
-
     const codeMission = String(req.params.codeMission);
 
     const stat = {
@@ -361,13 +376,12 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
       nbPannesExterneByMonth: {},
       nbReparationInterneByMarque: {},
       nbReparationExterneByMarque: {},
-      nbReparationInterneByMonth:{},
-      nbReparationExterneByMonth:{},
-
+      nbReparationInterneByMonth: {},
+      nbReparationExterneByMonth: {},
     };
 
-   // await prisma.$queryRaw`SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))`;
-    
+    // await prisma.$queryRaw`SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))`;
+
     const rawNumberByYears: Array<MaterielPannesType> =
       await prisma.$queryRaw`SELECT DATE_FORMAT(r.dPanne, '%m / %Y') AS dates , count(*) as nbr
     FROM reparationInterne r , materiel m 
@@ -390,9 +404,11 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     GROUP BY dates
     ORDER BY dates`;
 
-    stat.nbPannesExterneByMonth = rawNumberExterneByYears.map(({ dates, nbr }) => {
-      return { dates, nbr: Number(nbr) };
-    });
+    stat.nbPannesExterneByMonth = rawNumberExterneByYears.map(
+      ({ dates, nbr }) => {
+        return { dates, nbr: Number(nbr) };
+      }
+    );
 
     /* *************************************************** */
 
@@ -403,9 +419,11 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
         m.codeMission = ${codeMission}
     GROUP BY m.marque`;
 
-    stat.nbReparationInterneByMarque = rawNumberInterneByMarque.map(({ marque, nbr }) => {
-      return { marque, nbr: Number(nbr) };
-    });
+    stat.nbReparationInterneByMarque = rawNumberInterneByMarque.map(
+      ({ marque, nbr }) => {
+        return { marque, nbr: Number(nbr) };
+      }
+    );
 
     const rawNumberExterneByMarque: Array<MaterielPannesMarque> =
       await prisma.$queryRaw`SELECT m.marque , count(r.idRep) as nbr FROM 
@@ -414,11 +432,11 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
         m.codeMission = ${codeMission}
     GROUP BY m.marque`;
 
-    stat.nbReparationExterneByMarque = rawNumberExterneByMarque.map(({ marque, nbr }) => {
-      return { marque, nbr: Number(nbr) };
-    });
-
-
+    stat.nbReparationExterneByMarque = rawNumberExterneByMarque.map(
+      ({ marque, nbr }) => {
+        return { marque, nbr: Number(nbr) };
+      }
+    );
 
     /* ****************************************************** */
 
@@ -430,9 +448,11 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     GROUP BY dates
     ORDER BY dates`;
 
-    stat.nbReparationInterneByMonth = rawNumberInerneByMonths.map(({ dates, nbr }) => {
-      return { dates, nbr: Number(nbr) };
-    });
+    stat.nbReparationInterneByMonth = rawNumberInerneByMonths.map(
+      ({ dates, nbr }) => {
+        return { dates, nbr: Number(nbr) };
+      }
+    );
 
     /* ********************************************************* */
 
@@ -444,15 +464,16 @@ export const atelierStatistiques = async (req: Request, res: Response) => {
     GROUP BY dates
     ORDER BY dates`;
 
-    stat.nbReparationExterneByMonth = rawNumberExterneByMonths.map(({ dates, nbr }) => {
-      return { dates, nbr: Number(nbr) };
-    });
+    stat.nbReparationExterneByMonth = rawNumberExterneByMonths.map(
+      ({ dates, nbr }) => {
+        return { dates, nbr: Number(nbr) };
+      }
+    );
 
     res.status(200).json(stat);
-  } catch(e) {
-    console.log(e);
+  } catch (e) {
     res
       .status(500)
-      .json({ err: "Problème lors de la collection des atelier statistiques" });
+      .json({ err: 'Problème lors de la collection des atelier statistiques' });
   }
 };

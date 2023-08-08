@@ -189,7 +189,6 @@ const updateEmploye = async () => {
     fonctionId: Number(fonctionRef.value),
   };
 
-  console.log('request : ' + req.fonctionId);
   await axios.put(`http://localhost:3000/employes/${user.employeId}`, req);
   message.success('employe modifiee');
 };
